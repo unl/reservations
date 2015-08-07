@@ -1,5 +1,5 @@
 require './utils/language'
-ENV['RACK_ENV'] = ENV['RACK_ENV'] || 'development'
+ENV['RACK_ENV'] ||= 'development'
 # load the config file
 require './utils/config_loader'
 
