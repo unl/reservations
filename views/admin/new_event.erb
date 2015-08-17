@@ -1,0 +1,101 @@
+<div class="wdn-grid-set">
+    <form id="create-event-form" action="" method="POST" enctype="multipart/form-data">
+        <div class="bp3-wdn-col-two-thirds">
+            <fieldset>
+                <legend style="margin-top: 0">Event Details</legend>
+                <label for="title"><span class="required">*</span> Title</label>
+                <input type="text" id="title" name="title" value="<%= event.title %>"/>
+
+                <label for="description">Description</label>
+                <textarea rows="4" id="description" name="description"><%= event.description %></textarea>
+
+                <label for="type">Type</label>
+                <select id="type" name="type" class="use-select2" style="width: 100%;">
+                <% types.each do |type| %>
+                    <option <%= 'selected="selected"' if !event.type.nil? && event.type.id == type.id %> value="<%= type.id %>"><%= type.description %></option>
+                <% end %>
+                </select>
+            </fieldset>
+
+            <fieldset>
+            <legend style="font-size: 1.6em">Location, Date, and Time</legend>
+                <label for="location"><span class="required">*</span> Location</label>
+                <select id="location" name="location" class="use-select2" style="width: 100%;">
+                    <% locations.each do |location| %>
+                        <option <%= 'selected="selected"' if !event.location.nil? && event.location.id == location.id %> value="<%= location.id %>"><%= location.name %></option>
+                    <% end %>
+                </select>
+
+                <label for="start-date" ><span class="required">*</span> Start Date &amp; Time</label>
+                <div class="date-time-select"><span class="wdn-icon-calendar"></span>
+                    <input id="start-date" value="<%= event.start_time.strftime('%m/%d/%Y') if !event.start_time.nil? %>" name="start_date" title="Start Date" type="text" class="datepicker" /><br class="hidden small-block"> @
+                    <select id="start-time-hour" name="start_time_hour" title="Start Time Hour">
+                        <option value=""></option>
+                        <% (1..12).each do |i| %>
+                        <option <%= 'selected="selected"' if !event.start_time.nil? && event.start_time.in_time_zone.hour.to_i % 12 == i % 12 %> value="<%= i %>"><%= i %></option>
+                        <% end %>
+                    </select> : 
+
+                    <select id="start-time-minute" name="start_time_minute" title="Start Time Minute">
+                        <option value=""></option>
+                        <% (0..11).each do |i| %>
+                        <option <%= 'selected="selected"' if !event.start_time.nil? && event.start_time.in_time_zone.min == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
+                        <% end %>
+                    </select>
+
+                    <div id="start-time-am-pm" class="am_pm">
+                        <input <%= 'checked="checked"' if event.start_time.nil? || event.start_time.in_time_zone.hour < 12 %> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm">AM<br>
+                        <input <%= 'checked="checked"' if !event.start_time.nil? && event.start_time.in_time_zone.hour >= 12 %> id="start-time-am-pm-pm" title="PM" type="radio" value="pm" name="start_time_am_pm">PM
+                    </div>
+                </div>
+
+                <label for="end-date">End Date &amp; Time (optional)</label>
+                <div class="date-time-select"><span class="wdn-icon-calendar"></span>
+                    <input id="end-date" value="<%= event.end_time.strftime('%m/%d/%Y') if !event.end_time.nil? %>" name="end_date" title="End Date" type="text" class="datepicker" /><br class="hidden small-block"> @
+                    <select id="end-time-hour" name="end_time_hour" title="End Time Hour">
+                        <option value=""></option>
+                        <% (1..12).each do |i| %>
+                        <option <%= 'selected="selected"' if !event.end_time.nil? && event.end_time.in_time_zone.hour.to_i % 12 == i % 12 %> value="<%= i %>"><%= i %></option>
+                        <% end %>
+                    </select> : 
+
+                    <select id="end-time-minute" name="end_time_minute" title="End Time Minute">
+                        <option value=""></option>
+                        <% (0..11).each do |i| %>
+                        <option <%= 'selected="selected"' if !event.end_time.nil? && event.end_time.in_time_zone.min == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
+                        <% end %>
+                    </select>
+
+                    <div id="end-time-am-pm" class="am_pm">
+                        <input <%= 'checked="checked"' if event.end_time.nil? || event.end_time.in_time_zone.hour < 12 %> id="end-time-am-pm-am" title="AM" type="radio" value="am" name="end_time_am_pm">AM<br>
+                        <input <%= 'checked="checked"' if !event.end_time.nil? && event.end_time.in_time_zone.hour >= 12 %> id="end-time-am-pm-pm" title="PM" type="radio" value="pm" name="end_time_am_pm">PM
+                    </div>
+                </div>
+            </fieldset>
+
+        </div>
+        <div class="bp3-wdn-col-one-third">
+            <div class="visual-island">
+                <div class="vi-header">
+                    <label>Image</label>
+                </div>
+
+                <div class="details">
+                    <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata" title="Event Image">
+                </div>
+            </div>
+        </div>
+        <div class="bp1-wdn-col-two-thirds">
+            <button class="wdn-button wdn-button-brand wdn-pull-left" type="submit"><%= event.id.nil? ? 'Create' : 'Save' %> Event</button>
+        </div>
+    </form>
+</div>
+<br>
+
+<script type="text/javascript">
+WDN.initializePlugin('jqueryui', [function() {  
+    $ = require('jquery');
+    $('.datepicker').datepicker();
+    $("LINK[href='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
+}]);
+</script>

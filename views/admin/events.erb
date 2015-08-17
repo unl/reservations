@@ -1,0 +1,54 @@
+<div class="wdn-band">
+    <div class="wdn-inner-wrapper">
+        <section class="wdn-grid-set reverse">
+            <div class="bp2-wdn-col-three-fourths">
+                <div class="event-page">
+                    <table class="event-list">
+                        <thead class="small-hidden">
+                            <tr>
+                                <th>Title</th>
+                                <th>Date/Location</th>
+                                <th>Signups</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <% events.each do |event| %>
+                            <tr>
+                                <td class="small-hidden">
+                                    <a href="/admin/events/<%= event.id %>/edit/"><%= event.title %></a>
+                                </td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            date/location
+                                        </li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <a href="/admin/events/<%= event.id %>/signup_list/"><%= event.signups.count %> signed up</a>
+                                </td>
+                            </tr>
+                        <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <nav class="bp2-wdn-col-one-fourth">
+                <div class="toolbox">
+                    <h3>Tools</h3>
+                    <div class="tools">
+                        <div style="text-align: center; margin-bottom: .8em">
+                            <a class="wdn-button wdn-button-brand" href="/admin/events/create/">
+                            <span style="font-size: 2em; vertical-align: middle; font-weight: 600">+</span>
+                            <span style="vertical-align: middle;">New Event</span>
+                            </a>
+                        </div>
+                        <ul>
+                            <li><a href="/admin/events/">Events</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </section>
+    </div>
+</div>

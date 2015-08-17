@@ -1,13 +1,22 @@
 require 'sinatra'
 require 'models/user'
+require 'models/service_space'
 
-enable :sessions
+use Rack::Session::Cookie, :key => 'rack.session',
+                           :path => '/',
+                           :domain => (ENV['RACK_ENV'] == 'development' ? nil : '.unl.edu'),
+                           :secret => 'averymanteroldfatherbesseyhamilton',
+                           :old_secret => 'averymanteroldfatherbesseyhamilton'
+
+Time.zone = "America/Chicago"
 
 # this gives the user messages
 def flash(type, message)
   session[:notice][type] ||= []
   session[:notice][type] << message
 end
+
+SS_ID = ServiceSpace.where(:name => 'Innovation Studio').first.id
 
 before do
     # site defaults
@@ -45,3 +54,5 @@ post '/login/?' do
     session[:user_id] = user.id
     redirect '/home/'
 end
+
+Dir.glob("#{ROOT}/routes/*.rb") { |file| require file }

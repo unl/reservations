@@ -27,7 +27,8 @@
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
 <!-- Place optional header elements here -->
-
+<link rel="stylesheet" href="/css/innovation_studio.css">
+<link rel="stylesheet" href="/css/jquery-ui.min-custom.css">
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -69,7 +70,7 @@
                 <nav id="navigation" role="navigation" class="wdn-band">
                     <h3 class="wdn_list_descriptor wdn-text-hidden">Navigation</h3>
                     <!-- TemplateBeginEditable name="navlinks" -->
-                    <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/sharedcode/navigation.html"))).result %>
+                    <%= erb :navigation %>
                     <!-- TemplateEndEditable -->
                     <label for="wdn_menu_toggle" class="wdn-icon-menu">Menu</label>
                 </nav>

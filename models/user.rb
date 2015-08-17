@@ -4,6 +4,11 @@ require 'bcrypt'
 class User < ActiveRecord::Base
     include BCrypt
 
+    def is_admin?
+    	is_admin == TRUE
+    end
+    alias_method :admin?, :is_admin?
+
     def password
         @password ||= Password.new(password_hash)
     end

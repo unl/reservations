@@ -42,6 +42,7 @@ GEM
     json (1.8.3)
     less (2.6.0)
       commonjs (~> 0.2.7)
+    libv8 (3.16.14.11)
     listen (3.0.3)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -66,6 +67,7 @@ GEM
     rb-fsevent (0.9.5)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
+    ref (2.0.0)
     shellany (0.0.1)
     shotgun (0.9.1)
       rack (>= 1.0)
@@ -81,6 +83,9 @@ GEM
       sinatra (~> 1.4.0)
       tilt (>= 1.3, < 3)
     slop (3.6.0)
+    therubyracer (0.12.2)
+      libv8 (~> 3.16.14.0)
+      ref
     thin (1.6.3)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0)
@@ -103,4 +108,5 @@ DEPENDENCIES
   shotgun
   sinatra
   sinatra-contrib
+  therubyracer
   thin

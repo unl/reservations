@@ -1,0 +1,43 @@
+<div class="wdn-band">
+    <div class="wdn-inner-wrapper">
+    	<p>
+		Welcome to the Nebraska Innovation Studio! 
+		New members who wish to use the space must attend a Member Orientation Training.
+		Here are the upcoming dates we are holding trainings:
+		</p>
+
+		<div class="event-page">
+            <table class="event-list">
+                <thead class="small-hidden">
+                    <tr>
+                        <th>Title</th>
+                        <th>Date/Location</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% events.each do |event| %>
+                    <tr>
+                        <td class="small-hidden">
+                            <%= event.title %>
+                        </td>
+                        <td>
+                            <div class="small-block hidden calendar-event-title">
+                                <%= event.title %>
+                            </div>
+                            <ul>
+                                <li>
+                                    date/location
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                        <a class="wdn-button wdn-button-brand" href="/new_members/sign_up/<%= event.id %>/">Sign Up!</a>
+                        </td>
+                    </tr>
+                <% end %>
+                </tbody>
+            </table>
+        </div>
+	</div>
+</div>

@@ -1,7 +1,7 @@
 require 'active_record'
 
 class CreateDatabase < ActiveRecord::Migration
-	def up
+	def change
 		create_table :resources do |t|
 			t.string :name
 			t.integer :service_space_id
@@ -15,12 +15,16 @@ class CreateDatabase < ActiveRecord::Migration
 		end
 
 		create_table :events do |t|
-			t.string :name
+			t.string :title
 			t.string :description
+			t.datetime :start_time
+			t.datetime :end_time
+			t.integer :service_space_id
 		end
 
 		create_table :reservations do |t|
 			t.integer :resource_id
+			t.integer :event_id
 			t.datetime :start_time
 			t.datetime :end_time
 		end

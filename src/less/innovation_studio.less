@@ -1,0 +1,164 @@
+@charset "UTF-8";
+
+@import "lib/lesshat.less";
+@import "lib/breakpoints.less";
+@import "lib/colors.less";
+@import "lib/fonts.less";
+@import "lib/eventicon-embedded.less";
+
+.clearfix:after {
+   content: " "; /* Older browsers do not support empty content */
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}
+
+.wdn-grid-set.reverse > [class*=wdn-col] {
+	float: right;
+}
+
+#maincontent form {
+	padding: 1em;
+
+	fieldset {
+		margin: 0;
+		margin-bottom: 1em;
+	}
+	legend {
+	    font-size: 1.5em;
+	    margin-top: 0.5em;
+	    margin-bottom: 1em;
+	    padding-bottom: 0;
+	}
+	&.delete-form {
+	    display: inline;
+	    padding: 0;
+	}
+	input {
+	  	word-wrap: normal;
+	}
+	textarea {
+		resize: vertical;
+	}
+}
+
+.toolbox, .visual-island {
+    background: #f9f8f5;
+    margin-bottom: 1em;
+    word-wrap: break-word;
+	padding: 0 !important;
+	.tools, .details {
+		padding: 1em;
+		border-left: 1px solid #d5d5d2;
+		border-right: 1px solid #d5d5d2;
+		border-bottom: 1px solid #d5d5d2;
+		&.top-border {
+			border-top: 1px solid #d5d5d2;
+		}
+	}
+    h1, h2, h3, h4, h5, h6, .vi-header{
+		display: block;
+		font-size: .802em !important;
+		margin: 0;
+		border-bottom: 1px solid #474746;
+		font-family: "Gotham SSm A","Gotham SSm B",Verdana,"Verdana Ref",Geneva,Tahoma,"Lucida Grande","Lucida Sans Unicode","Lucida Sans","DejaVu Sans","Bitstream Vera Sans","Liberation Sans",sans-serif;
+		width: 100%;
+		background-color: #474746;
+		padding: 1em;
+		text-transform: uppercase;
+		color:#fff;
+		font-weight: 400;
+		font-style: normal;
+		text-align: center;
+	}
+	p {
+		padding: 0 1em 1em 1em;
+	}
+	ul {
+		padding: 0;
+		padding-left: 1em;
+		margin: 0;
+	    a {
+	    	border-bottom: none;
+	    	font-family: "Gotham SSm A","Gotham SSm B",Verdana,"Verdana Ref",Geneva,Tahoma,"Lucida Grande","Lucida Sans Unicode","Lucida Sans","DejaVu Sans","Bitstream Vera Sans","Liberation Sans",sans-serif;
+	    }
+	}
+}
+
+.event-list {
+    background-color: #eae9e6;
+    font-size: 80%;
+    line-height: 1.4;
+    .center {
+        text-align: center;
+    }
+    tbody tr {
+        min-height: 30px;
+    }
+    ul {
+        padding-left: 0;
+        list-style-type: none;
+    }
+    li {
+        padding: 5px 0;
+    }
+    li:not(:last-child) {
+        border-bottom: 1px solid #999999;
+    }
+}
+
+.date-time-select {
+    padding: 1em;
+    background-color: #f9f8f5;
+    border: 1px solid #d5d5d2;
+    margin-bottom: 0.75em;
+    text-align: center;
+    .wdn-icon-calendar {
+	    margin-right: -2.3em;
+	    position: relative;
+	    z-index: 2;
+	    margin-left: 0.8em;
+	}
+	.am_pm {
+	    display: inline-block;
+	    font-family: "Gotham";
+	    font-size: .75em;
+	    margin-left: .75em;
+	}
+	input {
+	    padding-left: 2.3em;
+	    width: 40%;
+	    position: relative;
+	    text-align: center;
+	}
+	select {
+	    width: 14%;
+	    text-align: center;
+	    padding: 0;
+	}
+	> * {
+	  vertical-align: middle;
+	}
+}
+
+/* for mobile-tablet-ish sizes */
+@media (max-width: 767px) {
+	.medium-hidden {
+		display: none;
+	}
+
+	.medium-block {
+		display: block !important;
+	}
+
+	.date-time-select {
+		input {
+		    width: 100%;
+		}
+		select {
+		    width: 30%;
+		    text-align: center;
+		}
+	}
+}
