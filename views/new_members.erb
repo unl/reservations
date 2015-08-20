@@ -25,7 +25,8 @@ Here are the upcoming dates we are holding trainings:
                     </div>
                     <ul>
                         <li>
-                            date/location
+                            <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
+                            <%= event.location.name %>
                         </li>
                     </ul>
                 </td>

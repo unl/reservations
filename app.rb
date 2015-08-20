@@ -11,9 +11,12 @@ use Rack::Session::Cookie, :key => 'rack.session',
 Time.zone = "America/Chicago"
 
 # this gives the user messages
-def flash(type, message)
-  session[:notice][type] ||= []
-  session[:notice][type] << message
+def flash(type, header, message)
+  session[:notice] = {
+    :type => type,
+    :header => header,
+    :message => message
+  }
 end
 
 SS_ID = ServiceSpace.where(:name => 'Innovation Studio').first.id
@@ -23,7 +26,6 @@ before do
     @title = 'Innovation Studio Manager'
 
     session[:init] = true
-    session[:notice] ||= {}
 
     # check if the user is currently logged in
     if session.has_key?(:user_id)

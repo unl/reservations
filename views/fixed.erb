@@ -88,6 +88,29 @@
                 <!-- TemplateBeginEditable name="maincontentarea" -->
                 <div class="wdn-band">
                     <div class="wdn-inner-wrapper">
+                        <% unless session[:notice].nil? %>
+                            <% notice = session.delete(:notice) %>
+                            <% notice_class = '' %>
+                            <% case notice[:type]
+                                when 'success', :success
+                                    notice_class = 'affirm'
+                                when 'failure', :failure
+                                    notice_class = 'negate'
+                                when 'alert', 'danger', :alert
+                                    notice_class = 'alert' %>
+                            <% end %>
+                            <div id="notice" class="wdn_notice <%= notice_class %>">
+                                <div class="close">
+                                <a href="#" title="Close this notice">Close this notice</a>
+                                </div>
+                                <div class="message">
+                                    <h4><%= notice[:header] %></h4>
+                                    <div class="message-content">
+                                        <%= notice[:message] %>
+                                    </div>
+                                </div>
+                            </div>
+                        <% end %>
                         <%= yield %>
                     </div>
                 </div>
