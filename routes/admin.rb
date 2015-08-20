@@ -18,6 +18,7 @@ def set_event_data(event, params)
 	event.end_time = calculate_time(params[:end_date], params[:end_time_hour], params[:end_time_minute], params[:end_time_am_pm])
 	event.event_type_id = params[:type]
 	event.location_id = params[:location]
+	event.service_space_id = SS_ID
 
 	event
 end

@@ -18,10 +18,6 @@ end
 
 SS_ID = ServiceSpace.where(:name => 'Innovation Studio').first.id
 
-get '*' do
-  'Innovation Studio Manager -- Coming Soon!'
-end
-
 before do
     # site defaults
     @title = 'Innovation Studio Manager'

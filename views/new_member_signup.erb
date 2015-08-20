@@ -1,13 +1,20 @@
 <div class="wdn-band">
     <div class="wdn-inner-wrapper">
 	    <div id="pagetitle">
-	    	<h3>Sign Up For Orientation</h3>
+	    	<h3>Sign Up For New Member Orientation
+	    	<span class="wdn-subhead"><%= event.start_time.in_time_zone.strftime('%m/%d/%Y %l:%M %P') %></span></h3>
 	    </div>
 
         <form id="signup" action="" method="POST">
 	        <div class="bp2-wdn-col-one-half">
 	            <label for="name">Name</label>
 	            <input type="text" id="name" name="name" />
+
+	            <label for="email">Email</label>
+	            <input type="email" id="email" name="email" />
+
+	            <label for="signup-passowrd">Sign Up Password</label>
+	            <input type="text" id="signup-password" name="signup_password" />
 	            <br><br>
 	            <button class="wdn-button wdn-button-brand" type="submit">Sign Up</button>
 	        </div>
