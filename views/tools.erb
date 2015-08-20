@@ -1,0 +1,24 @@
+<div class="wdn-band">
+    <div class="wdn-inner-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Tool</th>
+                    <th>Model</th>
+                </tr>
+            </thead>
+            <tbody>
+            <% available_tools.each do |tool| %>
+                <tr>
+                    <td>
+                        <%= tool.name %>
+                    </td>
+                    <td>
+                        <%= tool.model %>
+                    </td>
+                </tr>
+            <% end %>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+<div class="wdn-band">
+    <div class="wdn-inner-wrapper">
+	    <div id="pagetitle">
+	    	<h3>Manage Tool Authorizations for <%= user.full_name %></h3>
+	    </div>
+
+        <form id="signup" action="" method="POST">
+        <% tools.each do |tool| %>
+	        <input <%= 'checked="checked"' if user.authorized_resource_ids.include?(tool.id) %> type="checkbox" name="permission_<%= tool.id %>" id="permission-<%= tool.id %>">
+        	<label for="permission-<%= tool.id %>"><%= tool.name %></label><br>
+        <% end %>
+        <br>
+        <button class="wdn-button wdn-button-brand" type="submit">Save User</button>
+	    </form>
+    </div>
+</div>

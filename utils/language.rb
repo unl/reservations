@@ -32,23 +32,11 @@ class Integer
 end
 
 class String
-  def capitalize_all
-    self.split('_').map(&:capitalize).join(' ').split(' ').map(&:capitalize).join(' ')
-  end
-
-  def urlify
-    self.downcase.split(' ').join('-')
-  end
-
   alias_method :trim, :strip
   alias_method :trim!, :strip!
 end
 
 class Time
-  def to_ct
-    self.getlocal
-  end
-
   def midnight
     Time.new(self.year, self.month, self.day)
   end

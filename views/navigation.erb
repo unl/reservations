@@ -1,13 +1,14 @@
 <ul>
-    <li><a href="http://www.unl.edu/" title="Innovation Studio homepage">Innovation Studio</a>
+    <li><a href="http://innovationstudio.unl.edu/" title="Innovation Studio homepage">Innovation Studio</a>
     </li>
-    <li><a href="http://visit.unl.edu/" title="Tools &amp; Reservations">Tools &amp; Reservations</a>
+    <li><a href="/tools/" title="Tools &amp; Reservations">Tools &amp; Reservations</a>
     </li>
     <li><a href="/new_members/" title="New Member Orientation">New Members</a>
     </li>
     <% unless @user.nil? || !@user.is_admin? %>
 	    <li><a href="/admin/" title="Admin">Admin</a>
             <ul>
+                <li><a href="/admin/users/">Users</a></li>
                 <li><a href="/admin/events/">Events</a></li>
             </ul>
 	    </li>
