@@ -1,38 +1,34 @@
-<div class="wdn-band">
-    <div class="wdn-inner-wrapper">
-        <div>
-            <table class="event-list">
-                <thead class="small-hidden">
-                    <tr>
-                        <th>Name</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Tool Authorizations</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <% users.each do |user| %>
-                    <tr>
-                        <td>
-                            <%= user.full_name %>
-                        </td>
-                        <td>
-                            <%= user.username %>
-                        </td>
-                        <td>
-                            <%= user.email %>
-                        </td>
-                        <td>
-                        <%= user.authorized_resource_ids.count %> tools
-                        </td>
-                        <td>
-                            <a href="/admin/users/<%= user.id %>/manage/" class="wdn-button wdn-button-brand">Manage</a>
-                        </td>
-                    </tr>
-                <% end %>
-                </tbody>
-            </table>
-        </div>
-    </div>
+<div>
+    <table class="event-list">
+        <thead class="small-hidden">
+            <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Tool Authorizations</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        <% users.each do |user| %>
+            <tr>
+                <td>
+                    <%= user.full_name %>
+                </td>
+                <td>
+                    <%= user.username %>
+                </td>
+                <td>
+                    <%= user.email %>
+                </td>
+                <td>
+                    <%= user.authorized_resource_ids.count %> tools
+                </td>
+                <td>
+                    <a href="/admin/users/<%= user.id %>/manage/" class="wdn-button wdn-button-brand">Manage</a>
+                </td>
+            </tr>
+        <% end %>
+        </tbody>
+    </table>
 </div>

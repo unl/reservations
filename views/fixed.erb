@@ -29,6 +29,7 @@
 <!-- Place optional header elements here -->
 <link rel="stylesheet" href="/css/innovation_studio.css">
 <link rel="stylesheet" href="/css/jquery-ui.min-custom.css">
+<script type="text/javascript">WDN.initializePlugin("notice");</script>
 <!-- TemplateEndEditable -->
 <!-- TemplateParam name="class" type="text" value="" -->
 </head>
@@ -85,7 +86,11 @@
             <div id="maincontent" class="wdn-main">
                 <!--THIS IS THE MAIN CONTENT AREA; WDN: see glossary item 'main content area' -->
                 <!-- TemplateBeginEditable name="maincontentarea" -->
-                <%= yield %>
+                <div class="wdn-band">
+                    <div class="wdn-inner-wrapper">
+                        <%= yield %>
+                    </div>
+                </div>
                 <!-- TemplateEndEditable -->
                 <!--THIS IS THE END OF THE MAIN CONTENT AREA.-->
             </div>

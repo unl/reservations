@@ -1,20 +1,16 @@
-<div class="wdn-band">
-    <div class="wdn-inner-wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                </tr>
-            </thead>
-            <tbody>
-            <% event.signups.each do |signup| %>
-                <tr>
-                    <td>
-                        <%= signup.name %>
-                    </td>
-                </tr>
-            <% end %>
-            </tbody>
-        </table>
-    </div>
-</div>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% event.signups.each do |signup| %>
+        <tr>
+            <td>
+                <%= signup.name %>
+            </td>
+        </tr>
+    <% end %>
+    </tbody>
+</table>
