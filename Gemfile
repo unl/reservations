@@ -7,6 +7,7 @@ gem 'sinatra-contrib'
 gem 'activerecord', :require => 'active_record'
 gem 'mysql'
 gem 'bcrypt'
+gem 'unicorn'
 
 group :development do
   gem 'shotgun'
