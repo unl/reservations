@@ -18,10 +18,22 @@ end
 
 post '/admin/users/create/?' do
 	# check that username is not taken
+	unless User.find_by(:username => params[:username]).nil?
+		flash(:alert, 'Username Taken', 'Sorry, another user has already taken that username.')
+		redirect '/admin/users/create/'
+	end
 
 	# check password is at least 8 characters
+	unless params[:password].length >= 8
+		flash(:alert, 'Password too short', 'Sorry, your password must be at least 8 characters.')
+		redirect '/admin/users/create/'
+	end
 
 	# check that password matches confirmation
+	unless params[:password] == params[:password2]
+		flash(:alert, 'Passwords do not match', 'Sorry, your passwords do not match.')
+		redirect '/admin/users/create/'
+	end
 
 	params.delete('password2')
 	user = User.new(params)

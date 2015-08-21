@@ -1,9 +1,14 @@
+<div id="pagetitle">
+<h3>Tools You Can Reserve</h3>
+</div>
+
 <% if available_tools.count > 0 %>
 <table>
     <thead>
         <tr>
             <th>Tool</th>
             <th>Model</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -14,6 +19,9 @@
             </td>
             <td>
                 <%= tool.model %>
+            </td>
+            <td>
+                <a href="/tools/<%= tool.id %>/reserve/" class="wdn-button wdn-button-brand">Reserve Time</a>
             </td>
         </tr>
     <% end %>

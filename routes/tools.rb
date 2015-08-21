@@ -1,4 +1,5 @@
 require 'models/resource'
+require 'models/reservation'
 require 'models/event'
 require 'models/event_type'
 require 'models/event_signup'
@@ -51,9 +52,68 @@ post '/tools/trainings/sign_up/:event_id/?' do
 end
 
 get '/tools/:resource_id/reserve/?' do
+	require_login
+
 	# check that the user has authorization to reserve this tool, if tool requires auth
+	tool = Resource.find_by(:service_space_id => SS_ID, :id => params[:resource_id])
+	if tool.nil?
+		flash(:alert, 'Not Found', 'That tool does not exist.')
+		redirect '/tools/'
+	end
+
+	unless @user.authorized_resource_ids.include?(tool.id)
+		flash(:alert, 'Not Authorized', 'Sorry, you have not yet been authorized to reserve time on this machine.')
+		redirect '/tools/'
+	end
+
+	erb :reserve, :layout => :fixed, :locals => {
+		:tool => tool,
+		:reservations => Reservation.where(:resource_id => tool.id).in_day(Time.now).all
+	}
+end
+
+get '/tools/:resource_id/reservations.json' do
+	# check that the tool exists
+	tool = Resource.find_by(:service_space_id => SS_ID, :id => params[:resource_id])
+	if tool.nil?
+		flash(:alert, 'Not Found', 'That tool does not exist.')
+		redirect '/tools/'
+	end
+
+	time = params[:time]
+	if time.nil?
+		time = Time.now
+	else
+		time = Time.parse(time)
+	end
+
+	Reservation.where(:resource_id => tool.id).in_day(time).all.to_json
 end
 
 post '/tools/:resource_id/reserve/?' do
-	# if the tool requires approval, note that, otherwise say reservation successful
+	require_login
+	
+	# check that the user has authorization to reserve this tool, if tool requires auth
+	tool = Resource.find_by(:service_space_id => SS_ID, :id => params[:resource_id])
+	if tool.nil?
+		flash(:alert, 'Not Found', 'That tool does not exist.')
+		redirect '/tools/'
+	end
+
+	start = calculate_time(params[:date], params[:start_time_hour], params[:start_time_minute], params[:start_time_am_pm])
+
+	Reservation.create(
+		:resource_id => tool.id,
+		:event_id => nil,
+		:start_time => start,
+		:end_time => start + params[:length].to_i.minutes,
+		:is_training => false,
+		:user_id => @user.id
+	)
+
+	flash(:success, 'Reservation Created', "You have successfully reserved #{tool.name} for #{params[:length]} minutes at #{start.in_time_zone.strftime('%A, %B %d at %l:%M %P')}")
+	redirect '/tools/'
 end
+
+
+
