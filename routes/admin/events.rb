@@ -9,7 +9,12 @@ get '/admin/events/?' do
 end
 
 get '/admin/events/:event_id/signup_list/?' do
-	event = Event.includes(:event_signups).find(params[:event_id])
+	event = Event.includes(:event_signups).find_by(:id => params[:event_id], :service_space_id => SS_ID)
+	if event.nil?
+		# that event does not exist
+		flash(:danger, 'Not Found', 'That event does not exist')
+		redirect '/admin/events/'
+	end
 
 	erb :'admin/signup_list', :layout => :fixed, :locals => {
 		:event => event
@@ -33,21 +38,37 @@ post '/admin/events/create/?' do
 		# need to create a reservation on the machine at that time
 	end
 
+	# notify that it worked
+	flash(:success, 'Event Created', "Your #{event.type.description}: #{event.title} has been created.")
 	redirect '/admin/events/'
 end
 
 get '/admin/events/:event_id/edit/?' do
+	event = Event.includes(:event_type, :location).find_by(:id => params[:event_id], :service_space_id => SS_ID)
+	if event.nil?
+		# that event does not exist
+		flash(:danger, 'Not Found', 'That event does not exist')
+		redirect '/admin/events/'
+	end
+
 	erb :'admin/new_event', :layout => :fixed, :locals => {
-		:event => Event.includes(:event_type, :location).find(params[:event_id]),
+		:event => event,
 		:types => EventType.where(:service_space_id => SS_ID).all,
 		:locations => Location.where(:service_space_id => SS_ID).all
 	}
 end
 
 post '/admin/events/:event_id/edit/?' do
-	event = Event.find(params[:event_id])
+	event = Event.find_by(:id => params[:event_id], :service_space_id => SS_ID)
+	if event.nil?
+		# that event does not exist
+		flash(:danger, 'Not Found', 'That event does not exist')
+		redirect '/admin/events/'
+	end
 	event = set_event_data(event, params)
 	event.save
 
+	# notify that it worked
+	flash(:success, 'Event Updated', "Your #{event.type.description}: #{event.title} has been updated.")
 	redirect '/admin/events/'
 end

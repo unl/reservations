@@ -1,11 +1,11 @@
 <div id="pagetitle">
-    <h3>New Member Orientations</h3>
+    <h3>Upcoming Machine Trainings</h3>
 </div>
 
 <p>
 Welcome to the Nebraska Innovation Studio! 
-New members who wish to use the space must attend a Member Orientation Training.
-Here are the upcoming dates we are holding orientations:
+Before using our equipment, it is necessary to complete training workshops on each
+type of equipment. Here, you can sign up for upcoming trainings. Take a look at our upcoming offerings:
 </p>
 
 <div class="event-page">
@@ -35,7 +35,9 @@ Here are the upcoming dates we are holding orientations:
                     </ul>
                 </td>
                 <td>
-                <a class="wdn-button wdn-button-brand" href="/new_members/sign_up/<%= event.id %>/">Sign Up!</a>
+                    <form class="inline-form" action="/tools/trainings/sign_up/<%= event.id %>/" method="POST">
+                        <button type="submit" class="wdn-button wdn-button-brand" href="/tools/trainings/sign_up/<%= event.id %>/">Sign Up!</button>
+                    </form>
                 </td>
             </tr>
         <% end %>

@@ -1,4 +1,7 @@
 require 'models/resource'
+require 'models/event'
+require 'models/event_type'
+require 'models/event_signup'
 
 get '/tools/?' do
 	# show tools that the user is authorized to use, as well as all those that do not require authorization
@@ -8,6 +11,36 @@ get '/tools/?' do
 	erb :tools, :layout => :fixed, :locals => {
 		:available_tools => tools
 	}
+end
+
+get '/tools/trainings/?' do
+	machine_training_id = EventType.find_by(:description => 'Machine Training', :service_space_id => SS_ID).id
+	events = Event.where(:service_space_id => SS_ID, :event_type_id => machine_training_id).all
+
+	erb :trainings, :layout => :fixed, :locals => {
+		:events => events
+	}
+end
+
+post '/tools/trainings/sign_up/:event_id/?' do
+	# check that is a valid event
+	machine_training_id = EventType.find_by(:description => 'Machine Training', :service_space_id => SS_ID).id
+	event = Event.find_by(:service_space_id => SS_ID, :event_type_id => machine_training_id, :id => params[:event_id])
+
+	if event.nil?
+		# that event does not exist
+		flash(:danger, 'Not Found', 'That event does not exist')
+		redirect '/tools/trainings/'
+	end
+
+	EventSignup.create(
+		:event_id => params[:event_id],
+		:name => @user.full_name
+	)
+
+	# flash a message that this works
+	flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, #{event.title} is #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}.")
+	redirect '/tools/trainings/'
 end
 
 get '/tools/:resource_id/reserve/?' do

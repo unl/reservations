@@ -128,7 +128,7 @@
             <div class="wdn-band" id="wdn_footer_related">
                 <div class="wdn-inner-wrapper">
                     <!-- TemplateBeginEditable name="leftcollinks" -->
-                    <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/sharedcode/relatedLinks.html"))).result %>
+                    <%= erb :related_links %>
                     <!-- TemplateEndEditable -->
                 </div>
             </div>

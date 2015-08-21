@@ -46,7 +46,7 @@ post '/new_members/sign_up/:event_id/?' do
 	)
 
 	# flash a message that this works
-	flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, orientation is #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}")
+	flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, orientation is #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}.")
 	redirect '/new_members/'
 end
 

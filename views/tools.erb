@@ -1,3 +1,4 @@
+<% if available_tools.count > 0 %>
 <table>
     <thead>
         <tr>
@@ -18,3 +19,9 @@
     <% end %>
     </tbody>
 </table>
+<% else %>
+<p>
+    There are no tools currently available for you to reserve. To reserve a tool, you must have
+    completed a training on that machine. Perhaps you'd like to <a href="/tools/trainings/">sign up for some upcoming trainings</a>?
+</p>
+<% end %>
