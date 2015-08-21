@@ -2,8 +2,13 @@ require 'models/user'
 require 'models/resource'
 
 get '/admin/users/?' do
+	users = User.includes(:resource_authorizations).where(:created_by_user_id => @user.id).all.to_a
+	unless users.map{|user| user.id}.include?(@user.id)
+		users = users + [@user]
+	end
+
 	erb :'admin/users', :layout => :fixed, :locals => {
-		:users => User.includes(:resource_authorizations).where(:created_by_user_id => @user.id).all
+		:users => users
 	}
 end
 
