@@ -111,6 +111,8 @@
                                     </div>
                                 </div>
                             </div>
+                        <% else %>
+                        <% session.delete(:notice) %>
                         <% end %>
                         <%= yield %>
                     </div>
