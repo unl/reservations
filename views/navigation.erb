@@ -13,4 +13,12 @@
             </ul>
 	    </li>
     <% end %>
+    <% unless @user.nil? %>
+    <li>
+        <a href="/me/">My Account</a>
+        <ul>
+            <li><a href="/logout/">Logout</a></li>
+        </ul>
+    </li>
+    <% end %>
 </ul>

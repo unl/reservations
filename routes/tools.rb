@@ -4,6 +4,8 @@ require 'models/event_type'
 require 'models/event_signup'
 
 get '/tools/?' do
+	require_login
+
 	# show tools that the user is authorized to use, as well as all those that do not require authorization
 	tools = Resource.where(:service_space_id => SS_ID).all.to_a
 	tools.reject! {|tool| tool.needs_authorization && !@user.authorized_resource_ids.include?(tool.id)}
@@ -14,6 +16,8 @@ get '/tools/?' do
 end
 
 get '/tools/trainings/?' do
+	require_login
+
 	machine_training_id = EventType.find_by(:description => 'Machine Training', :service_space_id => SS_ID).id
 	events = Event.where(:service_space_id => SS_ID, :event_type_id => machine_training_id).all
 
@@ -23,6 +27,8 @@ get '/tools/trainings/?' do
 end
 
 post '/tools/trainings/sign_up/:event_id/?' do
+	require_login
+
 	# check that is a valid event
 	machine_training_id = EventType.find_by(:description => 'Machine Training', :service_space_id => SS_ID).id
 	event = Event.find_by(:service_space_id => SS_ID, :event_type_id => machine_training_id, :id => params[:event_id])

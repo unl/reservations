@@ -1,0 +1,38 @@
+<div id="pagetitle">
+    <h3>Manage My Account</h3>
+</div>
+
+<form action="" method="POST">
+<section class="wdn-grid-set">
+<div class="bp2-wdn-col-one-half">
+	<label for="email">Email</label>
+    <input type="text" id="email" name="email" value="<%= @user.email %>" />
+
+    <label for="first-name">First Name</label>
+    <input type="text" id="first-name" name="first_name" value="<%= @user.first_name %>" />
+
+    <label for="last-name">First Name</label>
+    <input type="text" id="last-name" name="last_name" value="<%= @user.last_name %>" />
+    <br><br>
+    <button type="submit" class="wdn-button wdn-button-brand">Save</button>
+</div>
+</section>
+</form>
+
+<div>
+	<h3>Change Password</h3>
+</div>
+
+<form action="/change-password/" method="POST">
+<section class="wdn-grid-set">
+<div class="bp2-wdn-col-one-half">
+	<label for="password">New Password</label>
+	<input type="password" id="password" name="password" />
+
+	<label for="password2">Confirm New Password</label>
+	<input type="password" id="password2" name="password2" />
+	<br><br>
+	<button type="submit" class="wdn-button wdn-button-brand">Change Password</button>
+</div>
+</section>
+</form>

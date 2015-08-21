@@ -8,6 +8,7 @@ New members who wish to use the space must attend a Member Orientation Training.
 Here are the upcoming dates we are holding orientations:
 </p>
 
+<% if events.count > 0 %>
 <div class="event-page">
     <table class="event-list">
         <thead class="small-hidden">
@@ -42,3 +43,8 @@ Here are the upcoming dates we are holding orientations:
         </tbody>
     </table>
 </div>
+<% else %>
+<p>
+There are no member orientations scheduled right now. Please check back again soon!
+</p>
+<% end %>
