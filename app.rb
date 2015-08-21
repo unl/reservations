@@ -4,7 +4,7 @@ require 'models/service_space'
 
 use Rack::Session::Cookie, :key => 'rack.session',
                            :path => '/',
-                           :domain => (ENV['RACK_ENV'] == 'development' ? nil : '.unl.edu'),
+                           :domain => (ENV['RACK_ENV'] == 'development' ? nil : 'innovationstudio-manager.unl.edu'),
                            :secret => 'averymanteroldfatherbesseyhamilton',
                            :old_secret => 'averymanteroldfatherbesseyhamilton'
 
