@@ -35,9 +35,13 @@ type of equipment. Here, you can sign up for upcoming trainings. Take a look at 
                     </ul>
                 </td>
                 <td>
+                <% if !@user.signed_up_event_ids.include?(event.id) %>
                     <form class="inline-form" action="/tools/trainings/sign_up/<%= event.id %>/" method="POST">
                         <button type="submit" class="wdn-button wdn-button-brand" href="/tools/trainings/sign_up/<%= event.id %>/">Sign Up!</button>
                     </form>
+                <% else %>
+                    Signed up!
+                <% end %>
                 </td>
             </tr>
         <% end %>

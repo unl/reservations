@@ -56,6 +56,7 @@ class CreateDatabase < ActiveRecord::Migration
 
 		create_table :event_signups do |t|
 			t.integer :event_id
+			t.integer :user_id
 			t.string :name
 		end
 	end
