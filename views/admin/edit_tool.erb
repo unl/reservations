@@ -1,0 +1,16 @@
+<div id="pagetitle">
+<h3>Edit <%= tool.name %></h3>
+</div>
+
+<form action="" method="POST">
+	<label for="name">Name</label>
+	<input type="text" name="name" id="name" value='<%= tool.name %>'/>
+
+	<label for="model">Model</label>
+	<input type="text" name="model" id="model" value='<%= tool.model %>'/>
+
+	<label for="description">Description</label>
+	<textarea id="description" name="description"><%= tool.description %></textarea>
+
+	<button type="submit" class="wdn-button wdn-button-brand">Save Tool</button>
+</form>

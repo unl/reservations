@@ -1,0 +1,45 @@
+<div id="pagetitle">
+<h3>All Tools</h3>
+</div>
+
+<a class="wdn-button wdn-button-brand" href="/admin/tools/create/">Create Tool</a><br><br>
+
+<table>
+    <thead>
+        <tr>
+            <th>Tool</th>
+            <th>Model</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% tools.each do |tool| %>
+        <tr>
+            <td>
+                <%= tool.name %>
+            </td>
+            <td>
+                <%= tool.model %>
+            </td>
+            <td class="table-actions">
+                <a href="/admin/tools/<%= tool.id %>/edit/" class="wdn-button wdn-button-brand">Edit</a>
+                <form method="POST" action="/admin/tools/<%= tool.id %>/delete/" class="delete-form delete-tool">
+                    <button class="wdn-button" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+    <% end %>
+    </tbody>
+</table>
+
+<script type="text/javascript">
+require(['jquery'], function($) {
+    $(document).ready(function() {
+        $('.delete-tool').submit(function (submit) {
+            if (!window.confirm('Are you sure you want to delete this tool?')) {
+                submit.preventDefault();
+            }
+        });
+    });
+});
+</script>

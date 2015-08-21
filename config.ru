@@ -10,5 +10,12 @@ require 'utils/database'
 require 'sinatra'
 require 'app'
 
+if ENV['RACK_ENV'] == 'development'
+  # weird workaround for localhost cookie things
+  set :cookie_options, :domain => nil
+else
+  set :cookie_options, :domain => 'innovationstudio-manager.unl.edu'
+end
+
 # run it
 run Sinatra::Application
