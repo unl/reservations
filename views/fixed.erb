@@ -89,8 +89,8 @@
                 <!-- TemplateBeginEditable name="maincontentarea" -->
                 <div class="wdn-band">
                     <div class="wdn-inner-wrapper">
-                        <% unless session[:notice].nil? %>
-                            <% notice = session.delete(:notice) %>
+                        <% unless session["notice"].nil? %>
+                            <% notice = session.delete("notice") %>
                             <% notice_class = '' %>
                             <% case notice[:type]
                                 when 'success', :success
@@ -113,6 +113,7 @@
                             </div>
                         <% else %>
                         <% session.delete(:notice) %>
+                        <% session.delete("notice") %>
                         <% end %>
                         <%= yield %>
                     </div>
