@@ -1,0 +1,41 @@
+<% events_groups = events.group_by do |event|
+	event.start_time.in_time_zone.strftime("%Y/%m/%d")
+end %>
+
+<div id="pagetitle">
+	<h3>Innovation Studio Calendar</h3>
+</div>
+
+<div class="calendar-container">
+	<div class="time-labels">
+		<div class="time-chart">
+			<% (12..47).each do |j| %>
+				<div class="calendar-half-hour">
+					<label><%= "#{(j / 2) % 12 + (j==24?12:0)} #{j>=24?'PM':'AM'}" if j % 2 == 0 %></label>
+				</div>
+			<% end %>
+		</div>
+	</div>
+	<% (1..5).map{|i| sunday+i.days}.each do |day| %>
+	<div class="calendar-day" data-day="<%= day.strftime("%Y/%m/%d") %>">
+		<label class="day-header"><%= day.strftime("%^a %-m/%d") %></label>
+		<div class="day-chart">
+			<% day_events = events_groups[day.strftime("%Y/%m/%d")] %>
+			<% unless day_events.nil? %>
+			<% day_events.each do |event| %>
+				<div class="event <%= event.type.description.downcase.split(' ').join('-') %>" 
+					style="top: <%= ((event.start_time.in_time_zone.minutes_after_midnight - 360) / 30) * 20 %>px; height: <%= event.length * 20 / 30 %>px;">
+				<a href="<%= event.info_link %>"><%= event.title %></a>
+				</div>
+			<% end %>
+			<% end %>
+
+			<% (12..47).each do |j| %>
+				<div class="calendar-half-hour">
+					&nbsp;
+				</div>
+			<% end %>
+		</div>
+	</div>
+	<% end %>
+</div>

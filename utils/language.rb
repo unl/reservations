@@ -41,6 +41,10 @@ class Time
     Time.new(self.year, self.month, self.day)
   end
 
+  def minutes_after_midnight
+    ((self - self.midnight) / 60).to_i
+  end
+
   def week_start
     time = self
     until time.sunday?
