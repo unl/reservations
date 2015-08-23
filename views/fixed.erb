@@ -142,7 +142,7 @@
                         <h3>Contact Us</h3>
                         <div class="wdn-contact-wrapper">
                             <!-- TemplateBeginEditable name="contactinfo" -->
-                            <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/sharedcode/footerContactInfo.html"))).result %>
+                            <%= erb :footer_contact_info %>
                             <!-- TemplateEndEditable -->
                         </div>
                     </div>
