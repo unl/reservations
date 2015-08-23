@@ -24,6 +24,17 @@ SS_ID = ServiceSpace.where(:name => 'Innovation Studio').first.id
 before do
     # site defaults
     @title = 'Innovation Studio Manager'
+    @breadcrumbs = [
+      {
+        :href => 'http://www.unl.edu/',
+        :text => 'UNL',
+        :title => 'University of Nebraska&ndash;Lincoln'
+      },
+      {
+        :href => '/',
+        :text => 'Innovation Studio Manager'
+      }
+    ]
 
     session[:init] = true
 
@@ -43,15 +54,18 @@ def require_login
 end
 
 not_found do
+  @breadcrumbs << {:text => 'Not Found'}
   erb 'That page was not found.', :layout => :fixed
 end
 
 error do
+  @breadcrumbs << {:text => 'Error'}
   flash(:danger, 'Sorry! There was an error.', "We apologize. A really bad error occurred and it didn't work. We're fixing this as we speak.")
   erb 'In the meantime, you can <a href="/">go back to the homepage</a>.', :layout => :fixed
 end
 
 get '/' do
+    @breadcrumbs << {:text => 'Home'}
     redirect '/login/'
 end
 

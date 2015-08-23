@@ -2,6 +2,7 @@ require 'models/user'
 
 get '/me/?' do
   require_login
+  @breadcrumbs << {:text => 'My Account'}
 
   erb :me, :layout => :fixed
 end
@@ -41,6 +42,7 @@ post '/change-password/?' do
 end
 
 get '/login/?' do
+    @breadcrumbs << {:text => 'Login'}
     unless @user.nil?
       redirect '/me/'
     end

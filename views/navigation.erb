@@ -1,16 +1,23 @@
 <ul>
     <li><a href="http://innovationstudio.unl.edu/" title="Innovation Studio homepage">Innovation Studio</a>
+    <ul>
+        <li><a href="/" title="Manager Home">Manager Home</a></li>
+        <li><a href="/calendar/" title="Calendar of Events">Calendar</a></li>
+    </ul>
     </li>
     <li><a href="/tools/" title="Tools &amp; Reservations">Tools &amp; Reservations</a>
+    <ul>
+        <li><a href="/tools/trainings/" title="Trainings">Trainings</a></li>
+    </ul>
     </li>
     <li><a href="/new_members/" title="New Member Orientation">New Members</a>
     </li>
     <% unless @user.nil? || !@user.is_admin? %>
 	    <li><a href="/admin/" title="Admin">Admin</a>
             <ul>
-                <li><a href="/admin/users/">Users</a></li>
-                <li><a href="/admin/events/">Events</a></li>
-                <li><a href="/admin/tools/">Tools</a></li>
+                <li><a href="/admin/users/" title="Users">Users</a></li>
+                <li><a href="/admin/events/" title="Events">Events</a></li>
+                <li><a href="/admin/tools/" title="Tools">Tools</a></li>
             </ul>
 	    </li>
     <% end %>

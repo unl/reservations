@@ -2,6 +2,8 @@ require 'models/user'
 require 'models/resource'
 
 get '/admin/users/?' do
+	@breadcrumbs << {:text => 'Admin Users'}
+
 	users = User.includes(:resource_authorizations).where(:created_by_user_id => @user.id).all.to_a
 	unless users.map{|user| user.id}.include?(@user.id)
 		users = users + [@user]
@@ -13,6 +15,7 @@ get '/admin/users/?' do
 end
 
 get '/admin/users/create/?' do
+	@breadcrumbs << {:text => 'Admin Users', :href => '/admin/users/'} << {:text => 'Create User'}
 	erb :'admin/new_user', :layout => :fixed
 end
 
@@ -44,6 +47,7 @@ post '/admin/users/create/?' do
 end
 
 get '/admin/users/:user_id/manage/?' do
+	@breadcrumbs << {:text => 'Admin Users', :href => '/admin/users/'} << {:text => 'Manage User Permissions'}
 	# check that the admin user has permission to manage this user
 
 	user = User.includes(:resource_authorizations).find(params[:user_id])

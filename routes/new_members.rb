@@ -2,6 +2,7 @@ require 'models/event'
 require 'models/event_signup'
 
 get '/new_members/?' do
+	@breadcrumbs << {:text => 'New Members'}
 	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
 
     erb :new_members, :layout => :fixed, :locals => {
@@ -10,6 +11,8 @@ get '/new_members/?' do
 end
 
 get '/new_members/sign_up/:event_id/?' do
+	@breadcrumbs << {:text => 'New Members', :href => '/new_members/'} << {text: 'Sign Up'}
+
 	# check if this is a new member signup orientation
 	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
 	event = Event.includes(:event_signups).find_by(:service_space_id => SS_ID, :id => params[:event_id])

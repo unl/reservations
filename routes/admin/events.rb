@@ -3,12 +3,14 @@ require 'models/event_type'
 require 'models/location'
 
 get '/admin/events/?' do
+	@breadcrumbs << {:text => 'Admin Events'}
 	erb :'admin/events', :layout => :fixed, :locals => {
 		:events => Event.includes(:event_signups).where(:service_space_id => SS_ID).all
 	}
 end
 
 get '/admin/events/:event_id/signup_list/?' do
+	@breadcrumbs << {:text => 'Admin Events', :href => '/admin/events/'} << {text: 'Signup List'}
 	event = Event.includes(:event_signups).find_by(:id => params[:event_id], :service_space_id => SS_ID)
 	if event.nil?
 		# that event does not exist
@@ -22,6 +24,7 @@ get '/admin/events/:event_id/signup_list/?' do
 end
 
 get '/admin/events/create/?' do
+	@breadcrumbs << {:text => 'Admin Events', :href => '/admin/events/'} << {text: 'Create Event'}
 	erb :'admin/new_event', :layout => :fixed, :locals => {
 		:event => Event.new,
 		:types => EventType.where(:service_space_id => SS_ID).all,
@@ -44,6 +47,7 @@ post '/admin/events/create/?' do
 end
 
 get '/admin/events/:event_id/edit/?' do
+	@breadcrumbs << {:text => 'Admin Events', :href => '/admin/events/'} << {text: 'Edit Event'}
 	event = Event.includes(:event_type, :location).find_by(:id => params[:event_id], :service_space_id => SS_ID)
 	if event.nil?
 		# that event does not exist

@@ -2,6 +2,7 @@ require 'models/resource'
 
 get '/admin/tools/?' do
 	require_login
+	@breadcrumbs << {:text => 'Admin Tools'}
 
 	tools = Resource.where(:service_space_id => SS_ID).order(:name).all
 	erb :'admin/tools', :layout => :fixed, :locals => {
@@ -11,6 +12,7 @@ end
 
 get '/admin/tools/create/?' do
 	require_login
+	@breadcrumbs << {:text => 'Admin Tools', :href => '/admin/tools/'} << {:text => 'Create Tool'}
 
 	erb :'admin/edit_tool', :layout => :fixed, :locals => {
 		:tool => Resource.new
@@ -35,6 +37,7 @@ end
 
 get '/admin/tools/:resource_id/edit/?' do
 	require_login
+	@breadcrumbs << {:text => 'Admin Tools', :href => '/admin/tools/'} << {:text => 'Edit Tool'}
 
 	# check that this is a valid tool
 	tool = Resource.find_by(:id => params[:resource_id], :service_space_id => SS_ID)

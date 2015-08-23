@@ -5,6 +5,7 @@ require 'models/event_type'
 require 'models/event_signup'
 
 get '/tools/?' do
+	@breadcrumbs << {:text => 'Tools'}
 	require_login
 
 	# show tools that the user is authorized to use, as well as all those that do not require authorization
@@ -17,6 +18,7 @@ get '/tools/?' do
 end
 
 get '/tools/trainings/?' do
+	@breadcrumbs << {:text => 'Tools', :href => '/tools/'} << {:text => 'Upcoming Trainings'}
 	require_login
 
 	machine_training_id = EventType.find_by(:description => 'Machine Training', :service_space_id => SS_ID).id
@@ -28,6 +30,7 @@ get '/tools/trainings/?' do
 end
 
 post '/tools/trainings/sign_up/:event_id/?' do
+	@breadcrumbs << {:text => 'Tools', :href => '/tools/'} << {:text => 'Upcoming Trainings', :href => '/tools/trainings/'} << {text: 'Sign Up'}
 	require_login
 
 	# check that is a valid event
@@ -52,6 +55,7 @@ post '/tools/trainings/sign_up/:event_id/?' do
 end
 
 get '/tools/:resource_id/reserve/?' do
+	@breadcrumbs << {:text => 'Tools', :href => '/tools/'} << {:text => 'Reserve'}
 	require_login
 
 	# check that the user has authorization to reserve this tool, if tool requires auth
@@ -92,7 +96,7 @@ end
 
 post '/tools/:resource_id/reserve/?' do
 	require_login
-	
+
 	# check that the user has authorization to reserve this tool, if tool requires auth
 	tool = Resource.find_by(:service_space_id => SS_ID, :id => params[:resource_id])
 	if tool.nil?

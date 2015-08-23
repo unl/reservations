@@ -62,9 +62,13 @@
                 <h3 class="wdn_list_descriptor wdn-text-hidden">Breadcrumbs</h3>
                 <!-- TemplateBeginEditable name="breadcrumbs" -->
                 <ul>
-                    <li><a href="http://www.unl.edu/" title="University of Nebraska&ndash;Lincoln" class="wdn-icon-home">UNL</a></li>
-                    <li><a href="#" title="Site Title">Innovation Studio Manager</a></li>
-                    <li>Home</li>
+                    <% @breadcrumbs.each do |crumb| %>
+                    <% if crumb[:href].nil? %>
+                    <li><%= crumb[:text] %></li>
+                    <% else %>
+                    <li><a <%= 'class="wdn-icon-home"' if crumb[:text] == 'UNL' %> href="<%= crumb[:href] %>" title="<%= crumb[:title] || crumb[:text] %>"><%= crumb[:text] %></a></li>
+                    <% end %>
+                    <% end %>
                 </ul>
                 <!-- TemplateEndEditable -->
             </nav>
