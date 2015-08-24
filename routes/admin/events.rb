@@ -76,3 +76,17 @@ post '/admin/events/:event_id/edit/?' do
 	flash(:success, 'Event Updated', "Your #{event.type.description}: #{event.title} has been updated.")
 	redirect '/admin/events/'
 end
+
+post '/admin/events/:event_id/delete/?' do
+	event = Event.find_by(:id => params[:event_id], :service_space_id => SS_ID)
+	if event.nil?
+		# that event does not exist
+		flash(:danger, 'Not Found', 'That event does not exist')
+		redirect '/admin/events/'
+	end
+
+	event.destroy
+
+	flash(:success, 'Event Deleted', "Your event #{event.title} has been deleted. All signups on this event have also been removed.")
+	redirect '/admin/events/'
+end

@@ -10,6 +10,7 @@
                         <th>Title</th>
                         <th>Date/Location</th>
                         <th>Signups</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,6 +29,11 @@
                         </td>
                         <td>
                             <a href="/admin/events/<%= event.id %>/signup_list/"><%= event.signups.count %> signed up</a>
+                        </td>
+                        <td>
+                        <form class="delete-event delete-form" action="/admin/events/<%=event.id%>/delete/" method="POST">
+                        <button type="submit" class="wdn-button">Delete</button>
+                        </form>
                         </td>
                     </tr>
                 <% end %>
@@ -49,3 +55,15 @@
         </div>
     </nav>
 </section>
+
+<script type="text/javascript">
+require(['jquery'], function($) {
+    $(document).ready(function() {
+        $('.delete-event').submit(function (submit) {
+            if (!window.confirm('Are you sure you want to delete this event?')) {
+                submit.preventDefault();
+            }
+        });
+    });
+});
+</script>
