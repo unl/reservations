@@ -3,42 +3,80 @@
         <div id="pagetitle">
         <h3>Events</h3>
         </div>
-        <div class="event-page">
-            <table class="event-list">
-                <thead class="small-hidden">
-                    <tr>
-                        <th>Title</th>
-                        <th>Date/Location</th>
-                        <th>Signups</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <% events.each do |event| %>
-                    <tr>
-                        <td class="small-hidden">
-                            <a href="/admin/events/<%= event.id %>/edit/"><%= event.title %></a>
-                        </td>
-                        <td>
-                            <ul>
-                                <li>
-                                    <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
-                                    <%= event.location.name %>
-                                </li>
-                            </ul>
-                        </td>
-                        <td>
-                            <a href="/admin/events/<%= event.id %>/signup_list/"><%= event.signups.count %> signed up</a>
-                        </td>
-                        <td>
-                        <form class="delete-event delete-form" action="/admin/events/<%=event.id%>/delete/" method="POST">
-                        <button type="submit" class="wdn-button">Delete</button>
-                        </form>
-                        </td>
-                    </tr>
-                <% end %>
-                </tbody>
-            </table>
+        <ul class="wdn_tabs">
+            <li class="<%='selected' if tab == 'upcoming' %>"><a href="?tab=upcoming">Upcoming</a></li>
+            <li class="<%='selected' if tab == 'past' %>"><a href="?tab=past">Past</a></li>
+        </ul>
+        <div class="wdn_tabs_content">
+            <div class="event-page">
+                <table class="event-list">
+                    <thead class="small-hidden">
+                        <tr>
+                            <th>Title</th>
+                            <th>Date/Location</th>
+                            <th>Signups</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% events.each do |event| %>
+                        <tr>
+                            <td class="small-hidden">
+                                <a href="/admin/events/<%= event.id %>/edit/"><%= event.title %></a>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>
+                                        <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
+                                        <%= event.location.name %>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td>
+                                <a href="/admin/events/<%= event.id %>/signup_list/"><%= event.signups.count %> signed up</a>
+                            </td>
+                            <td>
+                            <form class="delete-event delete-form" action="/admin/events/<%=event.id%>/delete/" method="POST">
+                            <button type="submit" class="wdn-button">Delete</button>
+                            </form>
+                            </td>
+                        </tr>
+                    <% end %>
+                    </tbody>
+                </table>
+            </div>
+            <% if total_pages > 1 %>
+                <script type="text/javascript">
+                WDN.loadCSS(WDN.getTemplateFilePath('css/modules/pagination.css'));
+                </script>
+                <div style="text-align: center;">
+                    <div style="display: inline-block;">
+                        <ul id="pending-pagination" class="wdn_pagination" data-tab="pending" style="padding-left: 0;">
+                            <% if page != 1 %>
+                                <li class="arrow prev"><a href="?tab=<%= tab %>&amp;page=<%= page-1 %>" title="Go to the previous page">← prev</a></li>
+                            <% end %>
+                            <% before_ellipsis_shown = false; after_ellipsis_shown = false %>
+                            <% (1..total_pages).each do |i| %>
+                                    <% if i == page %>
+                                        <li class="selected"><span><%= i %></span></li>
+                                    <% elsif (i <= 3 || i >= total_pages - 2 || i == page - 1 || 
+                                                i == page - 2 || i == page + 1 || $i == page + 2) %>
+                                        <li><a href="?tab=<%= tab %>&amp;page=<%= i %>" title="Go to page <%= i %>"><%= i %></a></li>
+                                    <% elsif (i < page && !before_ellipsis_shown) %>
+                                        <li><span class="ellipsis">...</span></li>
+                                        <% before_ellipsis_shown = true %>
+                                    <% elsif (i > page && !after_ellipsis_shown) %>
+                                        <li><span class="ellipsis">...</span></li>
+                                        <% after_ellipsis_shown = true %>
+                                    <% end %>
+                            <% end %>
+                            <% if page != total_pages %>
+                                <li class="arrow next"><a href="?tab=<%= tab %>&amp;page=<%= page+1 %>" title="Go to the next page">next →</a></li>
+                            <% end %>
+                        </ul>
+                    </div>
+                </div>
+            <% end %>
         </div>
     </div>
     <nav class="bp2-wdn-col-one-fourth">

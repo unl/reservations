@@ -4,8 +4,27 @@ require 'models/location'
 
 get '/admin/events/?' do
 	@breadcrumbs << {:text => 'Admin Events'}
+	page = params[:page]
+	page = page.to_i >= 1 ? page.to_i : 1
+	page_size = 10
+	tab = ['upcoming', 'past'].include?(params[:tab]) ? params[:tab] : 'upcoming'
+
+	case tab
+	when 'past'
+		where_clause = 'start_time < ?', Time.now
+		order_clause = {:start_time => :desc}
+	else
+		where_clause = 'start_time >= ?', Time.now
+		order_clause = {:start_time => :asc}
+	end
+
+	iterator = Event.includes(:event_signups).where(:service_space_id => SS_ID).where(where_clause)
+
 	erb :'admin/events', :layout => :fixed, :locals => {
-		:events => Event.includes(:event_signups).where(:service_space_id => SS_ID).all
+		:events => iterator.order(order_clause).limit(page_size).offset((page-1)*page_size).all,
+		:total_pages => (iterator.count.to_f / page_size).ceil,
+		:page => page,
+		:tab => tab
 	}
 end
 

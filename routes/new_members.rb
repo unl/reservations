@@ -8,7 +8,7 @@ get '/new_members/?' do
 	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
 
     erb :new_members, :layout => :fixed, :locals => {
-    	:events => Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => new_member_orientation_id).all
+    	:events => Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => new_member_orientation_id).where('start_time >= ?', Time.now).all
     }
 end
 
