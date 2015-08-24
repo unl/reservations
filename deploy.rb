@@ -1,4 +1,4 @@
-'/var/www/html/innovationstudio-manager.unl.edu/innovationstudio-manager.pid'
+pid_file = '/var/www/html/innovationstudio-manager.unl.edu/innovationstudio-manager.pid'
 
 def get_exit
   $?.exitstatus
