@@ -25,6 +25,6 @@ class Event < ActiveRecord::Base
 		if type.description == 'New Member Orientation'
 			return "/new_members/sign_up/#{id}/"
 		end
-		return '#'
+		return nil
 	end
 end

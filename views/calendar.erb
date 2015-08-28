@@ -3,15 +3,16 @@
 end %>
 
 <div id="pagetitle">
-	<h3>Innovation Studio Calendar
-	<span class="wdn-subhead">See all our upcoming events!</span></h3>
+	<h3>
+		Innovation Studio Calendar
+		<span class="wdn-subhead">See all our upcoming events!</span>
+	</h3>
 </div>
 
 <div style="margin-bottom: 16px;">
 <a href="/calendar/?date=<%= (date-7.days).strftime('%Y-%m-%d') %>" class="wdn-button wdn-button-triad" id="prev-week">&lt; PREV</a>
 <a href="/calendar/?date=<%= (date+7.days).strftime('%Y-%m-%d') %>" class="wdn-button wdn-button-triad" style="float: right;" id="next-week">NEXT &gt;</a>
 </div>
-
 
 <div class="calendar-container">
 	<div class="time-labels">
@@ -31,16 +32,39 @@ end %>
 			<% day_events = events_groups[day.strftime("%Y/%m/%d")] %>
 			<% unless day_events.nil? %>
 			<% day_events.sort{|a, b| a.start_time <=> b.start_time}.each do |event| %>
-				<% start_slot = ((event.start_time.in_time_zone.minutes_after_midnight - 360) / 30).floor %>
-				<% end_slot = ((event.end_time.in_time_zone.minutes_after_midnight - 360) / 30).floor %>
-				<% over = 0 %>
-				<% (start_slot..end_slot).each do |k| %>
-					<% over = slots[k] if slots[k] > over %>
-				<% end %>
-				<% over = [over,5].min %>
-				<div class="event <%= event.type.description.downcase.split(' ').join('-') %>" 
-					style="top: <%= ((event.start_time.in_time_zone.minutes_after_midnight - 360) / 30) * 20 %>px; height: <%= event.length * 20 / 30 %>px; left: <%=over*8%>px">
-				<a href="<%= event.info_link %>"><%= event.title %></a>
+				<% start_slot = [(((event.start_time.in_time_zone - day.midnight) / 60 - 360) / 30).floor, 0].max 
+				end_slot = [(((event.end_time.in_time_zone - day.midnight) / 60 - 360) / 30).floor, 35].min 
+				if end_slot < 0
+					next
+				end
+				over = 0 
+				(start_slot..end_slot).each do |k|
+					over = slots[k] if slots[k] > over
+				end
+				over = [over,5].min
+				top = (((event.start_time.in_time_zone - day.midnight) / 60 - 360) / 30) * 20
+				height = event.length * 20 / 30
+				top_overflow = false
+				bottom_overflow = false
+				if top < 0
+					height += top
+					top = 0
+					top_overflow = true
+				end 
+				if top + height > 720
+					height = 720 - top
+					bottom_overflow = true
+					events_groups[(day + 1.day).strftime("%Y/%m/%d")] ||= []
+					events_groups[(day + 1.day).strftime("%Y/%m/%d")] << event
+				end
+				%>
+				<div class="event <%= event.type.description.downcase.split(' ').join('-') %> <%= 'top-overflow' if top_overflow %> <%= 'bottom-overflow' if bottom_overflow %>" 
+					style="top: <%= top %>px; height: <%= height %>px; left: <%=over*8%>px">
+					<% if event.info_link %>
+					<a href="<%= event.info_link %>"><%= event.title %></a>
+					<% else %>
+					<%= event.title %>
+					<% end %>
 				</div>
 				<% (start_slot..end_slot).each do |k| %>
 					<% slots[k] = slots[k] + 1 %>
