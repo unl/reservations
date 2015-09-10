@@ -34,6 +34,14 @@ end
 class String
   alias_method :trim, :strip
   alias_method :trim!, :strip!
+
+  def capitalize_all
+    self.split('_').map(&:capitalize).join(' ').split(' ').map(&:capitalize).join(' ')
+  end
+
+  def self.token
+    return (1..20).to_a.map{(Random.rand(26) + 65).chr}.join
+  end
 end
 
 class Time
@@ -42,7 +50,7 @@ class Time
   end
 
   def minutes_after_midnight
-    ((self - self.midnight) / 60).to_i
+    ((self - self.midnight).to_f / 60).to_i
   end
 
   def week_start

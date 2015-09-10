@@ -101,7 +101,7 @@
                                     notice_class = 'affirm'
                                 when 'failure', :failure
                                     notice_class = 'negate'
-                                when 'alert', 'danger', :alert, :danger
+                                when 'alert', 'danger', 'error', :error, :alert, :danger
                                     notice_class = 'alert' %>
                             <% end %>
                             <div id="notice" class="wdn_notice <%= notice_class %>">

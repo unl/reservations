@@ -18,14 +18,19 @@
                 <li><a href="/admin/users/" title="Users">Users</a></li>
                 <li><a href="/admin/events/" title="Events">Events</a></li>
                 <li><a href="/admin/tools/" title="Tools">Tools</a></li>
+                <li><a href="/admin/hours/" title="Hours">Hours</a></li>
             </ul>
 	    </li>
     <% end %>
-    <% unless @user.nil? %>
     <li>
         <a href="/me/">My Account</a>
+        <% unless @user.nil? %>
         <ul>
             <li><a href="/logout/">Logout</a></li>
+        </ul>
+        <% else %>
+        <ul>
+            <li><a href="/login/">Login</a></li>
         </ul>
     </li>
     <% end %>

@@ -24,11 +24,12 @@ end %>
 			<% end %>
 		</div>
 	</div>
-	<% (1..5).map{|i| sunday+i.days}.each do |day| %>
+	<% (1..5).each do |i| %>
+	<% day = sunday + i.days %>
 	<% slots = [0] * 36 %>
 	<div class="calendar-day" data-day="<%= day.strftime("%Y/%m/%d") %>">
 		<label class="day-header"><%= day.strftime("%^a %-m/%d") %></label>
-		<div class="day-chart">
+		<div class="day-chart" title="Open">
 			<% day_events = events_groups[day.strftime("%Y/%m/%d")] %>
 			<% unless day_events.nil? %>
 			<% day_events.sort{|a, b| a.start_time <=> b.start_time}.each do |event| %>
@@ -70,6 +71,75 @@ end %>
 					<% slots[k] = slots[k] + 1 %>
 				<% end %>
 			<% end %>
+			<% end %>
+
+			<% if week_hours.has_key?(i) %>
+				<% # figure out where the closed divs need to be
+					# we can assume that all records in this space_hour are non-intertwined
+					closed_start = 0
+					closed_end = 0
+					starts = week_hours[i].hours.map{|record| record[:start]}
+					ends = week_hours[i].hours.map{|record| record[:end]}
+					%> <%
+					closeds = []
+					(360..1439).each do |j|
+						if ends.include?(j)
+							closed_start = j
+						elsif starts.include?(j)
+							closed_end = j
+							closeds << [closed_start, closed_end]
+							closed_start = 0
+							closed_end = 0
+						end
+					end 
+					closed_end = 1440
+					closeds << [closed_start, closed_end]
+
+					closeds.each do |closed|
+						start_time = closed[0] %>
+	            		<% end_time = closed[1] %>
+	            		<% 
+	            		if [((end_time - 360) / 30).floor, 35].min  < 0
+							next
+						end
+						top = ((start_time - 360) / 30) * 20
+						height = (end_time - start_time) * 20 / 30
+						if top < 0
+							height += top
+							top = 0
+						end 
+						if top + height > 720
+							height = 720 - top
+						end
+						%>
+						<div class="status closed" title="Closed" style="top: <%= top %>px; height: <%= height %>px;">
+							&nbsp;
+						</div>
+						<%
+					end
+				%>
+				<% week_hours[i].hours.each do |record| %>
+					<% if record[:status] != 'open' && record[:status] != 'closed' %>
+						<% start_time = record[:start] %>
+	            		<% end_time = record[:end] %>
+	            		<% if [((end_time - 360) / 30).floor, 35].min  < 0
+							next
+						end
+						top = ((start_time - 360) / 30) * 20
+						height = (end_time - start_time) * 20 / 30
+						if top < 0
+							height += top
+							top = 0
+						end 
+						if top + height > 720
+							height = 720 - top
+						end
+						%>
+						<div title="<%= record[:status].split('_').join(' ').capitalize_all %>" class="status <%= record[:status].downcase.split('_').join('-') %>" style="top: <%= top %>px; height: <%= height %>px;">
+							&nbsp;
+						</div>
+					<% end %>
+				<% end %>
 			<% end %>
 			<div>
 			<% (12..47).each do |j| %>
