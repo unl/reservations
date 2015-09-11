@@ -21,7 +21,11 @@
                 <%= tool.model %>
             </td>
             <td class="table-actions">
-                <a href="/tools/<%= tool.id %>/reserve/" class="wdn-button wdn-button-brand">Reserve Time</a>
+                <% if tool.is_reservable %>
+                    <a href="/tools/<%= tool.id %>/reserve/" class="wdn-button wdn-button-brand">Reserve Time</a>
+                <% else %>
+                    Reservation not required
+                <% end %>
             </td>
         </tr>
     <% end %>

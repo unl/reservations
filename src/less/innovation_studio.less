@@ -41,6 +41,9 @@
 	}
 	input {
 	  	word-wrap: normal;
+	  	&[disabled] {
+	  		background: #CCCCCC;
+	  	}
 	}
 	textarea {
 		resize: vertical;
@@ -93,7 +96,7 @@
 			background-color: #EEEEEE;
 		}
 	}
-	.event {
+	.event, .reservation {
 		position: absolute;
 		background: lighten(#137cbd, 30%);
 		border: 1px solid #137cbd;
@@ -135,6 +138,15 @@
 		&.open-without-reservations {
 			background-color: lighten(#137cbd, 30%);
 		}
+	}
+}
+
+.calendar-container.individual-day {
+	.time-labels {
+		width: 25%;
+	}
+	.calendar-day {
+		width: 70%;
 	}
 }
 

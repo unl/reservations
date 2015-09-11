@@ -13,8 +13,110 @@
     </div>
     <div class="bp1-wdn-col-one-third">
     	<label>Schedule for <span id="current-date"><%= Time.now.strftime('%m/%d/%Y') %></span></label>
-    	<div>
+        <div class="calendar-container individual-day">
+            <div class="time-labels">
+                <div class="time-chart">
+                    <% (12..47).each do |j| %>
+                        <div class="calendar-half-hour">
+                            <label><%= "#{(j / 2) % 12 + (j==24?12:0)} #{j>=24?'PM':'AM'}" if j % 2 == 0 %></label>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+            <% slots = [0] * 36 %>
+            <div class="calendar-day" data-day="<%= day.strftime("%Y/%m/%d") %>">
+                <label class="day-header"><%= day.strftime("%^a %-m/%d") %></label>
+                <div class="day-chart" title="Open">
+                    <% reservations.each do |reservation| %>
+                        <% end_slot = [(((reservation.end_time.in_time_zone - day.midnight) / 60 - 360) / 30).floor, 35].min 
+                        if end_slot < 0
+                            next
+                        end
+                        top = (((reservation.start_time.in_time_zone - day.midnight) / 60 - 360) / 30) * 20
+                        height = reservation.length * 20 / 30
+                        %>
+                        <div class="reservation" 
+                            style="top: <%= top %>px; height: <%= height %>px;">
+                            <%= reservation.user_id == @user.id ? 'My Reservation' : 'busy' %>
+                        </div>
+                    <% end %>
+                    <% unless space_hour.nil? 
+                        # figure out where the closed divs need to be
+                        # we can assume that all records in this space_hour are non-intertwined
+                        closed_start = 0
+                        closed_end = 0
+                        starts = space_hour.hours.map{|record| record[:start]}
+                        ends = space_hour.hours.map{|record| record[:end]}
+                        %> <%
+                        closeds = []
+                        (360..1439).each do |j|
+                            if starts.include?(j)
+                                closed_end = j
+                                closeds << [closed_start, closed_end]
+                                closed_start = 0
+                                closed_end = 0
+                            end
+                            if ends.include?(j)
+                                closed_start = j
+                            end
+                        end 
+                        closed_end = 1440
+                        closeds << [closed_start, closed_end]
 
+                        closeds.each do |closed|
+                            start_time = closed[0] %>
+                            <% end_time = closed[1] %>
+                            <% 
+                            if [((end_time - 360) / 30).floor, 35].min  < 0
+                                next
+                            end
+                            top = ((start_time - 360) / 30) * 20
+                            height = (end_time - start_time) * 20 / 30
+                            if top < 0
+                                height += top
+                                top = 0
+                            end 
+                            if top + height > 720
+                                height = 720 - top
+                            end
+                            %>
+                            <div class="status closed" title="Closed" style="top: <%= top %>px; height: <%= height %>px;">
+                                &nbsp;
+                            </div>
+                            <%
+                        end %>
+                        <% space_hour.hours.each do |record| %>
+                            <% if record[:status] != 'open' && record[:status] != 'closed' %>
+                                <% start_time = record[:start] %>
+                                <% end_time = record[:end] %>
+                                <% if [((end_time - 360) / 30).floor, 35].min  < 0
+                                    next
+                                end
+                                top = ((start_time - 360) / 30) * 20
+                                height = (end_time - start_time) * 20 / 30
+                                if top < 0
+                                    height += top
+                                    top = 0
+                                end 
+                                if top + height > 720
+                                    height = 720 - top
+                                end
+                                %>
+                                <div title="<%= record[:status].split('_').join(' ').capitalize_all %>" class="status <%= record[:status].downcase.split('_').join('-') %>" style="top: <%= top %>px; height: <%= height %>px;">
+                                    &nbsp;
+                                </div>
+                            <% end %>
+                        <% end %>
+                    <% end %>
+                    <div>
+                    <% (12..47).each do |j| %>
+                        <div class="calendar-half-hour">
+                            &nbsp;
+                        </div>
+                    <% end %>
+                    </div>
+                </div>
+            </div>
     	</div>
     </div>
     <div class="bp1-wdn-col-one-third">
@@ -40,14 +142,20 @@
             </div>
         </div>
 
-        <label for="reservation-length">Reserve machine for:</label>
+        <label for="reservation-length">Reserve machine for:</label><br>
+        <% if tool.minutes_per_reservation.nil? %>
         <select id="reservation-length" name="length">
+
         	<% (1..4).each do |i| %>
         	<option value="<%=i*15%>"><%=i*15%> minutes</option>
         	<% end %>
         	<option value="90">1.5 hours</option>
         	<option value="120">2 hours</option>
         </select>
+        <% else %>
+        <input style="width: 50px" disabled="disabled" value="<%= tool.minutes_per_reservation %>" />&nbsp;&nbsp;<label>minutes</label>
+        <input type="hidden" name="length" value="<%= tool.minutes_per_reservation %>" />
+        <% end %>
         <br><br>
         <button type="submit" class="wdn-button wdn-button-brand">Reserve</button>
     </div>

@@ -83,13 +83,14 @@ end %>
 					%> <%
 					closeds = []
 					(360..1439).each do |j|
-						if ends.include?(j)
-							closed_start = j
-						elsif starts.include?(j)
+						if starts.include?(j)
 							closed_end = j
 							closeds << [closed_start, closed_end]
 							closed_start = 0
 							closed_end = 0
+						end
+						if ends.include?(j)
+							closed_start = j
 						end
 					end 
 					closed_end = 1440
