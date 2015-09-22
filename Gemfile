@@ -8,6 +8,7 @@ gem 'activerecord', :require => 'active_record'
 gem 'mysql'
 gem 'bcrypt'
 gem 'unicorn'
+gem 'pony'
 
 group :development do
   gem 'shotgun'

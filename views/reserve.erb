@@ -1,5 +1,21 @@
+<% 
+start_hour = nil
+start_minute = nil
+start_am_pm = nil
+unless reservation.nil?
+    start_hour = reservation.start_time.in_time_zone.hour
+    if start_hour >= 12
+        start_hour -= 12
+        start_am_pm = 'pm'
+    else
+        start_am_pm = 'am'
+    end
+    start_hour += 12 if start_hour == 0
+    start_minute = reservation.start_time.in_time_zone.min
+end %>
+
 <div id="pagetitle">
-	<h3>Reserve Time on <%= tool.name %></h3>
+	<h3><%= reservation.nil? ? 'Reserve Time on ' : 'Edit Reservation for ' %><%= tool.name %></h3>
 </div>
 
 <form action="" method="POST">
@@ -8,11 +24,11 @@
     	<label for="date">Date</label>
     	<div class="date-time-select">
     	<span class="wdn-icon-calendar"></span>
-        <input style="width: 90%;" id="date" name="date" title="Reservation Date" type="text" class="datepicker" value="<%= Time.now.strftime('%m/%d/%Y') %>" />
+        <input style="width: 90%;" id="date" name="date" title="Reservation Date" type="text" class="datepicker" value="<%= day.strftime('%m/%d/%Y') %>" />
         </div>
     </div>
     <div class="bp1-wdn-col-one-third">
-    	<label>Schedule for <span id="current-date"><%= Time.now.strftime('%m/%d/%Y') %></span></label>
+    	<label>Schedule for <span id="current-date"><%= day.strftime('%m/%d/%Y') %></span></label>
         <div class="calendar-container individual-day">
             <div class="time-labels">
                 <div class="time-chart">
@@ -27,17 +43,18 @@
             <div class="calendar-day" data-day="<%= day.strftime("%Y/%m/%d") %>">
                 <label class="day-header"><%= day.strftime("%^a %-m/%d") %></label>
                 <div class="day-chart" title="Open">
-                    <% reservations.each do |reservation| %>
-                        <% end_slot = [(((reservation.end_time.in_time_zone - day.midnight) / 60 - 360) / 30).floor, 35].min 
+                    <% reservations.each do |res| %>
+                        <% end_slot = [(((res.end_time.in_time_zone - day.midnight) / 60 - 360) / 30).floor, 35].min 
                         if end_slot < 0
                             next
                         end
-                        top = (((reservation.start_time.in_time_zone - day.midnight) / 60 - 360) / 30) * 20
-                        height = reservation.length * 20 / 30
+                        top = (((res.start_time.in_time_zone - day.midnight) / 60 - 360) / 30) * 20
+                        height = res.length * 20 / 30
                         %>
-                        <div class="reservation" 
+                        <div class="reservation <%= 'editing' if reservation.id == res.id %>" 
                             style="top: <%= top %>px; height: <%= height %>px;">
-                            <%= reservation.user_id == @user.id ? 'My Reservation' : 'busy' %>
+                            <%= res.user_id == @user.id ? 'My Reservation' : 'busy' %>
+                            <%= '(Editing)' if reservation.id == res.id %>
                         </div>
                     <% end %>
                     <% unless space_hour.nil? 
@@ -125,20 +142,20 @@
             <select style="width: 30%" id="start-time-hour" name="start_time_hour" title="Start Time Hour">
                 <option value=""></option>
                 <% (1..12).each do |i| %>
-                <option value="<%= i %>"><%= i %></option>
+                <option <%= 'selected="selected"' if i == start_hour %> value="<%= i %>"><%= i %></option>
                 <% end %>
             </select> : 
 
             <select style="width: 30%" id="start-time-minute" name="start_time_minute" title="Start Time Minute">
                 <option value=""></option>
                 <% (0..11).each do |i| %>
-                <option value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
+                <option <%= 'selected="selected"' if i*5 == start_minute %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
                 <% end %>
             </select>
 
             <div id="start-time-am-pm" class="am_pm">
-                <input id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm">AM<br>
-                <input id="start-time-am-pm-pm" title="PM" type="radio" value="pm" name="start_time_am_pm">PM
+                <input <%= 'checked="checked"' if start_am_pm == 'am' %> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm">AM<br>
+                <input <%= 'checked="checked"' if start_am_pm == 'pm' %>id="start-time-am-pm-pm" title="PM" type="radio" value="pm" name="start_time_am_pm">PM
             </div>
         </div>
 

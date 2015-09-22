@@ -1,1 +1,72 @@
-<p>Innovation</p>
+<div id="pagetitle">
+	<h3>Welcome to Innovation Studio Manager</h3>
+</div>
+
+<h4>
+My Reservations
+</h4>
+<table>
+    <thead>
+        <tr>
+            <th>Tool</th>
+            <th>Model</th>
+            <th>Time</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% reservations.each do |reservation| %>
+        <tr>
+            <td>
+                <%= reservation.resource.name %>
+            </td>
+            <td>
+                <%= reservation.resource.model %>
+            </td>
+            <td>
+            	<%= reservation.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
+            	<%= reservation.length %> minutes
+            </td>
+            <td class="table-actions">
+                <a href="/tools/<%= reservation.resource.id %>/edit_reservation/<%= reservation.id %>/" class="wdn-button wdn-button-brand">Edit</a>
+                <form method="POST" action="/tools/<%= reservation.resource.id %>/cancel/<%= reservation.id %>" class="delete-form">
+                    <button class="wdn-button" type="submit">Remove</button>
+                </form>
+            </td>
+        </tr>
+    <% end %>
+    </tbody>
+</table>
+
+<h4>
+My Events
+</h4>
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Date/Location</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% events.each do |event| %>
+        <tr>
+            <td>
+                <%= event.title %>
+            </td>
+            <td>
+                <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
+                <%= event.location.name %>
+            </td>
+            <td class="table-actions">
+            	<form action="/events/<%= event.id %>/remove_signup/" method="POST" class="delete-form">
+					<button class="wdn-button" type="submit">
+					Remove
+					</button>
+				</form>
+            </td>
+        </tr>
+    <% end %>
+    </tbody>
+</table>

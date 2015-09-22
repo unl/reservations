@@ -1,5 +1,6 @@
 require 'models/event'
 require 'models/event_signup'
+require 'classes/emailer'
 
 MAX_SIGNUPS_PER_ORIENTATION = 10
 
@@ -61,6 +62,18 @@ post '/new_members/sign_up/:event_id/?' do
 		:name => params[:name],
 		:email => params[:email]
 	)
+
+	body = <<EMAIL
+<p>Thank you, #{params[:name]} for signing up for #{event.title}. Don't forget that the event is</p>
+
+<p><strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
+
+<p>We'll see you there!</p>
+
+<p>Nebraska Innovation Studio</p>
+EMAIL
+
+	Emailer.mail(params[:email], "Nebraska Innovation Studio - #{event.title}", body)
 
 	# flash a message that this works
 	flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, orientation is #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}.")

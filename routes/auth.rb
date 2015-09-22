@@ -44,7 +44,7 @@ end
 get '/login/?' do
     @breadcrumbs << {:text => 'Login'}
     unless @user.nil?
-      redirect '/me/'
+      redirect '/home/'
     end
     erb :login, :layout => :fixed
 end
@@ -60,7 +60,7 @@ post '/login/?' do
 
     # it is the user, hooray
     session[:user_id] = user.id
-    redirect '/me/'
+    redirect '/home/'
 end
 
 get '/logout/?' do

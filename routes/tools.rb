@@ -50,6 +50,18 @@ post '/tools/trainings/sign_up/:event_id/?' do
 		:user_id => @user.id
 	)
 
+	body = <<EMAIL
+<p>Thank you, #{@user.full_name} for signing up for #{event.title}. Don't forget that this training is</p>
+
+<p><strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
+
+<p>We'll see you there!</p>
+
+<p>Nebraska Innovation Studio</p>
+EMAIL
+
+	Emailer.mail(@user.email, "Nebraska Innovation Studio - #{event.title}", body)
+
 	# flash a message that this works
 	flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, #{event.title} is #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}.")
 	redirect '/tools/trainings/'
@@ -81,7 +93,46 @@ get '/tools/:resource_id/reserve/?' do
 		:tool => tool,
 		:reservations => Reservation.where(:resource_id => tool.id).in_day(date).all,
 		:space_hour => space_hour,
-		:day => date
+		:day => date,
+		:reservation => nil
+	}
+end
+
+get '/tools/:resource_id/edit_reservation/:reservation_id/?' do
+	@breadcrumbs << {:text => 'Tools', :href => '/tools/'} << {:text => 'Edit Reservation'}
+	require_login
+
+	# check that the user has authorization to reserve this tool, if tool requires auth
+	tool = Resource.find_by(:service_space_id => SS_ID, :id => params[:resource_id])
+	if tool.nil?
+		flash(:alert, 'Not Found', 'That tool does not exist.')
+		redirect '/tools/'
+	end
+
+	unless @user.authorized_resource_ids.include?(tool.id)
+		flash(:alert, 'Not Authorized', 'Sorry, you have not yet been authorized to reserve time on this machine.')
+		redirect '/tools/'
+	end
+
+	# check that this reservation exists
+	reservation = Reservation.find(params[:reservation_id])
+	if reservation.nil?
+		flash(:alert, 'Not Found', 'That reservation does not exist.')
+		redirect back
+	end
+
+	date = reservation.start_time.in_time_zone.midnight
+	# get the studio's hours for this day
+	space_hour = SpaceHour.where(:service_space_id => SS_ID)
+		.where('effective_date <= ?', date.utc.strftime('%Y-%m-%d %H:%M:%S')).where(:day_of_week => date.wday)
+		.order(:effective_date => :desc, :id => :desc).first
+
+	erb :reserve, :layout => :fixed, :locals => {
+		:tool => tool,
+		:reservations => Reservation.where(:resource_id => tool.id).in_day(date).all,
+		:space_hour => space_hour,
+		:day => date,
+		:reservation => reservation
 	}
 end
 
@@ -174,5 +225,25 @@ post '/tools/:resource_id/reserve/?' do
 	redirect '/tools/'
 end
 
+post '/tools/:resource_id/cancel/:reservation_id/?' do
+	require_login
+
+	# check that the user requesting cancel is the same as the one on the reservation
+	reservation = Reservation.find(params[:reservation_id])
+	if reservation.nil?
+		flash :alert, 'Not Found', 'That reservation was not found.'
+		redirect back
+	end
+
+	if reservation.user_id != @user.id
+		flash :alert, 'Unauthorized', 'That is not your reservation.'
+		redirect back
+	end
+
+	reservation.delete
+
+	flash :success, 'Reservation Cancelled', 'Your reservation has been removed.'
+	redirect back
+end
 
 
