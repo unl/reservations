@@ -1,0 +1,39 @@
+<div id="pagetitle">
+	<h3>
+    	<%= event.title %><span class="wdn-subhead"><%= event.type.description %></span>
+    </h3>
+</div>
+<div>
+	<span class="date-wrapper eventicon-calendar-empty">
+    	<time class="dtstart">Sep. 22, 2015</time>
+	</span><br>
+	<span class="time-wrapper eventicon-clock">
+    	11:00 am–6:00 pm    
+    </span>
+	<div class="location eventicon-location">
+		<%= event.location.name %>
+	</div><br>
+	<div class="description">
+    	<%= event.description %>
+    </div>
+</div><br>
+
+<% if @user && event.signups.map(&:user_id).include?(@user.id) %>
+	<% if event.type.description == 'Free Event' %>
+		This event is noted on your homepage.<br>
+		<a href='/home/' class="wdn-button wdn-button-triad">View Homepage</a>
+	<% else %>
+		You have signed up for this event.<br>
+		<a href='/home/' class="wdn-button wdn-button-triad">View Homepage</a>
+	<% end %>
+<% elsif @user %>
+<form action="/events/<%= event.id %>/sign_up/" method="POST">
+<button type="submit" class="wdn-button wdn-button-brand">
+	<% if event.type.description == 'Free Event' %>
+		Note event on my homepage
+	<% else %>
+		Sign up for this event
+	<% end %>
+</a>
+</form>
+<% end %>
