@@ -22,9 +22,11 @@ class Event < ActiveRecord::Base
 	end
 
 	def info_link
-		if type.description == 'New Member Orientation'
-			return "/new_members/sign_up/#{id}/"
+		case type.description
+		when 'New Member Orientation'
+			"/new_members/sign_up/#{id}/"
+		else
+			"/events/#{id}/"
 		end
-		return nil
 	end
 end

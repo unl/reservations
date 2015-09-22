@@ -155,7 +155,7 @@ end %>
 
             <div id="start-time-am-pm" class="am_pm">
                 <input <%= 'checked="checked"' if start_am_pm == 'am' %> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm">AM<br>
-                <input <%= 'checked="checked"' if start_am_pm == 'pm' %>id="start-time-am-pm-pm" title="PM" type="radio" value="pm" name="start_time_am_pm">PM
+                <input <%= 'checked="checked"' if start_am_pm == 'pm' %> id="start-time-am-pm-pm" title="PM" type="radio" value="pm" name="start_time_am_pm">PM
             </div>
         </div>
 
@@ -174,7 +174,7 @@ end %>
         <input type="hidden" name="length" value="<%= tool.minutes_per_reservation %>" />
         <% end %>
         <br><br>
-        <button type="submit" class="wdn-button wdn-button-brand">Reserve</button>
+        <button type="submit" class="wdn-button wdn-button-brand"><%= reservation.nil? ? 'Reserve' : 'Update' %></button>
     </div>
 </section>
 </form>

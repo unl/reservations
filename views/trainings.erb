@@ -9,8 +9,8 @@ type of equipment. Here, you can sign up for upcoming trainings. Take a look at 
 </p>
 
 <div class="event-page">
-    <table class="event-list">
-        <thead class="small-hidden">
+    <table>
+        <thead>
             <tr>
                 <th>Title</th>
                 <th>Date/Location</th>
@@ -21,18 +21,11 @@ type of equipment. Here, you can sign up for upcoming trainings. Take a look at 
         <% events.each do |event| %>
             <tr>
                 <td class="small-hidden">
-                    <%= event.title %>
+                    <a href="<%= event.info_link %>"><%= event.title %></a>
                 </td>
                 <td>
-                    <div class="small-block hidden calendar-event-title">
-                        <%= event.title %>
-                    </div>
-                    <ul>
-                        <li>
-                            <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
-                            <%= event.location.name %>
-                        </li>
-                    </ul>
+                    <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
+                    <%= event.location.name %>
                 </td>
                 <td>
                 <% if !@user.signed_up_event_ids.include?(event.id) %>

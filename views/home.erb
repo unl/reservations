@@ -5,6 +5,10 @@
 <h4>
 My Reservations
 </h4>
+<% if reservations.empty? %>
+You have no upcoming reservations. You can view upcoming trainings to get certified, or check out the list of tools you can reserve.<br>
+<a href="/tools/trainings/" class="wdn-button wdn-button-triad">View Trainings</a> <a href="/tools/" class="wdn-button wdn-button-brand">View Tools</a>
+<% else %>
 <table>
     <thead>
         <tr>
@@ -37,10 +41,15 @@ My Reservations
     <% end %>
     </tbody>
 </table>
+<% end %>
 
 <h4>
 My Events
 </h4>
+<% if events.empty? %>
+You have not signed up for any upcoming events. Why not check out the calendar to find some?<br>
+<a href="/calendar/" class="wdn-button wdn-button-triad">View Calendar</a>
+<% else %>
 <table>
     <thead>
         <tr>
@@ -53,7 +62,7 @@ My Events
     <% events.each do |event| %>
         <tr>
             <td>
-                <%= event.title %>
+                <a href="<%= event.info_link %>"><%= event.title %></a>
             </td>
             <td>
                 <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
@@ -70,3 +79,4 @@ My Events
     <% end %>
     </tbody>
 </table>
+<% end %>
