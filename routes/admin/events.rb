@@ -66,7 +66,7 @@ post '/admin/events/create/?' do
 			:start_time => event.start_time,
 			:end_time => event.end_time,
 			:is_training => true,
-			:user_id => @user.id
+			:user_id => nil
 		)
 	end
 
@@ -112,7 +112,7 @@ post '/admin/events/:event_id/edit/?' do
 			:start_time => event.start_time,
 			:end_time => event.end_time,
 			:is_training => true,
-			:user_id => @user.id
+			:user_id => nil
 		)
 	elsif event.has_reservation && !checked
 		# remove the reservation
@@ -125,7 +125,7 @@ post '/admin/events/:event_id/edit/?' do
 			:start_time => event.start_time,
 			:end_time => event.end_time,
 			:is_training => true,
-			:user_id => @user.id
+			:user_id => nil
 		)
 	end
 
