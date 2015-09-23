@@ -51,10 +51,10 @@ end %>
                         top = (((res.start_time.in_time_zone - day.midnight) / 60 - 360) / 30) * 20
                         height = res.length * 20 / 30
                         %>
-                        <div class="reservation <%= 'editing' if reservation.id == res.id %>" 
+                        <div class="reservation <%= 'editing' if !reservation.nil? && reservation.id == res.id %>" 
                             style="top: <%= top %>px; height: <%= height %>px;">
                             <%= res.user_id == @user.id ? 'My Reservation' : 'busy' %>
-                            <%= '(Editing)' if reservation.id == res.id %>
+                            <%= '(Editing)' if !reservation.nil? && reservation.id == res.id %>
                         </div>
                     <% end %>
                     <% unless space_hour.nil? 
@@ -184,5 +184,10 @@ WDN.initializePlugin('jqueryui', [function() {
     $ = require('jquery');
     $('.datepicker').datepicker();
     $("LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
+
+    $('#date').change(function () {
+        var date = $('#date').val().split('/');
+        window.location = window.location.href.split('?')[0] + '?date=' + date[2] + '-' + date[0] + '-' + date[1];
+    });
 }]);
 </script>

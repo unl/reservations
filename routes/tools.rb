@@ -83,7 +83,7 @@ get '/tools/:resource_id/reserve/?' do
 		redirect '/tools/'
 	end
 
-	date = Time.now.midnight.in_time_zone
+	date = params[:date].nil? ? Time.now.midnight.in_time_zone : Time.parse(params[:date]).midnight.in_time_zone
 	# get the studio's hours for this day
 	space_hour = SpaceHour.where(:service_space_id => SS_ID)
 		.where('effective_date <= ?', date.utc.strftime('%Y-%m-%d %H:%M:%S')).where(:day_of_week => date.wday)
@@ -211,6 +211,20 @@ post '/tools/:resource_id/reserve/?' do
 		end
 	end
 	# if no record studio is open
+
+	# check for possible other reservations during this time period
+	other_reservations = Reservation.where(:resource_id => params[:resource_id]).in_day(date).all
+	other_reservations.each do |reservation|
+		if (start_time >= reservation.start_time && start_time < reservation.end_time) ||
+				(end_time >= reservation.start_time && end_time < reservation.end_time) ||
+				(start_time < reservation.start_time && end_time > reservation.end_time)
+			flash :alert, "Tool is being used.", "Sorry, that tool is reserved during that time period. Please try another time slot."
+			redirect back
+		elsif reservation.user_id == @user.id
+			flash :alert, "Over Limit", "Sorry, you can only reserve this tool once per day. Please try reserving another time slot on another day."
+			redirect back
+		end
+	end
 
 	Reservation.create(
 		:resource_id => tool.id,
