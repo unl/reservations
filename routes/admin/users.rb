@@ -16,26 +16,80 @@ end
 
 get '/admin/users/create/?' do
 	@breadcrumbs << {:text => 'Admin Users', :href => '/admin/users/'} << {:text => 'Create User'}
-	erb :'admin/new_user', :layout => :fixed
+	erb :'admin/new_user', :layout => :fixed, :locals => {
+		:user => User.new
+	}
+end
+
+get '/admin/users/:user_id/edit/?' do
+	user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
+	if user.nil?
+		flash :alert, "Not Found", "Sorry, that user was not found"
+		redirect '/admin/users/'
+	end
+
+	@breadcrumbs << {:text => 'Admin Users', :href => '/admin/users/'} << {:text => 'Edit User'}
+	erb :'admin/edit_user', :layout => :fixed, :locals => {
+		:user => user
+	}
+end
+
+post '/admin/users/:user_id/edit/?' do
+	user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
+	if user.nil?
+		flash :alert, "Not Found", "Sorry, that user was not found"
+		redirect '/admin/users/'
+	end
+
+	# check that username is not taken
+	name_user = User.find_by(:username => params[:username])
+	unless name_user.nil? || name_user == user
+		flash(:alert, 'Username Taken', 'Sorry, another user has already taken that username.')
+		redirect back
+	end
+
+	user.update({
+		:first_name => params[:first_name],
+		:last_name => params[:last_name],
+		:email => params[:email],
+		:username => params[:username],
+		:university_status => params[:university_status]
+	})
+
+	flash :success, 'User Updated', 'Your user has been updated.'
+	redirect '/admin/users/'
+end
+
+post '/admin/users/:user_id/delete/' do
+	user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
+	if user.nil?
+		flash :alert, "Not Found", "Sorry, that user was not found."
+		redirect '/admin/users/'
+	end
+
+	user.destroy
+
+	flash :success, 'User Deleted', 'That user has been deleted.'
+	redirect '/admin/users/'
 end
 
 post '/admin/users/create/?' do
 	# check that username is not taken
 	unless User.find_by(:username => params[:username]).nil?
 		flash(:alert, 'Username Taken', 'Sorry, another user has already taken that username.')
-		redirect '/admin/users/create/'
+		redirect back
 	end
 
 	# check password is at least 8 characters
 	unless params[:password].length >= 8
 		flash(:alert, 'Password too short', 'Sorry, your password must be at least 8 characters.')
-		redirect '/admin/users/create/'
+		redirect back
 	end
 
 	# check that password matches confirmation
 	unless params[:password] == params[:password2]
 		flash(:alert, 'Passwords do not match', 'Sorry, your passwords do not match.')
-		redirect '/admin/users/create/'
+		redirect back
 	end
 
 	params.delete('password2')
@@ -43,6 +97,7 @@ post '/admin/users/create/?' do
 	user.created_by_user_id = @user.id
 	user.save
 
+	flash :success, 'User Created', 'Your user has been created.'
 	redirect '/admin/users/'
 end
 

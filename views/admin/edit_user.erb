@@ -1,0 +1,28 @@
+<div id="pagetitle">
+    <h3>Edit User <%= user.username %></h3>
+</div>
+
+<form id="edit-user" action="" method="POST">
+    <div class="bp2-wdn-col-one-half">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" value="<%= user.username %>" />
+
+        <label for="email">Email Address</label>
+        <input type="text" id="email" name="email" value="<%= user.email %>" />
+
+        <label for="first-name">First Name</label>
+        <input type="text" id="first-name" name="first_name" value="<%= user.first_name %>" />
+
+        <label for="last-name">Last Name</label>
+        <input type="text" id="last-name" name="last_name" value="<%= user.last_name %>" />
+
+        <label for="university-status">University Status</label>
+        <select id="university-status" name="university_status">
+            <% %w(none student faculty staff).each do |word| %>
+                <option <%= 'selected="selected"' if user.university_status == word %> value="<%= word %>"><%= word.capitalize %></option>
+            <% end %>
+        </select>
+        <br><br>
+        <button class="wdn-button wdn-button-brand" type="submit">Update</button>
+    </div>
+</form>
