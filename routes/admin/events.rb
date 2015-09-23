@@ -1,6 +1,7 @@
 require 'models/event'
 require 'models/event_type'
 require 'models/location'
+require 'models/resource'
 
 get '/admin/events/?' do
 	@breadcrumbs << {:text => 'Admin Events'}
@@ -47,7 +48,8 @@ get '/admin/events/create/?' do
 	erb :'admin/new_event', :layout => :fixed, :locals => {
 		:event => Event.new,
 		:types => EventType.where(:service_space_id => SS_ID).all,
-		:locations => Location.where(:service_space_id => SS_ID).all
+		:locations => Location.where(:service_space_id => SS_ID).all,
+		:tools => Resource.where(:service_space_id => SS_ID, :is_reservable => true).all
 	}
 end
 
@@ -56,8 +58,16 @@ post '/admin/events/create/?' do
 	event = set_event_data(event, params)
 	event.save
 
-	if event.type.description == 'Machine Training'
-		# need to create a reservation on the machine at that time
+	if params.has_key?('reserve_tool') && params['reserve_tool'] == 'on'
+		# we need to create a reservation for the tool on the appropriate time
+		Reservation.create(
+			:resource_id => params[:tool],
+			:event_id => event.id,
+			:start_time => event.start_time,
+			:end_time => event.end_time,
+			:is_training => true,
+			:user_id => @user.id
+		)
 	end
 
 	# notify that it worked
@@ -67,7 +77,7 @@ end
 
 get '/admin/events/:event_id/edit/?' do
 	@breadcrumbs << {:text => 'Admin Events', :href => '/admin/events/'} << {text: 'Edit Event'}
-	event = Event.includes(:event_type, :location).find_by(:id => params[:event_id], :service_space_id => SS_ID)
+	event = Event.includes(:event_type, :location, :reservation => :resource).find_by(:id => params[:event_id], :service_space_id => SS_ID)
 	if event.nil?
 		# that event does not exist
 		flash(:danger, 'Not Found', 'That event does not exist')
@@ -77,7 +87,8 @@ get '/admin/events/:event_id/edit/?' do
 	erb :'admin/new_event', :layout => :fixed, :locals => {
 		:event => event,
 		:types => EventType.where(:service_space_id => SS_ID).all,
-		:locations => Location.where(:service_space_id => SS_ID).all
+		:locations => Location.where(:service_space_id => SS_ID).all,
+		:tools => Resource.where(:service_space_id => SS_ID, :is_reservable => true).all
 	}
 end
 
@@ -90,6 +101,33 @@ post '/admin/events/:event_id/edit/?' do
 	end
 	event = set_event_data(event, params)
 	event.save
+
+	# check the tool reservation for this
+	checked = params.has_key?('reserve_tool') && params['reserve_tool'] == 'on'
+	if event.has_reservation && checked
+		# update the reservation
+		event.reservation.update(
+			:resource_id => params[:tool],
+			:event_id => event.id,
+			:start_time => event.start_time,
+			:end_time => event.end_time,
+			:is_training => true,
+			:user_id => @user.id
+		)
+	elsif event.has_reservation && !checked
+		# remove the reservation
+		event.reservation.delete
+	elsif !event.has_reservation && checked
+		# create the reservation
+		Reservation.create(
+			:resource_id => params[:tool],
+			:event_id => event.id,
+			:start_time => event.start_time,
+			:end_time => event.end_time,
+			:is_training => true,
+			:user_id => @user.id
+		)
+	end
 
 	# notify that it worked
 	flash(:success, 'Event Updated', "Your #{event.type.description}: #{event.title} has been updated.")

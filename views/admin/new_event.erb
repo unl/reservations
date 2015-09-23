@@ -26,6 +26,19 @@
                     <% end %>
                 </select>
 
+                <div>
+                    <input type="checkbox" <%= 'checked="checked"' if !event.reservation.nil? && !event.reservation.resource.nil? %> id="reserve-tool" name="reserve_tool"><label for="reserve-tool">Reserve a tool for this event</label>
+                    <div id="tools-for-reserving" style="<%= 'display: none;' if event.reservation.nil? || event.reservation.resource.nil? %>">
+                        <label for="tool">Tool</label>
+                        <select id="tool" name="tool" class="use-select2" style="width: 100%;">
+                            <% tools.each do |tool| %>
+                                <option <%= 'selected="selected"' if !event.reservation.nil? && !event.reservation.resource.nil? && event.reservation.resource.id == tool.id %> value="<%= tool.id %>"><%= "#{tool.name} - #{tool.model}" %></option>
+                            <% end %>
+                        </select>
+                    </div>
+                </div>
+                <br>
+
                 <label for="start-date" ><span class="required">*</span> Start Date &amp; Time</label>
                 <div class="date-time-select"><span class="wdn-icon-calendar"></span>
                     <input id="start-date" value="<%= event.start_time.in_time_zone.strftime('%m/%d/%Y') if !event.start_time.nil? %>" name="start_date" title="Start Date" type="text" class="datepicker" /><br class="hidden small-block"> @
@@ -97,5 +110,13 @@ WDN.initializePlugin('jqueryui', [function() {
     $ = require('jquery');
     $('.datepicker').datepicker();
     $("LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
+
+    $('#reserve-tool').click(function(click) {
+        if ($('#reserve-tool').is(':checked')) {
+            $('#tools-for-reserving').show();
+        } else {
+            $('#tools-for-reserving').hide();
+        }
+    });
 }]);
 </script>

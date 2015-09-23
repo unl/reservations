@@ -2,7 +2,7 @@ require 'models/reservation'
 require 'models/event'
 
 get '/home/?' do
-	reservations = Reservation.joins(:resource).
+	reservations = Reservation.joins(:resource).includes(:event).
 		where(:resources => {:service_space_id => SS_ID}).
 		where(:user_id => @user.id).
 		where('end_time >= ?', Time.now).

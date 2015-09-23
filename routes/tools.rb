@@ -91,7 +91,7 @@ get '/tools/:resource_id/reserve/?' do
 
 	erb :reserve, :layout => :fixed, :locals => {
 		:tool => tool,
-		:reservations => Reservation.where(:resource_id => tool.id).in_day(date).all,
+		:reservations => Reservation.includes(:event).where(:resource_id => tool.id).in_day(date).all,
 		:space_hour => space_hour,
 		:day => date,
 		:reservation => nil
@@ -304,13 +304,23 @@ post '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 	end
 	# if no record studio is open
 
+	# check for possible other reservations during this time period
+	other_reservations = Reservation.where(:resource_id => params[:resource_id]).where.not(:id => reservation.id).in_day(date).all
+	other_reservations.each do |reservation|
+		if (start_time >= reservation.start_time && start_time < reservation.end_time) ||
+				(end_time >= reservation.start_time && end_time < reservation.end_time) ||
+				(start_time < reservation.start_time && end_time > reservation.end_time)
+			flash :alert, "Tool is being used.", "Sorry, that tool is reserved during that time period. Please try another time slot."
+			redirect back
+		elsif reservation.user_id == @user.id
+			flash :alert, "Over Limit", "Sorry, you can only reserve this tool once per day. Please try reserving another time slot on another day."
+			redirect back
+		end
+	end
+
 	reservation.update(
-		:resource_id => tool.id,
-		:event_id => nil,
 		:start_time => start_time,
-		:end_time => end_time,
-		:is_training => false,
-		:user_id => @user.id
+		:end_time => end_time
 	)
 
 	flash(:success, 'Reservation Updated', "You have successfully updated your reservation for #{tool.name}: it is now for #{params[:length]} minutes at #{start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}")

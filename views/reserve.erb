@@ -53,7 +53,11 @@ end %>
                         %>
                         <div class="reservation <%= 'editing' if !reservation.nil? && reservation.id == res.id %>" 
                             style="top: <%= top %>px; height: <%= height %>px;">
-                            <%= res.user_id == @user.id ? 'My Reservation' : 'busy' %>
+                            <% if !res.event.nil? %>
+                                <%= res.event.title %>
+                            <% else %>
+                                <%= res.user_id == @user.id ? 'My Reservation' : 'busy' %>
+                            <% end %>
                             <%= '(Editing)' if !reservation.nil? && reservation.id == res.id %>
                         </div>
                     <% end %>

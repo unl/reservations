@@ -2,6 +2,7 @@ require 'active_record'
 
 class Reservation < ActiveRecord::Base
 	belongs_to :resource
+	belongs_to :event
 	belongs_to :user
 
 	scope :in_day, ->(time) {

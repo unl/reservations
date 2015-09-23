@@ -23,6 +23,9 @@ You have no upcoming reservations. You can view upcoming trainings to get certif
         <tr>
             <td>
                 <%= reservation.resource.name %>
+                <% if !reservation.event.nil? %>
+                    <br><small><%= reservation.event.title %></small>
+                <% end %>
             </td>
             <td>
                 <%= reservation.resource.model %>

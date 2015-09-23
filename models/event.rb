@@ -2,6 +2,7 @@ require 'active_record'
 
 class Event < ActiveRecord::Base
 	has_many :event_signups, :dependent => :destroy
+	has_one :reservation
 	belongs_to :location
 	belongs_to :event_type
 	alias_method :type, :event_type
@@ -28,5 +29,9 @@ class Event < ActiveRecord::Base
 		else
 			"/events/#{id}/"
 		end
+	end
+
+	def has_reservation
+		!self.reservation.nil?
 	end
 end
