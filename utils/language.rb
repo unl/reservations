@@ -64,4 +64,8 @@ class Time
   def month_start
     Time.new(self.year, self.month, 1)
   end
+
+  def self.from_minutes(minutes)
+    Time.now.midnight + minutes.minutes
+  end
 end

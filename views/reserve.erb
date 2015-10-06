@@ -141,26 +141,17 @@ end %>
     	</div>
     </div>
     <div class="bp1-wdn-col-one-third">
-    	<label for="start-time-hour" >Start Time</label>
+    	<label for="start-minutes">Start Time</label>
         <div class="date-time-select">
-            <select style="width: 30%" id="start-time-hour" name="start_time_hour" title="Start Time Hour">
-                <option value=""></option>
-                <% (1..12).each do |i| %>
-                <option <%= 'selected="selected"' if i == start_hour %> value="<%= i %>"><%= i %></option>
-                <% end %>
-            </select> : 
-
-            <select style="width: 30%" id="start-time-minute" name="start_time_minute" title="Start Time Minute">
-                <option value=""></option>
-                <% (0..11).each do |i| %>
-                <option <%= 'selected="selected"' if i*5 == start_minute %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
-                <% end %>
-            </select>
-
-            <div id="start-time-am-pm" class="am_pm">
-                <input <%= 'checked="checked"' if start_am_pm == 'am' %> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm">AM<br>
-                <input <%= 'checked="checked"' if start_am_pm == 'pm' %> id="start-time-am-pm-pm" title="PM" type="radio" value="pm" name="start_time_am_pm">PM
-            </div>
+            <% if available_start_times.empty? %>
+                No available times today.
+            <% else %>
+                <select id="start-minutes" name="start_minutes" style="width: 90%">
+                    <% available_start_times.each do |minutes| %>
+                        <option <%='selected="selected"' if !reservation.nil? && reservation.start_time.in_time_zone.midnight == day && reservation.start_time.in_time_zone.minutes_after_midnight == minutes %> value="<%= minutes %>"><%= Time.from_minutes(minutes).strftime("%l:%M %p") %></option>
+                    <% end %>
+                </select>
+            <% end %>
         </div>
 
         <label for="reservation-length">Reserve machine for:</label><br>

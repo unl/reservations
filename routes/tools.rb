@@ -85,13 +85,45 @@ get '/tools/:resource_id/reserve/?' do
 
 	date = params[:date].nil? ? Time.now.midnight.in_time_zone : Time.parse(params[:date]).midnight.in_time_zone
 	# get the studio's hours for this day
+	# is there a one_off
 	space_hour = SpaceHour.where(:service_space_id => SS_ID)
-		.where('effective_date <= ?', date.utc.strftime('%Y-%m-%d %H:%M:%S')).where(:day_of_week => date.wday)
-		.order(:effective_date => :desc, :id => :desc).first
+		.where('effective_date = ?', date.utc.strftime('%Y-%m-%d %H:%M:%S'))
+		.where(:day_of_week => date.wday).where(:one_off => true).first
+	if space_hour.nil?
+		space_hour = SpaceHour.where(:service_space_id => SS_ID)
+			.where('effective_date <= ?', date.utc.strftime('%Y-%m-%d %H:%M:%S'))
+			.where(:day_of_week => date.wday).where(:one_off => false)
+			.order(:effective_date => :desc, :id => :desc).first
+	end
+
+	available_start_times = []
+	# calculate the available start times for reservation
+	if space_hour.nil?
+		start = 0
+		while start + tool.minutes_per_reservation <= 1440
+			available_start_times << start
+			start += tool.minutes_per_reservation
+		end
+	else
+		space_hour.hours.sort{|x,y| x[:start] <=> y[:start]}.each do |record|
+			if record[:status] == 'open'
+				start = record[:start]
+				while start + tool.minutes_per_reservation <= record[:end]
+					available_start_times << start
+					start += tool.minutes_per_reservation
+				end
+			end
+		end
+	end
+
+	# filter out times when tool is reserved
+	reservations = Reservation.includes(:event).where(:resource_id => tool.id).in_day(date).all
+	available_start_times = available_start_times - reservations.map{|res|res.start_time.in_time_zone.minutes_after_midnight}
 
 	erb :reserve, :layout => :fixed, :locals => {
 		:tool => tool,
-		:reservations => Reservation.includes(:event).where(:resource_id => tool.id).in_day(date).all,
+		:reservations => reservations,
+		:available_start_times => available_start_times,
 		:space_hour => space_hour,
 		:day => date,
 		:reservation => nil
@@ -121,15 +153,51 @@ get '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 		redirect back
 	end
 
-	date = reservation.start_time.in_time_zone.midnight
+	date = params[:date].nil? ? reservation.start_time.in_time_zone.midnight : Time.parse(params[:date]).midnight.in_time_zone
 	# get the studio's hours for this day
+	# is there a one_off
 	space_hour = SpaceHour.where(:service_space_id => SS_ID)
-		.where('effective_date <= ?', date.utc.strftime('%Y-%m-%d %H:%M:%S')).where(:day_of_week => date.wday)
-		.order(:effective_date => :desc, :id => :desc).first
+		.where('effective_date = ?', date.utc.strftime('%Y-%m-%d %H:%M:%S'))
+		.where(:day_of_week => date.wday).where(:one_off => true).first
+	if space_hour.nil?
+		space_hour = SpaceHour.where(:service_space_id => SS_ID)
+			.where('effective_date <= ?', date.utc.strftime('%Y-%m-%d %H:%M:%S'))
+			.where(:day_of_week => date.wday).where(:one_off => false)
+			.order(:effective_date => :desc, :id => :desc).first
+	end
+
+	available_start_times = []
+	# calculate the available start times for reservation
+	if space_hour.nil?
+		start = 0
+		while start + tool.minutes_per_reservation <= 1440
+			available_start_times << start
+			start += tool.minutes_per_reservation
+		end
+	else
+		space_hour.hours.sort{|x,y| x[:start] <=> y[:start]}.each do |record|
+			if record[:status] == 'open'
+				start = record[:start]
+				while start + tool.minutes_per_reservation <= record[:end]
+					available_start_times << start
+					start += tool.minutes_per_reservation
+				end
+			end
+		end
+	end
+
+	# filter out times when tool is reserved
+	reservations = Reservation.includes(:event).where(:resource_id => tool.id).in_day(date).all
+	available_start_times = (available_start_times - reservations.map{|res|res.start_time.in_time_zone.minutes_after_midnight})
+	if date == reservation.start_time.in_time_zone.midnight
+		available_start_times = available_start_times + [reservation.start_time.in_time_zone.minutes_after_midnight]
+	end
+	available_start_times.sort!
 
 	erb :reserve, :layout => :fixed, :locals => {
 		:tool => tool,
-		:reservations => Reservation.where(:resource_id => tool.id).in_day(date).all,
+		:reservations => reservations,
+		:available_start_times => available_start_times,
 		:space_hour => space_hour,
 		:day => date,
 		:reservation => reservation
@@ -164,15 +232,33 @@ post '/tools/:resource_id/reserve/?' do
 		redirect '/tools/'
 	end
 
-	start_time = calculate_time(params[:date], params[:start_time_hour], params[:start_time_minute], params[:start_time_am_pm])
+	if params[:start_minutes].nil?
+		flash(:alert, 'Please specify a start time', 'Please specify a start time for your reservation.')
+		redirect back
+	end
+
+	hour = (params[:start_minutes].to_i / 60).floor
+	am_pm = hour >= 12 ? 'pm' : 'am'
+	hour = hour % 12
+	hour += 12 if hour == 0
+	minutes = params[:start_minutes].to_i % 60
+
+	start_time = calculate_time(params[:date], hour, minutes, am_pm)
 	end_time = start_time + params[:length].to_i.minutes
 
 	date = start_time.midnight
 	# validate that the requested time slot falls within the open hours of the day
 	# get the studio's hours for this day
+	# is there a one_off
 	space_hour = SpaceHour.where(:service_space_id => SS_ID)
-		.where('effective_date <= ?', date.utc.strftime('%Y-%m-%d %H:%M:%S')).where(:day_of_week => date.wday)
-		.order(:effective_date => :desc, :id => :desc).first
+		.where('effective_date = ?', date.utc.strftime('%Y-%m-%d %H:%M:%S'))
+		.where(:day_of_week => date.wday).where(:one_off => true).first
+	if space_hour.nil?
+		space_hour = SpaceHour.where(:service_space_id => SS_ID)
+			.where('effective_date <= ?', date.utc.strftime('%Y-%m-%d %H:%M:%S'))
+			.where(:day_of_week => date.wday).where(:one_off => false)
+			.order(:effective_date => :desc, :id => :desc).first
+	end
 
 	unless space_hour.nil?
 		# figure out where the closed sections need to be
@@ -256,15 +342,28 @@ post '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 		redirect back
 	end
 
-	start_time = calculate_time(params[:date], params[:start_time_hour], params[:start_time_minute], params[:start_time_am_pm])
+	hour = (params[:start_minutes].to_i / 60).floor
+	am_pm = hour >= 12 ? 'pm' : 'am'
+	hour = hour % 12
+	hour += 12 if hour == 0
+	minutes = params[:start_minutes].to_i % 60
+
+	start_time = calculate_time(params[:date], hour, minutes, am_pm)
 	end_time = start_time + params[:length].to_i.minutes
 
 	date = start_time.midnight
 	# validate that the requested time slot falls within the open hours of the day
 	# get the studio's hours for this day
+	# is there a one_off
 	space_hour = SpaceHour.where(:service_space_id => SS_ID)
-		.where('effective_date <= ?', date.utc.strftime('%Y-%m-%d %H:%M:%S')).where(:day_of_week => date.wday)
-		.order(:effective_date => :desc, :id => :desc).first
+		.where('effective_date = ?', date.utc.strftime('%Y-%m-%d %H:%M:%S'))
+		.where(:day_of_week => date.wday).where(:one_off => true).first
+	if space_hour.nil?
+		space_hour = SpaceHour.where(:service_space_id => SS_ID)
+			.where('effective_date <= ?', date.utc.strftime('%Y-%m-%d %H:%M:%S'))
+			.where(:day_of_week => date.wday).where(:one_off => false)
+			.order(:effective_date => :desc, :id => :desc).first
+	end
 
 	unless space_hour.nil?
 		# figure out where the closed sections need to be
