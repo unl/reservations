@@ -28,7 +28,7 @@ end %>
 		</div>
 	</div>
 	<% (0..6).each do |i| %>
-	<% day = sunday + i.days %>
+	<% day = (sunday + i.days + 1.hour).midnight %>
 	<% slots = [0] * 36 %>
 	<div class="calendar-day" data-day="<%= day.strftime("%Y/%m/%d") %>">
 		<label class="day-header"><%= day.strftime("%^a %-m/%d") %></label>

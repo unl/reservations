@@ -19,7 +19,7 @@
     </thead>
     <tbody>
     	<% (0..6).each do |i| %>
-    	<% day = sunday + i.days %>
+    	<% day = (sunday + i.days + 1.hour).midnight %>
         <tr>
             <td>
             	<%= day.strftime('%a %m/%d') %>

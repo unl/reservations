@@ -9,7 +9,7 @@ get '/calendar/' do
 	sunday = date.in_time_zone.week_start
 
 	hours = SpaceHour.where(:service_space_id => SS_ID)
-		.where('effective_date < ?', (sunday+1.week).utc.strftime('%Y-%m-%d %H:%M:%S'))
+		.where('effective_date < ?', (sunday+1.week+1.hour).midnight.utc.strftime('%Y-%m-%d %H:%M:%S'))
 		.order(:day_of_week, :effective_date => :desc, :id => :desc).all.to_a
 
 	hours_days = hours.group_by do |space_hour|
@@ -18,7 +18,7 @@ get '/calendar/' do
 
 	week_hours = {}
 	hours_days.each do |number_of_days, array|
-		this_day = sunday + number_of_days.days
+		this_day = (sunday + number_of_days.days + 1.hour).midnight
 
 		# find the correct hour record to use for this day
 		array.each do |space_hour|
