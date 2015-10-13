@@ -1,0 +1,23 @@
+<div id="pagetitle">
+	<h3>Send Email</h3>
+</div>
+
+<form action="" method="POST">
+	<label for="to">To:</label><br>
+	<select id="to" name="to" style="width: auto;">
+		<option value="all">All Users</option>
+		<% users.each do |user| %>
+		<option value="<%= user.id %>"><%= user.full_name %></option>
+		<% end %>	
+	</select><br>
+
+	<label for="subject">Subject:</label>
+	<input type="text" id="subject" name="subject" />
+
+	<label for="body">Body:</label>
+	<textarea class="ckeditor" style="min-height: 150px" id="body" name="body"></textarea>
+	<br><br>
+	<button type="submit" class="wdn-button wdn-button-brand">Send</button>
+</form>
+
+<script type="text/javascript" src="/js/lib/ckeditor/ckeditor.js"></script>
