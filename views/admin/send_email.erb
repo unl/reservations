@@ -5,6 +5,7 @@
 <form action="" method="POST">
 	<label for="to">To:</label><br>
 	<select id="to" name="to" style="width: auto;">
+		<option value="all_non_admin">All Non-Admins</option>
 		<option value="all">All Users</option>
 		<% users.each do |user| %>
 		<option value="<%= user.id %>"><%= user.full_name %></option>

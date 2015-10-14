@@ -18,6 +18,10 @@ post '/admin/email/send/?' do
 		users = User.all
 		bcc = users.map(&:email).join(',')
 		Emailer.mail('', params[:subject], params[:body], bcc)
+	elsif params[:to] == 'all_non_admin'
+		users = User.where(:is_admin => false).all
+		bcc = users.map(&:email).join(',')
+		Emailer.mail('', params[:subject], params[:body], bcc)
 	else
 		user = User.find_by(:id => params[:to])
 		Emailer.mail(user.email, params[:subject], params[:body])
