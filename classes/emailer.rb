@@ -1,9 +1,10 @@
 require 'pony'
 
 class Emailer
-  def self.mail(to, subject, body)
+  def self.mail(to, subject, body, bcc = "")
     Pony.mail({
       :to => to,
+      :bcc => bcc,
       :subject => subject,
       :html_body => body,
       :from => 'innovationstudio@unl.edu',
