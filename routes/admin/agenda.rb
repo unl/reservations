@@ -1,5 +1,5 @@
 get '/admin/agenda/' do
-	date = params[:date].nil? ? Time.now : Time.parse(params[:date])
+	date = params[:date].nil? ? Time.now.midnight : Time.parse(params[:date])
 
 	reservations = Reservation.includes(:user, :resource, :event).in_day(date).order(:start_time)
 	events = Event.includes(:event_type).in_day(date).order(:start_time)
