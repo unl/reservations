@@ -1,0 +1,115 @@
+<form style="float: right; width: 320px; background: #41708D;">
+    <label for="date" style="color: white;">Go to another date:</label>
+    <div class="date-time-select">
+        <span class="wdn-icon-calendar"></span>
+        <input style="width: 90%;" id="date" name="date" title="Reservation Date" type="text" class="datepicker" value="<%= date.strftime('%m/%d/%Y') %>" />
+    </div>
+</form>
+
+<div id="pagetitle">
+	<h3>Today's Agenda<span class="wdn-subhead"><%= date.strftime('%B %d, %Y') %></h3>
+</div>
+
+
+<h4>
+Today's Hours
+</h4>
+<% unless space_hour.nil? %>
+    <%= space_hour.hours.map do |record|
+        start_time = date + record[:start].minutes
+        end_time = date + record[:end].minutes
+        "#{record[:status].capitalize_all}: #{start_time.in_time_zone.strftime('%l:%M %P')} - #{end_time.in_time_zone.strftime('%l:%M %P')}"
+    end.join(', ') %>
+<% else %>
+    The studio is open all day.
+<% end %>
+
+<h4>
+Today's Reservations
+</h4>
+<% if reservations.empty? %>
+No reservations today. Hopefully someone will still come in to use the space!<br>
+<% else %>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Tool</th>
+            <th>Model</th>
+            <th>Time</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% reservations.each do |reservation| %>
+        <tr>
+            <td>
+                <% if reservation.user %>
+                <%= reservation.user.full_name %>
+                <% elsif !reservation.event.nil? %>
+                <strong>Event:</strong> <%= reservation.event.title %>
+                <% end %>
+            </td>
+            <td>
+                <%= reservation.resource.name %>
+            </td>
+            <td>
+                <%= reservation.resource.model %>
+            </td>
+            <td>
+            	<%= reservation.start_time.in_time_zone.strftime('%l:%M %P') %><br>
+            	<%= reservation.length %> minutes
+            </td>
+        </tr>
+    <% end %>
+    </tbody>
+</table>
+<% end %>
+
+<h4>
+Today's Events
+</h4>
+<% if events.empty? %>
+No events today. Perhaps you'd like to create one?<br>
+<a href="/admin/events/create/" class="wdn-button wdn-button-brand">New Event</a>
+<% else %>
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Date/Location</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% events.each do |event| %>
+        <tr>
+            <td>
+                <a title="Edit Event" href="<%= event.edit_link %>"><%= event.title %></a>
+            </td>
+            <td>
+                <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
+                <%= event.location.name %>
+            </td>
+            <td>
+                <%= event.type.name %>
+            </td>
+        </tr>
+    <% end %>
+    </tbody>
+</table>
+<br>
+<a href="/admin/events/" class="wdn-button wdn-button-triad">Go To Events</a>
+<% end %>
+
+<script type="text/javascript">
+WDN.initializePlugin('jqueryui', [function() {  
+    $ = require('jquery');
+    $('.datepicker').datepicker();
+    $("LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
+
+    $('#date').change(function () {
+        var date = $('#date').val().split('/');
+        window.location = window.location.href.split('?')[0] + '?date=' + date[2] + '-' + date[0] + '-' + date[1];
+    });
+}]);
+</script>
