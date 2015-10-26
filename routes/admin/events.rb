@@ -144,6 +144,6 @@ post '/admin/events/:event_id/delete/?' do
 
 	event.destroy
 
-	flash(:success, 'Event Deleted', "Your event #{event.title} has been deleted. All signups on this event have also been removed.")
+	flash(:success, 'Event Deleted', "Your event #{event.title} has been deleted. All signups on this event have also been removed, and if a reservation was attached, it also has been removed.")
 	redirect '/admin/events/'
 end

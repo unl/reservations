@@ -2,7 +2,7 @@ require 'active_record'
 
 class Event < ActiveRecord::Base
 	has_many :event_signups, :dependent => :destroy
-	has_one :reservation
+	has_one :reservation, :dependent => :destroy
 	belongs_to :location
 	belongs_to :event_type
 	alias_method :type, :event_type
