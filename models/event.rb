@@ -8,6 +8,12 @@ class Event < ActiveRecord::Base
 	alias_method :type, :event_type
 	alias_method :signups, :event_signups
 
+	scope :in_day, ->(time) {
+		today = time.midnight
+		tomorrow = (time + 1.day).midnight
+		where('(start_time >= ? AND start_time < ?) OR (end_time >= ? AND end_time < ?)', today, tomorrow, today, tomorrow)
+	}
+
 	scope :in_week, ->(time) {
 		last_sunday = time.week_start
 		next_sunday = (time + 1.week).week_start
@@ -29,6 +35,10 @@ class Event < ActiveRecord::Base
 		else
 			"/events/#{id}/"
 		end
+	end
+
+	def edit_link
+		"/admin/events/#{id}/edit/"
 	end
 
 	def has_reservation
