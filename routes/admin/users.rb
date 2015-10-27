@@ -1,6 +1,19 @@
 require 'models/user'
 require 'models/resource'
 
+USER_STATII = [
+	'None',
+	'UNL Undergrad',
+	'UNL Grad',
+	'Other Student',
+	'UNL Staff',
+	'UNL Faculty',
+	'UNL Alumni',
+	'Emeritus UNL Faculty',
+	'NIC Partner',
+	'Community Member'
+]
+
 get '/admin/users/?' do
 	@breadcrumbs << {:text => 'Admin Users'}
 

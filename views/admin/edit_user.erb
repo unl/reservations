@@ -18,8 +18,8 @@
 
         <label for="university-status">University Status</label>
         <select id="university-status" name="university_status">
-            <% %w(none student faculty staff).each do |word| %>
-                <option <%= 'selected="selected"' if user.university_status == word %> value="<%= word %>"><%= word.capitalize %></option>
+            <% USER_STATII.each do |word| %>
+                <option <%= 'selected="selected"' if user.university_status == word %> value="<%= word %>"><%= word %></option>
             <% end %>
         </select>
         <br><br>
