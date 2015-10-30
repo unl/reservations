@@ -302,7 +302,7 @@ post '/tools/:resource_id/reserve/?' do
 	other_reservations = Reservation.where(:resource_id => params[:resource_id]).in_day(date).all
 	other_reservations.each do |reservation|
 		if (start_time >= reservation.start_time && start_time < reservation.end_time) ||
-				(end_time >= reservation.start_time && end_time < reservation.end_time) ||
+				(end_time > reservation.start_time && end_time <= reservation.end_time) ||
 				(start_time < reservation.start_time && end_time > reservation.end_time)
 			flash :alert, "Tool is being used.", "Sorry, that tool is reserved during that time period. Please try another time slot."
 			redirect back
