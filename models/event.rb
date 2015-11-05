@@ -16,7 +16,7 @@ class Event < ActiveRecord::Base
 
 	scope :in_week, ->(time) {
 		last_sunday = time.in_time_zone.week_start
-		next_sunday = (time.in_time_zone.week_start + 1.week + 1.hour).in_time_zoneweek_start
+		next_sunday = (time.in_time_zone.week_start + 1.week + 1.hour).in_time_zone.week_start
 		where('(start_time >= ? AND start_time < ?) OR (end_time >= ? AND end_time < ?)', last_sunday.getutc, next_sunday.getutc, last_sunday.getutc, next_sunday.getutc)
 	}
 
