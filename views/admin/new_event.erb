@@ -15,6 +15,11 @@
                     <option <%= 'selected="selected"' if !event.type.nil? && event.type.id == type.id %> value="<%= type.id %>"><%= type.description %></option>
                 <% end %>
                 </select>
+                <br><br>
+                <div>
+                    <input type="checkbox" <%= 'checked="checked"' unless event.max_signups.nil? %> id="limit-signups" name="limit_signups"><label for="limit-signups">Limit signups for this event to: </label>
+                    <input value="<%= event.max_signups %>" type="number" id="max-signups" name="max_signups" style="width: 100px;" />
+                </div>
             </fieldset>
 
             <fieldset>

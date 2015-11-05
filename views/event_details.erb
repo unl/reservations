@@ -27,13 +27,17 @@
 		<a href='/home/' class="wdn-button wdn-button-triad">View Homepage</a>
 	<% end %>
 <% elsif @user %>
-<form action="/events/<%= event.id %>/sign_up/" method="POST">
-<button type="submit" class="wdn-button wdn-button-brand">
-	<% if event.type.description == 'Free Event' %>
-		Note event on my homepage
+	<% if event.max_signups.nil? || event.signups.count < event.max_signups %>
+	<form action="/events/<%= event.id %>/sign_up/" method="POST">
+	<button type="submit" class="wdn-button wdn-button-brand">
+		<% if event.type.description == 'Free Event' %>
+			Note event on my homepage
+		<% else %>
+			Sign up for this event
+		<% end %>
+	</a>
+	</form>
 	<% else %>
-		Sign up for this event
+	All slots for this event are filled.
 	<% end %>
-</a>
-</form>
 <% end %>

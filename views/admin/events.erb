@@ -34,6 +34,9 @@
                             </td>
                             <td>
                                 <a href="/admin/events/<%= event.id %>/signup_list/"><%= event.signups.count %> signed up</a>
+                                <% unless event.max_signups.nil? %>
+                                <br><%= event.max_signups %> total slots
+                                <% end %>
                             </td>
                             <td>
                             <form class="delete-event delete-form" action="/admin/events/<%=event.id%>/delete/" method="POST">
