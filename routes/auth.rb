@@ -63,6 +63,54 @@ post '/login/?' do
     redirect '/home/'
 end
 
+get '/forgot_password/' do
+  erb :forgot_password, :layout => :fixed
+end
+
+post '/forgot_password/' do
+  user = User.find_by(:username => params[:username].trim)
+  unless user.nil?
+    user.send_reset_password_email
+  end
+
+  flash :success, 'Email sent', 'An email containing instructions to reset your password has been sent.'
+  redirect '/login/'
+end
+
+get '/reset_password/:token/?' do
+  user = User.find_by(:reset_password_token => params[:token])
+  not_found if user.nil? || user.reset_password_expiry < Time.now
+
+  @section = nil
+  erb :reset_password, :layout => :fixed, :locals => {
+    :token => params[:token]
+  }
+end
+
+post '/reset_password/' do
+  user = User.find_by(:reset_password_token => params[:token])
+  not_found if user.nil? || user.reset_password_expiry + 5.minutes < Time.now
+
+  # check password is at least 8 characters
+  unless params[:password].length >= 8
+    flash(:alert, 'Password too short', 'Sorry, your password must be at least 8 characters.')
+    redirect "/reset_password/#{params[:token]}"
+  end
+
+  if (params[:password] != params[:password2])
+    flash :danger, 'Password mismatch', 'Your passwords do not match.'
+    redirect "/reset_password/#{params[:token]}"
+  end
+
+  user.password = params[:password]
+  user.reset_password_token = nil
+  user.reset_password_expiry = nil
+  user.save
+
+  flash :success, 'Password Reset', 'Your password has been reset.'
+  redirect '/login/'
+end
+
 get '/logout/?' do
   session.clear
   redirect '/'
