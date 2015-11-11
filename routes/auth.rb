@@ -87,7 +87,7 @@ get '/reset_password/:token/?' do
   }
 end
 
-post '/reset_password/' do
+post '/reset_password/?' do
   user = User.find_by(:reset_password_token => params[:token])
   not_found if user.nil? || user.reset_password_expiry + 5.minutes < Time.now
 

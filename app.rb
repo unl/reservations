@@ -53,6 +53,13 @@ def require_login
   end
 end
 
+def check_membership
+  if @user.space_status != 'current'
+    flash :alert, 'Membership Expired', 'Sorry, your membership must be current to reserve tools and sign up for trainings. Please contact us at <a href="mailto:innovationstudio@unl.edu">innovationstudio@unl.edu</a>.'
+    redirect back
+  end
+end
+
 not_found do
   @breadcrumbs << {:text => 'Not Found'}
   erb 'That page was not found.', :layout => :fixed

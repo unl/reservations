@@ -14,6 +14,11 @@ USER_STATII = [
 	'Community Member'
 ]
 
+STUDIO_STATII = {
+	'Membership Current' => 'current',
+	'Membership Expired' => 'expired'
+}
+
 get '/admin/users/?' do
 	@breadcrumbs << {:text => 'Admin Users'}
 
@@ -66,7 +71,8 @@ post '/admin/users/:user_id/edit/?' do
 		:last_name => params[:last_name],
 		:email => params[:email],
 		:username => params[:username],
-		:university_status => params[:university_status]
+		:university_status => params[:university_status],
+		:space_status => params[:studio_status]
 	})
 
 	flash :success, 'User Updated', 'Your user has been updated.'
@@ -108,6 +114,7 @@ post '/admin/users/create/?' do
 	params.delete('password2')
 	user = User.new(params)
 	user.created_by_user_id = @user.id
+	user.space_status = 'current'
 	user.save
 
 	flash :success, 'User Created', 'Your user has been created.'
