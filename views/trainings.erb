@@ -28,12 +28,14 @@ type of equipment. Here, you can sign up for upcoming trainings. Take a look at 
                     <%= event.location.name %>
                 </td>
                 <td>
-                <% if !@user.signed_up_event_ids.include?(event.id) %>
+                <% if @user.signed_up_event_ids.include?(event.id) %>
+                    Signed up!
+                <% elsif !event.max_signups.nil? && event.signups.count >= event.max_signups %>
+                    Event is full.
+                <% else %>
                     <form class="inline-form" action="/tools/trainings/sign_up/<%= event.id %>/" method="POST">
                         <button type="submit" class="wdn-button wdn-button-brand" href="/tools/trainings/sign_up/<%= event.id %>/">Sign Up!</button>
                     </form>
-                <% else %>
-                    Signed up!
                 <% end %>
                 </td>
             </tr>

@@ -25,7 +25,7 @@ get '/tools/trainings/?' do
 	check_membership
 
 	machine_training_id = EventType.find_by(:description => 'Machine Training', :service_space_id => SS_ID).id
-	events = Event.where(:service_space_id => SS_ID, :event_type_id => machine_training_id).
+	events = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => machine_training_id).
 					where('start_time >= ?', Time.now).all
 
 	erb :trainings, :layout => :fixed, :locals => {
@@ -44,6 +44,12 @@ post '/tools/trainings/sign_up/:event_id/?' do
 	if event.nil?
 		# that event does not exist
 		flash(:danger, 'Not Found', 'That event does not exist')
+		redirect '/tools/trainings/'
+	end
+
+	if !event.max_signups.nil? && event.signups.count >= event.max_signups
+		# that event is full
+		flash(:danger, 'Event Full', 'Sorry, that event is full.')
 		redirect '/tools/trainings/'
 	end
 

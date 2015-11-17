@@ -28,6 +28,12 @@ post '/events/:event_id/sign_up/?' do
 		redirect '/calendar/'
 	end
 
+	if !event.max_signups.nil? && event.signups.count >= event.max_signups
+		# that event is full
+		flash(:danger, 'Event Full', 'Sorry, that event is full.')
+		redirect '/tools/trainings/'
+	end
+
 	EventSignup.create(
 		:event_id => params[:event_id],
 		:name => @user.full_name,
