@@ -11,6 +11,10 @@ class User < ActiveRecord::Base
         self.resource_authorizations.map {|res_auth| res_auth.resource_id}
     end
 
+    def get_authorization(resource_id)
+        self.resource_authorizations.where(:resource_id => resource_id).first
+    end
+
     def signed_up_event_ids
         self.event_signups.map {|event_signup| event_signup.event_id}
     end
@@ -55,5 +59,5 @@ body = <<EMAIL
 EMAIL
 
         Emailer.mail(self.email, 'Nebraska Innovation Studio password reset', body)
-      end
+    end
 end

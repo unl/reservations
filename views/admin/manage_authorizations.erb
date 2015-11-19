@@ -3,10 +3,31 @@
 </div>
 
 <form id="signup" action="" method="POST">
-<% tools.each do |tool| %>
-    <input <%= 'checked="checked"' if user.authorized_resource_ids.include?(tool.id) %> type="checkbox" name="permission_<%= tool.id %>" id="permission-<%= tool.id %>">
-	<label for="permission-<%= tool.id %>"><%= tool.name %> - <%= tool.model %></label><br>
-<% end %>
+<table>
+	<thead>
+		<th>
+			Tool
+		</th>
+		<th>
+			Authorized On
+		</th>
+	</thead>
+	<tbody>
+	<% tools.each do |tool| %>
+		<tr>
+			<td>
+		    	<input <%= 'checked="checked"' if user.authorized_resource_ids.include?(tool.id) %> type="checkbox" name="permission_<%= tool.id %>" id="permission-<%= tool.id %>">
+				<label for="permission-<%= tool.id %>"><%= tool.name %> - <%= tool.model %></label>
+			</td>
+			<td>
+				<% unless (auth = user.get_authorization(tool.id)).nil? %>
+					<%= auth.authorized_date.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %>
+				<% end %>
+			</td>
+		</tr>
+	<% end %>
+	</tbody>
+</table>
 <br>
 <button class="wdn-button wdn-button-brand" type="submit">Save User</button>
 </form>

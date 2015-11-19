@@ -124,8 +124,11 @@ end
 get '/admin/users/:user_id/manage/?' do
 	@breadcrumbs << {:text => 'Admin Users', :href => '/admin/users/'} << {:text => 'Manage User Permissions'}
 	# check that the admin user has permission to manage this user
-
-	user = User.includes(:resource_authorizations).find(params[:user_id])
+	user = User.includes(:resource_authorizations).where(:id => params[:user_id], :created_by_user_id => @user.id).first
+	if user.nil?
+		flash :alert, "Not Found", "Sorry, that user was not found."
+		redirect '/admin/users/'
+	end
 	tools = Resource.where(:service_space_id => SS_ID).order(:name).all
 
 	erb :'admin/manage_authorizations', :layout => :fixed, :locals => {
@@ -136,8 +139,11 @@ end
 
 post '/admin/users/:user_id/manage/?' do
 	# check that the admin user has permission to manage this user
-
-	user = User.includes(:resource_authorizations).find(params[:user_id])
+	user = User.includes(:resource_authorizations).where(:id => params[:user_id], :created_by_user_id => @user.id).first
+	if user.nil?
+		flash :alert, "Not Found", "Sorry, that user was not found."
+		redirect '/admin/users/'
+	end
 
 	# check for removed permissions
 	user.authorized_resource_ids.each do |resource_id|
@@ -154,11 +160,13 @@ post '/admin/users/:user_id/manage/?' do
 			unless user.authorized_resource_ids.include?(id)
 				ResourceAuthorization.create(
 					:user_id => user.id,
-					:resource_id => id
+					:resource_id => id,
+					:authorized_date => Time.now
 				)
 			end
 		end
 	end
 
+	flash :success, 'User Authorizations Updated', "User #{user.username}'s authorizations have been updated."
 	redirect '/admin/users/'
 end
