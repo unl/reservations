@@ -20,7 +20,7 @@
 				<label for="permission-<%= tool.id %>"><%= tool.name %> - <%= tool.model %></label>
 			</td>
 			<td>
-				<% unless (auth = user.get_authorization(tool.id)).nil? %>
+				<% unless (auth = user.get_authorization(tool.id)).nil? || auth.authorized_date.nil? %>
 					<%= auth.authorized_date.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %>
 				<% end %>
 			</td>
