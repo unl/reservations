@@ -40,7 +40,12 @@ get '/admin/users/create/?' do
 end
 
 get '/admin/users/:user_id/edit/?' do
-	user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
+	if user_id == @user.id
+		user = @user
+	else 
+		user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
+	end
+
 	if user.nil?
 		flash :alert, "Not Found", "Sorry, that user was not found"
 		redirect '/admin/users/'
@@ -53,7 +58,12 @@ get '/admin/users/:user_id/edit/?' do
 end
 
 post '/admin/users/:user_id/edit/?' do
-	user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
+	if user_id == @user.id
+		user = @user
+	else 
+		user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
+	end
+
 	if user.nil?
 		flash :alert, "Not Found", "Sorry, that user was not found"
 		redirect '/admin/users/'
@@ -80,7 +90,12 @@ post '/admin/users/:user_id/edit/?' do
 end
 
 post '/admin/users/:user_id/delete/' do
-	user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
+	if user_id == @user.id
+		user = @user
+	else 
+		user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
+	end
+	
 	if user.nil?
 		flash :alert, "Not Found", "Sorry, that user was not found."
 		redirect '/admin/users/'
@@ -124,7 +139,12 @@ end
 get '/admin/users/:user_id/manage/?' do
 	@breadcrumbs << {:text => 'Admin Users', :href => '/admin/users/'} << {:text => 'Manage User Permissions'}
 	# check that the admin user has permission to manage this user
-	user = User.includes(:resource_authorizations).where(:id => params[:user_id], :created_by_user_id => @user.id).first
+	if user_id == @user.id
+		user = @user
+	else 
+		user = User.includes(:resource_authorizations).where(:id => params[:user_id], :created_by_user_id => @user.id).first
+	end
+
 	if user.nil?
 		flash :alert, "Not Found", "Sorry, that user was not found."
 		redirect '/admin/users/'
@@ -139,7 +159,12 @@ end
 
 post '/admin/users/:user_id/manage/?' do
 	# check that the admin user has permission to manage this user
-	user = User.includes(:resource_authorizations).where(:id => params[:user_id], :created_by_user_id => @user.id).first
+	if user_id == @user.id
+		user = @user
+	else 
+		user = User.includes(:resource_authorizations).where(:id => params[:user_id], :created_by_user_id => @user.id).first
+	end
+
 	if user.nil?
 		flash :alert, "Not Found", "Sorry, that user was not found."
 		redirect '/admin/users/'
