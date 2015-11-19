@@ -18,6 +18,7 @@ end
 
 post '/events/:event_id/sign_up/?' do
 	require_login
+	check_membership
 
 	# check that is a valid event
 	event = Event.includes(:event_type).find_by(:service_space_id => SS_ID, :id => params[:event_id])
