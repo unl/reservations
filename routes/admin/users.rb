@@ -40,7 +40,7 @@ get '/admin/users/create/?' do
 end
 
 get '/admin/users/:user_id/edit/?' do
-	if user_id == @user.id
+	if params[:user_id].to_i == @user.id
 		user = @user
 	else 
 		user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
@@ -58,7 +58,7 @@ get '/admin/users/:user_id/edit/?' do
 end
 
 post '/admin/users/:user_id/edit/?' do
-	if user_id == @user.id
+	if params[:user_id].to_i == @user.id
 		user = @user
 	else 
 		user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
@@ -90,12 +90,12 @@ post '/admin/users/:user_id/edit/?' do
 end
 
 post '/admin/users/:user_id/delete/' do
-	if user_id == @user.id
+	if params[:user_id].to_i == @user.id
 		user = @user
 	else 
 		user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
 	end
-	
+
 	if user.nil?
 		flash :alert, "Not Found", "Sorry, that user was not found."
 		redirect '/admin/users/'
@@ -139,7 +139,7 @@ end
 get '/admin/users/:user_id/manage/?' do
 	@breadcrumbs << {:text => 'Admin Users', :href => '/admin/users/'} << {:text => 'Manage User Permissions'}
 	# check that the admin user has permission to manage this user
-	if user_id == @user.id
+	if params[:user_id].to_i == @user.id
 		user = @user
 	else 
 		user = User.includes(:resource_authorizations).where(:id => params[:user_id], :created_by_user_id => @user.id).first
@@ -159,7 +159,7 @@ end
 
 post '/admin/users/:user_id/manage/?' do
 	# check that the admin user has permission to manage this user
-	if user_id == @user.id
+	if params[:user_id].to_i == @user.id
 		user = @user
 	else 
 		user = User.includes(:resource_authorizations).where(:id => params[:user_id], :created_by_user_id => @user.id).first
