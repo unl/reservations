@@ -102,7 +102,20 @@
                     <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata" title="Event Image">
                 </div>
             </div>
+            <div class="visual-island">
+                <div class="vi-header">
+                    <label>Export</label>
+                </div>
+
+                <div class="details">
+                    <input id="export-to-unl-events" title="Export to UNL Events" type="checkbox" name="export_to_unl_events">
+                    <label for="export-to-unl-events">Export to UNL Events</label><br>
+                    <input disabled="disabled" id="consider-for-unl-main" title="Consider for main UNL Events calendar" type="checkbox" name="consider_for_unl_main"> 
+                    <label for="consider-for-unl-main">Consider for main UNL Events calendar</label><br>
+                </div>
+            </div>
         </div>
+
         <div class="bp1-wdn-col-two-thirds">
             <button class="wdn-button wdn-button-brand wdn-pull-left" type="submit"><%= event.id.nil? ? 'Create' : 'Save' %> Event</button>
         </div>
@@ -121,6 +134,15 @@ WDN.initializePlugin('jqueryui', [function() {
             $('#tools-for-reserving').show();
         } else {
             $('#tools-for-reserving').hide();
+        }
+    });
+
+    $('#export-to-unl-events').change(function (change) {
+        if ($('#export-to-unl-events').is(':checked')) {
+            $('#consider-for-unl-main').removeAttr('disabled');
+        } else {
+            $('#consider-for-unl-main').attr('checked', false);
+            $('#consider-for-unl-main').attr('disabled', 'disabled');
         }
     });
 }]);

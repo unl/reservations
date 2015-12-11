@@ -1,3 +1,4 @@
+require 'rest-client'
 require 'models/event'
 require 'models/event_type'
 require 'models/location'
@@ -81,6 +82,28 @@ post '/admin/events/create/?' do
 			:is_training => true,
 			:user_id => nil
 		)
+	end
+
+	if params.has_key?('export_to_unl_events') && params['export_to_unl_events'] == 'on'
+		post_params = {
+			:title => params[:title],
+			:description => params[:description],
+			:location => CONFIG['unl_events_location_id'],
+			:start_time => event.start_time.in_time_zone.strftime('%Y-%m-%d %H:%M:%S'),
+			:end_time => event.end_time.in_time_zone.strftime('%Y-%m-%d %H:%M:%S'),
+			:api_token => CONFIG['unl_events_api_token']
+		}
+
+		if params.has_key?('consider_for_unl_main') && params['consider_for_unl_main'] == 'on'
+			post_params['send_to_main'] =  'yes'
+		end
+
+		RestClient.post("#{CONFIG['unl_events_api_url']}#{CONFIG['unl_events_api_calendar']}/create/", post_params) do |response, request, result, &block|
+			case response.code
+			when 200
+				flash(:success, 'Event Posted to UNL Events', "The event can now be found on the NIS UNL Events calendar.")
+			end
+		end
 	end
 
 	# notify that it worked

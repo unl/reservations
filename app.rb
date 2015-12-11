@@ -12,7 +12,8 @@ Time.zone = "America/Chicago"
 
 # this gives the user messages
 def flash(type, header, message)
-  session["notice"] = {
+  session["notice"] ||= []
+  session["notice"] << {
     :type => type,
     :header => header,
     :message => message

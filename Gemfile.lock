@@ -21,6 +21,8 @@ GEM
     coderay (1.1.0)
     commonjs (0.2.7)
     daemons (1.2.3)
+    domain_name (0.5.25)
+      unf (>= 0.0.5, < 1.0.0)
     eventmachine (1.0.7)
     ffi (1.9.10)
     formatador (0.2.5)
@@ -38,6 +40,8 @@ GEM
       guard (~> 2.0)
       guard-compat (~> 1.2)
       less (~> 2.3)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
     i18n (0.7.0)
     json (1.8.3)
     kgio (2.9.3)
@@ -56,6 +60,7 @@ GEM
     multi_json (1.11.2)
     mysql (2.9.1)
     nenv (0.2.0)
+    netrc (0.11.0)
     notiffany (0.0.7)
       nenv (~> 0.1)
       shellany (~> 0.0)
@@ -75,6 +80,10 @@ GEM
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
     ref (2.0.0)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
     shellany (0.0.1)
     shotgun (0.9.1)
       rack (>= 1.0)
@@ -102,6 +111,9 @@ GEM
     tilt (2.0.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.1)
     unicorn (4.9.0)
       kgio (~> 2.6)
       rack
@@ -117,6 +129,7 @@ DEPENDENCIES
   guard-less
   mysql
   pony
+  rest-client
   shotgun
   sinatra
   sinatra-contrib

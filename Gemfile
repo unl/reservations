@@ -9,6 +9,7 @@ gem 'mysql'
 gem 'bcrypt'
 gem 'unicorn'
 gem 'pony'
+gem 'rest-client'
 
 group :development do
   gem 'shotgun'

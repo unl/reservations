@@ -94,7 +94,8 @@
                 <div class="wdn-band">
                     <div class="wdn-inner-wrapper">
                         <% unless session["notice"].nil? %>
-                            <% notice = session.delete("notice") %>
+                            <% notices = session.delete("notice") %>
+                            <% notices.each do |notice| %>
                             <% notice_class = '' %>
                             <% case notice[:type]
                                 when 'success', :success
@@ -115,6 +116,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <% end %>
                         <% else %>
                         <% session.delete(:notice) %>
                         <% session.delete("notice") %>
