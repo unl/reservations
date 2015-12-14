@@ -22,7 +22,10 @@
 		<fieldset class="bp2-wdn-col-one-half">
 			<legend>Attachments</legend>
 			<div id="files">
-				<input type="file" name="file_1" />
+				<div id="file-container" class="file-container" style="padding-right: 60px; position: relative;">
+					<input class="file-input" type="file" name="file_1" />
+					<button style="display: none; position: absolute; right: 5px; top: 5px;" type="button" class="remove-file wdn-button">&times;</button>
+				</div>
 			</div>
 			<br>
 			<button id="add-file" type="button" class="wdn-button wdn-button-triad">Add another file</button>
@@ -55,9 +58,16 @@ require(['jquery'], function ($) {
 
 		$('#add-file').click(function (click) {
 			click.preventDefault();
-			$input = $('input[name=file_1]').clone();
-			$input.attr('name', 'file_' + ++files);
-			$('#files').append($input);
+			$input_div = $('#file-container').clone();
+			$input_div.removeAttr('id');
+			$input_div.find('.file-input').attr('name', 'file_' + ++files);
+			$input_div.find('.remove-file').show();
+			$('#files').append($input_div);
+		});
+
+		$('#files').on('click', '.remove-file', function (click) {
+			click.preventDefault();
+			$(this).closest('.file-container').remove();
 		});
 	});
 });
