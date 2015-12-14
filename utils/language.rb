@@ -1,3 +1,9 @@
+class Hash
+  def checked?(key)
+    self.has_key?(key) && self[key] == 'on'
+  end
+end
+
 class Integer
   def seconds
     self

@@ -130,6 +130,7 @@ post '/admin/users/create/?' do
 	user = User.new(params)
 	user.created_by_user_id = @user.id
 	user.space_status = 'current'
+	user.service_space_id = SS_ID
 	user.save
 
 	flash :success, 'User Created', 'Your user has been created.'

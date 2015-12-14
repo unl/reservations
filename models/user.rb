@@ -39,6 +39,10 @@ class User < ActiveRecord::Base
         "#{first_name} #{last_name}"
     end
 
+    def sortable_name
+        "#{last_name}, #{first_name}"
+    end
+
     def send_reset_password_email
         token = ''
         begin
