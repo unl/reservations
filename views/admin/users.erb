@@ -1,14 +1,13 @@
 <div id="pagetitle">
-    <h3>Manage Users</h3>
+    <h3>Manage Users<span class="wdn-subhead"><a id="show-toolbox" href="#">Show Toolbox</a></span></h3>
 </div>
-
-<a id="show-toolbox" href="#">Show Toolbox</a>
 
 <div id="toolbox" class="toolbox" style="display: none;">
     <h3>Toolbox <span style="float: right;"><a style="color: white;" href="#" id="hide-toolbox">&ndash;</a></span></h3>
     <div class="tools">
         <a class="wdn-button wdn-button-brand" href="/admin/users/create/">Create User</a>
-        <a class="wdn-button" href="/admin/users/<%= @user.id %>/edit/">Edit My User</a>
+        <a class="wdn-button wdn-button-brand" href="/admin/users/<%= @user.id %>/edit/">Edit My User</a>
+        <a class="wdn-button wdn-button-triad" href="/admin/users/<%= @user.id %>/manage/">My Tools</a>
     </div>
 </div>
 
