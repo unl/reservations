@@ -2,14 +2,50 @@
     <h3>Manage Users</h3>
 </div>
 
-<a class="wdn-button wdn-button-brand" href="/admin/users/create/">Create User</a><br><br>
+<a id="show-toolbox" href="#">Show Toolbox</a>
 
+<div id="toolbox" class="toolbox" style="display: none;">
+    <h3>Toolbox <span style="float: right;"><a style="color: white;" href="#" id="hide-toolbox">&ndash;</a></span></h3>
+    <div class="tools">
+        <a class="wdn-button wdn-button-brand" href="/admin/users/create/">Create User</a>
+        <a class="wdn-button" href="/admin/users/<%= @user.id %>/edit/">Edit My User</a>
+    </div>
+</div>
+
+<form id="find-controls">
+    <div class="wdn-grid-set">
+        <div class="wdn-col-one-fifth">
+            <label style="font-size: 120%; margin-right: 20px;">Find users by:</label>
+            <br>
+            <a href="/admin/users/" class="wdn-button" style="font-size: 60%">Clear</a>
+        </div>
+        <div class="wdn-col-two-fifths">
+            <label>Studio Status:</label>
+            <select id="studio-status" name="studio_status">
+                <option value=""></option>
+                <% USER_STATII.each do |word| %>
+                    <option <%= 'selected="selected"' if studio_status == word %> value="<%= word %>"><%= word %></option>
+                <% end %>
+            </select>
+        </div>
+        <div class="wdn-col-two-fifths">
+            <label>Tool Authorization:</label>
+            <select id="tool-authorization" name="tool_authorization">
+                <option value=""></option>
+                <% tools.each do |tool| %>
+                    <option <%= 'selected="selected"' if selected_tool.to_i == tool.id %> value="<%= tool.id %>"><%= tool.name %></option>
+                <% end %>
+            </select>
+        </div>
+    </div>
+</form>
+
+<% if users.count > 0 %>
 <div>
     <table class="event-list">
         <thead class="small-hidden">
             <tr>
                 <th>Name</th>
-                <th>Username</th>
                 <th>Email</th>
                 <th>Tool Authorizations</th>
                 <th>Actions</th>
@@ -19,20 +55,25 @@
         <% users.each do |user| %>
             <tr>
                 <td>
-                    <%= user.full_name %>
-                </td>
-                <td>
-                    <%= user.username %>
+                    <%= user.full_name %><br>
+                    <small><%= user.university_status %></small>
                 </td>
                 <td>
                     <%= user.email %>
                 </td>
                 <td>
-                    <%= user.authorized_resource_ids.count %> tools
+                    <% if user.authorized_resource_ids.count == 0 %>
+                        None
+                    <% else %>
+                        <%= user.resource_authorizations.map(&:resource).map(&:name).first(5).join('<br>') %>
+                        <% if user.authorized_resource_ids.count > 5 %>
+                        <br><a href="/admin/users/<%= user.id %>/manage/">... and <%= user.authorized_resource_ids.count - 5 %> more</a>
+                        <% end %>
+                    <% end %>
                 </td>
                 <td class="table-actions">
                     <a href="/admin/users/<%= user.id %>/edit/" class="wdn-button wdn-button-brand">Edit</a>
-                    <a href="/admin/users/<%= user.id %>/manage/" class="wdn-button wdn-button-triad">Manage</a>
+                    <a href="/admin/users/<%= user.id %>/manage/" class="wdn-button wdn-button-triad">Tools</a>
                     <form class="delete-form delete-user" action="/admin/users/<%= user.id %>/delete/" method="POST">
                         <button type="submit" class="wdn-button">Delete</button>
                     </form>
@@ -42,6 +83,10 @@
         </tbody>
     </table>
 </div>
+<% else %>
+<br>
+<label>No users meet this criteria, or you have not created any. Open the toolbox to get started.</label>
+<% end %>
 
 <script type="text/javascript">
 require(['jquery'], function($) {
@@ -50,6 +95,31 @@ require(['jquery'], function($) {
             if (!window.confirm('Are you sure you want to delete this user?')) {
                 submit.preventDefault();
             }
+        });
+
+        $('#show-toolbox').click(function (click) {
+            click.preventDefault();
+            $('#show-toolbox').hide();
+            $('#toolbox').slideDown();
+        });
+        $('#hide-toolbox').click(function (click) {
+            click.preventDefault();
+            $('#toolbox').slideUp(400, function () {
+                $('#show-toolbox').show();
+            });
+        });
+
+        $('#studio-status, #tool-authorization').change(function (change) {
+            // construct new get URL from what we have
+            var conditions = [];
+            if ($('#studio-status').val() != '') {
+                conditions.push('studio_status=' + $('#studio-status').val())
+            }
+            if ($('#tool-authorization').val() != '') {
+                conditions.push('selected_tool=' + $('#tool-authorization').val());
+            }
+
+            window.location = '?' + conditions.join('&');
         });
     });
 });

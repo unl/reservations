@@ -22,13 +22,31 @@ STUDIO_STATII = {
 get '/admin/users/?' do
 	@breadcrumbs << {:text => 'Admin Users'}
 
-	users = User.includes(:resource_authorizations).where(:created_by_user_id => @user.id).all.to_a
-	unless users.map{|user| user.id}.include?(@user.id)
-		users = users + [@user]
+	studio_status = params[:studio_status]
+	selected_tool = params[:selected_tool]
+
+	# get all the users that this admin has created
+	users = User.includes(:resource_authorizations => :resource)
+				.where(:created_by_user_id => @user.id)
+	unless studio_status.nil?
+		users = users.where(:university_status => studio_status)
+	end
+	users = users.order(:last_name, :first_name).all.to_a
+
+	unless selected_tool.nil?
+		users.select! do |user|
+			user.authorized_resource_ids.include?(selected_tool.to_i)
+		end
 	end
 
+	# we need all the tools for the searching
+	tools = Resource.where(:service_space_id => SS_ID).order(:name).all
+
 	erb :'admin/users', :layout => :fixed, :locals => {
-		:users => users
+		:users => users,
+		:tools => tools,
+		:studio_status => studio_status,
+		:selected_tool => selected_tool
 	}
 end
 
