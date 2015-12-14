@@ -2,21 +2,33 @@
 	<h3>Send Email</h3>
 </div>
 
-<form action="" method="POST">
-	<fieldset>
-		<legend>Send to:</legend>
-		<input type="checkbox" id="send-to-all-non-admins" name="send_to_all_non_admins"> <label for="send-to-all-non-admins">All Non-Admins</label><br>
-		<input type="checkbox" id="send-to-all-users" name="send_to_all_users"> <label for="send-to-all-users">All Users</label><br>
-		<input type="checkbox" id="send-to-all-students" name="send_to_all_students"> <label title="UNL Undergrad, UNL Grad, Other Student" for="send-to-all-students">All Students</label><br>
-		<input type="checkbox" id="send-to-all-facstaff" name="send_to_all_facstaff"> <label title="UNL Staff, UNL Faculty, Emeritus UNL Faculty" for="send-to-all-facstaff">All UNL Faculty/Staff</label><br>
-		<input type="checkbox" id="send-to-specific-user" name="send_to_specific_user">
-		<label for="specific-user">Specific User:</label>
-		<select id="specific-user" name="specific_user" style="width: auto;">
-			<% users.sort{|x,y| x.sortable_name.downcase <=> y.sortable_name.downcase}.each do |user| %>
-			<option value="<%= user.id %>"><%= user.sortable_name %></option>
-			<% end %>	
-		</select><br>
-	</fieldset>
+<form action="" method="POST" enctype="multipart/form-data">
+	<div class="wdn-grid-set">
+		<fieldset class="bp2-wdn-col-one-half">
+			<legend>Send to:</legend>
+			<input type="checkbox" id="send-to-all-non-admins" name="send_to_all_non_admins"> <label for="send-to-all-non-admins">All Non-Admins</label><br>
+			<input type="checkbox" id="send-to-all-users" name="send_to_all_users"> <label for="send-to-all-users">All Users</label><br>
+			<input type="checkbox" id="send-to-all-students" name="send_to_all_students"> <label title="UNL Undergrad, UNL Grad, Other Student" for="send-to-all-students">All Students</label><br>
+			<input type="checkbox" id="send-to-all-facstaff" name="send_to_all_facstaff"> <label title="UNL Staff, UNL Faculty, Emeritus UNL Faculty" for="send-to-all-facstaff">All UNL Faculty/Staff</label><br>
+			<input type="checkbox" id="send-to-specific-user" name="send_to_specific_user">
+			<label for="specific-user">Specific User:</label>
+			<select id="specific-user" name="specific_user" style="width: auto;">
+				<% users.sort{|x,y| x.sortable_name.downcase <=> y.sortable_name.downcase}.each do |user| %>
+				<option value="<%= user.id %>"><%= user.sortable_name %></option>
+				<% end %>	
+			</select><br>
+		</fieldset>
+
+		<fieldset class="bp2-wdn-col-one-half">
+			<legend>Attachments</legend>
+			<div id="files">
+				<input type="file" name="file_1" />
+			</div>
+			<br>
+			<button id="add-file" type="button" class="wdn-button wdn-button-triad">Add another file</button>
+		</fieldset>
+
+	</div>
 
 	<fieldset>
 		<legend>Compose</legend>
@@ -33,10 +45,19 @@
 <script type="text/javascript" src="/js/lib/ckeditor/ckeditor.js"></script>
 
 <script type="text/javascript">
+var files = 1;
+
 require(['jquery'], function ($) {
 	$(document).ready(function () {
 		$('#specific-user').change(function (change) {
 			$('#send-to-specific-user').attr('checked', true);
+		});
+
+		$('#add-file').click(function (click) {
+			click.preventDefault();
+			$input = $('input[name=file_1]').clone();
+			$input.attr('name', 'file_' + ++files);
+			$('#files').append($input);
 		});
 	});
 });

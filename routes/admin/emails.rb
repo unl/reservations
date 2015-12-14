@@ -42,13 +42,20 @@ post '/admin/email/send/?' do
 		user.id
 	end
 
+	# check on attachments
+ 	attachments = {}
+ 	params.select {|k,v| k.starts_with?('file_')}.each do |key, file_hash|
+ 		attachments[file_hash[:filename]] = file_hash[:tempfile].read
+ 	end
+ 	attachments = nil if attachments.empty?
+
 	# correctly choose how to send
 	if users_to_send_to.count == 1
-		Emailer.mail(users_to_send_to[0].email, params[:subject], params[:body])
+		Emailer.mail(users_to_send_to[0].email, params[:subject], params[:body], '', attachments)
 		output = users_to_send_to[0].full_name
 	elsif users_to_send_to.count > 1
 		bcc = users_to_send_to.map(&:email).join(',')
-		Emailer.mail('', params[:subject], params[:body], bcc)
+		Emailer.mail('', params[:subject], params[:body], bcc, attachments)
 		output = "#{users_to_send_to.count} users"
 	else
 		flash :error, 'No Users Selected', 'This email was not sent to any users'
@@ -56,5 +63,5 @@ post '/admin/email/send/?' do
 	end
 
 	flash :success, 'Email sent', "Your email was sent to #{output}."
-	redirect '/admin/email/'
+	redirect '/admin/email/send/'
 end
