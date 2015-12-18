@@ -1,3 +1,9 @@
+before '/admin/agenda*' do
+	unless @user.has_permission?(Permission::SEE_AGENDA)
+		raise Sinatra::NotFound
+	end
+end
+
 get '/admin/agenda/' do
 	date = params[:date].nil? ? Time.now.midnight : Time.parse(params[:date])
 

@@ -4,6 +4,12 @@ require 'models/event_type'
 require 'models/location'
 require 'models/resource'
 
+before '/admin/events*' do
+	unless @user.has_permission?(Permission::MANAGE_EVENTS)
+		raise Sinatra::NotFound
+	end
+end
+
 def set_event_data(event, params)
 	event.title = params[:title]
 	event.description = params[:description]

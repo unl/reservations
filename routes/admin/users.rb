@@ -1,5 +1,6 @@
 require 'models/user'
 require 'models/resource'
+require 'models/permission'
 
 USER_STATII = [
 	'None',
@@ -19,6 +20,12 @@ STUDIO_STATII = {
 	'Membership Expired' => 'expired'
 }
 
+before '/admin/users*' do
+	unless @user.has_permission?(Permission::MANAGE_USERS) || @user.has_permission?(Permission::SUPER_USER)
+		raise Sinatra::NotFound
+	end
+end
+
 get '/admin/users/?' do
 	@breadcrumbs << {:text => 'Admin Users'}
 
@@ -27,7 +34,7 @@ get '/admin/users/?' do
 
 	# get all the users that this admin has created
 	users = User.includes(:resource_authorizations => :resource)
-				.where(:created_by_user_id => @user.id)
+				.where(:service_space_id => SS_ID)
 	unless studio_status.nil?
 		users = users.where(:university_status => studio_status)
 	end
@@ -61,7 +68,7 @@ get '/admin/users/:user_id/edit/?' do
 	if params[:user_id].to_i == @user.id
 		user = @user
 	else 
-		user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
+		user = User.includes(:permissions).where(:id => params[:user_id], :service_space_id => SS_ID).first
 	end
 
 	if user.nil?
@@ -71,7 +78,9 @@ get '/admin/users/:user_id/edit/?' do
 
 	@breadcrumbs << {:text => 'Admin Users', :href => '/admin/users/'} << {:text => 'Edit User'}
 	erb :'admin/edit_user', :layout => :fixed, :locals => {
-		:user => user
+		:user => user,
+		:permissions => Permission.where.not(:id => Permission::SUPER_USER).all,
+		:su_permission => Permission.find(Permission::SUPER_USER)
 	}
 end
 
@@ -79,7 +88,7 @@ post '/admin/users/:user_id/edit/?' do
 	if params[:user_id].to_i == @user.id
 		user = @user
 	else 
-		user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
+		user = User.includes(:permissions).where(:id => params[:user_id], :service_space_id => SS_ID).first
 	end
 
 	if user.nil?
@@ -103,15 +112,32 @@ post '/admin/users/:user_id/edit/?' do
 		:space_status => params[:studio_status]
 	})
 
+	# check the permissions, check for new ones
+	params.select {|k,v| k =~ /permission_*/}.each do |k,v|
+		if params.checked?(k)
+			perm_id = k.split('permission_')[1].to_i
+			unless user.has_permission?(perm_id)
+				user.permissions << Permission.find(perm_id)
+			end
+		end
+	end
+
+	# check for any removed
+	user.permissions.each do |perm|
+		unless params.checked?("permission_#{perm.id}")
+			user.permissions.delete(perm)
+		end
+	end
+
 	flash :success, 'User Updated', 'Your user has been updated.'
 	redirect '/admin/users/'
 end
 
-post '/admin/users/:user_id/delete/' do
+post '/admin/users/:user_id/delete/?' do
 	if params[:user_id].to_i == @user.id
 		user = @user
 	else 
-		user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
+		user = User.where(:id => params[:user_id], :service_space_id => SS_ID).first
 	end
 
 	if user.nil?
@@ -161,7 +187,7 @@ get '/admin/users/:user_id/manage/?' do
 	if params[:user_id].to_i == @user.id
 		user = @user
 	else 
-		user = User.includes(:resource_authorizations).where(:id => params[:user_id], :created_by_user_id => @user.id).first
+		user = User.includes(:resource_authorizations).where(:id => params[:user_id], :service_space_id => SS_ID).first
 	end
 
 	if user.nil?
@@ -181,7 +207,7 @@ post '/admin/users/:user_id/manage/?' do
 	if params[:user_id].to_i == @user.id
 		user = @user
 	else 
-		user = User.includes(:resource_authorizations).where(:id => params[:user_id], :created_by_user_id => @user.id).first
+		user = User.includes(:resource_authorizations).where(:id => params[:user_id], :service_space_id => SS_ID).first
 	end
 
 	if user.nil?

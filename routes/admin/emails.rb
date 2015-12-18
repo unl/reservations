@@ -1,4 +1,11 @@
 require 'models/user'
+require 'models/permission'
+
+before '/admin/email*' do
+	unless @user.has_permission?(Permission::MANAGE_EMAILS)
+		raise Sinatra::NotFound
+	end
+end
 
 get '/admin/email/?' do
 	erb :'admin/emails', :layout => :fixed

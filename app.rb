@@ -41,7 +41,7 @@ before do
 
     # check if the user is currently logged in
     if session.has_key?(:user_id)
-        @user = (User.find(session[:user_id]) rescue nil)
+        @user = (User.includes(:permissions).find(session[:user_id]) rescue nil)
     else
         @user = nil;
     end

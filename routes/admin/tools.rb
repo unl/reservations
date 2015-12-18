@@ -1,4 +1,11 @@
 require 'models/resource'
+require 'models/permission'
+
+before '/admin/tools*' do
+	unless @user.has_permission?(Permission::MANAGE_RESOURCES)
+		raise Sinatra::NotFound
+	end
+end
 
 get '/admin/tools/?' do
 	require_login

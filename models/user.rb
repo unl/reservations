@@ -2,11 +2,16 @@ require 'active_record'
 require 'bcrypt'
 require 'models/resource_authorization'
 require 'models/event_signup'
+require 'models/permission'
+require 'models/user_has_permission'
 require 'classes/emailer'
 
 class User < ActiveRecord::Base
     has_many :resource_authorizations
     has_many :event_signups
+    has_many :user_has_permissions
+    has_many :permissions, through: :user_has_permissions
+
     def authorized_resource_ids
         self.resource_authorizations.map {|res_auth| res_auth.resource_id}
     end
@@ -21,10 +26,20 @@ class User < ActiveRecord::Base
 
     include BCrypt
 
+    # now decides based on whether they have any admin permissions
     def is_admin?
-    	is_admin == TRUE
+    	!self.permissions.empty?
     end
     alias_method :admin?, :is_admin?
+
+    def is_super_user?
+        self.permissions.include?(Permission.find(Permission::SUPER_USER))
+    end
+    alias_method :super_user?, :is_super_user?
+
+    def has_permission?(id)
+        self.permissions.include?(Permission.find(id))
+    end
 
     def password
         @password ||= Password.new(password_hash)
