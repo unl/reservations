@@ -10,10 +10,61 @@ get '/events/:event_id/?' do
 	end
 
 	@breadcrumbs << {:text => event.title}
-
 	erb :event_details, :layout => :fixed, :locals => {
 		:event => event
 	}
+end
+
+get '/events/:event_id/sign_up_as_non_member/?' do
+	event = Event.includes(:event_type).find_by(:id => params[:event_id])
+	if event.nil?
+		flash(:danger, 'Not Found', 'That event does not exist')
+		redirect '/calendar/'
+	end
+
+	@breadcrumbs << {:text => event.title, :href => event.info_link}
+	@breadcrumbs << {:text => 'Sign up as Non-Member'}
+	erb :event_signup, :layout => :fixed, :locals => {
+		:event => event
+	}
+end
+
+post '/events/:event_id/sign_up_as_non_member/?' do
+	event = Event.includes(:event_type).find_by(:id => params[:event_id])
+	if event.nil?
+		flash(:danger, 'Not Found', 'That event does not exist')
+		redirect '/calendar/'
+	end
+	if event.type.description == 'Free Event'
+		flash(:warning, 'Signup not required', 'This event is a Free Event and is open to anyone. No signup is required.')
+		redirect event.info_link
+	end
+	if params[:name].trim.empty? || params[:email].trim.empty?
+		flash(:danger, 'All Fields Required', 'Name and email are both required.')
+		redirect back
+	end
+
+	EventSignup.create(
+		:event_id => params[:event_id],
+		:name => params[:name],
+		:email => params[:email]
+	)
+
+	body = <<EMAIL
+<p>Thank you, #{params[:name]} for signing up for #{event.title}. Don't forget that this event is</p>
+
+<p><strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
+
+<p>We'll see you there!</p>
+
+<p>Nebraska Innovation Studio</p>
+EMAIL
+
+	Emailer.mail(params[:email], "Nebraska Innovation Studio - #{event.title}", body)
+
+	# flash a message that this works
+	flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, #{event.title} is #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}.")
+	redirect event.info_link
 end
 
 post '/events/:event_id/sign_up/?' do
@@ -38,12 +89,13 @@ post '/events/:event_id/sign_up/?' do
 	EventSignup.create(
 		:event_id => params[:event_id],
 		:name => @user.full_name,
-		:user_id => @user.id
+		:user_id => @user.id,
+		:email => @user.email
 	)
 
 	if event.type.description != 'Free Event'
 		body = <<EMAIL
-<p>Thank you, #{@user.full_name} for signing up for #{event.title}. Don't forget that this training is</p>
+<p>Thank you, #{@user.full_name} for signing up for #{event.title}. Don't forget that this event is</p>
 
 <p><strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
 

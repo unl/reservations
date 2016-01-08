@@ -40,4 +40,6 @@
 	<% else %>
 	All slots for this event are filled.
 	<% end %>
+<% else %>
+	<a class="wdn-button wdn-button-brand" href="/events/<%= event.id %>/sign_up_as_non_member/">Sign up for this event</a>
 <% end %>
