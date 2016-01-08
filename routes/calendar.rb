@@ -1,6 +1,6 @@
 require 'models/event'
 
-get '/calendar/' do
+get '/calendar/?' do
 	@breadcrumbs << {:text => 'Calendar'}
 
 	# get all events for this week
