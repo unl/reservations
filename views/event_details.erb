@@ -18,7 +18,9 @@
     </div>
 </div><br>
 
+<% # free events do not require signup but users can mark it on their homepage %>
 <% if @user && event.signups.map(&:user_id).include?(@user.id) %>
+	<% # the user is already signed up %>
 	<% if event.type.description == 'Free Event' %>
 		This event is noted on your homepage.<br>
 		<a href='/home/' class="wdn-button wdn-button-triad">View Homepage</a>
@@ -27,6 +29,7 @@
 		<a href='/home/' class="wdn-button wdn-button-triad">View Homepage</a>
 	<% end %>
 <% elsif @user %>
+	<% # the user is logged in but not signed up %>
 	<% if event.max_signups.nil? || event.signups.count < event.max_signups %>
 	<form action="/events/<%= event.id %>/sign_up/" method="POST">
 	<button type="submit" class="wdn-button wdn-button-brand">
@@ -41,9 +44,12 @@
 	All slots for this event are filled.
 	<% end %>
 <% else %>
-	<% if event.max_signups.nil? || event.signups.count < event.max_signups %>
-	<a class="wdn-button wdn-button-brand" href="/events/<%= event.id %>/sign_up_as_non_member/">Sign up for this event</a>
-	<% else %>
-	All slots for this event are filled.
+	<% # a non user. May still sign up for the event UNLESS it is a tool training %>
+	<% if event.type.description != 'Machine Training' %>
+		<% if event.max_signups.nil? || event.signups.count < event.max_signups %>
+		<a class="wdn-button wdn-button-brand" href="/events/<%= event.id %>/sign_up_as_non_member/">Sign up for this event</a>
+		<% else %>
+		All slots for this event are filled.
+		<% end %>
 	<% end %>
 <% end %>

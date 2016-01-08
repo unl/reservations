@@ -5,6 +5,7 @@ before '/admin/agenda*' do
 end
 
 get '/admin/agenda/' do
+	@breadcrumbs << {:text => 'Agenda'}
 	date = params[:date].nil? ? Time.now.midnight : Time.parse(params[:date])
 
 	reservations = Reservation.includes(:user, :resource, :event).in_day(date).order(:start_time)

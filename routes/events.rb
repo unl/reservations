@@ -69,7 +69,6 @@ end
 
 post '/events/:event_id/sign_up/?' do
 	require_login
-	check_membership
 
 	# check that is a valid event
 	event = Event.includes(:event_type).find_by(:service_space_id => SS_ID, :id => params[:event_id])
@@ -83,7 +82,11 @@ post '/events/:event_id/sign_up/?' do
 	if !event.max_signups.nil? && event.signups.count >= event.max_signups
 		# that event is full
 		flash(:danger, 'Event Full', 'Sorry, that event is full.')
-		redirect '/tools/trainings/'
+		redirect back
+	end
+
+	if event.type.description == 'Machine Training'
+		check_membership
 	end
 
 	EventSignup.create(

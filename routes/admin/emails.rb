@@ -8,10 +8,13 @@ before '/admin/email*' do
 end
 
 get '/admin/email/?' do
+	@breadcrumbs << {:text => 'Admin Emails'}
 	erb :'admin/emails', :layout => :fixed
 end
 
 get '/admin/email/send/?' do
+	@breadcrumbs << {:text => 'Admin Emails', :href => '/admin/email/'}
+	@breadcrumbs << {:text => 'Send Email'}
 	users = User.all
 
 	erb :'admin/send_email', :layout => :fixed, :locals => {
