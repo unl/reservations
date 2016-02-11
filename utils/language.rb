@@ -46,7 +46,7 @@ class String
   end
 
   def nl2br
-    self.gsub('\n', '<br />')
+    self.gsub("\n\r","<br>").gsub("\r", "").gsub("\n", "<br />")
   end
 
   def self.token
