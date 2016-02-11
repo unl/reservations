@@ -107,7 +107,9 @@ post '/admin/events/create/?' do
 		RestClient.post("#{CONFIG['unl_events_api_url']}#{CONFIG['unl_events_api_calendar']}/create/", post_params) do |response, request, result, &block|
 			case response.code
 			when 200
-				flash(:success, 'Event Posted to UNL Events', "The event can now be found on the NIS UNL Events calendar.")
+				flash :success, 'Event Posted to UNL Events', "The event can now be found on the NIS UNL Events calendar."
+			else
+				flash :error, 'Event Not Posted to UNL Events', "There was a problem posting to UNL Events. You should check out your UNL Events calendar to see if your event made it."
 			end
 		end
 	end

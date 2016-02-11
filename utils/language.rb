@@ -45,6 +45,10 @@ class String
     self.split('_').map(&:capitalize).join(' ').split(' ').map(&:capitalize).join(' ')
   end
 
+  def nl2br
+    self.gsub('\n', '<br />')
+  end
+
   def self.token
     return (1..20).to_a.map{(Random.rand(26) + 65).chr}.join
   end
