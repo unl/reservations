@@ -56,7 +56,8 @@ post '/tools/trainings/sign_up/:event_id/?' do
 	EventSignup.create(
 		:event_id => params[:event_id],
 		:name => @user.full_name,
-		:user_id => @user.id
+		:user_id => @user.id,
+		:email => @user.email
 	)
 
 	body = <<EMAIL
