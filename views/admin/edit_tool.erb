@@ -1,5 +1,5 @@
 <div id="pagetitle">
-<h3>Edit <%= tool.name %></h3>
+<h3><%= tool.id.nil? ? 'Create Tool' : "Edit #{tool.name}" %></h3>
 </div>
 
 <form action="" method="POST">
@@ -11,6 +11,16 @@
 
 	<label for="description">Description</label>
 	<textarea id="description" name="description"><%= tool.description %></textarea>
+
+	<div>
+		<input type="checkbox" <%= 'checked="checked"' if tool.is_reservable || tool.id.nil? %> name='is_reservable' id="is-reservable">
+		<label for="is-reservable">Requires Reservation?</label>
+	</div>
+	<div>
+		<label for="minutes-per-reservation">Minutes Per Reservation</label>
+		<input type="number" name="minutes_per_reservation" id="minutes-per-reservation" value="<%= tool.minutes_per_reservation %>">
+	</div>
+	<br>
 
 	<button type="submit" class="wdn-button wdn-button-brand">Save Tool</button>
 </form>

@@ -35,7 +35,10 @@ post '/admin/tools/create/?' do
 	tool.description = params[:description]
 	tool.service_space_id = SS_ID
 	tool.needs_authorization = true
+	tool.is_reservable = params.checked?('is_reservable')
+	tool.minutes_per_reservation = params[:minutes_per_reservation]
 	tool.needs_approval = false
+	tool.max_reservations_per_slot = 5
 	tool.save
 
 	flash(:success, 'Tool Created', "Your tool #{tool.name} has been created.")
@@ -71,6 +74,8 @@ post '/admin/tools/:resource_id/edit/?' do
 	tool.name = params[:name]
 	tool.model = params[:model]
 	tool.description = params[:description]
+	tool.is_reservable = params.checked?('is_reservable')
+	tool.minutes_per_reservation = params[:minutes_per_reservation]
 	tool.save
 
 	flash(:success, 'Tool Updated', "Your tool #{tool.name} has been updated.")
