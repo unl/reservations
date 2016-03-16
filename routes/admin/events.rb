@@ -10,19 +10,6 @@ before '/admin/events*' do
 	end
 end
 
-def set_event_data(event, params)
-	event.title = params[:title]
-	event.description = params[:description]
-	event.start_time = calculate_time(params[:start_date], params[:start_time_hour], params[:start_time_minute], params[:start_time_am_pm])
-	event.end_time = calculate_time(params[:end_date], params[:end_time_hour], params[:end_time_minute], params[:end_time_am_pm])
-	event.event_type_id = params[:type]
-	event.location_id = params[:location]
-	event.max_signups = params[:limit_signups] == 'on' ? params[:max_signups].to_i : nil
-	event.service_space_id = SS_ID
-
-	event
-end
-
 get '/admin/events/?' do
 	@breadcrumbs << {:text => 'Admin Events'}
 	page = params[:page]
@@ -75,8 +62,8 @@ end
 
 post '/admin/events/create/?' do
 	event = Event.new
-	event = set_event_data(event, params)
-	event.save
+	event.set_image_data(params)
+	event.set_data(params)
 
 	if params.has_key?('reserve_tool') && params['reserve_tool'] == 'on'
 		# we need to create a reservation for the tool on the appropriate time
@@ -143,11 +130,15 @@ post '/admin/events/:event_id/edit/?' do
 		flash(:danger, 'Not Found', 'That event does not exist')
 		redirect '/admin/events/'
 	end
-	event = set_event_data(event, params)
-	event.save
+	if params.checked?('remove_image')
+		event.remove_image_data
+	else
+		event.set_image_data(params)
+	end
+	event.set_data(params)
 
 	# check the tool reservation for this
-	checked = params.has_key?('reserve_tool') && params['reserve_tool'] == 'on'
+	checked = params.checked?('reserve_tool')
 	if event.has_reservation && checked
 		# update the reservation
 		event.reservation.update(

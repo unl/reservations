@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'models/user'
 require 'models/service_space'
+require 'models/event'
 
 use Rack::Session::Cookie, :key => 'rack.session',
                            :path => '/',
@@ -73,8 +74,17 @@ error do
 end
 
 get '/' do
-    @breadcrumbs << {:text => 'Home'}
-    redirect '/login/'
+  @breadcrumbs << {:text => 'Home'}
+  redirect '/login/'
+end
+
+get '/images/:event_id/?' do
+  event = Event.find_by(:id => params[:event_id])
+  if event.nil? || event.imagedata.nil?
+    raise Sinatra::NotFound
+  end
+
+  return event.imagedata
 end
 
 Dir.glob("#{ROOT}/routes/*.rb") { |file| require file }

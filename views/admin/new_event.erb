@@ -99,6 +99,12 @@
                 </div>
 
                 <div class="details">
+                    <% unless event.imagedata.nil? %>
+                        <img src="<%= event.image_src %>" alt="Image for Event <%= event.title %>">
+                        <br>
+                        <input type="checkbox" name="remove_image" id="remove-image">
+                        <label for="remove-image">Remove Image</label> 
+                    <% end %>
                     <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata" title="Event Image">
                 </div>
             </div>
