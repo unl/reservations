@@ -114,9 +114,9 @@
                 </div>
 
                 <div class="details">
-                    <input id="export-to-unl-events" title="Export to UNL Events" type="checkbox" name="export_to_unl_events">
+                    <input id="export-to-unl-events" title="Export to UNL Events" type="checkbox" <%= 'checked="checked"' if on_unl_events %> name="export_to_unl_events">
                     <label for="export-to-unl-events">Export to UNL Events</label><br>
-                    <input disabled="disabled" id="consider-for-unl-main" title="Consider for main UNL Events calendar" type="checkbox" name="consider_for_unl_main"> 
+                    <input disabled="disabled" id="consider-for-unl-main" title="Consider for main UNL Events calendar" type="checkbox" <%= 'checked="checked"' if on_main_calendar %> name="consider_for_unl_main"> 
                     <label for="consider-for-unl-main">Consider for main UNL Events calendar</label><br>
                 </div>
             </div>
@@ -150,6 +150,6 @@ WDN.initializePlugin('jqueryui', [function() {
             $('#consider-for-unl-main').attr('checked', false);
             $('#consider-for-unl-main').attr('disabled', 'disabled');
         }
-    });
+    }).change();
 }]);
 </script>

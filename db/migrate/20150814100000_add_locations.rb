@@ -22,10 +22,10 @@ class AddLocations < ActiveRecord::Migration
 		Location.create(
 			:name => 'Nebraska Innovation Studio',
 			:streetaddress => "2021 Transformation Drive",
-			:streetaddress2 => 'Suite 2220',
+			:streetaddress2 => 'Suite 1500',
 			:city => 'Lincoln',
 			:state => 'NE',
-			:zip => '68588-6200',
+			:zip => '68508',
 			:additionalinfo => nil,
 			:service_space_id => ss.id
 		)

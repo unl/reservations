@@ -56,7 +56,9 @@ get '/admin/events/create/?' do
 		:event => Event.new,
 		:types => EventType.where(:service_space_id => SS_ID).all,
 		:locations => Location.where(:service_space_id => SS_ID).all,
-		:tools => Resource.where(:service_space_id => SS_ID, :is_reservable => true).all
+		:tools => Resource.where(:service_space_id => SS_ID, :is_reservable => true).all,
+		:on_unl_events => false,
+		:on_main_calendar => false
 	}
 end
 
@@ -77,7 +79,7 @@ post '/admin/events/create/?' do
 		)
 	end
 
-	if params.has_key?('export_to_unl_events') && params['export_to_unl_events'] == 'on'
+	if params.checked?('export_to_unl_events')
 		post_params = {
 			:title => params[:title],
 			:description => params[:description],
@@ -87,7 +89,7 @@ post '/admin/events/create/?' do
 			:api_token => CONFIG['unl_events_api_token']
 		}
 
-		if params.has_key?('consider_for_unl_main') && params['consider_for_unl_main'] == 'on'
+		if params.checked?('consider_for_unl_main')
 			post_params['send_to_main'] =  'yes'
 		end
 
@@ -95,6 +97,8 @@ post '/admin/events/create/?' do
 			case response.code
 			when 200
 				flash :success, 'Event Posted to UNL Events', "The event can now be found on the NIS UNL Events calendar."
+				event.unl_events_id = JSON.parse(response.body)['id']
+				event.save
 			else
 				flash :error, 'Event Not Posted to UNL Events', "There was a problem posting to UNL Events. You should check out your UNL Events calendar to see if your event made it."
 			end
@@ -115,11 +119,29 @@ get '/admin/events/:event_id/edit/?' do
 		redirect '/admin/events/'
 	end
 
+	on_unl_events = false
+	on_main_calendar = false
+	unless event.unl_events_id.nil?
+		get_params = {
+			:api_token => CONFIG['unl_events_api_token']
+		}
+		RestClient.get("#{CONFIG['unl_events_api_url']}#{CONFIG['unl_events_api_calendar']}/event/#{event.unl_events_id}/", {:params => get_params}) do |response, request, result, &block|
+			if response.code == 200
+				on_unl_events = true
+				if JSON.parse(response.body)['on_main_calendar']
+					on_main_calendar = true
+				end
+			end
+		end
+	end
+
 	erb :'admin/new_event', :layout => :fixed, :locals => {
 		:event => event,
 		:types => EventType.where(:service_space_id => SS_ID).all,
 		:locations => Location.where(:service_space_id => SS_ID).all,
-		:tools => Resource.where(:service_space_id => SS_ID, :is_reservable => true).all
+		:tools => Resource.where(:service_space_id => SS_ID, :is_reservable => true).all,
+		:on_unl_events => on_unl_events,
+		:on_main_calendar => on_main_calendar
 	}
 end
 
@@ -162,6 +184,29 @@ post '/admin/events/:event_id/edit/?' do
 			:is_training => true,
 			:user_id => nil
 		)
+	end
+
+	if params.checked?('export_to_unl_events')
+		post_params = {
+			:title => params[:title],
+			:description => params[:description],
+			:api_token => CONFIG['unl_events_api_token']
+		}
+
+		if params.checked?('consider_for_unl_main')
+			post_params['send_to_main'] = 'yes'
+		end
+
+		RestClient.post("#{CONFIG['unl_events_api_url']}#{CONFIG['unl_events_api_calendar']}/event/#{event.unl_events_id}/", post_params) do |response, request, result, &block|
+			case response.code
+			when 200
+				flash :success, 'Event Posted to UNL Events', "The event details were updated on the NIS UNL Events calendar."
+				event.unl_events_id = JSON.parse(response.body)['id']
+				event.save
+			else
+				flash :error, 'Event Not Posted to UNL Events', "There was a problem posting to UNL Events. You should check out your UNL Events calendar to see if your event is OK."
+			end
+		end
 	end
 
 	# notify that it worked
