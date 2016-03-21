@@ -1,8 +1,10 @@
-<form style="float: right; width: 320px; background: #41708D;">
-    <label for="date" style="color: white;">Go to another date:</label>
-    <div class="date-time-select">
-        <span class="wdn-icon-calendar"></span>
-        <input style="width: 90%;" id="date" name="date" title="Reservation Date" type="text" class="datepicker" value="<%= date.strftime('%m/%d/%Y') %>" />
+<form style="float: right; width: 320px;">
+    <div class="offset-field-group">
+        <label for="date">Go to another date:</label>
+        <div class="date-time-select">
+            <span class="wdn-icon-calendar"></span>
+            <input style="width: 90%;" id="date" name="date" title="Reservation Date" type="text" class="datepicker" value="<%= date.strftime('%m/%d/%Y') %>" />
+        </div>
     </div>
 </form>
 

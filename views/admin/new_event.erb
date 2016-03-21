@@ -29,7 +29,33 @@
                     <% locations.each do |location| %>
                         <option <%= 'selected="selected"' if !event.location.nil? && event.location.id == location.id %> value="<%= location.id %>"><%= location.name %></option>
                     <% end %>
+                    <option value="new">-- New Location --</option>
                 </select>
+
+                <div style="display: none;" class="offset-field-group" id="new-location-details">
+                    <label for="location-name"><span class="required">*</span> Name</label>
+                    <input type="text" id="location-name" name="new_location[name]" />
+
+                    <label for="location-address">Address</label>
+                    <input type="text" id="location-address" name="new_location[streetaddress]" />
+
+                    <label for="location-address2">Address 2</label>
+                    <input type="text" id="location-address2" name="new_location[streetaddress2]" />
+
+                    <label for="location-city">City</label>
+                    <input type="text" id="location-city" name="new_location[city]" />
+
+                    <label for="location-state">State</label>
+                    <input type="text" id="location-state" name="new_location[state]" />
+
+                    <label for="location-zip">Zip</label>
+                    <input type="text" id="location-zip" name="new_location[zip]" />
+
+                    <label for="location-additionalinfo">Additional Info</label>
+                    <input type="text" id="location-additionalinfo" name="new_location[additionalinfo]" />
+
+                    <label>* This location will be saved for future use</label>
+                </div>
 
                 <div>
                     <input type="checkbox" <%= 'checked="checked"' if !event.reservation.nil? && !event.reservation.resource.nil? %> id="reserve-tool" name="reserve_tool"><label for="reserve-tool">Reserve a tool for this event</label>
@@ -142,6 +168,14 @@ WDN.initializePlugin('jqueryui', [function() {
             $('#tools-for-reserving').hide();
         }
     });
+
+    $('#location').change(function (change) {
+        if ($(this).val() == 'new') {
+            $('#new-location-details').show();
+        } else {
+            $('#new-location-details').hide();
+        }
+    }).chagne();
 
     $('#export-to-unl-events').change(function (change) {
         if ($('#export-to-unl-events').is(':checked')) {

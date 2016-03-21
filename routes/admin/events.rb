@@ -63,6 +63,14 @@ get '/admin/events/create/?' do
 end
 
 post '/admin/events/create/?' do
+	if params[:location] == 'new'
+		# this is a new location, we must create it!
+		location = Location.create(params[:new_location].merge({
+			:service_space_id => SS_ID
+		}))
+		params[:location] = location.id
+	end
+
 	event = Event.new
 	event.set_image_data(params)
 	event.set_data(params)
@@ -152,6 +160,15 @@ post '/admin/events/:event_id/edit/?' do
 		flash(:danger, 'Not Found', 'That event does not exist')
 		redirect '/admin/events/'
 	end
+
+	if params[:location] == 'new'
+		# this is a new location, we must create it!
+		location = Location.create(params[:new_location].merge({
+			:service_space_id => SS_ID
+		}))
+		params[:location] = location.id
+	end
+	
 	if params.checked?('remove_image')
 		event.remove_image_data
 	else
