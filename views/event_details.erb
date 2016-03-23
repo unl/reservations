@@ -14,15 +14,15 @@
 		<div class="location eventicon-location">
 			<%= event.location.name %>
 		</div>
+		<% unless event.imagedata.nil? %>
+		<div class="inset-image">
+			<img src="<%= event.image_src %>" alt="Image for Event: <%= event.title %>">
+		</div>
+		<% end %>
 		<div class="description">
 	    	<%= event.description.nl2br.force_encoding("UTF-8") %>
 	    </div>
 	</div>
-	<% unless event.imagedata.nil? %>
-	<div class="inset-image">
-		<img src="<%= event.image_src %>" alt="Image for Event: <%= event.title %>">
-	</div>
-	<% end %>
 </div>
 
 <% # free events do not require signup but users can mark it on their homepage %>
