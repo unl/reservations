@@ -88,10 +88,25 @@ post '/admin/events/create/?' do
 	end
 
 	if params.checked?('export_to_unl_events')
+		# first create the location, if necessary
+		if event.location.unl_events_id.nil?
+			post_params = event.location.attributes.merge(:api_token => CONFIG['unl_events_api_token'])
+			RestClient.post("#{CONFIG['unl_events_api_url']}location/create/", post_params) do |response, request, result|
+				case response.code
+				when 200
+					event.location.unl_events_id = JSON.parse(response.body)['id']
+					event.location.save
+				else
+					flash :error, 'Location Not Posted to UNL Events', "We had an issue creating the location on UNL Events. Please go to events.unl.edu/manager to create your event."
+				end
+			end
+		end
+
+		# send the event up
 		post_params = {
 			:title => params[:title],
 			:description => params[:description],
-			:location => CONFIG['unl_events_location_id'],
+			:location => event.location.unl_events_id,
 			:start_time => event.start_time.in_time_zone.strftime('%Y-%m-%d %H:%M:%S'),
 			:end_time => event.end_time.in_time_zone.strftime('%Y-%m-%d %H:%M:%S'),
 			:api_token => CONFIG['unl_events_api_token']
@@ -101,7 +116,7 @@ post '/admin/events/create/?' do
 			post_params['send_to_main'] =  'yes'
 		end
 
-		RestClient.post("#{CONFIG['unl_events_api_url']}#{CONFIG['unl_events_api_calendar']}/create/", post_params) do |response, request, result, &block|
+		RestClient.post("#{CONFIG['unl_events_api_url']}#{CONFIG['unl_events_api_calendar']}/create/", post_params) do |response, request, result|
 			case response.code
 			when 200
 				flash :success, 'Event Posted to UNL Events', "The event can now be found on the NIS UNL Events calendar."
@@ -168,7 +183,7 @@ post '/admin/events/:event_id/edit/?' do
 		}))
 		params[:location] = location.id
 	end
-	
+
 	if params.checked?('remove_image')
 		event.remove_image_data
 	else
