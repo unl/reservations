@@ -9,7 +9,7 @@
 
     $Id: fixed.dwt | 6edb0e1ee94038935f3821c6ce15dfd5c217b2e2 | Tue Dec 1 17:08:56 2015 -0600 | Kevin Abel  $
 -->
-<%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_4.1/includes/scriptsandstyles.html"))).result %>
+<%= erb :scriptsandstyles %>
 <!-- InstanceBeginEditable name="doctitle" -->
 <title><%= @title %> | University of Nebraska&ndash;Lincoln</title>
 <!-- InstanceEndEditable -->
