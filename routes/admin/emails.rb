@@ -27,19 +27,19 @@ post '/admin/email/send/?' do
 
 	# compile the list based on what was checked
 	if params.checked?('send_to_all_non_admins')
-		users = User.where(:service_space_id => SS_ID, :is_admin => false).all
+		users = User.where(:service_space_id => SS_ID, :is_admin => false).where.not(:space_status => 'expired_no_email').all
 		users_to_send_to += users
 	end
 	if params.checked?('send_to_all_users')
-		users = User.where(:service_space_id => SS_ID).all
+		users = User.where(:service_space_id => SS_ID).where.not(:space_status => 'expired_no_email').all
 		users_to_send_to += users
 	end
 	if params.checked?('send_to_all_students')
-		users = User.where(:service_space_id => SS_ID, :university_status => ['UNL Undergrad','UNL Grad','Other Student']).all
+		users = User.where(:service_space_id => SS_ID, :university_status => ['UNL Undergrad','UNL Grad','Other Student']).where.not(:space_status => 'expired_no_email').all
 		users_to_send_to += users
 	end
 	if params.checked?('send_to_all_facstaff')
-		users = User.where(:service_space_id => SS_ID, :university_status => ['UNL Staff','UNL Faculty','Emeritus UNL Faculty']).all
+		users = User.where(:service_space_id => SS_ID, :university_status => ['UNL Staff','UNL Faculty','Emeritus UNL Faculty']).where.not(:space_status => 'expired_no_email').all
 		users_to_send_to += users
 	end
 	if params.checked?('send_to_specific_user')

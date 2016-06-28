@@ -17,7 +17,8 @@ USER_STATII = [
 
 STUDIO_STATII = {
 	'Membership Current' => 'current',
-	'Membership Expired' => 'expired'
+	'Membership Expired' => 'expired',
+	'Membership Expired (opted out of emails)' => 'expired_no_email'
 }
 
 before '/admin/users*' do
