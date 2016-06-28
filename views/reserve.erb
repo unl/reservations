@@ -154,19 +154,26 @@ end %>
             <% end %>
         </div>
 
-        <label for="reservation-length">Reserve machine for:</label><br>
-        <% if tool.minutes_per_reservation.nil? %>
+        <label for="reservation-length">Reserve tool for:</label><br>
+        <% if tool.time_slot_type == 'exact' %>
+            <input style="width: 50px" disabled="disabled" value="<%= tool.minutes_per_reservation %>" />&nbsp;&nbsp;<label>minutes</label>
+            <input type="hidden" name="length" value="<%= tool.minutes_per_reservation %>" />
+        <% elsif tool.time_slot_type == 'range' %>
+            <select id="reservation-length" name="length">
+                <% i = tool.min_minutes_per_reservation %>
+                <% while i <= tool.max_minutes_per_reservation %>
+                <option value="<%= i %>"><%= i.minutes_output %></option>
+                <% i += tool.increment_minutes_per_reservation %>
+                <% end %>
+            </select>
+        <% else tool.minutes_per_reservation.nil? %>
         <select id="reservation-length" name="length">
-
-        	<% (1..4).each do |i| %>
-        	<option value="<%=i*15%>"><%=i*15%> minutes</option>
-        	<% end %>
-        	<option value="90">1.5 hours</option>
-        	<option value="120">2 hours</option>
+            <% (1..4).each do |i| %>
+            <option value="<%=i*15%>"><%=i*15%> minutes</option>
+            <% end %>
+            <option value="90">1.5 hours</option>
+            <option value="120">2 hours</option>
         </select>
-        <% else %>
-        <input style="width: 50px" disabled="disabled" value="<%= tool.minutes_per_reservation %>" />&nbsp;&nbsp;<label>minutes</label>
-        <input type="hidden" name="length" value="<%= tool.minutes_per_reservation %>" />
         <% end %>
         <br><br>
         <button type="submit" class="wdn-button wdn-button-brand"><%= reservation.nil? ? 'Reserve' : 'Update' %></button>
