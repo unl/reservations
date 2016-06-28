@@ -36,7 +36,11 @@ post '/admin/tools/create/?' do
 	tool.service_space_id = SS_ID
 	tool.needs_authorization = true
 	tool.is_reservable = params.checked?('is_reservable')
+	tool.time_slot_type = params[:time_slot_type]
 	tool.minutes_per_reservation = params[:minutes_per_reservation]
+	tool.min_minutes_per_reservation = params[:min_minutes_per_reservation]
+	tool.max_minutes_per_reservation = params[:max_minutes_per_reservation]
+	tool.increment_minutes_per_reservation = params[:increment_minutes_per_reservation]
 	tool.needs_approval = false
 	tool.max_reservations_per_slot = 5
 	tool.save
@@ -75,7 +79,11 @@ post '/admin/tools/:resource_id/edit/?' do
 	tool.model = params[:model]
 	tool.description = params[:description]
 	tool.is_reservable = params.checked?('is_reservable')
+	tool.time_slot_type = params[:time_slot_type]
 	tool.minutes_per_reservation = params[:minutes_per_reservation]
+	tool.min_minutes_per_reservation = params[:min_minutes_per_reservation]
+	tool.max_minutes_per_reservation = params[:max_minutes_per_reservation]
+	tool.increment_minutes_per_reservation = params[:increment_minutes_per_reservation]
 	tool.save
 
 	flash(:success, 'Tool Updated', "Your tool #{tool.name} has been updated.")

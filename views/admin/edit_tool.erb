@@ -17,8 +17,14 @@
 		<label for="is-reservable">Requires Reservation?</label>
 	</div>
 	<div>
-		<label for="minutes-per-reservation">Minutes Per Reservation</label>
-		<input type="number" name="minutes_per_reservation" id="minutes-per-reservation" value="<%= tool.minutes_per_reservation %>">
+		<label for="minutes-per-reservation">Minutes Per Reservation</label><br>
+		<input type="radio" name="time_slot_type" id="time-slot-type-exact" value="exact" <%= 'checked="checked"' if tool.time_slot_type == 'exact' || tool.time_slot_type.nil? %>>
+		<label for="time-slot-type-exact">Exactly:</label> <input type="number" name="minutes_per_reservation" id="minutes-per-reservation" value="<%= tool.minutes_per_reservation %>"><br><br>
+		<input type="radio" name="time_slot_type" id="time-slot-type-range" value="range" <%= 'checked="checked"' if tool.time_slot_type == 'range' %>>
+		<label for="time-slot-type-range">Range:</label>
+		<label for="min-minutes-per-reservation">Min:</label> <input style="width: 100px" type="number" name="min_minutes_per_reservation" id="min-minutes-per-reservation" value="<%= tool.min_minutes_per_reservation %>">
+		<label for="max-minutes-per-reservation">Max:</label> <input style="width: 100px" type="number" name="max_minutes_per_reservation" id="max-minutes-per-reservation" value="<%= tool.max_minutes_per_reservation %>">
+		<label for="increment-minutes-per-reservation">Increment:</label> <input style="width: 100px" type="number" name="increment_minutes_per_reservation" id="increment-minutes-per-reservation" value="<%= tool.increment_minutes_per_reservation %>">
 	</div>
 	<br>
 
