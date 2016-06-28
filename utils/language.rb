@@ -30,6 +30,14 @@ class Integer
     "$#{self / 100.0}"
   end
 
+  def minutes_output
+    if self < 60
+      "#{self} minutes"
+    else
+      "#{(self / 60)} hours #{self % 60} minutes"
+    end
+  end
+
   alias_method :second, :seconds
   alias_method :minute, :minutes
   alias_method :hour, :hours
