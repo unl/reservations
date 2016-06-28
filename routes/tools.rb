@@ -111,17 +111,17 @@ get '/tools/:resource_id/reserve/?' do
 	# calculate the available start times for reservation
 	if space_hour.nil?
 		start = 0
-		while start + tool.minutes_per_reservation <= 1440
+		while start + (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15) <= 1440
 			available_start_times << start
-			start += tool.minutes_per_reservation
+			start += (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15)
 		end
 	else
 		space_hour.hours.sort{|x,y| x[:start] <=> y[:start]}.each do |record|
 			if record[:status] == 'open'
 				start = record[:start]
-				while start + tool.minutes_per_reservation <= record[:end]
+				while start + (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15) <= record[:end]
 					available_start_times << start
-					start += tool.minutes_per_reservation
+					start += (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15)
 				end
 			end
 		end
@@ -181,17 +181,17 @@ get '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 	# calculate the available start times for reservation
 	if space_hour.nil?
 		start = 0
-		while start + tool.minutes_per_reservation <= 1440
+		while start + (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15) <= 1440
 			available_start_times << start
-			start += tool.minutes_per_reservation
+			start += (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15)
 		end
 	else
 		space_hour.hours.sort{|x,y| x[:start] <=> y[:start]}.each do |record|
 			if record[:status] == 'open'
 				start = record[:start]
-				while start + tool.minutes_per_reservation <= record[:end]
+				while start + (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15) <= record[:end]
 					available_start_times << start
-					start += tool.minutes_per_reservation
+					start += (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15)
 				end
 			end
 		end
