@@ -10,7 +10,7 @@ get '/admin/agenda/' do
 
 	reservations = Reservation.includes(:user, :resource, :event).in_day(date).order(:start_time)
 	reservations.select! do |res|
- 		res.event.service_space_id == @space.id
+ 		res.event.service_space_id == SS_ID
  		(!res.event.nil? && res.event.service_space_id == SS_ID) || (!res.resource.nil? && res.resource.service_space_id == SS_ID)
  	end
 	events = Event.includes(:event_type).where(:service_space_id => SS_ID).in_day(date).order(:start_time)
