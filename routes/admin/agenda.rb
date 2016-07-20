@@ -8,9 +8,8 @@ get '/admin/agenda/' do
 	@breadcrumbs << {:text => 'Agenda'}
 	date = params[:date].nil? ? Time.now.midnight : Time.parse(params[:date])
 
-	reservations = Reservation.includes(:user, :resource, :event).in_day(date).order(:start_time)
+	reservations = Reservation.includes(:user, :resource, :event).in_day(date).order(:start_time).all.to_a
 	reservations.select! do |res|
- 		res.event.service_space_id == SS_ID
  		(!res.event.nil? && res.event.service_space_id == SS_ID) || (!res.resource.nil? && res.resource.service_space_id == SS_ID)
  	end
 	events = Event.includes(:event_type).where(:service_space_id => SS_ID).in_day(date).order(:start_time)
