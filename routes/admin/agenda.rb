@@ -9,6 +9,10 @@ get '/admin/agenda/' do
 	date = params[:date].nil? ? Time.now.midnight : Time.parse(params[:date])
 
 	reservations = Reservation.includes(:user, :resource, :event).in_day(date).order(:start_time)
+	reservations.select! do |res|
+ 		res.event.service_space_id == @space.id
+ 		(!res.event.nil? && res.event.service_space_id == @space.id) || (!res.resource.nil? && res.resource.service_space_id == @space.id)
+ 	end
 	events = Event.includes(:event_type).in_day(date).order(:start_time)
 
 	# get the hours for this day to show
