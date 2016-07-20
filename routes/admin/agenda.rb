@@ -13,7 +13,7 @@ get '/admin/agenda/' do
  		res.event.service_space_id == @space.id
  		(!res.event.nil? && res.event.service_space_id == @space.id) || (!res.resource.nil? && res.resource.service_space_id == @space.id)
  	end
-	events = Event.includes(:event_type).in_day(date).order(:start_time)
+	events = Event.includes(:event_type).where(:service_space_id => SS_ID).in_day(date).order(:start_time)
 
 	# get the hours for this day to show
 	hours = SpaceHour.where(:service_space_id => SS_ID)
