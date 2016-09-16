@@ -52,11 +52,6 @@ post '/new_members/sign_up/:event_id/?' do
 		redirect '/new_members/'
 	end
 
-	if params[:signup_password].trim != 'makerspace'
-		flash(:alert, 'Incorrect Password', 'Please use the password provided in your email to sign up for this orientation.')
-		redirect "/new_members/sign_up/#{params[:event_id]}/"
-	end
-
 	EventSignup.create(
 		:event_id => params[:event_id],
 		:name => params[:name],
