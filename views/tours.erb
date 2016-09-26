@@ -1,0 +1,50 @@
+<div id="pagetitle">
+    <h3>Tours</h3>
+</div>
+
+<p>
+<strong>Welcome to the Nebraska Innovation Studio!</strong><br>
+We'd love to show you around. Check out our tours below and sign up to attend! 
+No membership or sign-in is necessary.
+</p>
+
+<% if events.count > 0 %>
+<div class="event-page">
+    <table class="event-list">
+        <thead class="small-hidden">
+            <tr>
+                <th>Title</th>
+                <th>Date/Location</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        <% events.each do |event| %>
+            <tr>
+                <td class="small-hidden">
+                    <%= event.title %>
+                </td>
+                <td>
+                    <div class="small-block hidden calendar-event-title">
+                        <%= event.title %>
+                    </div>
+                    <ul>
+                        <li>
+                            <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
+                            <%= event.location.name %>
+                        </li>
+                    </ul>
+                </td>
+                <td>
+                    <a class="wdn-button wdn-button-brand" href="/tours/sign_up/<%= event.id %>/">Sign Up!</a>
+                </td>
+            </tr>
+        <% end %>
+        </tbody>
+    </table>
+</div>
+<% else %>
+<p>
+There are no tours scheduled right now. Please check back again soon!
+</p>
+<% end %>
