@@ -43,8 +43,10 @@ post '/admin/email/send/?' do
 		users_to_send_to += users
 	end
 	if params.checked?('send_to_specific_user')
-		user = User.find_by(:service_space_id => SS_ID, :id => params[:specific_user])
-		users_to_send_to << user unless user.nil?
+		params[:specific_user].each do |id|
+			user = User.find_by(:service_space_id => SS_ID, :id => id)
+			users_to_send_to << user unless user.nil?
+		end
 	end
 
 	# compact and uniqify the list

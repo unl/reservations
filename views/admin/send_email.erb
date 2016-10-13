@@ -11,8 +11,8 @@
 			<input type="checkbox" id="send-to-all-students" name="send_to_all_students"> <label title="UNL Undergrad, UNL Grad, Other Student" for="send-to-all-students">All Students</label><br>
 			<input type="checkbox" id="send-to-all-facstaff" name="send_to_all_facstaff"> <label title="UNL Staff, UNL Faculty, Emeritus UNL Faculty" for="send-to-all-facstaff">All UNL Faculty/Staff</label><br>
 			<input type="checkbox" id="send-to-specific-user" name="send_to_specific_user">
-			<label for="specific-user">Specific User:</label>
-			<select id="specific-user" name="specific_user" style="width: auto;">
+			<label for="specific-user">Specific User(s) (use Shift or Ctrl/Cmd to select multiple):</label>
+			<select multiple="multiple" id="specific-user" name="specific_user[]" style="width: auto;">
 				<% users.sort{|x,y| x.sortable_name.downcase <=> y.sortable_name.downcase}.each do |user| %>
 				<option value="<%= user.id %>"><%= user.sortable_name %></option>
 				<% end %>	
