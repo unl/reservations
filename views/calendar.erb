@@ -30,6 +30,7 @@ end %>
 	<% (0..6).each do |i| %>
 	<% day = (sunday + i.days + 1.hour).midnight %>
 	<% slots = [0] * 36 %>
+	<% max_slots = [0] * 36 %>
 	<div class="calendar-day" data-day="<%= day.strftime("%Y/%m/%d") %>">
 		<label class="day-header"><%= day.strftime("%^a %-m/%d") %></label>
 		<div class="day-chart" title="Open">
@@ -107,13 +108,23 @@ end %>
 			<% unless day_events.nil? %>
 			<% day_events.sort{|a, b| a.start_time <=> b.start_time}.each do |event| %>
 				<% start_slot = [(((event.start_time.in_time_zone - day.midnight) / 60 - 360) / 30).floor, 0].max 
+				end_slot = [(((event.end_time.in_time_zone - day.midnight) / 60 - 360) / 30).floor, 35].min
+
+				(start_slot..end_slot).each do |k| %>
+					<% max_slots[k] = max_slots[k] + 1 %>
+				<% end %>
+			<% end %>
+			<% day_events.sort{|a, b| a.start_time <=> b.start_time}.each do |event| %>
+				<% start_slot = [(((event.start_time.in_time_zone - day.midnight) / 60 - 360) / 30).floor, 0].max 
 				end_slot = [(((event.end_time.in_time_zone - day.midnight) / 60 - 360) / 30).floor, 35].min 
 				if end_slot < 0
 					next
 				end
-				over = 0 
+				over = 0
+				size = 1
 				(start_slot..end_slot).each do |k|
 					over = slots[k] if slots[k] > over
+					size = max_slots[k] if max_slots[k] > size
 				end
 				over = [over,3].min
 				top = (((event.start_time.in_time_zone - day.midnight) / 60 - 360) / 30) * 20
@@ -133,7 +144,7 @@ end %>
 				end
 				%>
 				<div class="event <%= event.type.description.downcase.split(' ').join('-') %> <%= 'top-overflow' if top_overflow %> <%= 'bottom-overflow' if bottom_overflow %>" 
-					style="top: <%= top %>px; height: <%= height %>px; left: <%=over*8%>px">
+					style="top: <%= top %>px; height: <%= height %>px; left: <%=over*80/size%>%; width: <%=10+80/size%>%;">
 					<% if event.info_link %>
 					<a href="<%= event.info_link %>"><%= event.title %></a>
 					<% else %>
