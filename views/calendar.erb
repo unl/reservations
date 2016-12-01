@@ -108,7 +108,7 @@ end %>
 			<% unless day_events.nil? %>
 			<% day_events.sort{|a, b| a.start_time <=> b.start_time}.each do |event| %>
 				<% start_slot = [(((event.start_time.in_time_zone - day.midnight) / 60 - 360) / 30).floor, 0].max 
-				end_slot = [(((event.end_time.in_time_zone - day.midnight) / 60 - 360) / 30).floor, 35].min
+				end_slot = [(((event.end_time.in_time_zone - day.midnight) / 60 - 361) / 30).floor, 35].min
 
 				(start_slot..end_slot).each do |k| %>
 					<% max_slots[k] = max_slots[k] + 1 %>
@@ -116,7 +116,7 @@ end %>
 			<% end %>
 			<% day_events.sort{|a, b| a.start_time <=> b.start_time}.each do |event| %>
 				<% start_slot = [(((event.start_time.in_time_zone - day.midnight) / 60 - 360) / 30).floor, 0].max 
-				end_slot = [(((event.end_time.in_time_zone - day.midnight) / 60 - 360) / 30).floor, 35].min 
+				end_slot = [(((event.end_time.in_time_zone - day.midnight) / 60 - 361) / 30).floor, 35].min 
 				if end_slot < 0
 					next
 				end
