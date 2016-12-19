@@ -26,7 +26,7 @@ get '/tools/trainings/?' do
 
 	machine_training_id = EventType.find_by(:description => 'Machine Training', :service_space_id => SS_ID).id
 	events = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => machine_training_id).
-					where('start_time >= ?', Time.now).all
+					where('start_time >= ?', Time.now).order(:start_time => :asc).all
 
 	erb :trainings, :layout => :fixed, :locals => {
 		:events => events
