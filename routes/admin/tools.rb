@@ -1,6 +1,8 @@
 require 'models/resource'
 require 'models/permission'
 
+NIS_TOOL_RESOURCE_CLASS_ID = 1
+
 before '/admin/tools*' do
 	unless @user.has_permission?(Permission::MANAGE_RESOURCES)
 		raise Sinatra::NotFound
@@ -30,8 +32,8 @@ post '/admin/tools/create/?' do
 	require_login
 
 	tool = Resource.new
+	tool.resource_class_id = NIS_TOOL_RESOURCE_CLASS_ID
 	tool.name = params[:name]
-	tool.model = params[:model]
 	tool.description = params[:description]
 	tool.service_space_id = SS_ID
 	tool.needs_authorization = true
@@ -44,6 +46,8 @@ post '/admin/tools/create/?' do
 	tool.needs_approval = false
 	tool.max_reservations_per_slot = 5
 	tool.save
+	tool.set_field_data('model', params[:model])
+
 
 	flash(:success, 'Tool Created', "Your tool #{tool.name} has been created.")
 	redirect '/admin/tools/'
@@ -76,7 +80,6 @@ post '/admin/tools/:resource_id/edit/?' do
 	end
 
 	tool.name = params[:name]
-	tool.model = params[:model]
 	tool.description = params[:description]
 	tool.is_reservable = params.checked?('is_reservable')
 	tool.time_slot_type = params[:time_slot_type]
@@ -85,6 +88,7 @@ post '/admin/tools/:resource_id/edit/?' do
 	tool.max_minutes_per_reservation = params[:max_minutes_per_reservation]
 	tool.increment_minutes_per_reservation = params[:increment_minutes_per_reservation]
 	tool.save
+	tool.set_field_data('model', params[:model])
 
 	flash(:success, 'Tool Updated', "Your tool #{tool.name} has been updated.")
 	redirect '/admin/tools/'

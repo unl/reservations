@@ -7,7 +7,7 @@
 	<input type="text" name="name" id="name" value='<%= tool.name %>'/>
 
 	<label for="model">Model</label>
-	<input type="text" name="model" id="model" value='<%= tool.model %>'/>
+	<input type="text" name="model" id="model" value='<%= tool.model if tool.id %>'/>
 
 	<label for="description">Description</label>
 	<textarea id="description" name="description"><%= tool.description %></textarea>
