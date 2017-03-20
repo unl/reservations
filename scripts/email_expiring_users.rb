@@ -9,7 +9,7 @@ require 'utils/database'
 # script-necessary things
 require 'models/user'
 
-users = User.where('expiration_date >= ? AND expiration_date < ?', Time.now + 3.days, Time.now + 4.days).all
+users = User.where(:service_space_id => 1).where('expiration_date >= ? AND expiration_date < ?', Time.now + 3.days, Time.now + 4.days).all
 
 users.each do |user|
 	user.send_membership_expiring_email
