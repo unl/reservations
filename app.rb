@@ -78,6 +78,15 @@ get '/' do
   redirect '/login/'
 end
 
+get '/images/user/:user_id/?' do
+  user = User.find_by(:id => params[:user_id])
+  if user.nil? || user.imagedata.nil?
+    raise Sinatra::NotFound
+  end
+
+  return user.imagedata
+end
+
 get '/images/:event_id/?' do
   event = Event.find_by(:id => params[:event_id])
   if event.nil? || event.imagedata.nil?

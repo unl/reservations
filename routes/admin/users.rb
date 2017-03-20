@@ -110,8 +110,15 @@ post '/admin/users/:user_id/edit/?' do
 		:email => params[:email],
 		:username => params[:username],
 		:university_status => params[:university_status],
-		:space_status => params[:studio_status]
+		:space_status => params[:studio_status],
+		:expiration_date => params[:expiration_date].nil? || params[:expiration_date].empty? ? nil : calculate_time(params[:expiration_date], 0, 0, 'am')
 	})
+
+	if params.checked?('remove_image')
+		user.remove_image_data
+	else
+		user.set_image_data(params)
+	end
 
 	# check the permissions, check for new ones
 	params.select {|k,v| k =~ /permission_*/}.each do |k,v|
@@ -172,11 +179,14 @@ post '/admin/users/create/?' do
 	end
 
 	params.delete('password2')
+	params[:expiration_date] = params[:expiration_date].nil? || params[:expiration_date].empty? ? nil : calculate_time(params[:expiration_date], 0, 0, 'am')
 	user = User.new(params)
 	user.created_by_user_id = @user.id
 	user.space_status = 'current'
 	user.service_space_id = SS_ID
 	user.save
+
+	user.set_image_data(params)
 
 	flash :success, 'User Created', 'Your user has been created.'
 	redirect '/admin/users/'

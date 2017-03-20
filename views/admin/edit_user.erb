@@ -2,7 +2,7 @@
     <h3>Edit User <%= user.username %></h3>
 </div>
 
-<form id="edit-user" action="" method="POST">
+<form id="edit-user" action="" method="POST" enctype="multipart/form-data">
     <div class="wdn-grid-set">
         <fieldset class="bp2-wdn-col-one-half">
             <legend>User Details</legend>
@@ -31,6 +31,22 @@
                 <option <%= 'selected="selected"' if user.space_status == value %> value="<%= value %>"><%= desc %></option>
             <% end %>
             </select>
+
+            <label for="expiration-date">Membership Expiration Date</label>
+            <div class="date-time-select"><span class="wdn-icon-calendar"></span>
+            <input id="expiration-date" name="expiration_date" title="Membership Expiration Date" type="text" class="datepicker full-width" value="<%= user.expiration_date.strftime('%m/%d/%Y') %>" />
+            </div>
+
+            <label for="imagedata">User Image</label>
+            <div>
+                <% unless user.imagedata.nil? %>
+                    <img src="<%= user.image_src %>" alt="Image for User <%= user.username %>">
+                    <br>
+                    <input type="checkbox" name="remove_image" id="remove-image">
+                    <label for="remove-image">Remove Image</label> 
+                <% end %>
+                <input type="file" name="imagedata" id="imagedata" title="User Image">
+            </div>
         </fieldset>
 
         <% if @user.is_super_user? %>
@@ -55,3 +71,11 @@
     </div>
     <button class="wdn-button wdn-button-brand" type="submit">Update</button>
 </form>
+
+<script type="text/javascript">
+WDN.initializePlugin('jqueryui', [function() {  
+    $ = require('jquery');
+    $('.datepicker').datepicker();
+    $("LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
+}]);
+</script>

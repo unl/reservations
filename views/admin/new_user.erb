@@ -2,7 +2,7 @@
     <h3>Create User</h3>
 </div>
 
-<form id="new-user" action="" method="POST" class="bp2-wdn-col-one-half">
+<form id="new-user" action="" method="POST" enctype="multipart/form-data" class="bp2-wdn-col-one-half">
     <fieldset>
         <legend>User Details</legend>
         <label for="username">Username</label>
@@ -29,7 +29,23 @@
                 <option value="<%= word %>"><%= word %></option>
             <% end %>
         </select>
+
+        <label for="expiration-date">Membership Expiration Date</label>
+        <div class="date-time-select"><span class="wdn-icon-calendar"></span>
+        <input id="expiration-date" name="expiration_date" title="Membership Expiration Date" type="text" class="datepicker full-width" />
+        </div>
+
+        <label for="imagedata">User Image</label>
+        <input type="file" name="imagedata" id="imagedata" title="User Image">
         <br><br>
         <button class="wdn-button wdn-button-brand" type="submit">Create</button>
     </fieldset>
 </form>
+
+<script type="text/javascript">
+WDN.initializePlugin('jqueryui', [function() {  
+    $ = require('jquery');
+    $('.datepicker').datepicker();
+    $("LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
+}]);
+</script>
