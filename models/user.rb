@@ -76,6 +76,22 @@ class User < ActiveRecord::Base
     self.save
   end
 
+  def send_membership_expiring_email
+body = <<EMAIL
+<p>Hello, #{self.full_name}. Your Innovation Studio account is expiring soon! Our records show that your account expires on
+#{self.expiration_date.strftime('%m-%d-%Y')}.
+Please contact us at
+<a href="mailto:innovationstudio@unl.edu">innovationstudio@unl.edu</a> or visit us to keep your membership active.
+</p>
+
+<p>We hope to see you soon!</p>
+
+<p>Nebraska Innovation Studio</p>
+EMAIL
+
+    Emailer.mail(self.email, 'Nebraska Innovation Studio Membership Expiring', body)
+  end
+
   def send_reset_password_email
     token = ''
     begin
@@ -95,6 +111,6 @@ body = <<EMAIL
 <p>Nebraska Innovation Studio</p>
 EMAIL
 
-    Emailer.mail(self.email, 'Nebraska Innovation Studio password reset', body)
+    Emailer.mail(self.email, 'Nebraska Innovation Studio Password Reset', body)
   end
 end
