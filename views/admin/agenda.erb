@@ -39,6 +39,7 @@ No reservations today. Hopefully someone will still come in to use the space!<br
             <th>Tool</th>
             <th>Model</th>
             <th>Time</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -60,6 +61,11 @@ No reservations today. Hopefully someone will still come in to use the space!<br
             <td>
             	<%= reservation.start_time.in_time_zone.strftime('%l:%M %P') %><br>
             	<%= reservation.length %> minutes
+            </td>
+            <td>
+                <form class="delete-form" method="POST" action="/admin/agenda/reservations/<%= reservation.id %>/remove/">
+                <button class="wdn-button wdn-button-brand" type="submit">Remove</button>
+                </form>
             </td>
         </tr>
     <% end %>

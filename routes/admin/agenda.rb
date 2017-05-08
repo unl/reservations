@@ -35,3 +35,15 @@ get '/admin/agenda/' do
 		:space_hour => correct_hour
 	}
 end
+
+post '/admin/agenda/reservations/:reservation_id/remove/?' do
+	reservation = Reservation.find_by(:id => params[:reservation_id])
+	if reservation.nil?
+		flash :error, 'Not Found', "Could not find that reservation."
+		redirect '/admin/agenda/'
+	end
+
+	reservation.delete
+	flash :success, 'Reservation Removed', "#{reservation.user.full_name}'s reservation for #{reservation.resource.name} has been removed."
+	redirect '/admin/agenda/'
+end
