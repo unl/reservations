@@ -2,8 +2,6 @@ require 'models/event'
 require 'models/event_signup'
 require 'classes/emailer'
 
-MAX_SIGNUPS_PER_ORIENTATION = 10
-
 get '/new_members/?' do
 	@breadcrumbs << {:text => 'New Members'}
 	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
@@ -25,7 +23,7 @@ get '/new_members/sign_up/:event_id/?' do
 		redirect '/new_members/'
 	end
 
-	if event.signups.count >= MAX_SIGNUPS_PER_ORIENTATION
+	if event.signups.count >= event.max_signups
 		# that event is full
 		flash(:alert, 'This Orientation is Full', "Sorry, #{event.title} is full.")
 		redirect '/new_members/'
@@ -46,7 +44,7 @@ post '/new_members/sign_up/:event_id/?' do
 		redirect '/new_members/'
 	end
 
-	if event.signups.count >= MAX_SIGNUPS_PER_ORIENTATION
+	if event.signups.count >= event.max_signups
 		# that event is full
 		flash(:alert, 'This Orientation is Full', "Sorry, #{event.title} is full.")
 		redirect '/new_members/'

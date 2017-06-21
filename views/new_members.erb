@@ -36,7 +36,7 @@ Here are the upcoming dates we are holding orientations:
                     </ul>
                 </td>
                 <td>
-                    <% if event.signups.count < MAX_SIGNUPS_PER_ORIENTATION %>
+                    <% if event.signups.count < event.max_signups %>
                     <a class="wdn-button wdn-button-brand" href="/new_members/sign_up/<%= event.id %>/">Sign Up!</a>
                     <% else %>
                     <strong>FULL</strong>
