@@ -23,7 +23,7 @@ get '/new_members/sign_up/:event_id/?' do
 		redirect '/new_members/'
 	end
 
-	if event.signups.count >= event.max_signups
+	if !event.max_signups.nil? && event.signups.count >= event.max_signups
 		# that event is full
 		flash(:alert, 'This Orientation is Full', "Sorry, #{event.title} is full.")
 		redirect '/new_members/'
@@ -44,7 +44,7 @@ post '/new_members/sign_up/:event_id/?' do
 		redirect '/new_members/'
 	end
 
-	if event.signups.count >= event.max_signups
+	if !event.max_signups.nil? && event.signups.count >= event.max_signups
 		# that event is full
 		flash(:alert, 'This Orientation is Full', "Sorry, #{event.title} is full.")
 		redirect '/new_members/'
