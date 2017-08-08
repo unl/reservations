@@ -61,6 +61,8 @@ post '/new_members/sign_up/:event_id/?' do
 
 <p><strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
 
+<p>Our main entrance is on the northwest side of the Innovation Commons building on 19th St. just off Transformation Drive. Our address is 2021 Transformation Drive, Suite 1500, Entrance B.</p>
+
 <p>We'll see you there!</p>
 
 <p>Nebraska Innovation Studio</p>
