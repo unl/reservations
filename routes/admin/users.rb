@@ -1,6 +1,7 @@
 require 'models/user'
 require 'models/resource'
 require 'models/permission'
+require 'csv'
 
 USER_STATII = [
 	'None',
@@ -25,6 +26,21 @@ before '/admin/users*' do
 	unless @user.has_permission?(Permission::MANAGE_USERS) || @user.has_permission?(Permission::SUPER_USER)
 		raise Sinatra::NotFound
 	end
+end
+
+get '/admin/users/download/?' do
+	# load up a CSV with the data
+	users = User.where(:service_space_id => SS_ID)
+	csv_string = CSV.generate do |csv|
+		csv << ["User ID", "Username", "Email", "First Name", "Last Name", "University Status", "Date Created", "Space Status", "Expiration Date"]
+		users.each do |user|
+			csv << [user.id, user.username, user.email, user.first_name, user.last_name, user.university_status, (user.date_created.strftime('%Y-%m-%d') rescue ''), user.space_status, (user.expiration_date.strftime('%Y-%m-%d') rescue '')]
+		end
+	end
+
+	content_type 'application/csv'
+	attachment 'users.csv'
+	csv_string
 end
 
 get '/admin/users/?' do
