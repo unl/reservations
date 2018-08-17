@@ -1,21 +1,19 @@
 <ul>
-    <li><a href="/" title="Nebraska Innovation Studio Manager Home">NIS Manager</a>
+    <li><a href="/" title="Nebraska Innovation Studio Manager Home">Manage Your Studio</a>
     <ul>
         <li><a href="http://innovationstudio.unl.edu/" title="Innovation Studio homepage">Innovation Studio</a></li>
-        <li><a href="/calendar/" title="Calendar of Events">Calendar</a></li>
-    </ul>
-    </li>
-    <li><a href="/tools/" title="Tools &amp; Reservations">Tools &amp; Reservations</a>
-    <ul>
+        <li><a href="/calendar/" title="Calendar of Events">Event Calendar</a></li>
         <li><a href="/tools/trainings/" title="Trainings">Trainings</a></li>
     </ul>
+    </li>
+    <li><a href="/tools/" title="Equipment Reservations">Equipment Reservations</a>
     </li>
     <li><a href="/tours/" title="Tours">Tours</a>
     </li>
     <li><a href="/new_members/" title="New Member Orientation">New Members</a>
     </li>
     <% unless @user.nil? || !@user.is_admin? %>
-	    <li><a href="/admin/" title="Admin">Admin</a>
+        <li><a href="/admin/" title="Admin">Admin</a>
             <ul>
                 <% if @user.has_permission?(Permission::MANAGE_USERS) || @user.has_permission?(Permission::SUPER_USER) %>
                 <li><a href="/admin/users/" title="Users">Users</a></li>
@@ -36,7 +34,7 @@
                 <li><a href="/admin/agenda/" title="Agenda">Agenda</a></li>
                 <% end %>
             </ul>
-	    </li>
+        </li>
     <% end %>
     <li>
         <a href="/me/">My Account</a>
