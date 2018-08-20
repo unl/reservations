@@ -10,9 +10,10 @@ Hello, <%= @user.full_name %> (<%= @user.username %>)
 <h4>
 My Reservations
 </h4>
+<p><a href="/tools/" class="wdn-button wdn-button-brand">Reserve Equipment</a></p>
 <% if reservations.empty? %>
-You have no upcoming reservations. You can view upcoming trainings to get certified, or check out the list of tools you can reserve.<br>
-<a href="/tools/trainings/" class="wdn-button wdn-button-triad">View Trainings</a> <a href="/tools/" class="wdn-button wdn-button-brand">View Tools</a>
+<p>You have no upcoming reservations. You can <a href="/tools/trainings/">view upcoming trainings to get certified</a>, or <a href="/tools/">check out the list of tools you can reserve.</a></p>
+
 <% else %>
 <table>
     <thead>
@@ -55,8 +56,10 @@ You have no upcoming reservations. You can view upcoming trainings to get certif
 My Events
 </h4>
 <% if events.empty? %>
-You have not signed up for any upcoming events. Why not check out the calendar to find some?<br>
-<a href="/calendar/" class="wdn-button wdn-button-triad">View Calendar</a>
+<p>You have not signed up for any upcoming events. Why not check out the calendar to find some?</p>
+<a href="/tools/trainings/" class="wdn-button wdn-button-triad">View Trainings</a>
+<a href="/workshops/" class="wdn-button wdn-button-triad">View Workshops</a>
+<a href="/calendar/" class="wdn-button wdn-button-triad">View Full Calendar</a>
 <% else %>
 <table>
     <thead>
