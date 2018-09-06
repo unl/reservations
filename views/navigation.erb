@@ -8,10 +8,13 @@
     </li>
     <li><a href="/tools/" title="Reserve Equipment">Reserve Equipment</a>
     </li>
+<%
+=begin These items are linked from the main website
     <li><a href="/tours/" title="Tours">Tours</a>
     </li>
     <li><a href="/new_members/" title="New Member Orientation">New Members</a>
     </li>
+=end %>
     <% unless @user.nil? || !@user.is_admin? %>
         <li><a href="/admin/" title="Admin">Admin</a>
             <ul>
