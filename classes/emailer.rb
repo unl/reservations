@@ -18,7 +18,8 @@ class Emailer
 
   def self.method
     if ENV['RACK_ENV'] == 'development'
-      :smtp
+      :sendmail
+#     :smtp
     else
       :sendmail
     end

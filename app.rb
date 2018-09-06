@@ -28,9 +28,13 @@ before do
     @title = 'Innovation Studio Manager'
     @breadcrumbs = [
       {
-        :href => 'http://www.unl.edu/',
-        :text => 'UNL',
-        :title => 'University of Nebraska&ndash;Lincoln'
+        :href => 'https://www.unl.edu/',
+        :text => 'Nebraska',
+        :title => 'University of Nebraska&ndash;Lincoln Home'
+      },
+      {
+        :href => 'https://innovationstudio.unl.edu/',
+        :text => 'Innovation Studio'
       },
       {
         :href => '/',

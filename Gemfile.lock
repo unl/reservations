@@ -47,7 +47,7 @@ GEM
     kgio (2.9.3)
     less (2.6.0)
       commonjs (~> 0.2.7)
-    libv8 (3.16.14.11)
+    libv8 (3.16.14.19)
     listen (3.0.3)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -141,4 +141,4 @@ RUBY VERSION
    ruby 2.2.3p173
 
 BUNDLED WITH
-   1.14.6
+   1.16.2
