@@ -1,0 +1,11 @@
+<div id="pagetitle">
+<h3>Material Pricing
+    <% if @user.has_permission?(Permission::MANAGE_RESOURCES) %>
+    (<a href="https://innovationstudio.unl.edu/user/login?destination=node/79/edit" target="_blank">Edit</a>)
+    <% end %>
+</h3>
+</div>
+
+<%= content %>
+
+

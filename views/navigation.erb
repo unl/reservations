@@ -4,6 +4,7 @@
         <li><a href="/tools/trainings/" title="Trainings">Trainings</a></li>
         <li><a href="/workshops/" title="Workshops">Workshops</a></li>
         <li><a href="/calendar/" title="Calendar of Events">Event Calendar</a></li>
+        <li><a href="/pricing/" title="Material Pricing">Material Pricing</a></li>
     </ul>
     </li>
     <li><a href="/tools/" title="Reserve Equipment">Reserve Equipment</a>
@@ -35,6 +36,9 @@
                 <% end %>
                 <% if @user.has_permission?(Permission::SEE_AGENDA) %>
                 <li><a href="/admin/agenda/" title="Agenda">Agenda</a></li>
+                <% end %>
+                <% if @user.has_permission?(Permission::MANAGE_RESOURCES) %>
+                <li><a href="https://innovationstudio.unl.edu/user/login?destination=node/79/edit" target="_blank">Edit Material Pricing</a></li>
                 <% end %>
             </ul>
         </li>
