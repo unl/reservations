@@ -13,8 +13,8 @@ Using local resources
 6. `config/config.json` is a committed file, and a template for the configuration. Create a copy in the same directoy named `server.json` and edit it to match your database.
 7. Your database is currently blank. Import the production database or copy https://git.unl.edu/iim/unl-resource-scheduler/tree/master/db/migrate into this project and run the migrations from the root of the project using `rake migrate` to bring in all the tables and columns.
 8. Install the WDN Framework into the `public/wdn` directory...see [WDN Documentation](http://wdn.unl.edu/documentation).
-9. Start the server by going to the root directory and doing `bundle exec shotgun -o 0.0.0.0 -p 9292`. This launches the server on localhost port 9292, listening everywhere (you can use your iimlemburg.unl.edu or whichever), and the server will automatically update to new code. If you add gems to the bundle, you will need to re-execute this command.
-10. Navigate to `localhost:9292/` or similar and begin!
+9. Start the server by going to the root directory and doing `bundle exec shotgun -o 0.0.0.0 -p 9393`. This launches the server on localhost port 9393, listening everywhere (you can use your iimlemburg.unl.edu or whichever), and the server will automatically update to new code. If you add gems to the bundle, you will need to re-execute this command.
+10. Navigate to `localhost:9393/` or similar and begin!
 11. In another terminal, type `bundle exec guard` in the project root to execute LESS compilation.
 
 Quick Tutorial
