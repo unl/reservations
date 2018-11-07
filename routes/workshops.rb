@@ -53,9 +53,9 @@ post '/workshops/sign_up/:event_id/?' do
 
 	EventSignup.create(
 		:event_id => params[:event_id],
-		:name => params[:name],
+		:name => @user.full_name,
 		:user_id => @user.id,
-		:email => params[:email]
+		:email => @user.email
 	)
 
 	body = <<EMAIL
