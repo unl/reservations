@@ -13,6 +13,11 @@ class Resource < ActiveRecord::Base
 	has_many :resource_field_datas, dependent: :destroy
 	alias_method :approvers, :resource_approvers
 
+    def user_reservation_limit
+        # return nil unless valid limit
+        return max_reservations_per_user unless max_reservations_per_user.nil? || max_reservations_per_user.to_i < 1
+    end
+
 	def method_missing(meth_sym)
 		# check if this symbol can be associated with a field for this class
 		if !self.resource_class.nil? && (field = ResourceField.find_by(:resource_class_id => self.resource_class.id, :field_name => meth_sym.to_s.downcase))

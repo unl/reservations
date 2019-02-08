@@ -3,6 +3,7 @@ require 'bcrypt'
 require 'models/resource_authorization'
 require 'models/event_signup'
 require 'models/permission'
+require 'models/resource'
 require 'models/user_has_permission'
 require 'classes/emailer'
 
@@ -14,6 +15,26 @@ class User < ActiveRecord::Base
 
   def authorized_resource_ids
     self.resource_authorizations.map {|res_auth| res_auth.resource_id}
+  end
+
+  def meets_resource_reservation_limit?(resource_id)
+    # no limit for super user
+    return true if self.is_super_user?
+
+    # get resource to lookup limit
+    resource = Resource.find(resource_id)
+
+    # at limit if invalid resource
+    return false if resource.nil?
+
+    # no limit if limit is nil
+    return true if resource.user_reservation_limit.nil?
+
+    # check if user over reservation limit for resource and return boolean
+    Reservation.joins(:resource).includes(:event).
+        where(:resources => {:id => resource_id}).
+        where(:user_id => id).
+        where('end_time >= ?', Time.now).count < resource.user_reservation_limit.to_i
   end
 
   def get_authorization(resource_id)
