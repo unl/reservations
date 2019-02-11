@@ -17,6 +17,15 @@
 		<label for="is-reservable">Requires Reservation?</label>
 	</div>
 	<div>
+	    <label for="max-reservations-per-user">User Reservation Limit</label><br>
+	    <select id="max-reservations-per-user" name="max_reservations_per_user">
+            <option value="">No Limit</option>
+            <% for i in 1..20 do
+                selected = tool.max_reservations_per_user == i ? ' selected=selected' : ''
+            %>
+            <option value="<%= i.to_s %>"<%= selected %>><%= i.to_s %></option>
+            <% end %>
+	    </select>
 		<label for="minutes-per-reservation">Minutes Per Reservation</label><br>
 		<input type="radio" name="time_slot_type" id="time-slot-type-exact" value="exact" <%= 'checked="checked"' if tool.time_slot_type == 'exact' || tool.time_slot_type.nil? %>>
 		<label for="time-slot-type-exact">Exactly:</label> <input type="number" name="minutes_per_reservation" id="minutes-per-reservation" value="<%= tool.minutes_per_reservation %>"><br><br>

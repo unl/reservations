@@ -45,6 +45,7 @@ post '/admin/tools/create/?' do
 	tool.increment_minutes_per_reservation = params[:increment_minutes_per_reservation]
 	tool.needs_approval = false
 	tool.max_reservations_per_slot = 5
+	tool.max_reservations_per_user = params[:max_reservations_per_user]
 	tool.save
 	tool.set_field_data('model', params[:model])
 
@@ -87,6 +88,7 @@ post '/admin/tools/:resource_id/edit/?' do
 	tool.min_minutes_per_reservation = params[:min_minutes_per_reservation]
 	tool.max_minutes_per_reservation = params[:max_minutes_per_reservation]
 	tool.increment_minutes_per_reservation = params[:increment_minutes_per_reservation]
+	tool.max_reservations_per_user = params[:max_reservations_per_user]
 	tool.save
 	tool.set_field_data('model', params[:model])
 
