@@ -1,5 +1,7 @@
 require 'models/user'
 require 'models/resource'
+require 'models/permission'
+require 'csv'
 
 USER_STATII = [
 	'None',
@@ -16,8 +18,30 @@ USER_STATII = [
 
 STUDIO_STATII = {
 	'Membership Current' => 'current',
-	'Membership Expired' => 'expired'
+	'Membership Expired' => 'expired',
+	'Membership Expired (opted out of emails)' => 'expired_no_email'
 }
+
+before '/admin/users*' do
+	unless @user.has_permission?(Permission::MANAGE_USERS) || @user.has_permission?(Permission::SUPER_USER)
+		raise Sinatra::NotFound
+	end
+end
+
+get '/admin/users/download/?' do
+	# load up a CSV with the data
+	users = User.where(:service_space_id => SS_ID)
+	csv_string = CSV.generate do |csv|
+		csv << ["User ID", "Username", "Email", "First Name", "Last Name", "University Status", "Date Created", "Space Status", "Expiration Date"]
+		users.each do |user|
+			csv << [user.id, user.username, user.email, user.first_name, user.last_name, user.university_status, (user.date_created.strftime('%Y-%m-%d') rescue ''), user.space_status, (user.expiration_date.strftime('%Y-%m-%d') rescue '')]
+		end
+	end
+
+	content_type 'application/csv'
+	attachment 'users.csv'
+	csv_string
+end
 
 get '/admin/users/?' do
 	@breadcrumbs << {:text => 'Admin Users'}
@@ -27,7 +51,7 @@ get '/admin/users/?' do
 
 	# get all the users that this admin has created
 	users = User.includes(:resource_authorizations => :resource)
-				.where(:created_by_user_id => @user.id)
+				.where(:service_space_id => SS_ID)
 	unless studio_status.nil?
 		users = users.where(:university_status => studio_status)
 	end
@@ -61,7 +85,7 @@ get '/admin/users/:user_id/edit/?' do
 	if params[:user_id].to_i == @user.id
 		user = @user
 	else 
-		user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
+		user = User.includes(:permissions).where(:id => params[:user_id], :service_space_id => SS_ID).first
 	end
 
 	if user.nil?
@@ -71,7 +95,9 @@ get '/admin/users/:user_id/edit/?' do
 
 	@breadcrumbs << {:text => 'Admin Users', :href => '/admin/users/'} << {:text => 'Edit User'}
 	erb :'admin/edit_user', :layout => :fixed, :locals => {
-		:user => user
+		:user => user,
+		:permissions => Permission.where.not(:id => Permission::SUPER_USER).all,
+		:su_permission => Permission.find(Permission::SUPER_USER)
 	}
 end
 
@@ -79,7 +105,7 @@ post '/admin/users/:user_id/edit/?' do
 	if params[:user_id].to_i == @user.id
 		user = @user
 	else 
-		user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
+		user = User.includes(:permissions).where(:id => params[:user_id], :service_space_id => SS_ID).first
 	end
 
 	if user.nil?
@@ -100,18 +126,42 @@ post '/admin/users/:user_id/edit/?' do
 		:email => params[:email],
 		:username => params[:username],
 		:university_status => params[:university_status],
-		:space_status => params[:studio_status]
+		:space_status => params[:studio_status],
+		:expiration_date => params[:expiration_date].nil? || params[:expiration_date].empty? ? nil : calculate_time(params[:expiration_date], 0, 0, 'am')
 	})
+
+	if params.checked?('remove_image')
+		user.remove_image_data
+	else
+		user.set_image_data(params)
+	end
+
+	# check the permissions, check for new ones
+	params.select {|k,v| k =~ /permission_*/}.each do |k,v|
+		if params.checked?(k)
+			perm_id = k.split('permission_')[1].to_i
+			unless user.has_permission?(perm_id)
+				user.permissions << Permission.find(perm_id)
+			end
+		end
+	end
+
+	# check for any removed
+	user.permissions.each do |perm|
+		unless params.checked?("permission_#{perm.id}")
+			user.permissions.delete(perm)
+		end
+	end
 
 	flash :success, 'User Updated', 'Your user has been updated.'
 	redirect '/admin/users/'
 end
 
-post '/admin/users/:user_id/delete/' do
+post '/admin/users/:user_id/delete/?' do
 	if params[:user_id].to_i == @user.id
 		user = @user
 	else 
-		user = User.where(:id => params[:user_id], :created_by_user_id => @user.id).first
+		user = User.where(:id => params[:user_id], :service_space_id => SS_ID).first
 	end
 
 	if user.nil?
@@ -145,11 +195,14 @@ post '/admin/users/create/?' do
 	end
 
 	params.delete('password2')
+	params[:expiration_date] = params[:expiration_date].nil? || params[:expiration_date].empty? ? nil : calculate_time(params[:expiration_date], 0, 0, 'am')
 	user = User.new(params)
 	user.created_by_user_id = @user.id
 	user.space_status = 'current'
 	user.service_space_id = SS_ID
 	user.save
+
+	user.set_image_data(params)
 
 	flash :success, 'User Created', 'Your user has been created.'
 	redirect '/admin/users/'
@@ -161,7 +214,7 @@ get '/admin/users/:user_id/manage/?' do
 	if params[:user_id].to_i == @user.id
 		user = @user
 	else 
-		user = User.includes(:resource_authorizations).where(:id => params[:user_id], :created_by_user_id => @user.id).first
+		user = User.includes(:resource_authorizations).where(:id => params[:user_id], :service_space_id => SS_ID).first
 	end
 
 	if user.nil?
@@ -181,7 +234,7 @@ post '/admin/users/:user_id/manage/?' do
 	if params[:user_id].to_i == @user.id
 		user = @user
 	else 
-		user = User.includes(:resource_authorizations).where(:id => params[:user_id], :created_by_user_id => @user.id).first
+		user = User.includes(:resource_authorizations).where(:id => params[:user_id], :service_space_id => SS_ID).first
 	end
 
 	if user.nil?

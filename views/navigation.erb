@@ -1,28 +1,47 @@
 <ul>
-    <li><a href="/" title="Nebraska Innovation Studio Manager Home">NIS Manager</a>
-    <ul>
-        <li><a href="http://innovationstudio.unl.edu/" title="Innovation Studio homepage">Innovation Studio</a></li>
-        <li><a href="/calendar/" title="Calendar of Events">Calendar</a></li>
-    </ul>
-    </li>
-    <li><a href="/tools/" title="Tools &amp; Reservations">Tools &amp; Reservations</a>
+    <li><a href="/" title="Nebraska Innovation Studio Manager Home">Manage Your Studio</a>
     <ul>
         <li><a href="/tools/trainings/" title="Trainings">Trainings</a></li>
+        <li><a href="/workshops/" title="Workshops">Workshops</a></li>
+        <li><a href="/calendar/" title="Calendar of Events">Event Calendar</a></li>
+        <li><a href="/pricing/" title="Material Pricing">Material Pricing</a></li>
     </ul>
+    </li>
+    <li><a href="/tools/" title="Reserve Equipment">Reserve Equipment</a>
+    </li>
+<%
+=begin These items are linked from the main website
+    <li><a href="/tours/" title="Tours">Tours</a>
     </li>
     <li><a href="/new_members/" title="New Member Orientation">New Members</a>
     </li>
+=end %>
     <% unless @user.nil? || !@user.is_admin? %>
-	    <li><a href="/admin/" title="Admin">Admin</a>
+        <li><a href="/admin/" title="Admin">Admin</a>
             <ul>
+                <% if @user.has_permission?(Permission::MANAGE_USERS) || @user.has_permission?(Permission::SUPER_USER) %>
                 <li><a href="/admin/users/" title="Users">Users</a></li>
+                <% end %>
+                <% if @user.has_permission?(Permission::MANAGE_EVENTS) %>
                 <li><a href="/admin/events/" title="Events">Events</a></li>
+                <% end %>
+                <% if @user.has_permission?(Permission::MANAGE_RESOURCES) %>
                 <li><a href="/admin/tools/" title="Tools">Tools</a></li>
+                <% end %>
+                <% if @user.has_permission?(Permission::MANAGE_SPACE_HOURS) %>
                 <li><a href="/admin/hours/" title="Hours">Hours</a></li>
+                <% end %>
+                <% if @user.has_permission?(Permission::MANAGE_EMAILS) %>
                 <li><a href="/admin/email/" title="Email">Email</a></li>
+                <% end %>
+                <% if @user.has_permission?(Permission::SEE_AGENDA) %>
                 <li><a href="/admin/agenda/" title="Agenda">Agenda</a></li>
+                <% end %>
+                <% if @user.has_permission?(Permission::MANAGE_RESOURCES) %>
+                <li><a href="https://innovationstudio.unl.edu/user/login?destination=node/79/edit" target="_blank">Edit Material Pricing</a></li>
+                <% end %>
             </ul>
-	    </li>
+        </li>
     <% end %>
     <li>
         <a href="/me/">My Account</a>

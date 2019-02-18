@@ -1,11 +1,11 @@
 <div id="pagetitle">
-    <h3>New Member Orientations</h3>
+    <h3>Tours</h3>
 </div>
 
 <p>
-Welcome to the Nebraska Innovation Studio! 
-New members who wish to use the space must attend a Member Orientation Training.
-Here are the upcoming dates we are holding orientations:
+<strong>Welcome to the Nebraska Innovation Studio!</strong><br>
+We'd love to show you around. Check out our tours below and sign up to attend! 
+No membership or sign-in is necessary.
 </p>
 
 <% if events.count > 0 %>
@@ -36,11 +36,7 @@ Here are the upcoming dates we are holding orientations:
                     </ul>
                 </td>
                 <td>
-                    <% if event.max_signups.nil? || event.signups.count < event.max_signups %>
-                    <a class="wdn-button wdn-button-brand" href="/new_members/sign_up/<%= event.id %>/">Sign Up!</a>
-                    <% else %>
-                    <strong>FULL</strong>
-                    <% end %>
+                    <a class="wdn-button wdn-button-brand" href="/tours/sign_up/<%= event.id %>/">Sign Up!</a>
                 </td>
             </tr>
         <% end %>
@@ -49,6 +45,6 @@ Here are the upcoming dates we are holding orientations:
 </div>
 <% else %>
 <p>
-There are no member orientations scheduled right now. Please check back again soon!
+There are no tours scheduled right now. Please check back again soon!
 </p>
 <% end %>

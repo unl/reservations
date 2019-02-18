@@ -8,8 +8,9 @@
 /test/tmp/
 /test/version_tmp/
 /tmp/
-/public/wdn/
+/public/wdn
 /db/scripts/private/
+.idea
 
 ## Documentation cache and generated files:
 /.yardoc/

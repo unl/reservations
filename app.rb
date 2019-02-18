@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'models/user'
 require 'models/service_space'
+require 'models/event'
 
 use Rack::Session::Cookie, :key => 'rack.session',
                            :path => '/',
@@ -27,9 +28,13 @@ before do
     @title = 'Innovation Studio Manager'
     @breadcrumbs = [
       {
-        :href => 'http://www.unl.edu/',
-        :text => 'UNL',
-        :title => 'University of Nebraska&ndash;Lincoln'
+        :href => 'https://www.unl.edu/',
+        :text => 'Nebraska',
+        :title => 'University of Nebraska&ndash;Lincoln Home'
+      },
+      {
+        :href => 'https://innovationstudio.unl.edu/',
+        :text => 'Innovation Studio'
       },
       {
         :href => '/',
@@ -41,7 +46,7 @@ before do
 
     # check if the user is currently logged in
     if session.has_key?(:user_id)
-        @user = (User.find(session[:user_id]) rescue nil)
+        @user = (User.includes(:permissions).find(session[:user_id]) rescue nil)
     else
         @user = nil;
     end
@@ -73,8 +78,26 @@ error do
 end
 
 get '/' do
-    @breadcrumbs << {:text => 'Home'}
-    redirect '/login/'
+  @breadcrumbs << {:text => 'Home'}
+  redirect '/login/'
+end
+
+get '/images/user/:user_id/?' do
+  user = User.find_by(:id => params[:user_id])
+  if user.nil? || user.imagedata.nil?
+    raise Sinatra::NotFound
+  end
+
+  return user.imagedata
+end
+
+get '/images/:event_id/?' do
+  event = Event.find_by(:id => params[:event_id])
+  if event.nil? || event.imagedata.nil?
+    raise Sinatra::NotFound
+  end
+
+  return event.imagedata
 end
 
 Dir.glob("#{ROOT}/routes/*.rb") { |file| require file }

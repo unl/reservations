@@ -2,14 +2,14 @@
     <thead>
         <tr>
             <th>Name</th>
+            <th>Email</th>
         </tr>
     </thead>
     <tbody>
     <% event.signups.each do |signup| %>
         <tr>
-            <td>
-                <%= signup.name %>
-            </td>
+            <td><%= signup.name %></td>
+            <td><%= signup.email %></td>
         </tr>
     <% end %>
     </tbody>

@@ -1,5 +1,5 @@
 <div id="pagetitle">
-<h3>Edit <%= tool.name %></h3>
+<h3><%= tool.id.nil? ? 'Create Tool' : "Edit #{tool.name}" %></h3>
 </div>
 
 <form action="" method="POST">
@@ -7,10 +7,35 @@
 	<input type="text" name="name" id="name" value='<%= tool.name %>'/>
 
 	<label for="model">Model</label>
-	<input type="text" name="model" id="model" value='<%= tool.model %>'/>
+	<input type="text" name="model" id="model" value='<%= tool.model if tool.id %>'/>
 
 	<label for="description">Description</label>
 	<textarea id="description" name="description"><%= tool.description %></textarea>
+
+	<div>
+		<input type="checkbox" <%= 'checked="checked"' if tool.is_reservable || tool.id.nil? %> name='is_reservable' id="is-reservable">
+		<label for="is-reservable">Requires Reservation?</label>
+	</div>
+	<div>
+	    <label for="max-reservations-per-user">User Reservation Limit</label><br>
+	    <select id="max-reservations-per-user" name="max_reservations_per_user">
+            <option value="">No Limit</option>
+            <% for i in 1..20 do
+                selected = tool.max_reservations_per_user == i ? ' selected=selected' : ''
+            %>
+            <option value="<%= i.to_s %>"<%= selected %>><%= i.to_s %></option>
+            <% end %>
+	    </select>
+		<label for="minutes-per-reservation">Minutes Per Reservation</label><br>
+		<input type="radio" name="time_slot_type" id="time-slot-type-exact" value="exact" <%= 'checked="checked"' if tool.time_slot_type == 'exact' || tool.time_slot_type.nil? %>>
+		<label for="time-slot-type-exact">Exactly:</label> <input type="number" name="minutes_per_reservation" id="minutes-per-reservation" value="<%= tool.minutes_per_reservation %>"><br><br>
+		<input type="radio" name="time_slot_type" id="time-slot-type-range" value="range" <%= 'checked="checked"' if tool.time_slot_type == 'range' %>>
+		<label for="time-slot-type-range">Range:</label>
+		<label for="min-minutes-per-reservation">Min:</label> <input style="width: 100px" type="number" name="min_minutes_per_reservation" id="min-minutes-per-reservation" value="<%= tool.min_minutes_per_reservation %>">
+		<label for="max-minutes-per-reservation">Max:</label> <input style="width: 100px" type="number" name="max_minutes_per_reservation" id="max-minutes-per-reservation" value="<%= tool.max_minutes_per_reservation %>">
+		<label for="increment-minutes-per-reservation">Increment:</label> <input style="width: 100px" type="number" name="increment_minutes_per_reservation" id="increment-minutes-per-reservation" value="<%= tool.increment_minutes_per_reservation %>">
+	</div>
+	<br>
 
 	<button type="submit" class="wdn-button wdn-button-brand">Save Tool</button>
 </form>

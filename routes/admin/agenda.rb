@@ -1,8 +1,18 @@
+before '/admin/agenda*' do
+	unless @user.has_permission?(Permission::SEE_AGENDA)
+		raise Sinatra::NotFound
+	end
+end
+
 get '/admin/agenda/' do
+	@breadcrumbs << {:text => 'Agenda'}
 	date = params[:date].nil? ? Time.now.midnight : Time.parse(params[:date])
 
-	reservations = Reservation.includes(:user, :resource, :event).in_day(date).order(:start_time)
-	events = Event.includes(:event_type).in_day(date).order(:start_time)
+	reservations = Reservation.includes(:user, :resource, :event).in_day(date).order(:start_time).all.to_a
+	reservations.select! do |res|
+ 		(!res.event.nil? && res.event.service_space_id == SS_ID) || (!res.resource.nil? && res.resource.service_space_id == SS_ID)
+ 	end
+	events = Event.includes(:event_type).where(:service_space_id => SS_ID).in_day(date).order(:start_time)
 
 	# get the hours for this day to show
 	hours = SpaceHour.where(:service_space_id => SS_ID)
@@ -24,4 +34,16 @@ get '/admin/agenda/' do
 		:date => date,
 		:space_hour => correct_hour
 	}
+end
+
+post '/admin/agenda/reservations/:reservation_id/remove/?' do
+	reservation = Reservation.find_by(:id => params[:reservation_id])
+	if reservation.nil?
+		flash :error, 'Not Found', "Could not find that reservation."
+		redirect '/admin/agenda/'
+	end
+
+	reservation.delete
+	flash :success, 'Reservation Removed', "#{reservation.user.full_name}'s reservation for #{reservation.resource.name} has been removed."
+	redirect '/admin/agenda/'
 end

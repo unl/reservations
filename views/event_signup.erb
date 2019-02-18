@@ -1,8 +1,9 @@
 <div id="pagetitle">
-	<h3>Sign Up For New Member Orientation
+	<h3>Sign Up For <%= event.title %>
 	<span class="wdn-subhead"><%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %></span></h3>
 </div>
 
+<% if event.type.description != 'Free Event' %>
 <form id="signup" action="" method="POST" novalidate="novalidate">
     <div class="bp2-wdn-col-one-half">
         <label for="name">Name</label>
@@ -14,3 +15,6 @@
         <button class="wdn-button wdn-button-brand" type="submit">Sign Up</button>
     </div>
 </form>
+<% else %>
+This event is a Free Event and is open to anyone. No signup is required.
+<% end %>

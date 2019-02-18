@@ -1,7 +1,7 @@
 require 'pony'
 
 class Emailer
-  def self.mail(to, subject, body, bcc = "")
+  def self.mail(to, subject, body, bcc = "", attachments = nil)
     Pony.mail({
       :to => to,
       :bcc => bcc,
@@ -9,7 +9,8 @@ class Emailer
       :html_body => body,
       :from => 'innovationstudio@unl.edu',
       :via => self.method,
-      :via_options => self.method_options
+      :via_options => self.method_options,
+      :attachments => attachments
     })
   end
 
@@ -17,7 +18,8 @@ class Emailer
 
   def self.method
     if ENV['RACK_ENV'] == 'development'
-      :smtp
+      :sendmail
+#     :smtp
     else
       :sendmail
     end

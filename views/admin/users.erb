@@ -8,6 +8,7 @@
         <a class="wdn-button wdn-button-brand" href="/admin/users/create/">Create User</a>
         <a class="wdn-button wdn-button-brand" href="/admin/users/<%= @user.id %>/edit/">Edit My User</a>
         <a class="wdn-button wdn-button-triad" href="/admin/users/<%= @user.id %>/manage/">My Tools</a>
+        <a class="wdn-button wdn-button-complement" href="/admin/users/download/">Download User Data</a>
     </div>
 </div>
 
@@ -44,15 +45,22 @@
     <table class="event-list">
         <thead class="small-hidden">
             <tr>
+                <th style="max-width: 80px;">&nbsp;</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Tool Authorizations</th>
+                <th>Expiration Date</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         <% users.each do |user| %>
             <tr>
+                <td style="max-width: 80px;">
+                    <% if user.imagedata %>
+                    <img src="<%= user.image_src %>" alt="Image for User: <%= user.username %>">
+                    <% end %>
+                </td>
                 <td>
                     <%= user.full_name %><br>
                     <small><%= user.university_status %></small>
@@ -69,6 +77,9 @@
                         <br><a href="/admin/users/<%= user.id %>/manage/">... and <%= user.authorized_resource_ids.count - 5 %> more</a>
                         <% end %>
                     <% end %>
+                </td>
+                <td>
+                <%= user.expiration_date.strftime('%m/%d/%Y') if user.expiration_date %>
                 </td>
                 <td class="table-actions">
                     <a href="/admin/users/<%= user.id %>/edit/" class="wdn-button wdn-button-brand">Edit</a>

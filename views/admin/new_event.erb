@@ -29,7 +29,33 @@
                     <% locations.each do |location| %>
                         <option <%= 'selected="selected"' if !event.location.nil? && event.location.id == location.id %> value="<%= location.id %>"><%= location.name %></option>
                     <% end %>
+                    <option value="new">-- New Location --</option>
                 </select>
+
+                <div style="display: none;" class="offset-field-group" id="new-location-details">
+                    <label for="location-name"><span class="required">*</span> Name</label>
+                    <input type="text" id="location-name" name="new_location[name]" />
+
+                    <label for="location-address">Address</label>
+                    <input type="text" id="location-address" name="new_location[streetaddress]" />
+
+                    <label for="location-address2">Address 2</label>
+                    <input type="text" id="location-address2" name="new_location[streetaddress2]" />
+
+                    <label for="location-city">City</label>
+                    <input type="text" id="location-city" name="new_location[city]" />
+
+                    <label for="location-state">State</label>
+                    <input type="text" id="location-state" name="new_location[state]" />
+
+                    <label for="location-zip">Zip</label>
+                    <input type="text" id="location-zip" name="new_location[zip]" />
+
+                    <label for="location-additionalinfo">Additional Info</label>
+                    <input type="text" id="location-additionalinfo" name="new_location[additionalinfo]" />
+
+                    <label>* This location will be saved for future use</label>
+                </div>
 
                 <div>
                     <input type="checkbox" <%= 'checked="checked"' if !event.reservation.nil? && !event.reservation.resource.nil? %> id="reserve-tool" name="reserve_tool"><label for="reserve-tool">Reserve a tool for this event</label>
@@ -99,6 +125,12 @@
                 </div>
 
                 <div class="details">
+                    <% unless event.imagedata.nil? %>
+                        <img src="<%= event.image_src %>" alt="Image for Event <%= event.title %>">
+                        <br>
+                        <input type="checkbox" name="remove_image" id="remove-image">
+                        <label for="remove-image">Remove Image</label> 
+                    <% end %>
                     <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata" title="Event Image">
                 </div>
             </div>
@@ -108,9 +140,9 @@
                 </div>
 
                 <div class="details">
-                    <input id="export-to-unl-events" title="Export to UNL Events" type="checkbox" name="export_to_unl_events">
+                    <input id="export-to-unl-events" title="Export to UNL Events" type="checkbox" <%= 'checked="checked"' if on_unl_events %> name="export_to_unl_events">
                     <label for="export-to-unl-events">Export to UNL Events</label><br>
-                    <input disabled="disabled" id="consider-for-unl-main" title="Consider for main UNL Events calendar" type="checkbox" name="consider_for_unl_main"> 
+                    <input disabled="disabled" id="consider-for-unl-main" title="Consider for main UNL Events calendar" type="checkbox" <%= 'checked="checked"' if on_main_calendar %> name="consider_for_unl_main"> 
                     <label for="consider-for-unl-main">Consider for main UNL Events calendar</label><br>
                 </div>
             </div>
@@ -137,6 +169,14 @@ WDN.initializePlugin('jqueryui', [function() {
         }
     });
 
+    $('#location').change(function (change) {
+        if ($(this).val() == 'new') {
+            $('#new-location-details').show();
+        } else {
+            $('#new-location-details').hide();
+        }
+    }).change();
+
     $('#export-to-unl-events').change(function (change) {
         if ($('#export-to-unl-events').is(':checked')) {
             $('#consider-for-unl-main').removeAttr('disabled');
@@ -144,6 +184,6 @@ WDN.initializePlugin('jqueryui', [function() {
             $('#consider-for-unl-main').attr('checked', false);
             $('#consider-for-unl-main').attr('disabled', 'disabled');
         }
-    });
+    }).change();
 }]);
 </script>

@@ -1,24 +1,33 @@
-<div id="pagetitle">
-	<h3>
-    	<%= event.title %><span class="wdn-subhead"><%= event.type.description %></span>
-    </h3>
+<div class="event-details">
+	<div>
+		<h3>
+	    	<%= event.title %><span class="wdn-subhead"><%= event.type.description %></span>
+	    </h3>
+	</div>
+	<div>
+		<span class="date-wrapper eventicon-calendar-empty">
+	    	<time class="dtstart"><%= event.start_time.in_time_zone.strftime('%b %d, %Y') %></time>
+		</span>
+		<span class="time-wrapper eventicon-clock">
+	    	<%= event.start_time.in_time_zone.strftime('%l:%M %P') %>–<%= event.end_time.in_time_zone.strftime('%l:%M %P') %>
+	    </span>
+		<div class="location eventicon-location">
+			<%= event.location.name %>
+		</div>
+		<% unless event.imagedata.nil? %>
+		<div class="inset-image">
+			<img src="<%= event.image_src %>" alt="Image for Event: <%= event.title %>">
+		</div>
+		<% end %>
+		<div class="description">
+	    	<%= event.description.nl2br.force_encoding("UTF-8") %>
+	    </div>
+	</div>
 </div>
-<div>
-	<span class="date-wrapper eventicon-calendar-empty">
-    	<time class="dtstart"><%= event.start_time.in_time_zone.strftime('%b %d, %Y') %></time>
-	</span><br>
-	<span class="time-wrapper eventicon-clock">
-    	<%= event.start_time.in_time_zone.strftime('%l:%M %P') %>–<%= event.end_time.in_time_zone.strftime('%l:%M %P') %>
-    </span>
-	<div class="location eventicon-location">
-		<%= event.location.name %>
-	</div><br>
-	<div class="description">
-    	<%= event.description.force_encoding("UTF-8") %>
-    </div>
-</div><br>
 
+<% # free events do not require signup but users can mark it on their homepage %>
 <% if @user && event.signups.map(&:user_id).include?(@user.id) %>
+	<% # the user is already signed up %>
 	<% if event.type.description == 'Free Event' %>
 		This event is noted on your homepage.<br>
 		<a href='/home/' class="wdn-button wdn-button-triad">View Homepage</a>
@@ -27,6 +36,7 @@
 		<a href='/home/' class="wdn-button wdn-button-triad">View Homepage</a>
 	<% end %>
 <% elsif @user %>
+	<% # the user is logged in but not signed up %>
 	<% if event.max_signups.nil? || event.signups.count < event.max_signups %>
 	<form action="/events/<%= event.id %>/sign_up/" method="POST">
 	<button type="submit" class="wdn-button wdn-button-brand">
@@ -39,5 +49,14 @@
 	</form>
 	<% else %>
 	All slots for this event are filled.
+	<% end %>
+<% else %>
+	<% # a non user. May still sign up for the event UNLESS it is a tool training %>
+	<% if event.type.description != 'Machine Training' %>
+		<% if event.max_signups.nil? || event.signups.count < event.max_signups %>
+		<a class="wdn-button wdn-button-brand" href="/events/<%= event.id %>/sign_up_as_non_member/">Sign up for this event</a>
+		<% else %>
+		All slots for this event are filled.
+		<% end %>
 	<% end %>
 <% end %>

@@ -12,7 +12,8 @@ get '/tools/?' do
 
 	# show tools that the user is authorized to use, as well as all those that do not require authorization
 	tools = Resource.where(:service_space_id => SS_ID).all.to_a
-	tools.reject! {|tool| tool.needs_authorization && !@user.authorized_resource_ids.include?(tool.id)}
+	tools.reject! {|tool| tool.needs_authorization && (!@user.authorized_resource_ids.include?(tool.id) || !@user.meets_resource_reservation_limit?(tool.id)) }
+	tools.sort_by! {|tool| tool.name.downcase}
 
 	erb :tools, :layout => :fixed, :locals => {
 		:available_tools => tools
@@ -26,7 +27,7 @@ get '/tools/trainings/?' do
 
 	machine_training_id = EventType.find_by(:description => 'Machine Training', :service_space_id => SS_ID).id
 	events = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => machine_training_id).
-					where('start_time >= ?', Time.now).all
+					where('start_time >= ?', Time.now).order(:start_time => :asc).all
 
 	erb :trainings, :layout => :fixed, :locals => {
 		:events => events
@@ -56,7 +57,8 @@ post '/tools/trainings/sign_up/:event_id/?' do
 	EventSignup.create(
 		:event_id => params[:event_id],
 		:name => @user.full_name,
-		:user_id => @user.id
+		:user_id => @user.id,
+		:email => @user.email
 	)
 
 	body = <<EMAIL
@@ -93,6 +95,11 @@ get '/tools/:resource_id/reserve/?' do
 		redirect '/tools/'
 	end
 
+    unless @user.meets_resource_reservation_limit?(tool.id)
+        flash(:alert, 'Not Authorized', "Sorry, you are at the user reservation limit (#{tool.max_reservations_per_user.to_s}) on this machine.")
+        redirect '/tools/'
+    end
+
 	date = params[:date].nil? ? Time.now.midnight.in_time_zone : Time.parse(params[:date]).midnight.in_time_zone
 	# get the studio's hours for this day
 	# is there a one_off
@@ -110,17 +117,17 @@ get '/tools/:resource_id/reserve/?' do
 	# calculate the available start times for reservation
 	if space_hour.nil?
 		start = 0
-		while start + tool.minutes_per_reservation <= 1440
+		while start + (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15) <= 1440
 			available_start_times << start
-			start += tool.minutes_per_reservation
+			start += (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15)
 		end
 	else
 		space_hour.hours.sort{|x,y| x[:start] <=> y[:start]}.each do |record|
 			if record[:status] == 'open'
 				start = record[:start]
-				while start + tool.minutes_per_reservation <= record[:end]
+				while start + (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15) <= record[:end]
 					available_start_times << start
-					start += tool.minutes_per_reservation
+					start += (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15)
 				end
 			end
 		end
@@ -180,17 +187,17 @@ get '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 	# calculate the available start times for reservation
 	if space_hour.nil?
 		start = 0
-		while start + tool.minutes_per_reservation <= 1440
+		while start + (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15) <= 1440
 			available_start_times << start
-			start += tool.minutes_per_reservation
+			start += (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15)
 		end
 	else
 		space_hour.hours.sort{|x,y| x[:start] <=> y[:start]}.each do |record|
 			if record[:status] == 'open'
 				start = record[:start]
-				while start + tool.minutes_per_reservation <= record[:end]
+				while start + (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15) <= record[:end]
 					available_start_times << start
-					start += tool.minutes_per_reservation
+					start += (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15)
 				end
 			end
 		end

@@ -44,4 +44,34 @@ class Event < ActiveRecord::Base
 	def has_reservation
 		!self.reservation.nil?
 	end
+
+	def image_src
+		"/images/#{id}/"
+	end
+
+	def set_data(params)
+		self.title = params[:title]
+		self.description = params[:description]
+		self.start_time = calculate_time(params[:start_date], params[:start_time_hour], params[:start_time_minute], params[:start_time_am_pm])
+		self.end_time = calculate_time(params[:end_date], params[:end_time_hour], params[:end_time_minute], params[:end_time_am_pm])
+		self.event_type_id = params[:type]
+		self.location_id = params[:location]
+		self.max_signups = params[:limit_signups] == 'on' ? params[:max_signups].to_i : nil
+		self.service_space_id = SS_ID
+		self.save
+	end
+
+	def set_image_data(params)
+		if params[:imagedata]
+			self.imagemime = params[:imagedata][:type]
+			self.imagedata = params[:imagedata][:tempfile].read if params[:imagedata][:tempfile].is_a?(Tempfile)
+		end
+		self.save
+	end
+
+	def remove_image_data
+		self.imagemime = nil
+		self.imagedata = nil
+		self.save
+	end
 end

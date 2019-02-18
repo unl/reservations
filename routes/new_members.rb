@@ -2,14 +2,12 @@ require 'models/event'
 require 'models/event_signup'
 require 'classes/emailer'
 
-MAX_SIGNUPS_PER_ORIENTATION = 10
-
 get '/new_members/?' do
 	@breadcrumbs << {:text => 'New Members'}
 	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
 
     erb :new_members, :layout => :fixed, :locals => {
-    	:events => Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => new_member_orientation_id).where('start_time >= ?', Time.now).all
+    	:events => Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => new_member_orientation_id).where('start_time >= ?', Time.now).order(:start_time => :asc).all
     }
 end
 
@@ -25,7 +23,7 @@ get '/new_members/sign_up/:event_id/?' do
 		redirect '/new_members/'
 	end
 
-	if event.signups.count >= MAX_SIGNUPS_PER_ORIENTATION
+	if !event.max_signups.nil? && event.signups.count >= event.max_signups
 		# that event is full
 		flash(:alert, 'This Orientation is Full', "Sorry, #{event.title} is full.")
 		redirect '/new_members/'
@@ -46,15 +44,10 @@ post '/new_members/sign_up/:event_id/?' do
 		redirect '/new_members/'
 	end
 
-	if event.signups.count >= MAX_SIGNUPS_PER_ORIENTATION
+	if !event.max_signups.nil? && event.signups.count >= event.max_signups
 		# that event is full
 		flash(:alert, 'This Orientation is Full', "Sorry, #{event.title} is full.")
 		redirect '/new_members/'
-	end
-
-	if params[:signup_password].trim != 'makerspace'
-		flash(:alert, 'Incorrect Password', 'Please use the password provided in your email to sign up for this orientation.')
-		redirect "/new_members/sign_up/#{params[:event_id]}/"
 	end
 
 	EventSignup.create(
@@ -67,6 +60,8 @@ post '/new_members/sign_up/:event_id/?' do
 <p>Thank you, #{params[:name]} for signing up for #{event.title}. Don't forget that the event is</p>
 
 <p><strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
+
+<p>Our main entrance is on the northwest side of the Innovation Commons building on 19th St. just off Transformation Drive. Our address is 2021 Transformation Drive, Suite 1500, Entrance B.</p>
 
 <p>We'll see you there!</p>
 
