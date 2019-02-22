@@ -19,15 +19,15 @@ end %>
 </div>
 
 <form action="" method="POST">
-<section class="wdn-grid-set">
-    <div class="bp1-wdn-col-one-third">
+<section class="dcf-grid-full dcf-grid-thirds@sm dcf-col-gap-vw">
+    <div>
     	<label for="date">Date</label>
     	<div class="date-time-select">
     	<span class="wdn-icon-calendar"></span>
         <input style="width: 90%;" id="date" name="date" title="Reservation Date" type="text" class="datepicker" value="<%= day.strftime('%m/%d/%Y') %>" />
         </div>
     </div>
-    <div class="bp1-wdn-col-one-third">
+    <div>
     	<label>Schedule for <span id="current-date"><%= day.strftime('%m/%d/%Y') %></span></label>
         <div class="calendar-container individual-day">
             <div class="time-labels">
@@ -140,7 +140,7 @@ end %>
             </div>
     	</div>
     </div>
-    <div class="bp1-wdn-col-one-third">
+    <div>
     	<label for="start-minutes">Start Time</label>
         <div class="date-time-select">
             <% if available_start_times.empty? %>
@@ -176,13 +176,12 @@ end %>
         </select>
         <% end %>
         <br><br>
-        <button type="submit" class="wdn-button wdn-button-brand"><%= reservation.nil? ? 'Reserve' : 'Update' %></button>
+        <button type="submit" class="dcf-btn dcf-btn-primary"><%= reservation.nil? ? 'Reserve' : 'Update' %></button>
     </div>
 </section>
 </form>
 
-<script type="text/javascript">
-WDN.initializePlugin('jqueryui', [function() {  
+<% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {
     $ = require('jquery');
     $('.datepicker').datepicker();
     $("LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
@@ -191,5 +190,4 @@ WDN.initializePlugin('jqueryui', [function() {
         var date = $('#date').val().split('/');
         window.location = window.location.href.split('?')[0] + '?date=' + date[2] + '-' + date[0] + '-' + date[1];
     });
-}]);
-</script>
+}]);]) %>

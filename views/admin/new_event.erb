@@ -1,6 +1,6 @@
-<div class="wdn-grid-set">
-    <form id="create-event-form" action="" method="POST" enctype="multipart/form-data">
-        <div class="bp3-wdn-col-two-thirds">
+<form id="create-event-form" action="" method="POST" enctype="multipart/form-data">
+    <div class="dcf-grid dcf-col-gap-vw">
+        <div class="dcf-col-100% dcf-col-67%-start@sm">
             <fieldset>
                 <legend style="margin-top: 0">Event Details</legend>
                 <label for="title"><span class="required">*</span> Title</label>
@@ -72,53 +72,73 @@
 
                 <label for="start-date" ><span class="required">*</span> Start Date &amp; Time</label>
                 <div class="date-time-select"><span class="wdn-icon-calendar"></span>
-                    <input id="start-date" value="<%= event.start_time.in_time_zone.strftime('%m/%d/%Y') if !event.start_time.nil? %>" name="start_date" title="Start Date" type="text" class="datepicker" /><br class="hidden small-block"> @
-                    <select id="start-time-hour" name="start_time_hour" title="Start Time Hour">
-                        <option value=""></option>
-                        <% (1..12).each do |i| %>
-                        <option <%= 'selected="selected"' if !event.start_time.nil? && event.start_time.in_time_zone.hour.to_i % 12 == i % 12 %> value="<%= i %>"><%= i %></option>
-                        <% end %>
-                    </select> : 
+                    <input id="start-date" value="<%= event.start_time.in_time_zone.strftime('%m/%d/%Y') if !event.start_time.nil? %>" name="start_date" title="Start Date" type="text" class="datepicker" />
 
-                    <select id="start-time-minute" name="start_time_minute" title="Start Time Minute">
-                        <option value=""></option>
-                        <% (0..11).each do |i| %>
-                        <option <%= 'selected="selected"' if !event.start_time.nil? && event.start_time.in_time_zone.min == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
-                        <% end %>
-                    </select>
+                    <div class="dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mt-4 dcf-mr-4">
+                    <span class="dcf-pr-2">@</span>
+                        <select class="dcf-flex-grow-1 dcf-input-select" id="start-time-hour" name="start_time_hour" title="Start Time Hour">
+                            <option value=""></option>
+                            <% (1..12).each do |i| %>
+                            <option <%= 'selected="selected"' if !event.start_time.nil? && event.start_time.in_time_zone.hour.to_i % 12 == i % 12 %> value="<%= i %>"><%= i %></option>
+                            <% end %>
+                        </select> :
 
-                    <div id="start-time-am-pm" class="am_pm">
-                        <input <%= 'checked="checked"' if event.start_time.nil? || event.start_time.in_time_zone.hour < 12 %> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm">AM<br>
-                        <input <%= 'checked="checked"' if !event.start_time.nil? && event.start_time.in_time_zone.hour >= 12 %> id="start-time-am-pm-pm" title="PM" type="radio" value="pm" name="start_time_am_pm">PM
+                        <select class="dcf-flex-grow-1 dcf-input-select" id="start-time-minute" name="start_time_minute" title="Start Time Minute">
+                            <option value=""></option>
+                            <% (0..11).each do |i| %>
+                            <option <%= 'selected="selected"' if !event.start_time.nil? && event.start_time.in_time_zone.min == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
+                            <% end %>
+                        </select>
+
+                        <div id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
+                            <div class="dcf-d-flex dcf-ai-center">
+                                <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-am">AM</label>
+                                <input <%= 'checked="checked"' if event.start_time.nil? || event.start_time.in_time_zone.hour < 12 %> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm" class="dcf-flex-shrink-0">
+                            </div>
+                            <div class="dcf-d-flex dcf-ai-center">
+                                <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-pm">PM</label>
+                                <input <%= 'checked="checked"' if !event.start_time.nil? && event.start_time.in_time_zone.hour >= 12 %> id="start-time-am-pm-pm" title="PM" type="radio" value="pm" name="start_time_am_pm" class="dcf-flex-shrink-0">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <label for="end-date">End Date &amp; Time (optional)</label>
                 <div class="date-time-select"><span class="wdn-icon-calendar"></span>
-                    <input id="end-date" value="<%= event.end_time.in_time_zone.strftime('%m/%d/%Y') if !event.end_time.nil? %>" name="end_date" title="End Date" type="text" class="datepicker" /><br class="hidden small-block"> @
-                    <select id="end-time-hour" name="end_time_hour" title="End Time Hour">
-                        <option value=""></option>
-                        <% (1..12).each do |i| %>
-                        <option <%= 'selected="selected"' if !event.end_time.nil? && event.end_time.in_time_zone.hour.to_i % 12 == i % 12 %> value="<%= i %>"><%= i %></option>
-                        <% end %>
-                    </select> : 
+                    <input id="end-date" value="<%= event.end_time.in_time_zone.strftime('%m/%d/%Y') if !event.end_time.nil? %>" name="end_date" title="End Date" type="text" class="datepicker" />
 
-                    <select id="end-time-minute" name="end_time_minute" title="End Time Minute">
-                        <option value=""></option>
-                        <% (0..11).each do |i| %>
-                        <option <%= 'selected="selected"' if !event.end_time.nil? && event.end_time.in_time_zone.min == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
-                        <% end %>
-                    </select>
+                     <div class="dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mt-4 dcf-mr-4">
+                        <span class="dcf-pr-2">@</span>
+                        <select class="dcf-flex-grow-1 dcf-input-select" id="end-time-hour" name="end_time_hour" title="End Time Hour">
+                            <option value=""></option>
+                            <% (1..12).each do |i| %>
+                            <option <%= 'selected="selected"' if !event.end_time.nil? && event.end_time.in_time_zone.hour.to_i % 12 == i % 12 %> value="<%= i %>"><%= i %></option>
+                            <% end %>
+                        </select> :
 
-                    <div id="end-time-am-pm" class="am_pm">
-                        <input <%= 'checked="checked"' if event.end_time.nil? || event.end_time.in_time_zone.hour < 12 %> id="end-time-am-pm-am" title="AM" type="radio" value="am" name="end_time_am_pm">AM<br>
-                        <input <%= 'checked="checked"' if !event.end_time.nil? && event.end_time.in_time_zone.hour >= 12 %> id="end-time-am-pm-pm" title="PM" type="radio" value="pm" name="end_time_am_pm">PM
+                        <select class="dcf-flex-grow-1 dcf-input-select" id="end-time-minute" name="end_time_minute" title="End Time Minute">
+                            <option value=""></option>
+                            <% (0..11).each do |i| %>
+                            <option <%= 'selected="selected"' if !event.end_time.nil? && event.end_time.in_time_zone.min == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
+                            <% end %>
+                        </select>
+
+                        <div id="end-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
+                            <div class="dcf-d-flex dcf-ai-center">
+                                <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-am">AM</label>
+                                <input <%= 'checked="checked"' if event.end_time.nil? || event.end_time.in_time_zone.hour < 12 %> id="end-time-am-pm-am" title="AM" type="radio" value="am" name="end_time_am_pm" class="dcf-flex-shrink-0">
+                            </div>
+                            <div class="dcf-d-flex dcf-ai-center">
+                                <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-pm">PM</label>
+                                <input <%= 'checked="checked"' if !event.end_time.nil? && event.end_time.in_time_zone.hour >= 12 %> id="end-time-am-pm-pm" title="PM" type="radio" value="pm" name="end_time_am_pm" class="dcf-flex-shrink-0">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </fieldset>
 
         </div>
-        <div class="bp3-wdn-col-one-third">
+        <div class="dcf-col-100% dcf-col-33%-end@sm">
             <div class="visual-island">
                 <div class="vi-header">
                     <label>Image</label>
@@ -147,16 +167,18 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="bp1-wdn-col-two-thirds">
-            <button class="wdn-button wdn-button-brand wdn-pull-left" type="submit"><%= event.id.nil? ? 'Create' : 'Save' %> Event</button>
+    <div class="dcf-grid dcf-col-gap-vw">
+        <div class="dcf-col-100% dcf-col-67%-start@sm">
+            <button class="dcf-btn dcf-btn-primary dcf-float-left" type="submit"><%= event.id.nil? ? 'Create' : 'Save' %> Event</button>
         </div>
-    </form>
+    </div>
+</form>
 </div>
 <br>
 
-<script type="text/javascript">
-WDN.initializePlugin('jqueryui', [function() {  
+<% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {
     $ = require('jquery');
     $('.datepicker').datepicker();
     $("LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
@@ -185,5 +207,4 @@ WDN.initializePlugin('jqueryui', [function() {
             $('#consider-for-unl-main').attr('disabled', 'disabled');
         }
     }).change();
-}]);
-</script>
+}]);]) %>

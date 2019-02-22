@@ -5,7 +5,7 @@ end %>
 <div id="pagetitle">
 	<h3>
 		Innovation Studio Calendar
-		<span class="wdn-subhead">See all our upcoming events!</span>
+		<span class="dcf-subhead">See all our upcoming events!</span>
 	</h3>
 </div>
 
@@ -13,8 +13,8 @@ end %>
 <h4 style="text-align: center; margin: 0;">
 <%= month = sunday.strftime('%B %Y') %><%= (month2 = (sunday+6.days).strftime('%B %Y')) == month ? '' : " - #{month2}" %>
 </h4>
-<a href="/calendar/?date=<%= (date-7.days).strftime('%Y-%m-%d') %>" class="wdn-button wdn-button-triad" id="prev-week">&lt; PREV</a>
-<a href="/calendar/?date=<%= (date+7.days).strftime('%Y-%m-%d') %>" class="wdn-button wdn-button-triad" style="float: right;" id="next-week">NEXT &gt;</a>
+<a href="/calendar/?date=<%= (date-7.days).strftime('%Y-%m-%d') %>" class="dcf-btn wdn-button-triad" id="prev-week">&lt; PREV</a>
+<a href="/calendar/?date=<%= (date+7.days).strftime('%Y-%m-%d') %>" class="dcf-btn wdn-button-triad" style="float: right;" id="next-week">NEXT &gt;</a>
 </div>
 
 <div class="calendar-container">
@@ -169,8 +169,7 @@ end %>
 	<% end %>
 </div>
 
-<script type="text/javascript">
-require(['jquery'], function ($) {
+<% append_script_declaration(%q[require(['jquery'], function ($) {
 	var max_z = 5;
 	$(document).ready(function () {
 		$('.event').click(function (click) {
@@ -178,5 +177,4 @@ require(['jquery'], function ($) {
 			max_z += 1;
 		});
 	});
-});
-</script>
+});]) %>

@@ -2,7 +2,8 @@
     <h3>Create User</h3>
 </div>
 
-<form id="new-user" action="" method="POST" enctype="multipart/form-data" class="bp2-wdn-col-one-half">
+<div class="dcf-grid dcf-col-gap-vw">
+<form id="new-user" action="" method="POST" enctype="multipart/form-data" class="dcf-col-100% dcf-col-50%-start@sm">
     <fieldset>
         <legend>User Details</legend>
         <label for="username">Username</label>
@@ -38,14 +39,13 @@
         <label for="imagedata">User Image</label>
         <input type="file" name="imagedata" id="imagedata" title="User Image">
         <br><br>
-        <button class="wdn-button wdn-button-brand" type="submit">Create</button>
+        <button class="dcf-btn dcf-btn-primary" type="submit">Create</button>
     </fieldset>
 </form>
+</div>
 
-<script type="text/javascript">
-WDN.initializePlugin('jqueryui', [function() {  
+<% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {
     $ = require('jquery');
     $('.datepicker').datepicker();
     $("LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
-}]);
-</script>
+}]);]) %>

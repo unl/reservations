@@ -8,8 +8,8 @@
 	<h4>Update Profile</h4>
 </div>
 <form action="" method="POST">
-<section class="wdn-grid-set">
-<div class="bp2-wdn-col-one-half">
+<section class="wdcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
+<div>
 	<label for="email">Email</label>
     <input type="text" id="email" name="email" value="<%= @user.email %>" />
 
@@ -19,7 +19,7 @@
     <label for="last-name">First Name</label>
     <input type="text" id="last-name" name="last_name" value="<%= @user.last_name %>" />
     <br><br>
-    <button type="submit" class="wdn-button wdn-button-brand">Save</button>
+    <button type="submit" class="dcf-btn dcf-btn-primary">Save</button>
 </div>
 </section>
 </form>
@@ -29,15 +29,15 @@
 </div>
 
 <form action="/change-password/" method="POST">
-<section class="wdn-grid-set">
-<div class="bp2-wdn-col-one-half">
+<section class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
+<div>
 	<label for="password">New Password</label>
 	<input type="password" id="password" name="password" />
 
 	<label for="password2">Confirm New Password</label>
 	<input type="password" id="password2" name="password2" />
 	<br><br>
-	<button type="submit" class="wdn-button wdn-button-brand">Change Password</button>
+	<button type="submit" class="dcf-btn dcf-btn-primary">Change Password</button>
 </div>
 </section>
 </form>

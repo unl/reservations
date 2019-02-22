@@ -25,6 +25,7 @@ SS_ID = ServiceSpace.where(:name => 'Innovation Studio').first.id
 
 before do
     # site defaults
+    @inline_body_script_content = ''
     @title = 'Innovation Studio Manager'
     @breadcrumbs = [
       {
@@ -50,6 +51,14 @@ before do
     else
         @user = nil;
     end
+end
+
+def append_script_tag(src)
+    @inline_body_script_content <<  "<script type=\"text/javascript\" src=\"#{src}\"></script>\n"
+end
+
+def append_script_declaration(content)
+    @inline_body_script_content <<  "<script>#{content}</script>\n"
 end
 
 def require_login
