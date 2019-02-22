@@ -3,8 +3,8 @@
 </div>
 
 <form id="create-hours" action="" method="POST">
-    <div class="wdn-grid-set">
-        <div class="bp1-wdn-col-one-half">
+    <div class="dcf-grid dcf-col-gap-vw">
+        <div class="dcf-col-100% dcf-col-50%-start@sm">
             <label for="day-of-week">Day Of Week</label>
             <select id="day-of-week" name="day_of_week">
             <% (weekdays = %w(Sunday Monday Tuesday Wednesday Thursday Friday Saturday)).each_index do |i| %>
@@ -75,18 +75,17 @@
                     <input <%= 'checked="checked"' if record[:end] >= 720 %> class="end-time-am-pm" title="PM" type="radio" value="pm" name="<%= z %>">PM
                 </div>
                 &nbsp;
-                <button title="Remove" type="button" class="<%= 'hidden' if x == 0 %> remove-hours wdn-button">&times;</button>
+                <button title="Remove" type="button" class="<%= 'hidden' if x == 0 %> remove-hours dcf-btn">&times;</button>
             </div>
             <% end %>
         </div>
-        <button id="add-hours" type="button" class="wdn-button wdn-button-complement">Add Hours</button>
+        <button id="add-hours" type="button" class="dcf-btn wdn-button-complement">Add Hours</button>
     </fieldset>
 
-    <button type="submit" class="wdn-button wdn-button-brand">Submit</button>
+    <button type="submit" class="dcf-btn dcf-btn-primary">Submit</button>
 </form>
 
-<script type="text/javascript">
-WDN.initializePlugin('jqueryui', [function() {  
+<% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {
     $ = require('jquery');
     $('.datepicker').datepicker();
     $("LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
@@ -126,5 +125,4 @@ WDN.initializePlugin('jqueryui', [function() {
         $('#hours').val(JSON.stringify(hours));
     });
 
-}]);
-</script>
+}]);]) %>

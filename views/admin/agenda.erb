@@ -9,7 +9,7 @@
 </form>
 
 <div id="pagetitle">
-	<h3>Today's Agenda<span class="wdn-subhead"><%= date.strftime('%B %d, %Y') %></h3>
+	<h3>Today's Agenda<span class="dcf-subhead"><%= date.strftime('%B %d, %Y') %></h3>
 </div>
 
 
@@ -64,7 +64,7 @@ No reservations today. Hopefully someone will still come in to use the space!<br
             </td>
             <td>
                 <form class="delete-form" method="POST" action="/admin/agenda/reservations/<%= reservation.id %>/remove/">
-                <button class="wdn-button wdn-button-brand" type="submit">Remove</button>
+                <button class="dcf-btn dcf-btn-primary" type="submit">Remove</button>
                 </form>
             </td>
         </tr>
@@ -73,12 +73,12 @@ No reservations today. Hopefully someone will still come in to use the space!<br
 </table>
 <% end %>
 
-<h4>
+<h4 class="dcf-mt-4">
 Today's Events
 </h4>
 <% if events.empty? %>
 No events today. Perhaps you'd like to create one?<br>
-<a href="/admin/events/create/" class="wdn-button wdn-button-brand">New Event</a>
+<a href="/admin/events/create/" class="dcf-btn dcf-btn-primary">New Event</a>
 <% else %>
 <table>
     <thead>
@@ -106,11 +106,10 @@ No events today. Perhaps you'd like to create one?<br>
     </tbody>
 </table>
 <br>
-<a href="/admin/events/" class="wdn-button wdn-button-triad">Go To Events</a>
+<a href="/admin/events/" class="dcf-btn wdn-button-triad">Go To Events</a>
 <% end %>
 
-<script type="text/javascript">
-WDN.initializePlugin('jqueryui', [function() {  
+<% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {
     $ = require('jquery');
     $('.datepicker').datepicker();
     $("LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
@@ -119,5 +118,4 @@ WDN.initializePlugin('jqueryui', [function() {
         var date = $('#date').val().split('/');
         window.location = window.location.href.split('?')[0] + '?date=' + date[2] + '-' + date[0] + '-' + date[1];
     });
-}]);
-</script>
+}]);]) %>
