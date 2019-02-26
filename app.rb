@@ -75,6 +75,17 @@ def check_membership
   end
 end
 
+def drupal_node_lookup(key)
+    nodes = {
+        material_pricing: 79,
+        sop_training_doc: 80,
+        workshops_training_doc: 81,
+        tips_training_doc: 82
+    }
+
+    return nodes[key] if nodes.key?(key)
+end
+
 not_found do
   @breadcrumbs << {:text => 'Not Found'}
   erb 'That page was not found.', :layout => :fixed
