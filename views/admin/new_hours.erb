@@ -6,7 +6,7 @@
     <div class="dcf-grid dcf-col-gap-vw">
         <div class="dcf-col-100% dcf-col-50%-start@sm">
             <label for="day-of-week">Day Of Week</label>
-            <select id="day-of-week" name="day_of_week">
+            <select id="day-of-week" name="day_of_week" class="dcf-input-select">
             <% (weekdays = %w(Sunday Monday Tuesday Wednesday Thursday Friday Saturday)).each_index do |i| %>
                 <option <%= 'selected="selected"' if space_hour.day_of_week == i && !space_hour.one_off %> value="<%= i %>"><%= weekdays[i] %></option>
             <% end %>
@@ -30,50 +30,67 @@
             <% hours.each_index do |x| %>
             <% record = hours[x] %>
             <div id="base-hours-<%=x%>" class="date-time-select hours-record">
-                <select class="hours-type">
+                <select class="hours-type dcf-input-select">
                     <option <%= 'selected="selected"' if record[:status] == 'open' %> value="open">Open</option>
                     <option <%= 'selected="selected"' if record[:status] == 'open_without_reservations' %> value="open_without_reservations">Open but Machine Reservations are Not Allowed</option>
                     <option <%= 'selected="selected"' if record[:status] == 'closed' %> value="closed">Closed</option>
                 </select>
-                <label>from</label>
-                <select class="start-time-hour" title="Start Time Hour">
-                    <option value=""></option>
-                    <% (1..12).each do |i| %>
-                    <option <%= 'selected="selected"' if [y = record[:start] / 60, y+12, y-12].include?(i) %> value="<%= i %>"><%= i %></option>
-                    <% end %>
-                </select> : 
+                <label for="start-date">from</label>
+                <div class="dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mt-4 dcf-mr-4">
+                    <select class="start-time-hour dcf-flex-grow-1 dcf-input-select" title="Start Time Hour">
+                        <option value=""></option>
+                        <% (1..12).each do |i| %>
+                        <option <%= 'selected="selected"' if [y = record[:start] / 60, y+12, y-12].include?(i) %> value="<%= i %>"><%= i %></option>
+                        <% end %>
+                    </select>&nbsp;:&nbsp;
 
-                <select class="start-time-minute"title="Start Time Minute">
-                    <option value=""></option>
-                    <% (0..11).each do |i| %>
-                    <option <%= 'selected="selected"' if record[:start] % 60 == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
-                    <% end %>
-                </select>
+                    <select class="start-time-minute dcf-flex-grow-1 dcf-input-select" title="Start Time Minute">
+                        <option value=""></option>
+                        <% (0..11).each do |i| %>
+                        <option <%= 'selected="selected"' if record[:start] % 60 == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
+                        <% end %>
+                    </select>
 
-                <div class="am_pm">
-                    <input <%= 'checked="checked"' if record[:start] < 720 %> class="start-time-am-pm" title="AM" type="radio" value="am" name="<%= z = String.token %>">AM<br>
-                    <input <%= 'checked="checked"' if record[:start] >= 720 %> class="start-time-am-pm" title="PM" type="radio" value="pm" name="<%= z %>">PM
-                </div>&nbsp;
-                <label>until</label>
-                &nbsp;
-                <select class="end-time-hour" title="End Time Hour">
-                    <option value=""></option>
-                    <% (1..12).each do |i| %>
-                    <option <%= 'selected="selected"' if [y = record[:end] / 60, y+12, y-12].include?(i) %> value="<%= i %>"><%= i %></option>
-                    <% end %>
-                </select> : 
-
-                <select class="end-time-minute"title="End Time Minute">
-                    <option value=""></option>
-                    <% (0..11).each do |i| %>
-                    <option <%= 'selected="selected"' if record[:end] % 60 == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
-                    <% end %>
-                </select>
-
-                <div class="am_pm">
-                    <input <%= 'checked="checked"' if record[:end] < 720 %> class="end-time-am-pm" title="AM" type="radio" value="am" name="<%= z = String.token %>">AM<br>
-                    <input <%= 'checked="checked"' if record[:end] >= 720 %> class="end-time-am-pm" title="PM" type="radio" value="pm" name="<%= z %>">PM
+                    <div class="am_pm dcf-mb-0 dcf-pl-3">
+                        <div class="dcf-d-flex dcf-ai-center">
+                            <label class="dcf-label dcf-2nd dcf-mt-0 dcf-ml-1" for="hours-start-am">AM</label>
+                            <input <%= 'checked="checked"' if record[:start] < 720 %> class="start-time-am-pm dcf-flex-shrink-0" title="AM" type="radio" value="am" name="<%= z = String.token %>">
+                        </div>
+                        <div class="dcf-d-flex dcf-ai-center">
+                            <label class="dcf-label dcf-2nd dcf-mt-0 dcf-ml-1" for="hours-start-pm">PM</label>
+                            <input <%= 'checked="checked"' if record[:start] >= 720 %> class="start-time-am-pm dcf-flex-shrink-0" title="PM" type="radio" value="pm" name="<%= z %>">
+                        </div>
+                    </div>
                 </div>
+
+                <label for="end-date">until</label>
+                <div class="dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mt-4 dcf-mr-4">
+                    <select class="end-time-hour dcf-flex-grow-1 dcf-input-select" title="End Time Hour">
+                        <option value=""></option>
+                        <% (1..12).each do |i| %>
+                        <option <%= 'selected="selected"' if [y = record[:end] / 60, y+12, y-12].include?(i) %> value="<%= i %>"><%= i %></option>
+                        <% end %>
+                    </select>&nbsp;:&nbsp;
+
+                    <select class="end-time-minute dcf-flex-grow-1 dcf-input-select" title="End Time Minute">
+                        <option value=""></option>
+                        <% (0..11).each do |i| %>
+                        <option <%= 'selected="selected"' if record[:start] % 60 == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
+                        <% end %>
+                    </select>
+
+                    <div class="am_pm dcf-mb-0 dcf-pl-3">
+                        <div class="dcf-d-flex dcf-ai-center">
+                            <label class="dcf-label dcf-2nd dcf-mt-0 dcf-ml-1" for="hours-end-am">AM</label>
+                            <input <%= 'checked="checked"' if record[:end] < 720 %> class="end-time-am-pm dcf-flex-shrink-0" title="AM" type="radio" value="am" name="<%= z = String.token %>">
+                        </div>
+                        <div class="dcf-d-flex dcf-ai-center">
+                            <label class="dcf-label dcf-2nd dcf-mt-0 dcf-ml-1" for="hours-end-pm">PM</label>
+                            <input <%= 'checked="checked"' if record[:end] >= 720 %> class="end-time-am-pm dcf-flex-shrink-0" title="PM" type="radio" value="pm" name="<%= z %>">
+                        </div>
+                    </div>
+                </div>
+
                 &nbsp;
                 <button title="Remove" type="button" class="<%= 'hidden' if x == 0 %> remove-hours dcf-btn">&times;</button>
             </div>
