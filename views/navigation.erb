@@ -9,6 +9,13 @@
     </li>
     <li><a href="/tools/" title="Reserve Equipment">Reserve Equipment</a>
     </li>
+    <li><a href="/training-documents" title="Nebraska Innovation Studio Training Documents">Training Documents</a>
+        <ul>
+            <li><a href="/training-documents/sop/" title="SOP">SOP</a></li>
+            <li><a href="/training-documents/workshops/" title="Workshops">Workshops</a></li>
+            <li><a href="/training-documents/tips-and-tricks/" title="Tips and Tricks">Tips and Tricks</a></li>
+        </ul>
+    </li>
 <%
 =begin These items are linked from the main website
     <li><a href="/tours/" title="Tours">Tours</a>
@@ -38,7 +45,10 @@
                 <li><a href="/admin/agenda/" title="Agenda">Agenda</a></li>
                 <% end %>
                 <% if @user.has_permission?(Permission::MANAGE_RESOURCES) %>
-                <li><a href="https://innovationstudio.unl.edu/user/login?destination=node/79/edit" target="_blank">Edit Material Pricing</a></li>
+                <li><a href="https://innovationstudio.unl.edu/user/login?destination=node/<%= drupal_node_lookup(:material_pricing) %>/edit" target="_blank">Edit Material Pricing</a></li>
+                <li><a href="https://innovationstudio.unl.edu/user/login?destination=node/<%= drupal_node_lookup(:sop_training_doc) %>/edit" target="_blank">Edit SOP</a></li>
+                <li><a href="https://innovationstudio.unl.edu/user/login?destination=node/<%= drupal_node_lookup(:workshops_training_doc) %>/edit" target="_blank">Edit Workshops</a></li>
+                <li><a href="https://innovationstudio.unl.edu/user/login?destination=node/<%= drupal_node_lookup(:tips_training_doc) %>/edit" target="_blank">Edit Tips and Tricks</a></li>
                 <% end %>
             </ul>
         </li>
