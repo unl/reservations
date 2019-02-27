@@ -3,7 +3,7 @@ require 'models/space_hour'
 require 'models/permission'
 
 before '/admin/hours*' do
-	unless @user.has_permission?(Permission::MANAGE_SPACE_HOURS)
+	unless has_permission?(Permission::MANAGE_SPACE_HOURS)
 		raise Sinatra::NotFound
 	end
 end

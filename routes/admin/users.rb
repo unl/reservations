@@ -23,7 +23,7 @@ STUDIO_STATII = {
 }
 
 before '/admin/users*' do
-	unless @user.has_permission?(Permission::MANAGE_USERS) || @user.has_permission?(Permission::SUPER_USER)
+	unless has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER)
 		raise Sinatra::NotFound
 	end
 end

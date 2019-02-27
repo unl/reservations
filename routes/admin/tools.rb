@@ -4,7 +4,7 @@ require 'models/permission'
 NIS_TOOL_RESOURCE_CLASS_ID = 1
 
 before '/admin/tools*' do
-	unless @user.has_permission?(Permission::MANAGE_RESOURCES)
+	unless has_permission?(Permission::MANAGE_RESOURCES)
 		raise Sinatra::NotFound
 	end
 end

@@ -5,28 +5,28 @@
 
 <table>
 	<tbody>
-		<% if @user.has_permission?(Permission::MANAGE_USERS) || @user.has_permission?(Permission::SUPER_USER) %>
+		<% if has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER) %>
 		<tr>
 			<td><strong>Users</strong></td>
 			<td><%= user_count %> users</td>
 			<td><a class="dcf-btn dcf-btn-primary" href="/admin/users/">Manage</a></td>
 		</tr>
 		<% end %>
-		<% if @user.has_permission?(Permission::MANAGE_EVENTS) %>
+		<% if has_permission?(Permission::MANAGE_EVENTS) %>
 		<tr>
 			<td><strong>Events</strong></td>
 			<td><%= upcoming_event_count %> upcoming events</td>
 			<td><a class="dcf-btn dcf-btn-primary" href="/admin/events/">Manage</a></td>
 		</tr>
 		<% end %>
-		<% if @user.has_permission?(Permission::MANAGE_RESOURCES) %>
+		<% if has_permission?(Permission::MANAGE_RESOURCES) %>
 		<tr>
 			<td><strong>Tools</strong></td>
 			<td><%= tool_count %> tools</td>
 			<td><a class="dcf-btn dcf-btn-primary" href="/admin/tools/">Manage</a></td>
 		</tr>
 		<% end %>
-		<% if @user.has_permission?(Permission::MANAGE_SPACE_HOURS) %>
+		<% if has_permission?(Permission::MANAGE_SPACE_HOURS) %>
 		<tr>
 			<td><strong>Hours</strong></td>
 			<td>Today: 
@@ -43,14 +43,14 @@
 			<td><a class="dcf-btn dcf-btn-primary" href="/admin/hours/">Manage</a></td>
 		</tr>
 		<% end %>
-		<% if @user.has_permission?(Permission::MANAGE_EMAILS) %>
+		<% if has_permission?(Permission::MANAGE_EMAILS) %>
 		<tr>
 			<td><strong>Emails</strong></td>
 			<td></td>
 			<td><a class="dcf-btn dcf-btn-primary" href="/admin/emails/">Manage</a></td>
 		</tr>
 		<% end %>
-		<% if @user.has_permission?(Permission::SEE_AGENDA) %>
+		<% if has_permission?(Permission::SEE_AGENDA) %>
 		<tr>
 			<td><strong>Agenda</strong></td>
 			<td></td>
