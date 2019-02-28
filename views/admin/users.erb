@@ -1,41 +1,45 @@
 <div id="pagetitle">
-    <h3>Manage Users<span class="wdn-subhead"><a id="show-toolbox" href="#">Show Toolbox</a></span></h3>
+    <h3>Manage Users<span class="dcf-subhead"><a id="show-toolbox" href="#">Show Toolbox</a></span></h3>
 </div>
 
 <div id="toolbox" class="toolbox" style="display: none;">
     <h3>Toolbox <span style="float: right;"><a style="color: white;" href="#" id="hide-toolbox">&ndash;</a></span></h3>
     <div class="tools">
-        <a class="wdn-button wdn-button-brand" href="/admin/users/create/">Create User</a>
-        <a class="wdn-button wdn-button-brand" href="/admin/users/<%= @user.id %>/edit/">Edit My User</a>
-        <a class="wdn-button wdn-button-triad" href="/admin/users/<%= @user.id %>/manage/">My Tools</a>
-        <a class="wdn-button wdn-button-complement" href="/admin/users/download/">Download User Data</a>
+        <a class="dcf-btn dcf-btn-primary" href="/admin/users/create/">Create User</a>
+        <a class="dcf-btn dcf-btn-primary" href="/admin/users/<%= @user.id %>/edit/">Edit My User</a>
+        <a class="dcf-btn wdn-button-triad" href="/admin/users/<%= @user.id %>/manage/">My Tools</a>
+        <a class="dcf-btn wdn-button-complement" href="/admin/users/download/">Download User Data</a>
     </div>
 </div>
 
 <form id="find-controls">
-    <div class="wdn-grid-set">
-        <div class="wdn-col-one-fifth">
+    <div class="dcf-grid dcf-col-gap-vw dcf-row-gap-6">
+        <div class="dcf-col-100% dcf-col-25%-start@sm">
             <label style="font-size: 120%; margin-right: 20px;">Find users by:</label>
             <br>
-            <a href="/admin/users/" class="wdn-button" style="font-size: 60%">Clear</a>
+            <a href="/admin/users/" class="dcf-btn" style="font-size: 60%">Clear</a>
         </div>
-        <div class="wdn-col-two-fifths">
-            <label>Studio Status:</label>
-            <select id="studio-status" name="studio_status">
-                <option value=""></option>
-                <% USER_STATII.each do |word| %>
-                    <option <%= 'selected="selected"' if studio_status == word %> value="<%= word %>"><%= word %></option>
-                <% end %>
-            </select>
-        </div>
-        <div class="wdn-col-two-fifths">
-            <label>Tool Authorization:</label>
-            <select id="tool-authorization" name="tool_authorization">
-                <option value=""></option>
-                <% tools.each do |tool| %>
-                    <option <%= 'selected="selected"' if selected_tool.to_i == tool.id %> value="<%= tool.id %>"><%= tool.name %></option>
-                <% end %>
-            </select>
+        <div class="dcf-col-100% dcf-col-75%-end@sm">
+            <div class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
+                <div>
+                    <label>Studio Status:</label>
+                    <select id="studio-status" name="studio_status" class="dcf-input-select">
+                        <option value=""></option>
+                        <% USER_STATII.each do |word| %>
+                            <option <%= 'selected="selected"' if studio_status == word %> value="<%= word %>"><%= word %></option>
+                        <% end %>
+                    </select>
+                </div>
+                <div>
+                    <label>Tool Authorization:</label>
+                    <select id="tool-authorization" name="tool_authorization" class="dcf-input-select">
+                        <option value=""></option>
+                        <% tools.each do |tool| %>
+                            <option <%= 'selected="selected"' if selected_tool.to_i == tool.id %> value="<%= tool.id %>"><%= tool.name %></option>
+                        <% end %>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
 </form>
@@ -82,10 +86,10 @@
                 <%= user.expiration_date.strftime('%m/%d/%Y') if user.expiration_date %>
                 </td>
                 <td class="table-actions">
-                    <a href="/admin/users/<%= user.id %>/edit/" class="wdn-button wdn-button-brand">Edit</a>
-                    <a href="/admin/users/<%= user.id %>/manage/" class="wdn-button wdn-button-triad">Tools</a>
+                    <a href="/admin/users/<%= user.id %>/edit/" class="dcf-btn dcf-btn-primary">Edit</a>
+                    <a href="/admin/users/<%= user.id %>/manage/" class="dcf-btn wdn-button-triad">Tools</a>
                     <form class="delete-form delete-user" action="/admin/users/<%= user.id %>/delete/" method="POST">
-                        <button type="submit" class="wdn-button">Delete</button>
+                        <button type="submit" class="dcf-btn">Delete</button>
                     </form>
                 </td>
             </tr>
@@ -98,8 +102,7 @@
 <label>No users meet this criteria, or you have not created any. Open the toolbox to get started.</label>
 <% end %>
 
-<script type="text/javascript">
-require(['jquery'], function($) {
+<% append_script_declaration(%q[require(['jquery'], function($) {
     $(document).ready(function() {
         $('.delete-user').submit(function (submit) {
             if (!window.confirm('Are you sure you want to delete this user?')) {
@@ -132,5 +135,4 @@ require(['jquery'], function($) {
             window.location = '?' + conditions.join('&');
         });
     });
-});
-</script>
+});]) %>

@@ -2,7 +2,7 @@ require 'models/user'
 require 'models/permission'
 
 before '/admin/email*' do
-	unless @user.has_permission?(Permission::MANAGE_EMAILS)
+	unless has_permission?(Permission::MANAGE_EMAILS)
 		raise Sinatra::NotFound
 	end
 end

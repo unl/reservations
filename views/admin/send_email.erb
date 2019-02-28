@@ -3,8 +3,8 @@
 </div>
 
 <form action="" method="POST" enctype="multipart/form-data">
-	<div class="wdn-grid-set">
-		<fieldset class="bp2-wdn-col-one-half">
+	<div class="dcf-grid dcf-col-gap-vw">
+		<fieldset class="dcf-col-100% dcf-col-50%-start@sm">
 			<legend>Send to:</legend>
 			<input type="checkbox" id="send-to-all-non-admins" name="send_to_all_non_admins"> <label for="send-to-all-non-admins">All Non-Admins</label><br>
 			<input type="checkbox" id="send-to-all-users" name="send_to_all_users"> <label for="send-to-all-users">All Users</label><br>
@@ -19,16 +19,16 @@
 			</select><br>
 		</fieldset>
 
-		<fieldset class="bp2-wdn-col-one-half">
+		<fieldset class="dcf-col-100% dcf-col-50%-end@sm">
 			<legend>Attachments</legend>
 			<div id="files">
 				<div id="file-container" class="file-container" style="padding-right: 60px; position: relative;">
 					<input class="file-input" type="file" name="file_1" />
-					<button style="display: none; position: absolute; right: 5px; top: 5px;" type="button" class="remove-file wdn-button">&times;</button>
+					<button style="display: none; position: absolute; right: 5px; top: 5px;" type="button" class="remove-file dcf-btn">&times;</button>
 				</div>
 			</div>
 			<br>
-			<button id="add-file" type="button" class="wdn-button wdn-button-triad">Add another file</button>
+			<button id="add-file" type="button" class="dcf-btn wdn-button-triad">Add another file</button>
 		</fieldset>
 
 	</div>
@@ -41,14 +41,13 @@
 		<label for="body">Body:</label>
 		<textarea class="ckeditor" style="min-height: 150px" id="body" name="body"></textarea>
 		<br><br>
-		<button type="submit" class="wdn-button wdn-button-brand">Send</button>
+		<button type="submit" class="dcf-btn dcf-btn-primary">Send</button>
 	</fieldset>
 </form>
 
-<script type="text/javascript" src="/js/lib/ckeditor/ckeditor.js"></script>
+<% append_script_tag('/js/lib/ckeditor/ckeditor.js') %>
 
-<script type="text/javascript">
-var files = 1;
+<% append_script_declaration(%q[var files = 1;
 
 require(['jquery'], function ($) {
 	$(document).ready(function () {
@@ -70,5 +69,4 @@ require(['jquery'], function ($) {
 			$(this).closest('.file-container').remove();
 		});
 	});
-});
-</script>
+});]) %>

@@ -1,13 +1,13 @@
 <div id="pagetitle">
 	<h3>
 		Your Hours For The Week
-		<span class="wdn-subhead"><%= "#{sunday.strftime("%m/%d")} - #{(sunday+6.days).strftime("%m/%d")}" %></span>
+		<span class="dcf-subhead"><%= "#{sunday.strftime("%m/%d")} - #{(sunday+6.days).strftime("%m/%d")}" %></span>
 	</h3>
 </div>
 
 <div style="margin-bottom: 16px;">
-<a href="/admin/hours/?date=<%= (date-7.days).strftime('%Y-%m-%d') %>" class="wdn-button wdn-button-triad" id="prev-week">&lt; PREV</a>
-<a href="/admin/hours/?date=<%= (date+7.days).strftime('%Y-%m-%d') %>" class="wdn-button wdn-button-triad" style="float: right;" id="next-week">NEXT &gt;</a>
+<a href="/admin/hours/?date=<%= (date-7.days).strftime('%Y-%m-%d') %>" class="dcf-btn wdn-button-triad" id="prev-week">&lt; PREV</a>
+<a href="/admin/hours/?date=<%= (date+7.days).strftime('%Y-%m-%d') %>" class="dcf-btn wdn-button-triad" style="float: right;" id="next-week">NEXT &gt;</a>
 </div>
 
 <table>
@@ -40,10 +40,10 @@
     </tbody>
 </table>
 
-<h3>
+<h3 class="dcf-mt-4">
 Upcoming Changes
 </h3>
-<a class="wdn-button wdn-button-brand" href="/admin/hours/create/">Add Hours Change</a><br><br>
+<a class="dcf-btn dcf-btn-primary" href="/admin/hours/create/">Add Hours Change</a><br><br>
 
 <table>
     <thead>
@@ -76,9 +76,9 @@ Upcoming Changes
             	<% end %>
             </td>
             <td class="table-actions">
-                <a class="wdn-button wdn-button-brand" href="/admin/hours/<%= space_hour.id %>/edit/">Edit</a>
+                <a class="dcf-btn dcf-btn-primary" href="/admin/hours/<%= space_hour.id %>/edit/">Edit</a>
                 <form class="delete-space-hour delete-form" action="/admin/hours/<%= space_hour.id %>/delete/" method="POST">
-                    <button type="submit" class="wdn-button">Remove</button>
+                    <button type="submit" class="dcf-btn">Remove</button>
                 </form>
             </td>
         </tr>
@@ -86,8 +86,7 @@ Upcoming Changes
     </tbody>
 </table>
 
-<script type="text/javascript">
-require(['jquery'], function($) {
+<% append_script_declaration(%q[require(['jquery'], function($) {
     $(document).ready(function() {
         $('.delete-space-hour').submit(function (submit) {
             if (!window.confirm('Are you sure you want to remove this hours change?')) {
@@ -95,5 +94,4 @@ require(['jquery'], function($) {
             }
         });
     });
-});
-</script>
+});]) %>

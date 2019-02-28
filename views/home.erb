@@ -4,7 +4,7 @@
 
 <h5>
 Hello, <%= @user.full_name %> (<%= @user.username %>)
-<span class="wdn-subhead">Your account is marked as: <%= @user.space_status %></span>
+<span class="dcf-subhead">Your account is marked as: <%= @user.space_status %></span>
 </h5>
 
 <h4>
@@ -40,9 +40,9 @@ My Reservations
             	<%= reservation.length %> minutes
             </td>
             <td class="table-actions">
-                <a href="/tools/<%= reservation.resource.id %>/edit_reservation/<%= reservation.id %>/" class="wdn-button wdn-button-brand">Edit</a>
+                <a href="/tools/<%= reservation.resource.id %>/edit_reservation/<%= reservation.id %>/" class="dcf-btn dcf-btn-primary">Edit</a>
                 <form method="POST" action="/tools/<%= reservation.resource.id %>/cancel/<%= reservation.id %>" class="delete-form">
-                    <button class="wdn-button" type="submit">Remove</button>
+                    <button class="dcf-btn" type="submit">Remove</button>
                 </form>
             </td>
         </tr>
@@ -50,8 +50,8 @@ My Reservations
     </tbody>
 </table>
 <% end %>
-<p>
-    <a href="/tools/" class="wdn-button wdn-button-brand">Reserve Equipment</a>
+<p class="dcf-mt-4">
+    <a href="/tools/" class="dcf-btn dcf-btn-primary">Reserve Equipment</a>
 </p>
 
 <h4>
@@ -80,7 +80,7 @@ My Events
             </td>
             <td class="table-actions">
             	<form action="/events/<%= event.id %>/remove_signup/" method="POST" class="delete-form">
-					<button class="wdn-button" type="submit">
+					<button class="dcf-button" type="submit">
 					Remove
 					</button>
 				</form>
@@ -90,8 +90,8 @@ My Events
     </tbody>
 </table>
 <% end %>
-<p>
-    <a href="/tools/trainings/" class="wdn-button wdn-button-triad">View Trainings</a>
-    <a href="/workshops/" class="wdn-button wdn-button-triad">View Workshops</a>
-    <a href="/calendar/" class="wdn-button wdn-button-triad">View Full Calendar</a>
+<p class="dcf-mt-4">
+    <a href="/tools/trainings/" class="dcf-btn wdn-button-triad">View Trainings</a>
+    <a href="/workshops/" class="dcf-btn wdn-button-triad">View Workshops</a>
+    <a href="/calendar/" class="dcf-btn wdn-button-triad">View Full Calendar</a>
 </p>

@@ -25,6 +25,7 @@ SS_ID = ServiceSpace.where(:name => 'Innovation Studio').first.id
 
 before do
     # site defaults
+    @inline_body_script_content = ''
     @title = 'Innovation Studio Manager'
     @breadcrumbs = [
       {
@@ -52,6 +53,18 @@ before do
     end
 end
 
+def append_script_tag(src)
+    @inline_body_script_content <<  "<script type=\"text/javascript\" src=\"#{src}\"></script>\n"
+end
+
+def append_script_declaration(content)
+    @inline_body_script_content <<  "<script>#{content}</script>\n"
+end
+
+def has_permission?(permission)
+    !@user.nil? && @user.has_permission?(permission)
+end
+
 def require_login
   if @user.nil?
     flash(:alert, 'You Must Login', 'That page requires you to be logged in. If you don\'t have an account, please sign up for <a href="/new_members/">New&nbsp;Member&nbsp;Orientation</a>.')
@@ -64,6 +77,17 @@ def check_membership
     flash :alert, 'Membership Expired', 'Sorry, your membership must be current to reserve tools and sign up for trainings. Please contact us at <a href="mailto:innovationstudio@unl.edu">innovationstudio@unl.edu</a>.'
     redirect back
   end
+end
+
+def drupal_node_lookup(key)
+    nodes = {
+        material_pricing: 79,
+        sop_training_doc: 80,
+        workshops_training_doc: 81,
+        tips_training_doc: 82
+    }
+
+    return nodes[key] if nodes.key?(key)
 end
 
 not_found do

@@ -1,7 +1,7 @@
 <div class="event-details">
 	<div>
 		<h3>
-	    	<%= event.title %><span class="wdn-subhead"><%= event.type.description %></span>
+	    	<%= event.title %><span class="dcf-subhead"><%= event.type.description %></span>
 	    </h3>
 	</div>
 	<div>
@@ -30,16 +30,16 @@
 	<% # the user is already signed up %>
 	<% if event.type.description == 'Free Event' %>
 		This event is noted on your homepage.<br>
-		<a href='/home/' class="wdn-button wdn-button-triad">View Homepage</a>
+		<a href='/home/' class="dcf-btn wdn-button-triad">View Homepage</a>
 	<% else %>
 		You have signed up for this event.<br>
-		<a href='/home/' class="wdn-button wdn-button-triad">View Homepage</a>
+		<a href='/home/' class="dcf-btn wdn-button-triad">View Homepage</a>
 	<% end %>
 <% elsif @user %>
 	<% # the user is logged in but not signed up %>
 	<% if event.max_signups.nil? || event.signups.count < event.max_signups %>
 	<form action="/events/<%= event.id %>/sign_up/" method="POST">
-	<button type="submit" class="wdn-button wdn-button-brand">
+	<button type="submit" class="dcf-btn dcf-btn-primary">
 		<% if event.type.description == 'Free Event' %>
 			Note event on my homepage
 		<% else %>
@@ -54,7 +54,7 @@
 	<% # a non user. May still sign up for the event UNLESS it is a tool training %>
 	<% if event.type.description != 'Machine Training' %>
 		<% if event.max_signups.nil? || event.signups.count < event.max_signups %>
-		<a class="wdn-button wdn-button-brand" href="/events/<%= event.id %>/sign_up_as_non_member/">Sign up for this event</a>
+		<a class="dcf-btn dcf-btn-primary" href="/events/<%= event.id %>/sign_up_as_non_member/">Sign up for this event</a>
 		<% else %>
 		All slots for this event are filled.
 		<% end %>
