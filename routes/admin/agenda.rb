@@ -1,5 +1,5 @@
 before '/admin/agenda*' do
-	unless @user.has_permission?(Permission::SEE_AGENDA)
+	unless has_permission?(Permission::SEE_AGENDA)
 		raise Sinatra::NotFound
 	end
 end

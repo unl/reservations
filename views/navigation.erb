@@ -26,25 +26,25 @@
     <% unless @user.nil? || !@user.is_admin? %>
         <li><a href="/admin/" title="Admin">Admin</a>
             <ul>
-                <% if @user.has_permission?(Permission::MANAGE_USERS) || @user.has_permission?(Permission::SUPER_USER) %>
+                <% if has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER) %>
                 <li><a href="/admin/users/" title="Users">Users</a></li>
                 <% end %>
-                <% if @user.has_permission?(Permission::MANAGE_EVENTS) %>
+                <% if has_permission?(Permission::MANAGE_EVENTS) %>
                 <li><a href="/admin/events/" title="Events">Events</a></li>
                 <% end %>
-                <% if @user.has_permission?(Permission::MANAGE_RESOURCES) %>
+                <% if has_permission?(Permission::MANAGE_RESOURCES) %>
                 <li><a href="/admin/tools/" title="Tools">Tools</a></li>
                 <% end %>
-                <% if @user.has_permission?(Permission::MANAGE_SPACE_HOURS) %>
+                <% if has_permission?(Permission::MANAGE_SPACE_HOURS) %>
                 <li><a href="/admin/hours/" title="Hours">Hours</a></li>
                 <% end %>
-                <% if @user.has_permission?(Permission::MANAGE_EMAILS) %>
+                <% if has_permission?(Permission::MANAGE_EMAILS) %>
                 <li><a href="/admin/email/" title="Email">Email</a></li>
                 <% end %>
-                <% if @user.has_permission?(Permission::SEE_AGENDA) %>
+                <% if has_permission?(Permission::SEE_AGENDA) %>
                 <li><a href="/admin/agenda/" title="Agenda">Agenda</a></li>
                 <% end %>
-                <% if @user.has_permission?(Permission::MANAGE_RESOURCES) %>
+                <% if has_permission?(Permission::MANAGE_RESOURCES) %>
                 <li><a href="https://innovationstudio.unl.edu/user/login?destination=node/<%= drupal_node_lookup(:material_pricing) %>/edit" target="_blank">Edit Material Pricing</a></li>
                 <li><a href="https://innovationstudio.unl.edu/user/login?destination=node/<%= drupal_node_lookup(:sop_training_doc) %>/edit" target="_blank">Edit SOP</a></li>
                 <li><a href="https://innovationstudio.unl.edu/user/login?destination=node/<%= drupal_node_lookup(:workshops_training_doc) %>/edit" target="_blank">Edit Workshops</a></li>

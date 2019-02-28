@@ -1,6 +1,6 @@
 <div id="pagetitle">
 <h3>Tips and Tricks
-    <% if @user.has_permission?(Permission::MANAGE_RESOURCES) %>
+    <% if has_permission?(Permission::MANAGE_RESOURCES) %>
     (<a href="https://innovationstudio.unl.edu/user/login?destination=node/<%= drupal_node_lookup(:tips_training_doc) %>/edit" target="_blank">Edit</a>)
     <% end %>
 </h3>

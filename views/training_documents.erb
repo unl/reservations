@@ -4,17 +4,17 @@
 
 <ul>
     <li><a href="/training-documents/sop">SOP</a>
-        <% if @user.has_permission?(Permission::MANAGE_RESOURCES) %>
+        <% if has_permission?(Permission::MANAGE_RESOURCES) %>
         (<a href="https://innovationstudio.unl.edu/user/login?destination=node/<%= drupal_node_lookup(:sop_training_doc) %>/edit" target="_blank">Edit</a>)
         <% end %>
     </li>
     <li><a href="/training-documents/workshops">Workshops</a>
-        <% if @user.has_permission?(Permission::MANAGE_RESOURCES) %>
+        <% if has_permission?(Permission::MANAGE_RESOURCES) %>
         (<a href="https://innovationstudio.unl.edu/user/login?destination=node/<%= drupal_node_lookup(:workshops_training_doc) %>/edit" target="_blank">Edit</a>)
         <% end %>
     </li>
     <li><a href="/training-documents/tips-and-tricks">Tips and Tricks</a>
-        <% if @user.has_permission?(Permission::MANAGE_RESOURCES) %>
+        <% if has_permission?(Permission::MANAGE_RESOURCES) %>
         (<a href="https://innovationstudio.unl.edu/user/login?destination=node/<%= drupal_node_lookup(:tips_training_doc) %>/edit" target="_blank">Edit</a>)
         <% end %>
     </li>

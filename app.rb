@@ -61,6 +61,10 @@ def append_script_declaration(content)
     @inline_body_script_content <<  "<script>#{content}</script>\n"
 end
 
+def has_permission?(permission)
+    !@user.nil? && @user.has_permission?(permission)
+end
+
 def require_login
   if @user.nil?
     flash(:alert, 'You Must Login', 'That page requires you to be logged in. If you don\'t have an account, please sign up for <a href="/new_members/">New&nbsp;Member&nbsp;Orientation</a>.')
