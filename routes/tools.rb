@@ -12,7 +12,7 @@ get '/tools/?' do
 
 	# show tools that the user is authorized to use, as well as all those that do not require authorization
 	tools = Resource.where(:service_space_id => SS_ID).all.to_a
-	tools.reject! {|tool| tool.needs_authorization && (!@user.authorized_resource_ids.include?(tool.id) || !@user.meets_resource_reservation_limit?(tool.id)) }
+	tools.reject! {|tool| tool.needs_authorization && !@user.authorized_resource_ids.include?(tool.id)}
 	tools.sort_by! {|tool| tool.name.downcase}
 
 	erb :tools, :layout => :fixed, :locals => {
@@ -94,11 +94,6 @@ get '/tools/:resource_id/reserve/?' do
 		flash(:alert, 'Not Authorized', 'Sorry, you have not yet been authorized to reserve time on this machine.')
 		redirect '/tools/'
 	end
-
-    unless @user.meets_resource_reservation_limit?(tool.id)
-        flash(:alert, 'Not Authorized', "Sorry, you are at the user reservation limit (#{tool.max_reservations_per_user.to_s}) on this machine.")
-        redirect '/tools/'
-    end
 
 	date = params[:date].nil? ? Time.now.midnight.in_time_zone : Time.parse(params[:date]).midnight.in_time_zone
 	# get the studio's hours for this day
@@ -254,6 +249,11 @@ post '/tools/:resource_id/reserve/?' do
 		flash(:alert, 'Please specify a start time', 'Please specify a start time for your reservation.')
 		redirect back
 	end
+
+    unless @user.meets_resource_reservation_limit?(tool.id)
+        flash(:alert, 'Not Authorized', "Sorry, you are at the user reservation limit (#{tool.max_reservations_per_user.to_s}) on this machine.")
+        redirect back
+    end
 
 	hour = (params[:start_minutes].to_i / 60).floor
 	am_pm = hour >= 12 ? 'pm' : 'am'
