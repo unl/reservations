@@ -29,7 +29,7 @@ My Reservations
             <td>
                 <%= reservation.resource.name %>
                 <% if !reservation.event.nil? %>
-                    <br><small><%= reservation.event.title %></small>
+                    <br><span class="dcf-txt-sm"><%= reservation.event.title %></span>
                 <% end %>
             </td>
             <td>
