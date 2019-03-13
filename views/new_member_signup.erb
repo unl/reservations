@@ -1,16 +1,18 @@
 <div id="pagetitle">
 	<h3>Sign Up For New Member Orientation
-	<span class="wdn-subhead"><%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %></span></h3>
+	<span class="dcf-subhead"><%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %></span></h3>
 </div>
 
 <form id="signup" action="" method="POST" novalidate="novalidate">
-    <div class="bp2-wdn-col-one-half">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" />
+    <div class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
+        <div>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" />
 
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" />
-        <br><br>
-        <button class="wdn-button wdn-button-brand" type="submit">Sign Up</button>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" />
+            <br><br>
+            <button class="dcf-btn dcf-btn-primary" type="submit">Sign Up</button>
+        </div>
     </div>
 </form>
