@@ -305,8 +305,7 @@ post '/tools/:resource_id/reserve/?' do
 			if record[:status] != 'open'
 				start_time_minutes = 60 * start_time.hour + start_time.min
 				end_time_minutes = 60 * end_time.hour + end_time.min
-				if (record[:start]+1..record[:end]-1).include?(start_time_minutes) || (record[:start]+1..record[:end]-1).include?(end_time_minutes) ||
-						(start_time_minutes < record[:start] && end_time_minutes > record[:end])
+				if (record[:start]+1..record[:end]-1).include?(start_time_minutes) || (start_time_minutes < record[:start] && end_time_minutes > record[:end] + tool.max_minutes_per_reservation)
 					# there is an overlap, this time is invalid
 					flash :alert, 'Invalid Time Slot', 'Sorry, that time slot is invalid for reservations.'
 					redirect back
@@ -410,8 +409,7 @@ post '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 			if record[:status] != 'open'
 				start_time_minutes = 60 * start_time.hour + start_time.min
 				end_time_minutes = 60 * end_time.hour + end_time.min
-				if (record[:start]+1..record[:end]-1).include?(start_time_minutes) || (record[:start]+1..record[:end]-1).include?(end_time_minutes) ||
-						(start_time_minutes < record[:start] && end_time_minutes > record[:end])
+				if (record[:start]+1..record[:end]-1).include?(start_time_minutes) || (start_time_minutes < record[:start] && end_time_minutes > record[:end] + tool.max_minutes_per_reservation)
 					# there is an overlap, this time is invalid
 					flash :alert, 'Invalid Time Slot', 'Sorry, that time slot is invalid for reservations.'
 					redirect back
