@@ -80,6 +80,11 @@ post '/admin/tools/:resource_id/edit/?' do
 		redirect '/admin/tools/'
 	end
 
+    if params[:max_minutes_per_reservation].to_i > 960
+        flash(:alert, 'Invalid Range Max', 'The range max cannot be greater than 960 minutes.')
+        redirect back
+    end
+
 	tool.name = params[:name]
 	tool.description = params[:description]
 	tool.is_reservable = params.checked?('is_reservable')
