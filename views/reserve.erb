@@ -1,4 +1,4 @@
-<% 
+<%
 start_hour = nil
 start_minute = nil
 start_am_pm = nil
@@ -44,13 +44,34 @@ end %>
                 <label class="day-header"><%= day.strftime("%^a %-m/%d") %></label>
                 <div class="day-chart" title="Open">
                     <% reservations.each do |res| %>
-                        <% end_slot = [(((res.end_time.in_time_zone - day.midnight) / 60 - 360) / 30).floor, 35].min 
+                    <%
+                        length = res.length
+
+                        day_start = (day.midnight + 21600) # 06:00 am
+                        day_end = (day.end_of_day - 1799)  # 11:30 pm
+                        if res.start_time.in_time_zone < day_start
+                            start_time = day_start
+                            length = length - ((day_start - res.start_time.in_time_zone) / 60)
+                        else
+                            start_time = res.start_time.in_time_zone
+                        end
+
+                        if res.end_time.in_time_zone > day_end
+                            end_time = day_end
+                            length = length - ((res.end_time.in_time_zone - day.end_of_day) / 60)
+                        else
+                            end_time = res.end_time.in_time_zone
+                        end
+
+                        end_slot = [(((end_time - day.midnight) / 60 - 360) / 30).floor, 35].min
                         if end_slot < 0
                             next
                         end
-                        top = (((res.start_time.in_time_zone - day.midnight) / 60 - 360) / 30) * 20
-                        height = res.length * 20 / 30
+
+                        top = (((start_time - day.midnight) / 60 - 360) / 30) * 20
+                        height = length * 20 / 30
                         %>
+
                         <div class="reservation <%= 'editing' if !reservation.nil? && reservation.id == res.id %>" 
                             style="top: <%= top %>px; height: <%= height %>px;">
                             <% if !res.event.nil? %>
