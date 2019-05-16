@@ -2,8 +2,10 @@
 require 'models/maker_request'
 %>
 <div id="pagetitle">
-<h3>Maker Request List</h3>
+<h3>Maker Request Lookup</h3>
 </div>
+
+<% if @user && !maker_requests.empty? %>
 
  <table>
     <thead>
@@ -21,12 +23,8 @@ require 'models/maker_request'
             <td><%= Maker_Request.category_options[maker_request.category_id] %></td>
             <td><%= maker_request.created.strftime('%b %e, %Y %l:%M %P') %></td>
             <td>
-            <% if @user.is_super_user? %>
                 <a class="dcf-btn dcf-btn-primary" href="/maker_request/<%= maker_request.uuid %>/manage/" role="button">Manage</a>
                 <a class="dcf-btn dcf-btn-primary" href="/maker_request/<%= maker_request.uuid %>/delete/" role="button" onclick="return confirm('Are you sure you want to DELETE this request.? This cannot be undone.');">Delete</a>
-            <% else %>
-                <a class="dcf-btn dcf-btn-primary" href="/maker_request/<%= maker_request.id %>/view/" role="button">View</a>
-            <% end %>
             </td>
         </tr>
     <% end %>
@@ -36,3 +34,17 @@ require 'models/maker_request'
 <div class="dcf-mt-6">
     <%= erb :'maker_request_disclaimer' %>
 </div>
+
+<% else %>
+<p>To receive a list of your maker requests, enter the email used to make the requests and we'll send you an email with the list.</p>
+
+<p>If you have an Innovation Studio Manager account you may login and view your list from this page.</p>
+
+<form class="dcf-form" id="maker_request_form" action="" method="POST" >
+    <label for="requestor-email">Email Address <small class="dcf-required">Required</small></label>
+    <input type="text" id="lookup-email" name="lookup_email" />
+
+    <button class="dcf-btn dcf-btn-primary dcf-mt-6" type="submit">Submit</button>
+</form>
+
+<% end %>

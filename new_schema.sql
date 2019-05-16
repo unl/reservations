@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS `maker_requests` (
   `requestor_name` varchar(255) NOT NULL,
   `requestor_email` varchar(255) NOT NULL,
   `requestor_phone` varchar(50) DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `created` timestamp NOT NULL DEFAULT now(),
   `updated` timestamp NOT NULL DEFAULT now() on update now(),

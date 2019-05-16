@@ -1,0 +1,22 @@
+<%
+require 'models/maker_request'
+%>
+
+<div id="pagetitle">
+<h3>Manage Maker Request</h3>
+</div>
+<figure class="dcf-mt-2 dcf-mb-4">
+    <a class="dcf-btn dcf-btn-primary" href="/maker_request/<%= maker_request.uuid %>/edit/" role="button">Edit</a>
+    <% if maker_request.status_id == Maker_Request::STATUS_OPEN %>
+    <a class="dcf-btn dcf-btn-primary" href="/maker_request/<%= maker_request.uuid %>/close/" role="button" onclick="return confirm('Are you sure you want to CLOSE this request?');">Close</a>
+    <% else %>
+    <a class="dcf-btn dcf-btn-primary" href="/maker_request/<%= maker_request.uuid %>/open/" role="button" onclick="return confirm('Are you sure you want to REOPEN this request?');">Reopen</a>
+    <% end %>
+    <a class="dcf-btn dcf-btn-primary" href="/maker_request/<%= maker_request.uuid %>/delete/" role="button" onclick="return confirm('Are you sure you want to DELETE this request.? This cannot be undone.');">Delete</a>
+    <a class="dcf-btn dcf-btn-secondary" href="/maker_request/" role="button">Add New</a>
+</figure>
+
+<%= erb :'maker_request_details', locals: {maker_request: maker_request} %>
+
+<hr class="dcf-mt-6" />
+<%= erb :'maker_request_disclaimer' %>
