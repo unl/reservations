@@ -5,6 +5,8 @@ class Reservation < ActiveRecord::Base
 	belongs_to :event
 	belongs_to :user
 
+	MAX_MINUTES_PER_RESERVATION_LIMIT = 1440
+
 	scope :in_day, ->(time) {
 		today = time.in_time_zone.midnight
 		tomorrow = (time.in_time_zone.midnight + 1.day + 1.hour).in_time_zone.midnight
