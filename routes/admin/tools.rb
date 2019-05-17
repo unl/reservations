@@ -1,5 +1,6 @@
 require 'models/resource'
 require 'models/permission'
+require 'models/reservation'
 
 NIS_TOOL_RESOURCE_CLASS_ID = 1
 
@@ -80,8 +81,8 @@ post '/admin/tools/:resource_id/edit/?' do
 		redirect '/admin/tools/'
 	end
 
-    if params[:max_minutes_per_reservation].to_i > 960
-        flash(:alert, 'Invalid Range Max', 'The range max cannot be greater than 960 minutes.')
+    if params[:max_minutes_per_reservation].to_i > Reservation::MAX_MINUTES_PER_RESERVATION_LIMIT
+        flash(:alert, 'Invalid Range Max', "The range max cannot be greater than #{Reservation::MAX_MINUTES_PER_RESERVATION_LIMIT} minutes.")
         redirect back
     end
 

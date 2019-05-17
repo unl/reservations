@@ -130,29 +130,7 @@ get '/tools/:resource_id/reserve/?' do
 
 	# filter out times when tool is reserved
 	reservations = Reservation.includes(:event).where(:resource_id => tool.id).in_day(date).all
-    unavailable_start_times = []
-    available_start_times.each do |available_start_time|
-        date_start = (date.midnight + 21600) # 06:00 am
-        date_end = (date.end_of_day - 1799)  # 11:30 pm
-        reservations.each do |res|
-            if res.start_time.in_time_zone < date_start
-                start_time = date_start
-            else
-                start_time = res.start_time.in_time_zone
-            end
-
-            if res.end_time.in_time_zone > date_end
-                end_time = date_end
-            else
-                end_time = res.end_time.in_time_zone
-            end
-            if available_start_time >= start_time.minutes_after_midnight && available_start_time <= end_time.minutes_after_midnight
-               unavailable_start_times << available_start_time
-               break
-            end
-        end
-    end
-    available_start_times = available_start_times - unavailable_start_times
+	available_start_times = available_start_times - reservations.map{|res|res.start_time.in_time_zone.minutes_after_midnight}
 
 	erb :reserve, :layout => :fixed, :locals => {
 		:tool => tool,
@@ -222,34 +200,11 @@ get '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 
 	# filter out times when tool is reserved
 	reservations = Reservation.includes(:event).where(:resource_id => tool.id).in_day(date).all
-    unavailable_start_times = []
-    available_start_times.each do |available_start_time|
-        date_start = (date.midnight + 21600) # 06:00 am
-        date_end = (date.end_of_day - 1799)  # 11:30 pm
-        reservations.each do |res|
-
-            # ignore current reseveration since really available
-            next if res.id == reservation.id
-
-            if res.start_time.in_time_zone < date_start
-                start_time = date_start
-            else
-                start_time = res.start_time.in_time_zone
-            end
-
-            if res.end_time.in_time_zone > date_end
-                end_time = date_end
-            else
-                end_time = res.end_time.in_time_zone
-            end
-
-            if available_start_time >= start_time.minutes_after_midnight && available_start_time <= end_time.minutes_after_midnight
-                unavailable_start_times << available_start_time
-                break
-            end
-        end
-    end
-    available_start_times = available_start_times - unavailable_start_times
+	available_start_times = (available_start_times - reservations.map{|res|res.start_time.in_time_zone.minutes_after_midnight})
+	if date == reservation.start_time.in_time_zone.midnight
+		available_start_times = available_start_times + [reservation.start_time.in_time_zone.minutes_after_midnight]
+	end
+	available_start_times.sort!
 
 	erb :reserve, :layout => :fixed, :locals => {
 		:tool => tool,
