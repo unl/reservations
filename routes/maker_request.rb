@@ -142,6 +142,7 @@ post '/maker_request/:maker_request_uuid/edit/?' do
     maker_request.requestor_email =  params[:requestor_email]
     maker_request.requestor_phone =  params[:requestor_phone]
     maker_request.category_id =  params[:category_id]
+    maker_request.title =  params[:title]
     maker_request.description =  params[:description]
     maker_request.updated = now_in_lincoln
 
