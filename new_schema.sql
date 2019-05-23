@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS `maker_requests` (
   `requestor_phone` varchar(50) DEFAULT NULL,
   `title` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `created` timestamp NOT NULL DEFAULT now(),
-  `updated` timestamp NOT NULL DEFAULT now() on update now(),
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`uuid`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;

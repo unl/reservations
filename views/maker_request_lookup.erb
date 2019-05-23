@@ -23,8 +23,8 @@ require 'models/maker_request'
             <td><%= Maker_Request.category_options[maker_request.category_id] %></td>
             <td><%= maker_request.created.strftime('%b %e, %Y %l:%M %P') %></td>
             <td>
-                <a class="dcf-btn dcf-btn-primary" href="/maker_request/<%= maker_request.uuid %>/manage/" role="button">Manage</a>
-                <a class="dcf-btn dcf-btn-primary" href="/maker_request/<%= maker_request.uuid %>/delete/" role="button" onclick="return confirm('Are you sure you want to DELETE this request.? This cannot be undone.');">Delete</a>
+                <a class="dcf-btn dcf-btn-primary dcf-mb-2" href="/maker_request/<%= maker_request.uuid %>/manage/" role="button">Manage</a>
+                <a class="dcf-btn dcf-btn-primary dcf-mb-2" href="/maker_request/<%= maker_request.uuid %>/delete/" role="button" onclick="return confirm('Are you sure you want to DELETE this request.? This cannot be undone.');">Delete</a>
             </td>
         </tr>
     <% end %>
