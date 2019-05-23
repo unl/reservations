@@ -61,7 +61,7 @@ class Maker_Request < ActiveRecord::Base
 
         # validate title
     	if self.title.nil? || self.title.empty?
-    		errors << {heading: 'Title', message: 'Please provide a title.'}
+            errors << {heading: 'Title', message: 'Please provide a title.'}
     	end
 
     	# validate category id

@@ -5,50 +5,50 @@ now_in_lincoln = Time.use_zone("America/Chicago") do
 end
 
 get '/maker_request/?' do
-	@breadcrumbs << {:text => 'Create Maker Request'}
+    @breadcrumbs << {:text => 'Create Maker Request'}
 
-	erb :maker_request, :layout => :fixed, :locals => {
-	    maker_request: Maker_Request.new(),
-	    extras: {confirm_email: ''}
-	}
+    erb :maker_request, :layout => :fixed, :locals => {
+        maker_request: Maker_Request.new(),
+        extras: {confirm_email: ''}
+    }
 end
 
 get '/maker_request/:maker_request_id/view/?' do
-   	@breadcrumbs << {:text => 'View Maker Request'}
+    @breadcrumbs << {:text => 'View Maker Request'}
 
     maker_request = Maker_Request.find(params[:maker_request_id])
     # can only view open requests
     not_found if maker_request.nil? || maker_request.status_id != Maker_Request::STATUS_OPEN
 
-   	erb :maker_request_view, :layout => :fixed, :locals => {
-   	    maker_request: maker_request
-   	}
+    erb :maker_request_view, :layout => :fixed, :locals => {
+        maker_request: maker_request
+    }
 end
 
 get '/maker_request/:maker_request_uuid/edit/?' do
-   	@breadcrumbs << {:text => 'Edit Maker Request'}
+    @breadcrumbs << {:text => 'Edit Maker Request'}
 
     maker_request = Maker_Request.find_by(uuid: params[:maker_request_uuid])
     not_found if maker_request.nil?
 
-   	erb :maker_request, :layout => :fixed, :locals => {
-   	    maker_request: maker_request,
+    erb :maker_request, :layout => :fixed, :locals => {
+        maker_request: maker_request,
         extras: {
             confirm_email: maker_request.requestor_email,
             confirm_read_disclaimer: 1
         }
-   	}
+    }
 end
 
 get '/maker_request/:maker_request_uuid/manage/?' do
-   	@breadcrumbs << {:text => 'Manage Maker Request'}
+    @breadcrumbs << {:text => 'Manage Maker Request'}
 
     maker_request = Maker_Request.find_by(uuid: params[:maker_request_uuid])
     not_found if maker_request.nil?
 
-   	erb :maker_request_manage, :layout => :fixed, :locals => {
-   	    maker_request: maker_request
-   	}
+    erb :maker_request_manage, :layout => :fixed, :locals => {
+        maker_request: maker_request
+    }
 end
 
 get '/maker_request/:maker_request_uuid/open/?' do
@@ -86,8 +86,8 @@ get '/maker_request/:maker_request_uuid/delete/?' do
 
     maker_request.destroy
 
-   	flash :success, 'Maker Request Deleted', 'Your maker request has been deleted.'
-   	if @user.nil?
+    flash :success, 'Maker Request Deleted', 'Your maker request has been deleted.'
+    if @user.nil?
         redirect '/maker_request/'
     else
         redirect '/maker_request/list/'
@@ -170,39 +170,39 @@ end
 
 
 get '/maker_request/list/?' do
-   	@breadcrumbs << {:text => 'Maker Request List'}
-	require_login
+    @breadcrumbs << {:text => 'Maker Request List'}
+    require_login
 
     maker_requests = Maker_Request.where(status_id: Maker_Request::STATUS_OPEN).all
-   	erb :maker_request_list, :layout => :fixed, :locals => {
-   	    maker_requests: maker_requests
-   	}
+    erb :maker_request_list, :layout => :fixed, :locals => {
+        maker_requests: maker_requests
+    }
 end
 
 get '/maker_request/lookup/?' do
-   	@breadcrumbs << {:text => 'Maker Request Lookup'}
+    @breadcrumbs << {:text => 'Maker Request Lookup'}
 
-   	lookup_email = ''
-   	lookup_email = @user.email unless @user.nil?
+    lookup_email = ''
+    lookup_email = @user.email unless @user.nil?
 
-   	maker_requests = []
-   	unless lookup_email.empty?
+    maker_requests = []
+    unless lookup_email.empty?
         maker_requests = Maker_Request.where(requestor_email: lookup_email).all
-   	end
+    end
 
-   	erb :maker_request_lookup, :layout => :fixed, :locals => {
-   	    lookup_email: lookup_email,
-   	    maker_requests: maker_requests
-   	}
+    erb :maker_request_lookup, :layout => :fixed, :locals => {
+        lookup_email: lookup_email,
+        maker_requests: maker_requests
+    }
 end
 
 post '/maker_request/lookup/?' do
-   	maker_requests = []
-   	if params[:lookup_email].nil? || params[:lookup_email].strip.empty?
-   	    flash :alert, 'Lookup Email', 'Please provide an email to lookup'
-   	elsif !params[:lookup_email].strip.match(Maker_Request::VALID_EMAIL_REGEX)
-   	    flash :alert, 'Lookup Email', 'Please provide a valid email to lookup'
-   	else
+    maker_requests = []
+    if params[:lookup_email].nil? || params[:lookup_email].strip.empty?
+        flash :alert, 'Lookup Email', 'Please provide an email to lookup'
+    elsif !params[:lookup_email].strip.match(Maker_Request::VALID_EMAIL_REGEX)
+        flash :alert, 'Lookup Email', 'Please provide a valid email to lookup'
+    else
         maker_requests = Maker_Request.where(requestor_email: params[:lookup_email].strip).all
         unless maker_requests.empty?
             # send email to requestor
@@ -217,9 +217,9 @@ post '/maker_request/lookup/?' do
         end
         # Send success whether email had requests or not so email cannot be validated via form
         flash :success, 'Lookup Email Sent', "An email with all of your maker requests has been sent to #{params[:lookup_email]} if you had any."
-   	end
+    end
 
-   	redirect back
+    redirect back
 end
 
 
