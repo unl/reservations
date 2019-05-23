@@ -1,0 +1,69 @@
+<%
+require 'models/maker_request'
+description_placeholder = 'Describe what you would like to have made.'
+mode = 'Create'
+mode = 'Update' if !maker_request.id.nil?
+%>
+
+<div id="pagetitle">
+<h3><%= mode %> Maker Request</h3>
+</div>
+
+<form class="dcf-form" id="maker_request_form" action="" method="POST" >
+
+     <fieldset>
+        <legend>Your Contact Information</legend>
+
+        <label for="requestor-name">Name <small class="dcf-required">Required</small></label>
+        <input type="text" id="requestor-name" name="requestor_name" value="<%= maker_request.requestor_name %>" />
+
+        <label for="requestor-email">Email Address <small class="dcf-required">Required</small></label>
+        <input type="text" id="requestor-email" name="requestor_email" value="<%= maker_request.requestor_email %>" />
+
+        <label for="requestor-email">Confirm Email Address <small class="dcf-required">Required</small></label>
+        <input type="text" id="confirm-email" name="confirm_email" value="<%= extras[:confirm_email] %>" />
+
+        <label for="requestor-phone">Phone</label>
+        <input type="text" id="requestor-phone" name="requestor_phone" value="<%= maker_request.requestor_phone %>" />
+     </fieldset>
+
+     <fieldset>
+        <legend>Request Information</legend>
+
+        <label for="title">Title <small class="dcf-required">Required</small></label>
+        <input type="text" id="title" name="title" value="<%= maker_request.title %>" />
+
+        <label for="category-id">Category <small class="dcf-required">Required</small></label>
+        <select id="category-id" name="category_id">
+            <option value="">Select a Category</option>
+            <% Maker_Request.category_options.each do |value, label|
+                selected = ''
+                selected = ' selected="selected" ' if maker_request.category_id.to_i == value
+            %>
+            <option value="<%= value %>"<%= selected %>><%= label %></option>
+            <% end %>
+        </select>
+
+        <label for="description">Description <small class="dcf-required">Required</small></label>
+        <textarea id="description" name="description" rows=8 placeholder="<%= description_placeholder %>"><%= maker_request.description %></textarea>
+
+        <div class="dcf-mt-4">
+            <%= erb :'maker_request_disclaimer' %>
+
+            <div class="dcf-input-checkbox">
+                <%
+                    disclaimer_checked = ''
+                    disclaimer_checked = ' checked="checked" ' if extras[:confirm_read_disclaimer].to_i == 1
+                %>
+                <input id="confirm-read-disclaimer" name="confirm_read_disclaimer" <%= disclaimer_checked %> type="checkbox" value="1">
+                <label for="confirm-read-disclaimer">I accept disclaimer <small class="dcf-required">Required</small></label>
+            </div>
+        </div>
+
+     </fieldset>
+
+     <button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
+     <% unless maker_request.uuid.nil? %>
+        <a class="dcf-btn dcf-btn-secondary" href="/maker_request/<%= maker_request.uuid %>/manage" role="button">Cancel</a>
+     <% end %>
+</form>
