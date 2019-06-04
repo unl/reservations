@@ -1,4 +1,5 @@
 <ul>
+    <% unless @user.nil? %>
     <li><a href="/" title="Nebraska Innovation Studio Manager Home">Manage Your Studio</a>
     <ul>
         <li><a href="/tools/trainings/" title="Trainings">Trainings</a></li>
@@ -7,8 +8,7 @@
         <li><a href="/pricing/" title="Material Pricing">Material Pricing</a></li>
     </ul>
     </li>
-    <li><a href="/tools/" title="Reserve Equipment">Reserve Equipment</a>
-    </li>
+    <li><a href="/tools/" title="Reserve Equipment">Reserve Equipment</a></li>
     <li><a href="/training-documents" title="Nebraska Innovation Studio Training Documents">Training Documents</a>
         <ul>
             <li><a href="/training-documents/sop/" title="SOP">SOP</a></li>
@@ -16,6 +16,24 @@
             <li><a href="/training-documents/tips-and-tricks/" title="Tips and Tricks">Tips and Tricks</a></li>
         </ul>
     </li>
+    <% end %>
+    <% if @user.nil? %>
+    <li><a href="/maker_request" title="Nebraska Innovation Studio Maker Requests">Maker&nbsp;Requests</a>
+        <ul>
+            <li><a href="/maker_request" title="Create Request">Create Request</a></li>
+            <li><a href="/maker_request/lookup" title="Lookup My Requests">Lookup My Requests</a></li>
+        </ul>
+    </li>
+    <% else %>
+    <li><a href="/maker_request/list" title="Nebraska Innovation Studio Maker Requests">Maker Requests</a>
+        <ul>
+            <li><a href="/maker_request/list" title="View Open Requests">View Open Requests</a></li>
+            <li><a href="/maker_request" title="Create Request">Create Request</a></li>
+            <li><a href="/maker_request/lookup" title="View My Requests">View My Requests</a></li>
+        </ul>
+    </li>
+    <% end %>
+
 <%
 =begin These items are linked from the main website
     <li><a href="/tours/" title="Tours">Tours</a>

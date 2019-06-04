@@ -3,6 +3,16 @@ require 'models/maker_request'
 description_placeholder = 'Describe what you would like to have made.'
 mode = 'Create'
 mode = 'Update' if !maker_request.id.nil?
+
+if !@user.nil? && mode == 'Create'
+    if maker_request.requestor_name.nil?
+        maker_request.requestor_name = @user.full_name
+    end
+    if maker_request.requestor_email.nil?
+        maker_request.requestor_email = @user.email
+        extras[:confirm_email] = @user.email
+    end
+end
 %>
 
 <div id="pagetitle">
