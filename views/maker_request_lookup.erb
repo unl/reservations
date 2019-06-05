@@ -5,7 +5,7 @@ require 'models/maker_request'
 <h3>Maker Request Lookup</h3>
 </div>
 
-<% if @user && !maker_requests.empty? %>
+<% if @user %>
 
  <table>
     <thead>
@@ -30,6 +30,9 @@ require 'models/maker_request'
     <% end %>
     </tbody>
 </table>
+<% if maker_requests.empty? %>
+<p class="dcf-mt-4 dcf-bold">No maker requests associated to <%= @user.email %></p>
+<% end %>
 
 <div class="dcf-mt-6">
     <%= erb :'maker_request_disclaimer' %>
