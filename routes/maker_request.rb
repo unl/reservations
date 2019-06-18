@@ -1,9 +1,5 @@
 require 'models/maker_request'
 
-now_in_lincoln = Time.use_zone("America/Chicago") do
-  Time.current.strftime('%Y-%m-%d %H:%M:%S')
-end
-
 get '/maker_request/?' do
     @breadcrumbs << {:text => 'Create Maker Request'}
 
@@ -57,7 +53,7 @@ get '/maker_request/:maker_request_uuid/open/?' do
 
     unless maker_request.status_id == Maker_Request::STATUS_OPEN
         maker_request.status_id = Maker_Request::STATUS_OPEN
-        maker_request.updated = now_in_lincoln
+        maker_request.updated = Time.current.strftime('%Y-%m-%d %H:%M:%S')
         maker_request.save
     end
 
@@ -71,7 +67,7 @@ get '/maker_request/:maker_request_uuid/close/?' do
 
     unless maker_request.status_id == Maker_Request::STATUS_CLOSED
         maker_request.status_id = Maker_Request::STATUS_CLOSED
-        maker_request.updated = now_in_lincoln
+        maker_request.updated = Time.current.strftime('%Y-%m-%d %H:%M:%S')
         maker_request.save
     end
 
@@ -110,8 +106,8 @@ post '/maker_request/?' do
     if errors.empty?
         maker_request.uuid = sprintf("%20.10f", Time.now.to_f).delete('.').to_i.to_s(36)
         maker_request.status_id = Maker_Request::STATUS_OPEN
-        maker_request.created = now_in_lincoln
-        maker_request.updated = now_in_lincoln
+        maker_request.created = Time.current.strftime('%Y-%m-%d %H:%M:%S')
+        maker_request.updated = Time.current.strftime('%Y-%m-%d %H:%M:%S')
         maker_request.save
 
         # send email to requestor
@@ -144,7 +140,7 @@ post '/maker_request/:maker_request_uuid/edit/?' do
     maker_request.category_id =  params[:category_id]
     maker_request.title =  params[:title]
     maker_request.description =  params[:description]
-    maker_request.updated = now_in_lincoln
+    maker_request.updated = Time.current.strftime('%Y-%m-%d %H:%M:%S')
 
     extras = {
         confirm_email: params[:confirm_email],
