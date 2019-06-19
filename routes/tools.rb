@@ -135,18 +135,18 @@ get '/tools/:resource_id/reserve/?' do
         date_start = (date.midnight + 21600) # 06:00 am
         date_end = (date.end_of_day - 1799)  # 11:30 pm
         reservations.each do |res|
-            if res.start_time.in_time_zone < date_start
+            if res.start_time.in_time_zone <= date_start
                 start_time = date_start
             else
                 start_time = res.start_time.in_time_zone
             end
 
-            if res.end_time.in_time_zone > date_end
+            if res.end_time.in_time_zone >= date_end
                 end_time = date_end
             else
                 end_time = res.end_time.in_time_zone
             end
-            if available_start_time >= start_time.minutes_after_midnight && available_start_time <= end_time.minutes_after_midnight
+            if available_start_time >= start_time.minutes_after_midnight && available_start_time < end_time.minutes_after_midnight
                unavailable_start_times << available_start_time
                break
             end
@@ -231,19 +231,19 @@ get '/tools/:resource_id/edit_reservation/:reservation_id/?' do
             # ignore current reseveration since really available
             next if res.id == reservation.id
 
-            if res.start_time.in_time_zone < date_start
+            if res.start_time.in_time_zone <= date_start
                 start_time = date_start
             else
                 start_time = res.start_time.in_time_zone
             end
 
-            if res.end_time.in_time_zone > date_end
+            if res.end_time.in_time_zone >= date_end
                 end_time = date_end
             else
                 end_time = res.end_time.in_time_zone
             end
 
-            if available_start_time >= start_time.minutes_after_midnight && available_start_time <= end_time.minutes_after_midnight
+            if available_start_time >= start_time.minutes_after_midnight && available_start_time < end_time.minutes_after_midnight
                 unavailable_start_times << available_start_time
                 break
             end
