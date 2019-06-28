@@ -9,6 +9,13 @@ get '/maker_request/?' do
     }
 end
 
+get '/maker_request/how_to' do
+    @breadcrumbs << {:text => 'How To'}
+    require_login
+
+    erb :maker_request_how_to, :layout => :fixed, :locals => {}
+end
+
 get '/maker_request/:maker_request_id/view/?' do
     @breadcrumbs << {:text => 'View Maker Request'}
 
