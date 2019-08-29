@@ -120,7 +120,7 @@ post '/maker_request/?' do
         # send email to requestor
         email_subject = 'Innovation Studio Manager Maker Request'
         email_body = "#{maker_request.requestor_name},<br><br>Your Innovation Studio Manager Maker Request has been posted.  "\
-            "Please keep this email for you records. You may manage your request here: http://#{request.host}/maker_request/#{maker_request.uuid}/manage"
+            "Please keep this email for you records. You may manage your request here: http://#{request.host}/maker_request/#{maker_request.uuid}/manage. When someone has picked up your request, please delete it from the list."
         Emailer.mail(maker_request.requestor_email, email_subject, email_body)
 
         flash :success, 'Maker Request Created', "Your maker request has been created. You should receive a confirmation email at #{params[:requestor_email]}."
@@ -177,7 +177,7 @@ get '/maker_request/list/?' do
     @breadcrumbs << {:text => 'Maker Request List'}
     require_login
 
-    maker_requests = Maker_Request.where(status_id: Maker_Request::STATUS_OPEN).all
+    maker_requests = Maker_Request.where(status_id: Maker_Request::STATUS_OPEN).order(category_id: :desc, created: :desc).all
     erb :maker_request_list, :layout => :fixed, :locals => {
         maker_requests: maker_requests
     }
@@ -191,7 +191,7 @@ get '/maker_request/lookup/?' do
 
     maker_requests = []
     unless lookup_email.empty?
-        maker_requests = Maker_Request.where(requestor_email: lookup_email).all
+        maker_requests = Maker_Request.where(requestor_email: lookup_email).order(category_id: :desc, created: :desc).all
     end
 
     erb :maker_request_lookup, :layout => :fixed, :locals => {
@@ -207,7 +207,7 @@ post '/maker_request/lookup/?' do
     elsif !params[:lookup_email].strip.match(Maker_Request::VALID_EMAIL_REGEX)
         flash :alert, 'Lookup Email', 'Please provide a valid email to lookup'
     else
-        maker_requests = Maker_Request.where(requestor_email: params[:lookup_email].strip).all
+        maker_requests = Maker_Request.where(requestor_email: params[:lookup_email].strip).order(category_id: :desc, created: :desc).all
         unless maker_requests.empty?
             # send email to requestor
             email_subject = 'Innovation Studio Manager Maker Request Lookup'
