@@ -177,7 +177,7 @@ get '/maker_request/list/?' do
     @breadcrumbs << {:text => 'Maker Request List'}
     require_login
 
-    maker_requests = Maker_Request.where(status_id: Maker_Request::STATUS_OPEN).order(category_id: :desc, created: :desc).all
+    maker_requests = Maker_Request.where(status_id: Maker_Request::STATUS_OPEN).order(category_id: :desc, created: :asc).all
     erb :maker_request_list, :layout => :fixed, :locals => {
         maker_requests: maker_requests
     }
@@ -191,7 +191,7 @@ get '/maker_request/lookup/?' do
 
     maker_requests = []
     unless lookup_email.empty?
-        maker_requests = Maker_Request.where(requestor_email: lookup_email).order(category_id: :desc, created: :desc).all
+        maker_requests = Maker_Request.where(requestor_email: lookup_email).order(category_id: :desc, created: :asc).all
     end
 
     erb :maker_request_lookup, :layout => :fixed, :locals => {
@@ -207,7 +207,7 @@ post '/maker_request/lookup/?' do
     elsif !params[:lookup_email].strip.match(Maker_Request::VALID_EMAIL_REGEX)
         flash :alert, 'Lookup Email', 'Please provide a valid email to lookup'
     else
-        maker_requests = Maker_Request.where(requestor_email: params[:lookup_email].strip).order(category_id: :desc, created: :desc).all
+        maker_requests = Maker_Request.where(requestor_email: params[:lookup_email].strip).order(category_id: :desc, created: :asc).all
         unless maker_requests.empty?
             # send email to requestor
             email_subject = 'Innovation Studio Manager Maker Request Lookup'
