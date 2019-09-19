@@ -222,7 +222,7 @@ post '/admin/events/:event_id/edit/?' do
             if event.start_time.in_time_zone < reservation.end_time.in_time_zone && reservation.start_time.in_time_zone < event.end_time.in_time_zone
                 # reset event times since reservation failed
                 event.update(start_time: original_event_start_time, end_time: original_event_end_time)
-j
+
                 # show error and display event form
                 flash :alert, "Tool is being used.", "Sorry, that tool is reserved during that time period. Please try different day or time."
                 redirect back
