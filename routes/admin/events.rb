@@ -56,13 +56,14 @@ get '/admin/events/create/?' do
 		:event => Event.new,
 		:types => EventType.where(:service_space_id => SS_ID).all,
 		:locations => Location.where(:service_space_id => SS_ID).all,
-		:tools => Resource.where(:service_space_id => SS_ID, :is_reservable => true).all,
+		:tools => Resource.where(:service_space_id => SS_ID, :is_reservable => true).order(:name => :asc).all,
 		:on_unl_events => false,
 		:on_main_calendar => false
 	}
 end
 
 post '/admin/events/create/?' do
+
 	if params[:location] == 'new'
 		# this is a new location, we must create it!
 		location = Location.create(params[:new_location].merge({
@@ -76,6 +77,17 @@ post '/admin/events/create/?' do
 	event.set_data(params)
 
 	if params.has_key?('reserve_tool') && params['reserve_tool'] == 'on'
+        # check for possible other reservations during this time period
+        date = event.start_time.midnight.in_time_zone
+        other_reservations = Reservation.where(:resource_id => params[:tool]).in_day(date).all
+        other_reservations.each do |reservation|
+            if event.start_time.in_time_zone < reservation.end_time.in_time_zone && reservation.start_time.in_time_zone < event.end_time.in_time_zone
+                event.delete
+                flash :alert, "Tool is being used.", "Sorry, that tool is reserved during that time period. Please try different day or time."
+                redirect back
+            end
+        end
+
 		# we need to create a reservation for the tool on the appropriate time
 		Reservation.create(
 			:resource_id => params[:tool],
@@ -162,7 +174,7 @@ get '/admin/events/:event_id/edit/?' do
 		:event => event,
 		:types => EventType.where(:service_space_id => SS_ID).all,
 		:locations => Location.where(:service_space_id => SS_ID).all,
-		:tools => Resource.where(:service_space_id => SS_ID, :is_reservable => true).all,
+		:tools => Resource.where(:service_space_id => SS_ID, :is_reservable => true).order(:name => :asc).all,
 		:on_unl_events => on_unl_events,
 		:on_main_calendar => on_main_calendar
 	}
@@ -175,6 +187,10 @@ post '/admin/events/:event_id/edit/?' do
 		flash(:danger, 'Not Found', 'That event does not exist')
 		redirect '/admin/events/'
 	end
+
+    # remember original start/end times
+    original_event_start_time = event.start_time
+    original_event_end_time = event.end_time
 
 	if params[:location] == 'new'
 		# this is a new location, we must create it!
@@ -193,6 +209,27 @@ post '/admin/events/:event_id/edit/?' do
 
 	# check the tool reservation for this
 	checked = params.checked?('reserve_tool')
+
+    if (checked)
+        # check for possible other reservations during this time period
+
+        date = event.start_time.midnight.in_time_zone
+        other_reservations = Reservation.where(:resource_id => params[:tool]).in_day(date).all
+        other_reservations.each do |reservation|
+            # ignore reservations for same the event
+            next if reservation.event_id == event.id
+
+            if event.start_time.in_time_zone < reservation.end_time.in_time_zone && reservation.start_time.in_time_zone < event.end_time.in_time_zone
+                # reset event times since reservation failed
+                event.update(start_time: original_event_start_time, end_time: original_event_end_time)
+j
+                # show error and display event form
+                flash :alert, "Tool is being used.", "Sorry, that tool is reserved during that time period. Please try different day or time."
+                redirect back
+            end
+        end
+    end
+
 	if event.has_reservation && checked
 		# update the reservation
 		event.reservation.update(
