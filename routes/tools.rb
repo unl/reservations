@@ -363,9 +363,7 @@ post '/tools/:resource_id/reserve/?' do
 	# check for possible other reservations during this time period
 	other_reservations = Reservation.where(:resource_id => params[:resource_id]).in_day(date).all
 	other_reservations.each do |reservation|
-		if (start_time >= reservation.start_time && start_time < reservation.end_time) ||
-				(end_time > reservation.start_time && end_time <= reservation.end_time) ||
-				(start_time < reservation.start_time && end_time > reservation.end_time)
+		if start_time < reservation.end_time && reservation.start_time < end_time
 			flash :alert, "Tool is being used.", "Sorry, that tool is reserved during that time period. Please try another time slot."
 			redirect back
 		elsif reservation.user_id == @user.id
@@ -467,9 +465,7 @@ post '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 	# check for possible other reservations during this time period
 	other_reservations = Reservation.where(:resource_id => params[:resource_id]).where.not(:id => reservation.id).in_day(date).all
 	other_reservations.each do |reservation|
-		if (start_time >= reservation.start_time && start_time < reservation.end_time) ||
-				(end_time >= reservation.start_time && end_time < reservation.end_time) ||
-				(start_time < reservation.start_time && end_time > reservation.end_time)
+		if start_time < reservation.end_time && reservation.start_time < end_time
 			flash :alert, "Tool is being used.", "Sorry, that tool is reserved during that time period. Please try another time slot."
 			redirect back
 		elsif reservation.user_id == @user.id
