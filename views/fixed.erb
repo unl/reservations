@@ -16,6 +16,8 @@
   <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/head-2.html"))).result.gsub('$DEP_VERSION$', template_dep_version) %>
   <!-- TemplateBeginEditable name="head" -->
   <!-- Place optional header elements here -->
+    <link rel="preload" href="https://unlcms.unl.edu/wdn/templates_5.0/css/deprecated.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unlcms.unl.edu/wdn/templates_5.0/css/deprecated.css"></noscript>
     <link rel="stylesheet" href="/css/innovation_studio.css">
     <link rel="stylesheet" href="/css/jquery-ui.min-custom.css">
   <!-- TemplateEndEditable -->
