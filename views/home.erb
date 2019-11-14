@@ -2,14 +2,9 @@
 	<h3>Welcome to Innovation Studio Manager</h3>
 </div>
 
-<h5>
-Hello, <%= @user.full_name %> (<%= @user.username %>)
-<span class="dcf-subhead">Your account is marked as: <%= @user.space_status %></span>
-</h5>
+<h5>Hello, <%= @user.full_name %> (<%= @user.username %>)</h5>
 
-<h4>
-My Reservations
-</h4>
+<h4>My Reservations</h4>
 <% if reservations.empty? %>
 <p>You have no upcoming reservations. You can <a href="/tools/trainings/">view upcoming trainings to get certified</a>, or <a href="/tools/">check out the list of tools you can reserve.</a></p>
 
