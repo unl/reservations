@@ -1,6 +1,6 @@
 {
 	"database" : {
-		"adapter" : "mysql",
+		"adapter" : "mysql2",
 		"host" : "localhost",
 		"username" : "root",
 		"password" : "",
