@@ -17,5 +17,4 @@ group :development do
   gem 'guard'
   gem 'guard-less'
   gem 'therubyracer'
-  gem 'libv8', '3.16.14.15'
 end
