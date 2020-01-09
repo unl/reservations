@@ -5,8 +5,8 @@ Installation
 Using local resources
 ---------------------
 0. Run `xcode-select --install`. Congratulations, you have saved yourself 5000 insanity points.
-1. Get the right ruby on your machine. UNL Resource Scheduler currently runs on Ruby 2.2.3. Get RVM on your machine with `\curl -sSL https://get.rvm.io | bash`.
-2. Now using RVM, install the ruby with `rvm install 2.2.3`.
+1. Get the right ruby on your machine. UNL Resource Scheduler currently runs on Ruby 2.6.5. Get RVM on your machine with `\curl -sSL https://get.rvm.io | bash`.
+2. Now using RVM, install the ruby with `rvm install 2.6.5`.
 3. You probably do not have the `bundler` gem. Check with `bundle`. If not, install it with `gem install bundler`.
 4. In the project root, install the gems using `bundle install`.
 5. Create a mysql database you'd like to use, you can typically use one on your computer. `brew install mysql` if necessary. 
