@@ -177,7 +177,10 @@ get '/maker_request/list/?' do
     @breadcrumbs << {:text => 'Maker Request List'}
     require_login
 
-    maker_requests = Maker_Request.where(status_id: Maker_Request::STATUS_OPEN).order(category_id: :desc, created: :asc).all
+    maker_requests = Maker_Request.
+        where(status_id: Maker_Request::STATUS_OPEN).
+        where("created > DATE_SUB(NOW(), INTERVAL #{Maker_Request::EXPIRATION_DAYS} DAY)").
+        order(category_id: :desc, created: :asc).all
     erb :maker_request_list, :layout => :fixed, :locals => {
         maker_requests: maker_requests
     }

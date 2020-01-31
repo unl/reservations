@@ -9,6 +9,8 @@ class Maker_Request < ActiveRecord::Base
     STATUS_OPEN = 1
     STATUS_CLOSED = 2
 
+    EXPIRATION_DAYS = 30
+
     VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
     def self.category_options
@@ -29,6 +31,10 @@ class Maker_Request < ActiveRecord::Base
             STATUS_OPEN => 'Open',
             STATUS_CLOSED => 'Closed'
         }
+    end
+
+    def expired?
+        self.created < Date.today - EXPIRATION_DAYS
     end
 
     def form_validate(extras)
