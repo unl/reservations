@@ -37,6 +37,10 @@ class Maker_Request < ActiveRecord::Base
         self.created < Date.today - EXPIRATION_DAYS
     end
 
+    def expires
+        self.created.next_day(EXPIRATION_DAYS)
+    end
+
     def form_validate(extras)
         errors = []
         compare_emails = true

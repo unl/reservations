@@ -23,7 +23,7 @@ require 'models/maker_request'
             <td>
             <% if @user.is_super_user? %>
                 <a class="dcf-btn dcf-btn-primary dcf-mb-2" href="/maker_request/<%= maker_request.uuid %>/manage/" role="button">Manage</a>
-                <a class="dcf-btn dcf-btn-primary" href="/maker_request/<%= maker_request.uuid %>/delete/" role="button" onclick="return confirm('Are you sure you want to DELETE this request.? This cannot be undone.');">Delete</a>
+                <a class="dcf-btn dcf-btn-primary dcf-mb-2" href="/maker_request/<%= maker_request.uuid %>/delete/" role="button" onclick="return confirm('Are you sure you want to DELETE this request.? This cannot be undone.');">Delete</a>
             <% else %>
                 <a class="dcf-btn dcf-btn-primary dcf-mb-2" href="/maker_request/<%= maker_request.id %>/view/" role="button">View</a>
             <% end %>
