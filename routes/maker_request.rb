@@ -120,7 +120,10 @@ post '/maker_request/?' do
         # send email to requestor
         email_subject = 'Innovation Studio Manager Maker Request'
         email_body = "#{maker_request.requestor_name},<br><br>Your Innovation Studio Manager Maker Request has been posted.  "\
-            "Please keep this email for you records. You may manage your request here: http://#{request.host}/maker_request/#{maker_request.uuid}/manage. When someone has picked up your request, please delete it from the list."
+            "Please keep this email for you records. You may manage your request here: http://#{request.host}/maker_request/#{maker_request.uuid}/manage. "\
+            "When someone has picked up your request, please delete it from the list. " \
+            "Maker requests will expire after #{Maker_Request::EXPIRATION_DAYS} days and will not "\
+            'display in the Maker Request List. If your request has expired and you’d like to renew it, you will need to create a new request.'
         Emailer.mail(maker_request.requestor_email, email_subject, email_body)
 
         flash :success, 'Maker Request Created', "Your maker request has been created. You should receive a confirmation email at #{params[:requestor_email]}."
