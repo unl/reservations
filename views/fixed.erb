@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<% template_dep_version = '5.0.6' %>
-<html class="no-js" lang="en">
+<% template_dep_version = '5.1.0' %>
+<html class="dcf-no-js dcf-no-webp" lang="en">
 <head>
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/head-1.html"))).result %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/head-1.html"))).result %>
   <!--
     Membership and regular participation in the UNL Web Developer Network is required to use the UNLedu Web Framework. Visit the WDN site at http://wdn.unl.edu/. Register for our mailing list and add your site or server to UNLwebaudit.
     All framework code is the property of the UNL Web Developer Network. The code seen in a source code view is not, and may not be used as, a template. You may not use this code, a reverse-engineered version of this code, or its associated visual presentation in whole or in part to create a derivative work.
@@ -13,58 +13,58 @@
   <!-- TemplateBeginEditable name="doctitle" -->
   <title><%= @title %> | University of Nebraska&ndash;Lincoln</title>
   <!-- TemplateEndEditable -->
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/head-2.html"))).result.gsub('$DEP_VERSION$', template_dep_version) %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/head-2-local.html"))).result.gsub('$DEP_VERSION$', template_dep_version) %>
   <!-- TemplateBeginEditable name="head" -->
   <!-- Place optional header elements here -->
-    <link rel="preload" href="https://unlcms.unl.edu/wdn/templates_5.0/css/deprecated.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://unlcms.unl.edu/wdn/templates_5.0/css/deprecated.css"></noscript>
+    <link rel="preload" href="/wdn/templates_5.1/css/deprecated.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/wdn/templates_5.1/css/deprecated.css"></noscript>
     <link rel="stylesheet" href="/css/innovation_studio.css">
     <link rel="stylesheet" href="/css/jquery-ui.min-custom.css">
   <!-- TemplateEndEditable -->
   <!-- TemplateParam name="class" type="text" value="" -->
 </head>
-<body class="unl" data-version="5.0">
-<%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/skip-nav.html"))).result %>
+<body class="unl" data-version="5.1">
+<%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/skip-nav.html"))).result %>
 <header class="dcf-header" id="dcf-header" role="banner">
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/header-global-1.html"))).result %>
-    <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/nav-global-1.html"))).result %>
-      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/visit-global-1.html"))).result %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/header-global-1.html"))).result %>
+    <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/nav-global-1.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/visit-global-1.html"))).result %>
       <!-- TemplateBeginEditable name="visitlocal" -->
       <!-- TemplateEndEditable -->
-      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/visit-global-2.html"))).result %>
-      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/apply-global-1.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/visit-global-2.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/apply-global-1.html"))).result %>
       <!-- TemplateBeginEditable name="applylocal" -->
       <!-- TemplateEndEditable -->
-      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/apply-global-2.html"))).result %>
-      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/give-global-1.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/apply-global-2.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/give-global-1.html"))).result %>
       <!-- TemplateBeginEditable name="givelocal" -->
       <!-- TemplateEndEditable -->
-      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/give-global-2.html"))).result %>
-    <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/nav-global-2.html"))).result %>
-    <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/idm.html"))).result %>
-    <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/search.html"))).result %>
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/header-global-2.html"))).result %>
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/logo-lockup-1.html"))).result %>
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/site-affiliation-1.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/give-global-2.html"))).result %>
+    <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/nav-global-2.html"))).result %>
+    <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/idm.html"))).result %>
+    <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/search.html"))).result %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/header-global-2.html"))).result %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/logo-lockup-1.html"))).result %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/site-affiliation-1.html"))).result %>
   <!-- TemplateBeginEditable name="affiliation" -->
   <a href="http://innovate.unl.edu">Nebraska Innovation Campus</a>
   <!-- TemplateEndEditable -->
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/site-affiliation-2.html"))).result %>
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/site-title-1.html"))).result %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/site-affiliation-2.html"))).result %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/site-title-1.html"))).result %>
   <!-- TemplateBeginEditable name="titlegraphic" -->
   <a class="dcf-txt-h5" href="/">Nebraska Innovation Studio Manager</a>
   <!-- TemplateEndEditable -->
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/site-title-2.html"))).result %>
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/logo-lockup-2.html"))).result %>
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/nav-toggle-group.html"))).result %>
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/nav-menu-1.html"))).result %>
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/nav-toggle-btn.html"))).result %>
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/nav-menu-child-1.html"))).result %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/site-title-2.html"))).result %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/logo-lockup-2.html"))).result %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/nav-toggle-group.html"))).result %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/nav-menu-1.html"))).result %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/nav-toggle-btn.html"))).result %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/nav-menu-child-1.html"))).result %>
   <!-- TemplateBeginEditable name="navlinks" -->
   <%= erb :'navigation' %>
   <!-- TemplateEndEditable -->
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/nav-menu-child-2.html"))).result %>
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/nav-menu-2.html"))).result %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/nav-menu-child-2.html"))).result %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/nav-menu-2.html"))).result %>
 </header>
 
 <main class="dcf-main" id="dcf-main" role="main" tabindex="-1">
@@ -141,14 +141,14 @@
 <footer class="dcf-footer" id="dcf-footer" role="contentinfo">
   <!-- TemplateBeginEditable name="optionalfooter" -->
   <!-- TemplateEndEditable -->
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/footer-global-1.html"))).result %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/footer-global-1.html"))).result %>
   <!-- TemplateBeginEditable name="contactinfo" -->
   <%= erb :'local_footer' %>
   <!-- TemplateEndEditable -->
-  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/footer-global-2.html"))).result %>
+  <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/footer-global-2.html"))).result %>
 </footer>
-<%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/noscript.html"))).result %>
-<%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.0/includes/global/js-body.html"))).result.gsub('$DEP_VERSION$', template_dep_version) %>
+<%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/noscript.html"))).result %>
+<%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.1/includes/global/js-body-local.html"))).result.gsub('$DEP_VERSION$', template_dep_version) %>
 <!-- TemplateBeginEditable name="jsbody" -->
 <!-- put your custom javascript here -->
 <script type="text/javascript">WDN.initializePlugin("notice");</script>
