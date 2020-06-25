@@ -72,7 +72,7 @@ GEM
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
-    rack (2.0.8)
+    rack (2.2.3)
     rack-protection (2.0.8.1)
       rack
     raindrops (0.19.1)
@@ -131,6 +131,7 @@ DEPENDENCIES
   guard-less
   mysql2
   pony
+  rack (= 2.2.3)
   rest-client
   shotgun
   sinatra
