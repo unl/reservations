@@ -9,6 +9,7 @@ gem 'mysql2'
 gem 'bcrypt'
 gem 'unicorn'
 gem 'pony'
+gem 'rack', '2.2.3'
 gem 'rest-client'
 
 group :development do
