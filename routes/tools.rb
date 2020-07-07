@@ -90,7 +90,7 @@ get '/tools/:resource_id/reserve/?' do
 		redirect '/tools/'
 	end
 
-	unless @user.authorized_resource_ids.include?(tool.id)
+	unless !tool.needs_authorization || @user.authorized_resource_ids.include?(tool.id)
 		flash(:alert, 'Not Authorized', 'Sorry, you have not yet been authorized to reserve time on this machine.')
 		redirect '/tools/'
 	end
@@ -175,7 +175,7 @@ get '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 		redirect '/tools/'
 	end
 
-	unless @user.authorized_resource_ids.include?(tool.id)
+	unless !tool.needs_authorization || @user.authorized_resource_ids.include?(tool.id)
 		flash(:alert, 'Not Authorized', 'Sorry, you have not yet been authorized to reserve time on this machine.')
 		redirect '/tools/'
 	end
@@ -347,10 +347,12 @@ post '/tools/:resource_id/reserve/?' do
 
 		# for each record, ensure that the time does not overlap if the record is not "open"
 		(space_hour.hours + closeds).each do |record|
+		    puts record.inspect
 			if record[:status] != 'open'
 				start_time_minutes = 60 * start_time.hour + start_time.min
 				end_time_minutes = 60 * end_time.hour + end_time.min
-				if (record[:start]+1..record[:end]-1).include?(start_time_minutes) || (start_time_minutes < record[:start] && end_time_minutes > record[:end] + tool.max_minutes_per_reservation)
+
+				if (record[:start]+1..record[:end]-1).include?(start_time_minutes) || (tool[:time_slot_type] === 'range' && start_time_minutes < record[:start] && end_time_minutes > record[:end] + tool.max_minutes_per_reservation)
 					# there is an overlap, this time is invalid
 					flash :alert, 'Invalid Time Slot', 'Sorry, that time slot is invalid for reservations.'
 					redirect back
@@ -452,7 +454,7 @@ post '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 			if record[:status] != 'open'
 				start_time_minutes = 60 * start_time.hour + start_time.min
 				end_time_minutes = 60 * end_time.hour + end_time.min
-				if (record[:start]+1..record[:end]-1).include?(start_time_minutes) || (start_time_minutes < record[:start] && end_time_minutes > record[:end] + tool.max_minutes_per_reservation)
+				if (record[:start]+1..record[:end]-1).include?(start_time_minutes) || (tool[:time_slot_type] === 'range' && start_time_minutes < record[:start] && end_time_minutes > record[:end] + (start_time_minutes < record[:start] && end_time_minutes > record[:end] + tool.max_minutes_per_reservation))
 					# there is an overlap, this time is invalid
 					flash :alert, 'Invalid Time Slot', 'Sorry, that time slot is invalid for reservations.'
 					redirect back

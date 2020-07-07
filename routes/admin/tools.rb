@@ -37,7 +37,7 @@ post '/admin/tools/create/?' do
 	tool.name = params[:name]
 	tool.description = params[:description]
 	tool.service_space_id = SS_ID
-	tool.needs_authorization = true
+	tool.needs_authorization = params.checked?('needs_authorization')
 	tool.is_reservable = params.checked?('is_reservable')
 	tool.time_slot_type = params[:time_slot_type]
 	tool.minutes_per_reservation = params[:minutes_per_reservation]
@@ -88,6 +88,7 @@ post '/admin/tools/:resource_id/edit/?' do
 
 	tool.name = params[:name]
 	tool.description = params[:description]
+	tool.needs_authorization = params.checked?('needs_authorization')
 	tool.is_reservable = params.checked?('is_reservable')
 	tool.time_slot_type = params[:time_slot_type]
 	tool.minutes_per_reservation = params[:minutes_per_reservation]
