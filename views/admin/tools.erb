@@ -22,9 +22,9 @@
                 <%= tool.model %>
             </td>
             <td class="table-actions">
-                <a href="/admin/tools/<%= tool.id %>/edit/" class="dcf-btn dcf-btn-primary">Edit</a>
+                <a href="/admin/tools/<%= tool.id %>/edit/" class="dcf-btn dcf-btn-primary dcf-mt-1">Edit</a>
                 <form method="POST" action="/admin/tools/<%= tool.id %>/delete/" class="delete-form delete-tool">
-                    <button class="dcf-btn" type="submit">Delete</button>
+                    <button class="dcf-btn dcf-btn-secondary dcf-mt-1" type="submit">Delete</button>
                 </form>
             </td>
         </tr>
