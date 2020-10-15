@@ -1,4 +1,4 @@
-<form id="create-event-form" action="" method="POST" enctype="multipart/form-data">
+<form class="dcf-form" id="create-event-form" action="" method="POST" enctype="multipart/form-data">
     <div class="dcf-grid dcf-col-gap-vw">
         <div class="dcf-col-100% dcf-col-67%-start@sm">
             <fieldset>
@@ -15,10 +15,11 @@
                     <option <%= 'selected="selected"' if !event.type.nil? && event.type.id == type.id %> value="<%= type.id %>"><%= type.description %></option>
                 <% end %>
                 </select>
-                <br><br>
-                <div>
-                    <input type="checkbox" <%= 'checked="checked"' unless event.max_signups.nil? %> id="limit-signups" name="limit_signups"><label for="limit-signups">Limit signups for this event to: </label>
-                    <input value="<%= event.max_signups %>" type="number" id="max-signups" name="max_signups" style="width: 100px;" />
+                <div class="dcf-mt-2">
+                    <div class="dcf-input-checkbox dcf-d-inline">
+                        <input type="checkbox" <%= 'checked="checked"' unless event.max_signups.nil? %> id="limit-signups" name="limit_signups"><label class="dcf-label" for="limit-signups">Limit signups for this event to: </label>
+                    </div>
+                    <input value="<%= event.max_signups %>" type="number" id="max-signups" name="max_signups" class="dcf-d-inline dcf-w-10" />
                 </div>
             </fieldset>
 
@@ -58,12 +59,14 @@
                 </div>
 
                 <div>
-                    <input type="checkbox" <%= 'checked="checked"' if !event.reservation.nil? && !event.reservation.resource.nil? %> id="reserve-tool" name="reserve_tool"><label for="reserve-tool">Reserve a tool for this event</label>
-                    <div id="tools-for-reserving" style="<%= 'display: none;' if event.reservation.nil? || event.reservation.resource.nil? %>">
+                    <div class="dcf-input-checkbox dcf-mt-6">
+                        <input type="checkbox" <%= 'checked="checked"' if event.has_reservation %> id="reserve-tool" name="reserve_tool"><label for="reserve-tool">Reserve a tool for this event</label>
+                    </div>
+                    <div id="tools-for-reserving" style="<%= 'display: none;' if !event.has_reservation %>">
                         <label for="tool">Tool</label>
-                        <select id="tool" name="tool" class="use-select2" style="width: 100%;">
+                        <select id="tools" name="tools[]" class="use-select2" style="width: 100%;" multiple>
                             <% tools.each do |tool| %>
-                                <option <%= 'selected="selected"' if !event.reservation.nil? && !event.reservation.resource.nil? && event.reservation.resource.id == tool.id %> value="<%= tool.id %>"><%= "#{tool.name} - #{tool.model}" %></option>
+                                <option <%= 'selected="selected"' if event.has_tool_reservation(tool.id) %> value="<%= tool.id %>"><%= "#{tool.name} - #{tool.model}" %></option>
                             <% end %>
                         </select>
                     </div>
@@ -92,12 +95,16 @@
 
                         <div id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
                             <div class="dcf-d-flex dcf-ai-center">
-                                <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-am">AM</label>
-                                <input <%= 'checked="checked"' if event.start_time.nil? || event.start_time.in_time_zone.hour < 12 %> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm" class="dcf-flex-shrink-0">
+                                <div class="dcf-input-radio">
+                                    <input <%= 'checked="checked"' if event.start_time.nil? || event.start_time.in_time_zone.hour < 12 %> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm" class="dcf-flex-shrink-0">
+                                    <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-am">AM</label>
+                                </div>
                             </div>
                             <div class="dcf-d-flex dcf-ai-center">
-                                <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-pm">PM</label>
-                                <input <%= 'checked="checked"' if !event.start_time.nil? && event.start_time.in_time_zone.hour >= 12 %> id="start-time-am-pm-pm" title="PM" type="radio" value="pm" name="start_time_am_pm" class="dcf-flex-shrink-0">
+                                <div class="dcf-input-radio">
+                                    <input <%= 'checked="checked"' if !event.start_time.nil? && event.start_time.in_time_zone.hour >= 12 %> id="start-time-am-pm-pm" title="PM" type="radio" value="pm" name="start_time_am_pm" class="dcf-flex-shrink-0">
+                                    <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-pm">PM</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -125,12 +132,16 @@
 
                         <div id="end-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
                             <div class="dcf-d-flex dcf-ai-center">
-                                <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-am">AM</label>
-                                <input <%= 'checked="checked"' if event.end_time.nil? || event.end_time.in_time_zone.hour < 12 %> id="end-time-am-pm-am" title="AM" type="radio" value="am" name="end_time_am_pm" class="dcf-flex-shrink-0">
+                                <div class="dcf-input-radio">
+                                    <input <%= 'checked="checked"' if event.end_time.nil? || event.end_time.in_time_zone.hour < 12 %> id="end-time-am-pm-am" title="AM" type="radio" value="am" name="end_time_am_pm" class="dcf-flex-shrink-0">
+                                    <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-am">AM</label>
+                                </div>
                             </div>
                             <div class="dcf-d-flex dcf-ai-center">
-                                <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-pm">PM</label>
-                                <input <%= 'checked="checked"' if !event.end_time.nil? && event.end_time.in_time_zone.hour >= 12 %> id="end-time-am-pm-pm" title="PM" type="radio" value="pm" name="end_time_am_pm" class="dcf-flex-shrink-0">
+                                <div class="dcf-input-radio">
+                                    <input <%= 'checked="checked"' if !event.end_time.nil? && event.end_time.in_time_zone.hour >= 12 %> id="end-time-am-pm-pm" title="PM" type="radio" value="pm" name="end_time_am_pm" class="dcf-flex-shrink-0">
+                                    <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-pm">PM</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -160,10 +171,14 @@
                 </div>
 
                 <div class="details">
-                    <input id="export-to-unl-events" title="Export to UNL Events" type="checkbox" <%= 'checked="checked"' if on_unl_events %> name="export_to_unl_events">
-                    <label for="export-to-unl-events">Export to UNL Events</label><br>
-                    <input disabled="disabled" id="consider-for-unl-main" title="Consider for main UNL Events calendar" type="checkbox" <%= 'checked="checked"' if on_main_calendar %> name="consider_for_unl_main"> 
-                    <label for="consider-for-unl-main">Consider for main UNL Events calendar</label><br>
+                    <div class="dcf-input-checkbox">
+                        <input id="export-to-unl-events" title="Export to UNL Events" type="checkbox" <%= 'checked="checked"' if on_unl_events %> name="export_to_unl_events">
+                        <label for="export-to-unl-events">Export to UNL Events</label>
+                    </div>
+                    <div class="dcf-input-checkbox">
+                        <input disabled="disabled" id="consider-for-unl-main" title="Consider for main UNL Events calendar" type="checkbox" <%= 'checked="checked"' if on_main_calendar %> name="consider_for_unl_main">
+                        <label for="consider-for-unl-main">Consider for main UNL Events calendar</label>
+                    </div>
                 </div>
             </div>
         </div>

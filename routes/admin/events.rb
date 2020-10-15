@@ -79,24 +79,26 @@ post '/admin/events/create/?' do
 	if params.has_key?('reserve_tool') && params['reserve_tool'] == 'on'
         # check for possible other reservations during this time period
         date = event.start_time.midnight.in_time_zone
-        other_reservations = Reservation.where(:resource_id => params[:tool]).in_day(date).all
-        other_reservations.each do |reservation|
-            if event.start_time.in_time_zone < reservation.end_time.in_time_zone && reservation.start_time.in_time_zone < event.end_time.in_time_zone
-                event.delete
-                flash :alert, "Tool is being used.", "Sorry, that tool is reserved during that time period. Please try different day or time."
-                redirect back
+        params[:tools].each do |tool_id|
+            other_reservations = Reservation.where(:resource_id => tool_id).in_day(date).all
+            other_reservations.each do |reservation|
+                if event.start_time.in_time_zone < reservation.end_time.in_time_zone && reservation.start_time.in_time_zone < event.end_time.in_time_zone
+                    event.delete
+                    flash :alert, "A tool is being used.", "Sorry, a selected tool is reserved during that time period. Please try different day or time."
+                    redirect back
+                end
             end
-        end
 
-		# we need to create a reservation for the tool on the appropriate time
-		Reservation.create(
-			:resource_id => params[:tool],
-			:event_id => event.id,
-			:start_time => event.start_time,
-			:end_time => event.end_time,
-			:is_training => true,
-			:user_id => nil
-		)
+            # we need to create a reservation for the tool on the appropriate time
+            Reservation.create(
+                :resource_id => tool_id,
+                :event_id => event.id,
+                :start_time => event.start_time,
+                :end_time => event.end_time,
+                :is_training => true,
+                :user_id => nil
+            )
+        end
 	end
 
 	if params.checked?('export_to_unl_events')
@@ -212,48 +214,75 @@ post '/admin/events/:event_id/edit/?' do
 
     if (checked)
         # check for possible other reservations during this time period
-
         date = event.start_time.midnight.in_time_zone
-        other_reservations = Reservation.where(:resource_id => params[:tool]).in_day(date).all
-        other_reservations.each do |reservation|
-            # ignore reservations for same the event
-            next if reservation.event_id == event.id
+        params[:tools].each do |tool_id|
+            other_reservations = Reservation.where(:resource_id => tool_id).in_day(date).all
+            other_reservations.each do |reservation|
+                # ignore reservations for same the event
+                next if reservation.event_id == event.id
 
-            if event.start_time.in_time_zone < reservation.end_time.in_time_zone && reservation.start_time.in_time_zone < event.end_time.in_time_zone
-                # reset event times since reservation failed
-                event.update(start_time: original_event_start_time, end_time: original_event_end_time)
+                if event.start_time.in_time_zone < reservation.end_time.in_time_zone && reservation.start_time.in_time_zone < event.end_time.in_time_zone
+                    # reset event times since reservation failed
+                    event.update(start_time: original_event_start_time, end_time: original_event_end_time)
 
-                # show error and display event form
-                flash :alert, "Tool is being used.", "Sorry, that tool is reserved during that time period. Please try different day or time."
-                redirect back
+                    # show error and display event form
+                    flash :alert, "A tool is being used.", "Sorry, a selected tool is reserved during that time period. Please try different day or time."
+                    redirect back
+                end
             end
         end
     end
 
-	if event.has_reservation && checked
-		# update the reservation
-		event.reservation.update(
-			:resource_id => params[:tool],
-			:event_id => event.id,
-			:start_time => event.start_time,
-			:end_time => event.end_time,
-			:is_training => true,
-			:user_id => nil
-		)
-	elsif event.has_reservation && !checked
-		# remove the reservation
-		event.reservation.delete
-	elsif !event.has_reservation && checked
-		# create the reservation
-		Reservation.create(
-			:resource_id => params[:tool],
-			:event_id => event.id,
-			:start_time => event.start_time,
-			:end_time => event.end_time,
-			:is_training => true,
-			:user_id => nil
-		)
-	end
+    if event.has_reservation && checked
+        # create or update selected tool reservations
+        params[:tools].each do |tool_id|
+            if event.has_tool_reservation(tool_id)
+                # update the reservation
+                event.reservation.update(
+                    :resource_id => params[tool_id],
+                    :event_id => event.id,
+                    :start_time => event.start_time,
+                    :end_time => event.end_time,
+                    :is_training => true,
+                    :user_id => nil
+                )
+            else
+                # create the reservation
+                Reservation.create(
+                    :resource_id => tool_id,
+                    :event_id => event.id,
+                    :start_time => event.start_time,
+                    :end_time => event.end_time,
+                    :is_training => true,
+                    :user_id => nil
+                )
+            end
+        end
+
+        # remove any old tool reservations
+        event.reservation.each do |r|
+            if !r.resource.nil? && !params[:tools].include?(r.resource.id)
+                r.delete
+            end
+        end
+    elsif event.has_reservation && !checked
+        # remove all event reservations
+        event.reservation.each do |r|
+            r.delete
+        end
+    elsif !event.has_reservation && checked
+        params[:tools].each do |tool_id|
+            # create the reservation
+            Reservation.create(
+                :resource_id => tool_id,
+                :event_id => event.id,
+                :start_time => event.start_time,
+                :end_time => event.end_time,
+                :is_training => true,
+                :user_id => nil
+            )
+        end
+    end
 
 	if params.checked?('export_to_unl_events')
 		on_unl_events = false

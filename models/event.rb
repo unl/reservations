@@ -2,7 +2,7 @@ require 'active_record'
 
 class Event < ActiveRecord::Base
 	has_many :event_signups, :dependent => :destroy
-	has_one :reservation, :dependent => :destroy
+	has_many :reservation, :dependent => :destroy
 	belongs_to :location
 	belongs_to :event_type
 	alias_method :type, :event_type
@@ -42,7 +42,15 @@ class Event < ActiveRecord::Base
 	end
 
 	def has_reservation
-		!self.reservation.nil?
+		!self.reservation.nil? && self.reservation.count > 0
+	end
+
+	def has_tool_reservation(tool_id)
+	    return false unless self.has_reservation
+	    self.reservation.each do |r|
+	        return true if !r.resource.nil? && r.resource.id == tool_id
+	    end
+	    false
 	end
 
 	def image_src
