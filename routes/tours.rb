@@ -17,10 +17,15 @@ get '/tours/sign_up/:event_id/?' do
 	# check if this is a tour signup
 	tour_id = EventType.find_by(:description => 'Tour', :service_space_id => SS_ID).id
 	event = Event.includes(:event_signups).find_by(:service_space_id => SS_ID, :id => params[:event_id])
+	now = DateTime.now.in_time_zone
 	if event.nil? || event.event_type_id != tour_id
 		# that event does not exist
 		flash(:danger, 'Not Found', 'That event does not exist')
 		redirect '/tours/'
+	elsif event.start_time.in_time_zone < DateTime.now.in_time_zone
+	  event.start_time.in_time_zone.inspect
+	  flash(:danger, 'Event Signup Closed', 'This event has passed')
+    redirect '/tours/'
 	end
 
 	erb :tour_signup, :layout => :fixed, :locals => {
@@ -35,7 +40,11 @@ post '/tours/sign_up/:event_id/?' do
 	if event.nil? || event.event_type_id != tour_id
 		# that event does not exist
 		flash(:danger, 'Not Found', 'That event does not exist')
-		redirect '/new_members/'
+		redirect '/tours/'
+	elsif event.start_time.in_time_zone < DateTime.now.in_time_zone
+    event.start_time.in_time_zone.inspect
+    flash(:danger, 'Event Signup Closed', 'This event has passed')
+    redirect '/tours/'
 	end
 
 	EventSignup.create(
