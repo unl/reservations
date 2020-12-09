@@ -17,7 +17,6 @@ get '/tours/sign_up/:event_id/?' do
 	# check if this is a tour signup
 	tour_id = EventType.find_by(:description => 'Tour', :service_space_id => SS_ID).id
 	event = Event.includes(:event_signups).find_by(:service_space_id => SS_ID, :id => params[:event_id])
-	now = DateTime.now.in_time_zone
 	if event.nil? || event.event_type_id != tour_id
 		# that event does not exist
 		flash(:danger, 'Not Found', 'That event does not exist')
