@@ -14,7 +14,8 @@ get '/admin/tools/?' do
 	require_login
 	@breadcrumbs << {:text => 'Admin Tools'}
 
-	tools = Resource.where(:service_space_id => SS_ID).order(:name).all
+	tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
+	tools.sort_by! {|tool| tool.name.downcase + tool.model.downcase}
 	erb :'admin/tools', :layout => :fixed, :locals => {
 		:tools => tools
 	}
