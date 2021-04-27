@@ -87,6 +87,7 @@ get '/maker_request/:maker_request_uuid/delete/?' do
     maker_request = Maker_Request.find_by(uuid: params[:maker_request_uuid])
     not_found if maker_request.nil?
 
+    maker_request.pdf_delete
     maker_request.destroy
 
     flash :success, 'Maker Request Deleted', 'Your maker request has been deleted.'
@@ -101,10 +102,12 @@ post '/maker_request/?' do
 
     extras = {
         confirm_email: params[:confirm_email],
-        confirm_read_disclaimer: params[:confirm_read_disclaimer]
+        confirm_read_disclaimer: params[:confirm_read_disclaimer],
+        pdf_document: params[:pdf_document]
     }
     params.delete('confirm_email')
     params.delete('confirm_read_disclaimer')
+    params.delete('pdf_document')
 
     maker_request = Maker_Request.new(params)
 
@@ -116,6 +119,7 @@ post '/maker_request/?' do
         maker_request.created = Time.current.strftime('%Y-%m-%d %H:%M:%S')
         maker_request.updated = Time.current.strftime('%Y-%m-%d %H:%M:%S')
         maker_request.save
+        maker_request.pdf_write(extras[:pdf_document][:tempfile]) if !extras[:pdf_document].nil?
 
         # send email to requestor
         email_subject = 'Innovation Studio Manager Maker Request'
@@ -154,13 +158,21 @@ post '/maker_request/:maker_request_uuid/edit/?' do
 
     extras = {
         confirm_email: params[:confirm_email],
-        confirm_read_disclaimer: params[:confirm_read_disclaimer]
+        confirm_read_disclaimer: params[:confirm_read_disclaimer],
+        pdf_document: params[:pdf_document],
+        remove_pdf_document: params[:remove_pdf_document]
     }
+    params.delete('confirm_email')
+    params.delete('confirm_read_disclaimer')
+    params.delete('pdf_document')
+    params.delete('remove_pdf_document')
 
     errors = maker_request.form_validate(extras)
 
     if errors.empty?
         maker_request.save
+        maker_request.pdf_delete if !extras[:remove_pdf_document].nil?
+        maker_request.pdf_write(extras[:pdf_document][:tempfile]) if !extras[:pdf_document].nil?
 
         flash :success, 'Maker Request Saved', 'Your maker request has been saved.'
         redirect "/maker_request/#{maker_request.uuid}/manage/"
