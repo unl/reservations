@@ -32,4 +32,8 @@
     <dd><%= maker_request.title %></dd>
     <dt>Description</dt>
     <dd><%= maker_request.description.gsub(/(?:\n\r?|\r\n?)/, '<br>') %></dd>
+    <% if maker_request.pdf_exists? %>
+    <dt>PDF Document</dt>
+    <dd><a href="/<%= maker_request.pdf_href %>" target="_blank">View PDF Document for more details</a>
+    <% end %>
 </dl>

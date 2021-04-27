@@ -19,45 +19,74 @@ end
 <h3><%= mode %> Maker Request</h3>
 </div>
 
-<form class="dcf-form" id="maker_request_form" action="" method="POST" >
+<form class="dcf-form" id="maker_request_form" action="" method="POST" enctype="multipart/form-data">
 
      <fieldset>
         <legend>Your Contact Information</legend>
 
-        <label for="requestor-name">Name <small class="dcf-required">Required</small></label>
-        <input type="text" id="requestor-name" name="requestor_name" value="<%= maker_request.requestor_name %>" />
+        <div class="dcf-form-group">
+          <label for="requestor-name">Name <small class="dcf-required">Required</small></label>
+          <input type="text" id="requestor-name" name="requestor_name" value="<%= maker_request.requestor_name %>" />
+        </div>
 
-        <label for="requestor-email">Email Address <small class="dcf-required">Required</small></label>
-        <input type="text" id="requestor-email" name="requestor_email" value="<%= maker_request.requestor_email %>" />
+        <div class="dcf-form-group dcf-mt-2">
+          <label for="requestor-email">Email Address <small class="dcf-required">Required</small></label>
+          <input type="text" id="requestor-email" name="requestor_email" value="<%= maker_request.requestor_email %>" />
+        </div>
 
-        <label for="requestor-email">Confirm Email Address <small class="dcf-required">Required</small></label>
-        <input type="text" id="confirm-email" name="confirm_email" value="<%= extras[:confirm_email] %>" />
+        <div class="dcf-form-group dcf-mt-2">
+          <label for="requestor-email">Confirm Email Address <small class="dcf-required">Required</small></label>
+          <input type="text" id="confirm-email" name="confirm_email" value="<%= extras[:confirm_email] %>" />
+        </div>
 
-        <label for="requestor-phone">Phone</label>
-        <input type="text" id="requestor-phone" name="requestor_phone" value="<%= maker_request.requestor_phone %>" />
+        <div class="dcf-form-group dcf-mt-2">
+          <label for="requestor-phone">Phone</label>
+          <input type="text" id="requestor-phone" name="requestor_phone" value="<%= maker_request.requestor_phone %>" />
+        </div>
      </fieldset>
 
      <fieldset>
         <legend>Request Information</legend>
 
-        <label for="title">Project Title <small class="dcf-required">Required</small></label>
-        <input type="text" id="title" name="title" value="<%= maker_request.title %>" />
+        <div class="dcf-form-group">
+          <label for="title">Project Title <small class="dcf-required">Required</small></label>
+          <input type="text" id="title" name="title" value="<%= maker_request.title %>" />
+        </div>
 
-        <label for="category-id">Category <small class="dcf-required">Required</small></label>
-        <select id="category-id" name="category_id">
-            <option value="">Select a Category</option>
-            <% Maker_Request.category_options.each do |value, label|
-                selected = ''
-                selected = ' selected="selected" ' if maker_request.category_id.to_i == value
-            %>
-            <option value="<%= value %>"<%= selected %>><%= label %></option>
-            <% end %>
-        </select>
+        <div class="dcf-form-group dcf-mt-2">
+          <label for="category-id">Category <small class="dcf-required">Required</small></label>
+          <select id="category-id" name="category_id">
+              <option value="">Select a Category</option>
+              <% Maker_Request.category_options.each do |value, label|
+                  selected = ''
+                  selected = ' selected="selected" ' if maker_request.category_id.to_i == value
+              %>
+              <option value="<%= value %>"<%= selected %>><%= label %></option>
+              <% end %>
+          </select>
+        </div>
 
-        <label for="description">Description <small class="dcf-required">Required</small></label>
-        <textarea id="description" name="description" rows=8 placeholder="<%= description_placeholder %>"><%= maker_request.description %></textarea>
+        <div class="dcf-form-group dcf-mt-2">
+          <label for="description">Description <small class="dcf-required">Required</small></label>
+          <textarea id="description" name="description" rows=8 placeholder="<%= description_placeholder %>"><%= maker_request.description %></textarea>
+        </div>
 
-        <div class="dcf-mt-4">
+        <div class="dcf-form-group dcf-mt-2">
+           <label for="pdf-document">PDF Document </label>
+           <% if maker_request.pdf_exists? %>
+                <div class="dcf-mt-4 dcf-mb-4">
+                     <a href="/<%= maker_request.pdf_href %>" target="_blank">View Current PDF Document</a>&nbsp;&nbsp;
+                    <div class="dcf-input-checkbox dcf-d-inline">
+                        <input id="remove-pdf-document" name="remove_pdf_document" type="checkbox" value="1">
+                        <label for="remove-pdf-document">Remove</label>
+                    </div>
+                </div>
+           <% end %>
+           <input type="file" id="pdf-document" name="pdf_document" aria-describedby="pdf-document-help">
+           <span class="dcf-form-help" id="pdf-document-help">You may upload an optional PDF which contains more a detailed description of your request.</span>
+        </div>
+
+        <div class="dcf-mt-6">
             <%= erb :'maker_request_expiration_notice' %>
             <%= erb :'maker_request_disclaimer' %>
 

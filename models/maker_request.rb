@@ -13,6 +13,8 @@ class Maker_Request < ActiveRecord::Base
 
     VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
+    UPLOAD_DIR = 'maker'
+
     def self.category_options
         {
             CATEGORY_WOODSHOP => 'Woodshop',
@@ -39,6 +41,30 @@ class Maker_Request < ActiveRecord::Base
 
     def expires
         self.created.next_day(EXPIRATION_DAYS)
+    end
+
+    def pdf_full_name
+        "./public/#{UPLOAD_DIR}/#{self.id}.pdf"
+    end
+
+    def pdf_exists?
+        File.exists?(self.pdf_full_name)
+    end
+
+    def pdf_href
+        "#{UPLOAD_DIR}/#{File.basename(self.pdf_full_name)}" if self.pdf_exists?
+    end
+
+    def pdf_write(upload_file)
+        if (File.exists?(upload_file) && File.extname(upload_file) == '.pdf')
+            File.open(self.pdf_full_name, 'wb') do |f|
+                f.write(upload_file.read)
+            end
+        end
+    end
+
+    def pdf_delete
+        File.delete(self.pdf_full_name) if self.pdf_exists?
     end
 
     def form_validate(extras)
@@ -82,6 +108,11 @@ class Maker_Request < ActiveRecord::Base
     	# validate description
     	if self.description.nil? || self.description.empty?
             errors << {heading: 'Description', message: 'Please provide description.'}
+        end
+
+        # validate pdf upload
+        if !extras[:pdf_document].nil? && !extras[:pdf_document][:filename].nil? && extras[:pdf_document][:type] != 'application/pdf'
+             errors << {heading: 'PDF Document', message: 'Must be a PDF file.'}
         end
 
     	# validate category id
