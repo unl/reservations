@@ -1,5 +1,5 @@
 <div id="pagetitle">
-    <h3>Upcoming Machine Trainings</h3>
+    <h3>Upcoming Machine Trainings and Workshops</h3>
 </div>
 
 <p>
@@ -8,7 +8,7 @@ Before using our equipment, it is necessary to complete training workshops on ea
 type of equipment. Here, you can sign up for upcoming trainings. Take a look at our upcoming offerings:
 </p>
 
-<div class="event-page">
+<div class="event-page dcf-mb-6">
     <table>
         <thead>
             <tr>
@@ -43,3 +43,5 @@ type of equipment. Here, you can sign up for upcoming trainings. Take a look at 
         </tbody>
     </table>
 </div>
+
+<%= erb :'workshop-listings', locals: {:events_advanced => events_advanced, :events_creation => events_creation, :events_general => events_general} %>

@@ -21,6 +21,10 @@ get '/events/:event_id/sign_up_as_non_member/?' do
 		flash(:danger, 'Not Found', 'That event does not exist')
 		redirect '/calendar/'
 	end
+	if event.type.description = 'Creation Workshop'
+	    flash(:danger, 'Signup Restricted', 'That event does not allow signup')
+        redirect back
+	end
 
 	@breadcrumbs << {:text => event.title, :href => event.info_link}
 	@breadcrumbs << {:text => 'Sign up as Non-Member'}
@@ -42,6 +46,11 @@ post '/events/:event_id/sign_up_as_non_member/?' do
 	if params[:name].trim.empty? || params[:email].trim.empty?
 		flash(:danger, 'All Fields Required', 'Name and email are both required.')
 		redirect back
+	end
+
+	if event.type.description = 'Creation Workshop'
+	    flash(:danger, 'Signup Restricted', 'That event does not allow signup')
+        redirect back
 	end
 
 	EventSignup.create(
@@ -83,6 +92,11 @@ post '/events/:event_id/sign_up/?' do
 		# that event is full
 		flash(:danger, 'Event Full', 'Sorry, that event is full.')
 		redirect back
+	end
+
+	if event.type.description = 'Creation Workshop'
+	    flash(:danger, 'Signup Restricted', 'That event does not allow signup')
+        redirect back
 	end
 
 	if event.type.description == 'Machine Training'

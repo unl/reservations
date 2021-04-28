@@ -27,10 +27,26 @@ get '/tools/trainings/?' do
 
 	machine_training_id = EventType.find_by(:description => 'Machine Training', :service_space_id => SS_ID).id
 	events = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => machine_training_id).
-					where('start_time >= ?', Time.now).order(:start_time => :asc).all
+        where('start_time >= ?', Time.now).order(:start_time => :asc).all
+
+    workshop_id = EventType.find_by(:description => 'Advanced Skill-Based Workshop', :service_space_id => SS_ID).id
+    events_advanced = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => workshop_id).
+        where('start_time >= ?', Time.now).order(:start_time => :asc).all
+
+    workshop_id = EventType.find_by(:description => 'Creation Workshop', :service_space_id => SS_ID).id
+    events_creation = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => workshop_id).
+        where('start_time >= ?', Time.now).order(:start_time => :asc).all
+
+    workshop_id = EventType.find_by(:description => 'General Workshop', :service_space_id => SS_ID).id
+    events_general = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => workshop_id).
+        where('start_time >= ?', Time.now).order(:start_time => :asc).all
+
 
 	erb :trainings, :layout => :fixed, :locals => {
-		:events => events
+		:events => events,
+		:events_advanced => events_advanced,
+		:events_creation => events_creation,
+		:events_general => events_general
 	}
 end
 

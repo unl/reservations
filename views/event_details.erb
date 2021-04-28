@@ -1,4 +1,4 @@
-<div class="event-details">
+<div class="event-details dcf-p-4">
 	<div>
 		<h3>
 	    	<%= event.title %> <span class="dcf-subhead"><%= event.type.description %></span>
@@ -37,7 +37,9 @@
 	<% end %>
 <% elsif @user %>
 	<% # the user is logged in but not signed up %>
-	<% if event.max_signups.nil? || event.signups.count < event.max_signups %>
+	<% if event.type.description == 'Creation Workshop' %>
+	    Signup can be done somewhere else...
+	<% elsif event.max_signups.nil? || event.signups.count < event.max_signups %>
 	<form action="/events/<%= event.id %>/sign_up/" method="POST">
 	<button type="submit" class="dcf-btn dcf-btn-primary">
 		<% if event.type.description == 'Free Event' %>
@@ -53,10 +55,12 @@
 <% else %>
 	<% # a non user. May still sign up for the event UNLESS it is a tool training %>
 	<% if event.type.description != 'Machine Training' %>
-		<% if event.max_signups.nil? || event.signups.count < event.max_signups %>
-		<a class="dcf-btn dcf-btn-primary" href="/events/<%= event.id %>/sign_up_as_non_member/">Sign up for this event</a>
+		<% if event.type.description == 'Creation Workshop' %>
+            Signup can be done somewhere else...
+        <% elsif event.max_signups.nil? || event.signups.count < event.max_signups %>
+		    <a class="dcf-btn dcf-btn-primary" href="/events/<%= event.id %>/sign_up_as_non_member/">Sign up for this event</a>
 		<% else %>
-		All slots for this event are filled.
+		    All slots for this event are filled.
 		<% end %>
 	<% end %>
 <% end %>
