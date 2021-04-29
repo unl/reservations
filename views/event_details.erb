@@ -28,7 +28,7 @@
 <% # free events do not require signup but users can mark it on their homepage %>
 <% if @user && event.signups.map(&:user_id).include?(@user.id) %>
 	<% # the user is already signed up %>
-	<% if event.type.description == 'Free Event' %>
+	<% if event.free_event_type? %>
 		This event is noted on your homepage.<br>
 		<a href='/home/' class="dcf-btn wdn-button-triad">View Homepage</a>
 	<% else %>
@@ -37,25 +37,25 @@
 	<% end %>
 <% elsif @user %>
 	<% # the user is logged in but not signed up %>
-	<% if event.type.description == 'Creation Workshop' %>
+	<% if !event.signup_allowed_for_type? %>
 	    Signup can be done somewhere else...
 	<% elsif event.max_signups.nil? || event.signups.count < event.max_signups %>
-	<form action="/events/<%= event.id %>/sign_up/" method="POST">
-	<button type="submit" class="dcf-btn dcf-btn-primary">
-		<% if event.type.description == 'Free Event' %>
-			Note event on my homepage
-		<% else %>
-			Sign up for this event
-		<% end %>
-	</a>
-	</form>
+        <form action="/events/<%= event.id %>/sign_up/" method="POST">
+        <button type="submit" class="dcf-btn dcf-btn-primary">
+            <% if event.free_event_type? %>
+                Note event on my homepage
+            <% else %>
+                Sign up for this event
+            <% end %>
+        </a>
+        </form>
 	<% else %>
-	All slots for this event are filled.
+	    All slots for this event are filled.
 	<% end %>
 <% else %>
 	<% # a non user. May still sign up for the event UNLESS it is a tool training %>
-	<% if event.type.description != 'Machine Training' %>
-		<% if event.type.description == 'Creation Workshop' %>
+	<% if !event.machine_training_event_type? %>
+		<% if !event.signup_allowed_for_type? %>
             Signup can be done somewhere else...
         <% elsif event.max_signups.nil? || event.signups.count < event.max_signups %>
 		    <a class="dcf-btn dcf-btn-primary" href="/events/<%= event.id %>/sign_up_as_non_member/">Sign up for this event</a>

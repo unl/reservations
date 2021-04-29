@@ -9,6 +9,9 @@
                 <label for="description">Description</label>
                 <textarea rows="4" id="description" name="description"><%= event.description %></textarea>
 
+                <label for="admin-notes">Admin Notes <span class="dcf-txt-xs">Only displayed here.</span></label>
+                <textarea rows="4" id="admin-notes" name="admin_notes"><%= event.admin_notes %></textarea>
+
                 <label for="type">Type</label>
                 <select id="type" name="type" class="use-select2" style="width: 100%;">
                 <% types.each do |type| %>

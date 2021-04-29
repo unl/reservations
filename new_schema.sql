@@ -1,5 +1,4 @@
 
-
 CREATE TABLE IF NOT EXISTS `maker_requests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` char(36) NOT NULL,
@@ -15,3 +14,6 @@ CREATE TABLE IF NOT EXISTS `maker_requests` (
   PRIMARY KEY (`id`),
   UNIQUE KEY (`uuid`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+-- Add admin_notes column to events table
+ALTER TABLE `events` ADD COLUMN `admin_notes` text NULL AFTER `description`;

@@ -21,7 +21,7 @@ get '/events/:event_id/sign_up_as_non_member/?' do
 		flash(:danger, 'Not Found', 'That event does not exist')
 		redirect '/calendar/'
 	end
-	if event.type.description = 'Creation Workshop'
+	if !event.signup_allowed_for_type?
 	    flash(:danger, 'Signup Restricted', 'That event does not allow signup')
         redirect back
 	end
@@ -39,7 +39,7 @@ post '/events/:event_id/sign_up_as_non_member/?' do
 		flash(:danger, 'Not Found', 'That event does not exist')
 		redirect '/calendar/'
 	end
-	if event.type.description == 'Free Event'
+	if event.free_event_type?
 		flash(:warning, 'Signup not required', 'This event is a Free Event and is open to anyone. No signup is required.')
 		redirect event.info_link
 	end
@@ -48,7 +48,7 @@ post '/events/:event_id/sign_up_as_non_member/?' do
 		redirect back
 	end
 
-	if event.type.description = 'Creation Workshop'
+	if !event.signup_allowed_for_type?
 	    flash(:danger, 'Signup Restricted', 'That event does not allow signup')
         redirect back
 	end
@@ -94,12 +94,12 @@ post '/events/:event_id/sign_up/?' do
 		redirect back
 	end
 
-	if event.type.description = 'Creation Workshop'
+	if !event.signup_allowed_for_type?
 	    flash(:danger, 'Signup Restricted', 'That event does not allow signup')
         redirect back
 	end
 
-	if event.type.description == 'Machine Training'
+	if event.machine_training_event_type?
 		check_membership
 	end
 
@@ -110,7 +110,7 @@ post '/events/:event_id/sign_up/?' do
 		:email => @user.email
 	)
 
-	if event.type.description != 'Free Event'
+	if !event.free_event_type?
 		body = <<EMAIL
 <p>Thank you, #{@user.full_name} for signing up for #{event.title}. Don't forget that this event is</p>
 
@@ -148,8 +148,8 @@ post '/events/:event_id/remove_signup/?' do
 	end
 	signup.delete
 
-	header = event.type.description == 'Free Event' ? 'Event Removed' : 'Signup Removed'
-	message = event.type.description == 'Free Event' ? "#{event.title} has been removed from your calendar." : "Your signup for #{event.title} has been removed."
+	header = event.free_event_type? ? 'Event Removed' : 'Signup Removed'
+	message = event.free_event_type? ? "#{event.title} has been removed from your calendar." : "Your signup for #{event.title} has been removed."
 
 	flash :success, header, message
 	redirect '/home/'
