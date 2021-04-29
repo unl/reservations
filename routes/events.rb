@@ -10,6 +10,8 @@ def flash_message(message)
             flash(:danger, 'Not Found', 'That event does not exist')
         when MESSAGE_SIGNUP_NOT_ALLOWED
             flash(:danger, 'Signup Restricted', 'That event does not allow signup')
+        else
+            # invalid message, do nothing
     end
 end
 
