@@ -38,7 +38,7 @@
 <% elsif @user %>
 	<% # the user is logged in but not signed up %>
 	<% if !event.signup_allowed_for_type? %>
-	    Signup can be done somewhere else...
+        Please read details above on how to signup for this event.
 	<% elsif event.max_signups.nil? || event.signups.count < event.max_signups %>
         <form action="/events/<%= event.id %>/sign_up/" method="POST">
         <button type="submit" class="dcf-btn dcf-btn-primary">
@@ -56,7 +56,7 @@
 	<% # a non user. May still sign up for the event UNLESS it is a tool training %>
 	<% if !event.machine_training_event_type? %>
 		<% if !event.signup_allowed_for_type? %>
-            Signup can be done somewhere else...
+            Please read details above on how to signup for this event.
         <% elsif event.max_signups.nil? || event.signups.count < event.max_signups %>
 		    <a class="dcf-btn dcf-btn-primary" href="/events/<%= event.id %>/sign_up_as_non_member/">Sign up for this event</a>
 		<% else %>

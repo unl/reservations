@@ -1,6 +1,18 @@
 require 'models/event'
 require 'models/event_signup'
 
+MESSAGE_EVENT_NOT_FOUND = 'message_event_not_found'
+MESSAGE_SIGNUP_NOT_ALLOWED = 'message_signup_not_allowed'
+
+def flash_message(message)
+    case message
+        when MESSAGE_EVENT_NOT_FOUND
+            flash(:danger, 'Not Found', 'That event does not exist')
+        when MESSAGE_SIGNUP_NOT_ALLOWED
+            flash(:danger, 'Signup Restricted', 'That event does not allow signup')
+    end
+end
+
 get '/events/:event_id/?' do
 	# this is an event details page
 	begin
@@ -18,11 +30,11 @@ end
 get '/events/:event_id/sign_up_as_non_member/?' do
 	event = Event.includes(:event_type).find_by(:id => params[:event_id])
 	if event.nil?
-		flash(:danger, 'Not Found', 'That event does not exist')
+		flash_message(MESSAGE_EVENT_NOT_FOUND)
 		redirect '/calendar/'
 	end
 	if !event.signup_allowed_for_type?
-	    flash(:danger, 'Signup Restricted', 'That event does not allow signup')
+	    flash_message(MESSAGE_SIGNUP_NOT_ALLOWED)
         redirect back
 	end
 
@@ -36,7 +48,7 @@ end
 post '/events/:event_id/sign_up_as_non_member/?' do
 	event = Event.includes(:event_type).find_by(:id => params[:event_id])
 	if event.nil?
-		flash(:danger, 'Not Found', 'That event does not exist')
+		flash_message(MESSAGE_EVENT_NOT_FOUND)
 		redirect '/calendar/'
 	end
 	if event.free_event_type?
@@ -49,7 +61,7 @@ post '/events/:event_id/sign_up_as_non_member/?' do
 	end
 
 	if !event.signup_allowed_for_type?
-	    flash(:danger, 'Signup Restricted', 'That event does not allow signup')
+	    flash_message(MESSAGE_SIGNUP_NOT_ALLOWED)
         redirect back
 	end
 
@@ -84,7 +96,7 @@ post '/events/:event_id/sign_up/?' do
 
 	if event.nil?
 		# that event does not exist
-		flash(:danger, 'Not Found', 'That event does not exist')
+		flash_message(MESSAGE_EVENT_NOT_FOUND)
 		redirect '/calendar/'
 	end
 
@@ -95,7 +107,7 @@ post '/events/:event_id/sign_up/?' do
 	end
 
 	if !event.signup_allowed_for_type?
-	    flash(:danger, 'Signup Restricted', 'That event does not allow signup')
+	    flash_message(MESSAGE_SIGNUP_NOT_ALLOWED)
         redirect back
 	end
 

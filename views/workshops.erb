@@ -2,4 +2,6 @@
     <h3>Upcoming Workshops</h3>
 </div>
 
-<%= erb :'workshop-listings', locals: {:events_advanced => events_advanced, :events_creation => events_creation, :events_general => events_general} %>
+<div class="event-page">
+    <%= erb :'workshop_listings', locals: {:events_advanced => events_advanced, :events_creation => events_creation, :events_general => events_general} %>
+</div>
