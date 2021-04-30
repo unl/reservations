@@ -56,7 +56,7 @@ post '/admin/email/send/?' do
 
 	# check on attachments
  	attachments = {}
- 	params.select {|k,v| k.starts_with?('file_')}.each do |key, file_hash|
+ 	params.select {|k,v| k.start_with?('file_')}.each do |key, file_hash|
  		attachments[file_hash[:filename]] = file_hash[:tempfile].read
  	end
  	attachments = nil if attachments.empty?
