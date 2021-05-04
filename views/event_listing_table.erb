@@ -1,0 +1,44 @@
+<table class="dcf-table dcf-table-striped dcf-table-responsive dcf-mb-6" aria-describedby="<%= events_advanced %>">
+    <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Date/Location</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% events.each do |event| %>
+        <tr>
+            <td class="small-hidden">
+                <a href="<%= event.info_link %>"><%= event.title %></a>
+            </td>
+            <td>
+                <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
+                <%= event.location.name %>
+            </td>
+            <td>
+            <% if @user.signed_up_event_ids.include?(event.id) %>
+                Signed up!
+            <% elsif !event.max_signups.nil? && event.signups.count >= event.max_signups %>
+                Event is full.
+            <% elsif !event.signup_allowed_for_type? %>
+                <a href="<%= event.info_link %>">View for details on how to signup.</a>
+            <% elsif event.machine_training_event_type? %>
+                <form class="inline-form" action="/tools/trainings/sign_up/<%= event.id %>/" method="POST">
+                    <button type="submit" class="wdn-button wdn-button-brand" href="/tools/trainings/sign_up/<%= event.id %>/">Sign Up!</button>
+                </form>
+            <% else %>
+                <form class="inline-form" action="/workshops/sign_up/<%= event.id %>/" method="POST">
+                    <button type="submit" class="dcf-btn dcf-btn-primary" href="/workshops/sign_up/<%= event.id %>/">Sign Up!</button>
+                </form>
+            <% end %>
+            </td>
+        </tr>
+    <% end %>
+    <% if events.count == 0 %>
+        <tr>
+            <td colspan="3">No Events Scheduled</td>
+        </tr>
+    <% end %>
+    </tbody>
+</table>

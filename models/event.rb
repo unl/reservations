@@ -8,6 +8,17 @@ class Event < ActiveRecord::Base
 	alias_method :type, :event_type
 	alias_method :signups, :event_signups
 
+    EVENT_TYPE_ID_NEW_MEMBER_ORIENTATION = 1
+    EVENT_TYPE_ID_MACHINE_TRAINING = 2
+    EVENT_TYPE_ID_ADV_SKILL_BASED_WORKSHOP = 3
+    EVENT_TYPE_ID_CREATION_WORKSHOP = 4
+    EVENT_TYPE_ID_GENERAL_WORKSHOP = 5
+    EVENT_TYPE_ID_FREE_EVENT = 6
+    EVENT_TYPE_ID_RSVP_ONLY_EVENT = 7
+    EVENT_TYPE_ID_TOUR = 8
+
+    EVENT_TYPES_NOT_ALLOWED_FOR_SIGNUP = [EVENT_TYPE_ID_CREATION_WORKSHOP]
+
 	scope :in_day, ->(time) {
 		today = time.in_time_zone.midnight
 		tomorrow = (time.in_time_zone.midnight + 1.day + 1.hour).in_time_zone.midnight
@@ -60,6 +71,7 @@ class Event < ActiveRecord::Base
 	def set_data(params)
 		self.title = params[:title]
 		self.description = params[:description]
+		self.admin_notes = params[:admin_notes]
 		self.start_time = calculate_time(params[:start_date], params[:start_time_hour], params[:start_time_minute], params[:start_time_am_pm])
 		self.end_time = calculate_time(params[:end_date], params[:end_time_hour], params[:end_time_minute], params[:end_time_am_pm])
 		self.event_type_id = params[:type]
@@ -81,5 +93,17 @@ class Event < ActiveRecord::Base
 		self.imagemime = nil
 		self.imagedata = nil
 		self.save
+	end
+
+	def signup_allowed_for_type?
+	    !EVENT_TYPES_NOT_ALLOWED_FOR_SIGNUP.include?(self.type.id)
+	end
+
+	def free_event_type?
+	    self.type.id == EVENT_TYPE_ID_FREE_EVENT
+	end
+
+	def machine_training_event_type?
+	    self.type.id == EVENT_TYPE_ID_MACHINE_TRAINING
 	end
 end

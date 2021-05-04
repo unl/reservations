@@ -1,5 +1,5 @@
 <div id="pagetitle">
-    <h3>Upcoming Machine Trainings</h3>
+    <h3>Upcoming Machine Trainings and Workshops</h3>
 </div>
 
 <p>
@@ -8,38 +8,9 @@ Before using our equipment, it is necessary to complete training workshops on ea
 type of equipment. Here, you can sign up for upcoming trainings. Take a look at our upcoming offerings:
 </p>
 
-<div class="event-page">
-    <table>
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Date/Location</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        <% events.each do |event| %>
-            <tr>
-                <td class="small-hidden">
-                    <a href="<%= event.info_link %>"><%= event.title %></a>
-                </td>
-                <td>
-                    <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
-                    <%= event.location.name %>
-                </td>
-                <td>
-                <% if @user.signed_up_event_ids.include?(event.id) %>
-                    Signed up!
-                <% elsif !event.max_signups.nil? && event.signups.count >= event.max_signups %>
-                    Event is full.
-                <% else %>
-                    <form class="inline-form" action="/tools/trainings/sign_up/<%= event.id %>/" method="POST">
-                        <button type="submit" class="wdn-button wdn-button-brand" href="/tools/trainings/sign_up/<%= event.id %>/">Sign Up!</button>
-                    </form>
-                <% end %>
-                </td>
-            </tr>
-        <% end %>
-        </tbody>
-    </table>
+<div class="event-page dcf-mt-6">
+    <h4 id="trainings-table">Trainings</h4>
+    <%= erb :'event_listing_table', locals: {:events => events, :events_advanced => 'trainings-table'} %>
+
+    <%= erb :'workshop_listings', locals: {:events_advanced => events_advanced, :events_creation => events_creation, :events_general => events_general} %>
 </div>

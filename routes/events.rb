@@ -1,6 +1,20 @@
 require 'models/event'
 require 'models/event_signup'
 
+MESSAGE_EVENT_NOT_FOUND = 'message_event_not_found'
+MESSAGE_SIGNUP_NOT_ALLOWED = 'message_signup_not_allowed'
+
+def flash_message(message)
+    case message
+        when MESSAGE_EVENT_NOT_FOUND
+            flash(:danger, 'Not Found', 'That event does not exist')
+        when MESSAGE_SIGNUP_NOT_ALLOWED
+            flash(:danger, 'Signup Restricted', 'That event does not allow signup')
+        else
+            # invalid message, do nothing
+    end
+end
+
 get '/events/:event_id/?' do
 	# this is an event details page
 	begin
@@ -18,8 +32,12 @@ end
 get '/events/:event_id/sign_up_as_non_member/?' do
 	event = Event.includes(:event_type).find_by(:id => params[:event_id])
 	if event.nil?
-		flash(:danger, 'Not Found', 'That event does not exist')
+		flash_message(MESSAGE_EVENT_NOT_FOUND)
 		redirect '/calendar/'
+	end
+	if !event.signup_allowed_for_type?
+	    flash_message(MESSAGE_SIGNUP_NOT_ALLOWED)
+        redirect back
 	end
 
 	@breadcrumbs << {:text => event.title, :href => event.info_link}
@@ -32,16 +50,21 @@ end
 post '/events/:event_id/sign_up_as_non_member/?' do
 	event = Event.includes(:event_type).find_by(:id => params[:event_id])
 	if event.nil?
-		flash(:danger, 'Not Found', 'That event does not exist')
+		flash_message(MESSAGE_EVENT_NOT_FOUND)
 		redirect '/calendar/'
 	end
-	if event.type.description == 'Free Event'
+	if event.free_event_type?
 		flash(:warning, 'Signup not required', 'This event is a Free Event and is open to anyone. No signup is required.')
 		redirect event.info_link
 	end
 	if params[:name].trim.empty? || params[:email].trim.empty?
 		flash(:danger, 'All Fields Required', 'Name and email are both required.')
 		redirect back
+	end
+
+	if !event.signup_allowed_for_type?
+	    flash_message(MESSAGE_SIGNUP_NOT_ALLOWED)
+        redirect back
 	end
 
 	EventSignup.create(
@@ -75,7 +98,7 @@ post '/events/:event_id/sign_up/?' do
 
 	if event.nil?
 		# that event does not exist
-		flash(:danger, 'Not Found', 'That event does not exist')
+		flash_message(MESSAGE_EVENT_NOT_FOUND)
 		redirect '/calendar/'
 	end
 
@@ -85,7 +108,12 @@ post '/events/:event_id/sign_up/?' do
 		redirect back
 	end
 
-	if event.type.description == 'Machine Training'
+	if !event.signup_allowed_for_type?
+	    flash_message(MESSAGE_SIGNUP_NOT_ALLOWED)
+        redirect back
+	end
+
+	if event.machine_training_event_type?
 		check_membership
 	end
 
@@ -96,7 +124,7 @@ post '/events/:event_id/sign_up/?' do
 		:email => @user.email
 	)
 
-	if event.type.description != 'Free Event'
+	if !event.free_event_type?
 		body = <<EMAIL
 <p>Thank you, #{@user.full_name} for signing up for #{event.title}. Don't forget that this event is</p>
 
@@ -134,8 +162,8 @@ post '/events/:event_id/remove_signup/?' do
 	end
 	signup.delete
 
-	header = event.type.description == 'Free Event' ? 'Event Removed' : 'Signup Removed'
-	message = event.type.description == 'Free Event' ? "#{event.title} has been removed from your calendar." : "Your signup for #{event.title} has been removed."
+	header = event.free_event_type? ? 'Event Removed' : 'Signup Removed'
+	message = event.free_event_type? ? "#{event.title} has been removed from your calendar." : "Your signup for #{event.title} has been removed."
 
 	flash :success, header, message
 	redirect '/home/'
