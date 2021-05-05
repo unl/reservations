@@ -17,3 +17,6 @@ CREATE TABLE IF NOT EXISTS `maker_requests` (
 
 -- Add admin_notes column to events table
 ALTER TABLE `events` ADD COLUMN `admin_notes` text NULL AFTER `description`;
+
+-- Add Events Read-only access
+INSERT INTO `permissions` VALUES (9, 'Events Admin Read-only');

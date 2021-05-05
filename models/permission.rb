@@ -8,4 +8,6 @@ class Permission < ActiveRecord::Base
 	MANAGE_SPACE_HOURS = 5
 	MANAGE_EVENTS = 6
 	SEE_AGENDA = 7
+	USER_ACCESS = 8
+	EVENTS_ADMIN_READ_ONLY = 9
 end

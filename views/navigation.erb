@@ -48,7 +48,7 @@
                 <% if has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER) %>
                 <li><a href="/admin/users/" title="Users">Users</a></li>
                 <% end %>
-                <% if has_permission?(Permission::MANAGE_EVENTS) %>
+                <% if has_permission?(Permission::MANAGE_EVENTS) || has_permission?(Permission::EVENTS_ADMIN_READ_ONLY) %>
                 <li><a href="/admin/events/" title="Events">Events</a></li>
                 <% end %>
                 <% if has_permission?(Permission::MANAGE_RESOURCES) %>

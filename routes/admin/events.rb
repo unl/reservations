@@ -5,9 +5,15 @@ require 'models/location'
 require 'models/resource'
 
 before '/admin/events*' do
-	unless has_permission?(Permission::MANAGE_EVENTS)
+	unless has_permission?(Permission::MANAGE_EVENTS) || has_permission?(Permission::EVENTS_ADMIN_READ_ONLY)
 		raise Sinatra::NotFound
 	end
+end
+
+before '/admin/events/:event_id/(create|edit|delete)*?' do
+    unless has_permission?(Permission::MANAGE_EVENTS)
+        raise Sinatra::NotFound
+    end
 end
 
 get '/admin/events/?' do
