@@ -14,6 +14,19 @@
     </div>
 
     <div class="dcf-form-group">
+        <label for="category-id">Category</label>
+        <select id="category-id" name="category_id">
+            <option value="">Select a Category (use this option for no category)</option>
+            <% Resource.category_options.each do |value, label|
+                selected = ''
+                selected = ' selected="selected" ' if tool.category_id.to_i == value
+            %>
+            <option value="<%= value %>"<%= selected %>><%= label %></option>
+            <% end %>
+        </select>
+    </div>
+
+    <div class="dcf-form-group">
         <label for="description">Description</label>
         <textarea id="description" name="description"><%= tool.description %></textarea>
     </div>

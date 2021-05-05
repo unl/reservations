@@ -13,6 +13,33 @@ class Resource < ActiveRecord::Base
 	has_many :resource_field_datas, dependent: :destroy
 	alias_method :approvers, :resource_approvers
 
+    CATEGORY_ART_STUDIO = 1
+    CATEGORY_GENERAL = 2
+    CATEGORY_METAL_SHOP = 3
+    CATEGORY_RAPID_PROTOTYPING = 4
+    CATEGORY_TEXTILES = 5
+    CATEGORY_WOOD_SHOP = 6
+
+    def self.category_options
+        {
+            CATEGORY_ART_STUDIO => 'Art Studio',
+            CATEGORY_GENERAL => 'General',
+            CATEGORY_METAL_SHOP => 'Metal Shop',
+            CATEGORY_RAPID_PROTOTYPING => 'Rapid Prototyping',
+            CATEGORY_TEXTILES => 'Textiles',
+            CATEGORY_WOOD_SHOP => 'Wood Shop',
+        }
+    end
+
+    def self.valid_category_id?(category_id)
+        self.category_options.key?(category_id.to_i)
+    end
+
+    def category_name
+        return self.class.category_options[category_id] if self.class.category_options.include?(category_id)
+        'Other'
+    end
+
     def user_reservation_limit
         # return nil unless valid limit
         return max_reservations_per_user unless max_reservations_per_user.nil? || max_reservations_per_user.to_i < 1

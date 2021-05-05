@@ -69,7 +69,7 @@
                         <label for="tool">Tool</label>
                         <select id="tools" name="tools[]" class="use-select2" style="width: 100%;" multiple>
                             <% tools.each do |tool| %>
-                                <option <%= 'selected="selected"' if event.has_tool_reservation(tool.id) %> value="<%= tool.id %>"><%= "#{tool.name} - #{tool.model}" %></option>
+                                <option <%= 'selected="selected"' if event.has_tool_reservation(tool.id) %> value="<%= tool.id %>"><%= "#{tool.category_name} - #{tool.name} - #{tool.model}" %></option>
                             <% end %>
                         </select>
                     </div>

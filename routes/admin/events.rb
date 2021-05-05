@@ -58,11 +58,13 @@ end
 
 get '/admin/events/create/?' do
 	@breadcrumbs << {:text => 'Admin Events', :href => '/admin/events/'} << {text: 'Create Event'}
+	tools = Resource.where(:service_space_id => SS_ID, :is_reservable => true).order(:name => :asc).all.to_a
+	tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
 	erb :'admin/new_event', :layout => :fixed, :locals => {
 		:event => Event.new,
 		:types => EventType.where(:service_space_id => SS_ID).all,
 		:locations => Location.where(:service_space_id => SS_ID).all,
-		:tools => Resource.where(:service_space_id => SS_ID, :is_reservable => true).order(:name => :asc).all,
+		:tools => tools,
 		:on_unl_events => false,
 		:on_main_calendar => false
 	}
@@ -178,11 +180,13 @@ get '/admin/events/:event_id/edit/?' do
 		end
 	end
 
+	tools = Resource.where(:service_space_id => SS_ID, :is_reservable => true).order(:name => :asc).all.to_a
+	tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
 	erb :'admin/new_event', :layout => :fixed, :locals => {
 		:event => event,
 		:types => EventType.where(:service_space_id => SS_ID).all,
 		:locations => Location.where(:service_space_id => SS_ID).all,
-		:tools => Resource.where(:service_space_id => SS_ID, :is_reservable => true).order(:name => :asc).all,
+		:tools => tools,
 		:on_unl_events => on_unl_events,
 		:on_main_calendar => on_main_calendar
 	}

@@ -15,7 +15,7 @@ get '/admin/tools/?' do
 	@breadcrumbs << {:text => 'Admin Tools'}
 
 	tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
-	tools.sort_by! {|tool| tool.name.downcase + tool.model.downcase}
+	tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
 	erb :'admin/tools', :layout => :fixed, :locals => {
 		:tools => tools
 	}
@@ -36,6 +36,7 @@ post '/admin/tools/create/?' do
 	tool = Resource.new
 	tool.resource_class_id = NIS_TOOL_RESOURCE_CLASS_ID
 	tool.name = params[:name]
+	tool.category_id = params[:category_id]
 	tool.description = params[:description]
 	tool.service_space_id = SS_ID
 	tool.needs_authorization = params.checked?('needs_authorization')
@@ -88,6 +89,7 @@ post '/admin/tools/:resource_id/edit/?' do
     end
 
 	tool.name = params[:name]
+	tool.category_id = params[:category_id]
 	tool.description = params[:description]
 	tool.needs_authorization = params.checked?('needs_authorization')
 	tool.is_reservable = params.checked?('is_reservable')

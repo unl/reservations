@@ -20,3 +20,6 @@ ALTER TABLE `events` ADD COLUMN `admin_notes` text NULL AFTER `description`;
 
 -- Add Events Read-only access
 INSERT INTO `permissions` VALUES (9, 'Events Admin Read-only');
+
+-- Add category id to resources
+ALTER TABLE `resources` ADD COLUMN `category_id` int(11) NULL AFTER `name`;
