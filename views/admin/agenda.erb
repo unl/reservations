@@ -2,14 +2,14 @@
     <div class="offset-field-group">
         <label for="date">Go to another date:</label>
         <div class="date-time-select">
-            <span class="wdn-icon-calendar"></span>
+            <span class="nic-icon-calendar"></span>
             <input style="width: 90%;" id="date" name="date" title="Reservation Date" type="text" class="datepicker" value="<%= date.strftime('%m/%d/%Y') %>" />
         </div>
     </div>
 </form>
 
 <div id="pagetitle">
-	<h3>Today's Agenda<span class="dcf-subhead"><%= date.strftime('%B %d, %Y') %></h3>
+	<h3>Today's Agenda <span class="dcf-subhead"><%= date.strftime('%B %d, %Y') %></h3>
 </div>
 
 
@@ -78,7 +78,7 @@ Today's Events
 </h4>
 <% if events.empty? %>
 No events today. Perhaps you'd like to create one?<br>
-<a href="/admin/events/create/" class="dcf-btn dcf-btn-primary">New Event</a>
+<a href="/admin/events/create/" class="dcf-mt-6 dcf-btn dcf-btn-primary">New Event</a>
 <% else %>
 <table>
     <thead>
@@ -106,7 +106,7 @@ No events today. Perhaps you'd like to create one?<br>
     </tbody>
 </table>
 <br>
-<a href="/admin/events/" class="dcf-btn wdn-button-triad">Go To Events</a>
+<a href="/admin/events/" class="dcf-btn dcf-btn-secondary">Go To Events</a>
 <% end %>
 
 <% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {

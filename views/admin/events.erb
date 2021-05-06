@@ -61,7 +61,7 @@
                             </td>
                             <td>
                             <% unless event.admin_notes.nil? %>
-                            <button class="dcf-mt-1dcf-btn dcf-btn-primary dcf-btn-toggle-modal" data-toggles-modal="admin-notes-modal-<%= event.id %>" type="button">View Notes</button>
+                            <button class="dcf-mt-1 dcf-btn dcf-btn-secondary dcf-btn-toggle-modal" data-toggles-modal="admin-notes-modal-<%= event.id %>" type="button">Notes</button>
                             <div class="dcf-modal" id="admin-notes-modal-<%= event.id %>" hidden>
                                 <div class="dcf-modal-wrapper">
                                     <div class="dcf-modal-header">
