@@ -1,4 +1,7 @@
 <section class="dcf-grid dcf-col-gap-vw">
+    <% event_div_class = 'dcf-col-100%' %>
+    <% if has_permission?(Permission::MANAGE_EVENTS) %>
+    <% event_div_class = 'dcf-col-100% dcf-col-75%-end@sm' %>
     <nav class="dcf-col-100% dcf-col-25%-start@sm">
         <div class="toolbox">
             <h3>Toolbox</h3>
@@ -12,7 +15,8 @@
             </div>
         </div>
     </nav>
-    <div class="dcf-col-100% dcf-col-75%-end@sm">
+    <% end %>
+    <div class="<%= event_div_class %>">
         <div id="pagetitle">
         <h3>Events</h3>
         </div>
@@ -35,7 +39,11 @@
                     <% events.each do |event| %>
                         <tr>
                             <td class="small-hidden">
+                                <% if has_permission?(Permission::MANAGE_EVENTS) %>
                                 <a href="/admin/events/<%= event.id %>/edit/"><%= event.title %></a>
+                                <% else %>
+                                <%= event.title %>
+                                <% end %>
                             </td>
                             <td>
                                 <ul>
@@ -52,9 +60,25 @@
                                 <% end %>
                             </td>
                             <td>
+                            <% unless event.admin_notes.nil? %>
+                            <button class="dcf-mt-1 dcf-btn dcf-btn-secondary dcf-btn-toggle-modal" data-toggles-modal="admin-notes-modal-<%= event.id %>" type="button">Notes</button>
+                            <div class="dcf-modal" id="admin-notes-modal-<%= event.id %>" hidden>
+                                <div class="dcf-modal-wrapper">
+                                    <div class="dcf-modal-header">
+                                        <h3>Admin Notes for <%= event.title %></h3>
+                                        <button class="dcf-btn-close-modal">Close</button>
+                                    </div>
+                                    <div class="dcf-modal-content">
+                                        <pre><%= event.admin_notes %></pre>
+                                    </div>
+                                </div>
+                            </div>
+                            <% end %>
+                            <% if has_permission?(Permission::MANAGE_EVENTS) %>
                             <form class="delete-event delete-form" action="/admin/events/<%=event.id%>/delete/" method="POST">
-                            <button type="submit" class="dcf-btn">Delete</button>
+                            <button type="submit" class="dcf-mt-1 dcf-btn dcf-btn-primary">Delete</button>
                             </form>
+                            <% end %>
                             </td>
                         </tr>
                     <% end %>

@@ -69,7 +69,7 @@
                         <label for="tool">Tool</label>
                         <select id="tools" name="tools[]" class="use-select2" style="width: 100%;" multiple>
                             <% tools.each do |tool| %>
-                                <option <%= 'selected="selected"' if event.has_tool_reservation(tool.id) %> value="<%= tool.id %>"><%= "#{tool.name} - #{tool.model}" %></option>
+                                <option <%= 'selected="selected"' if event.has_tool_reservation(tool.id) %> value="<%= tool.id %>"><%= "#{tool.category_name} - #{tool.name} - #{tool.model}" %></option>
                             <% end %>
                         </select>
                     </div>
@@ -77,7 +77,7 @@
                 <br>
 
                 <label for="start-date" ><span class="required">*</span> Start Date &amp; Time</label>
-                <div class="date-time-select"><span class="wdn-icon-calendar"></span>
+                <div class="date-time-select"><span class="nic-icon-calendar"></span>
                     <input id="start-date" value="<%= event.start_time.in_time_zone.strftime('%m/%d/%Y') if !event.start_time.nil? %>" name="start_date" title="Start Date" type="text" class="datepicker" />
 
                     <div class="dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mt-4 dcf-mr-4">
@@ -114,7 +114,7 @@
                 </div>
 
                 <label for="end-date">End Date &amp; Time (optional)</label>
-                <div class="date-time-select"><span class="wdn-icon-calendar"></span>
+                <div class="date-time-select"><span class="nic-icon-calendar"></span>
                     <input id="end-date" value="<%= event.end_time.in_time_zone.strftime('%m/%d/%Y') if !event.end_time.nil? %>" name="end_date" title="End Date" type="text" class="datepicker" />
 
                      <div class="dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mt-4 dcf-mr-4">

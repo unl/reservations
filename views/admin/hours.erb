@@ -6,8 +6,8 @@
 </div>
 
 <div style="margin-bottom: 16px;">
-<a href="/admin/hours/?date=<%= (date-7.days).strftime('%Y-%m-%d') %>" class="dcf-btn wdn-button-triad" id="prev-week">&lt; PREV</a>
-<a href="/admin/hours/?date=<%= (date+7.days).strftime('%Y-%m-%d') %>" class="dcf-btn wdn-button-triad" style="float: right;" id="next-week">NEXT &gt;</a>
+<a href="/admin/hours/?date=<%= (date-7.days).strftime('%Y-%m-%d') %>" class="dcf-btn dcf-btn-secondary" id="prev-week">&lt; PREV</a>
+<a href="/admin/hours/?date=<%= (date+7.days).strftime('%Y-%m-%d') %>" class="dcf-btn dcf-btn-secondary" style="float: right;" id="next-week">NEXT &gt;</a>
 </div>
 
 <table>
@@ -76,9 +76,9 @@ Upcoming Changes
             	<% end %>
             </td>
             <td class="table-actions">
-                <a class="dcf-btn dcf-btn-primary" href="/admin/hours/<%= space_hour.id %>/edit/">Edit</a>
+                <a class="dcf-mt-1 dcf-btn dcf-btn-primary" href="/admin/hours/<%= space_hour.id %>/edit/">Edit</a>
                 <form class="delete-space-hour delete-form" action="/admin/hours/<%= space_hour.id %>/delete/" method="POST">
-                    <button type="submit" class="dcf-btn">Remove</button>
+                    <button type="submit" class="dcf-mt-1 dcf-btn dcf-btn-primary">Remove</button>
                 </form>
             </td>
         </tr>

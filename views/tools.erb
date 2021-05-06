@@ -1,19 +1,23 @@
 <div id="pagetitle">
-<h3>Tools You Can Reserve</h3>
+<h3 id="tools-list-table">Tools You Can Reserve</h3>
 </div>
 
 <% if available_tools.count > 0 %>
-<table>
+<table class="dcf-table dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6" aria-describedby="tools-list-table">
     <thead>
         <tr>
-            <th>Tool</th>
-            <th>Model</th>
-            <th>Actions</th>
+            <th scope="col">Category</th>
+            <th scope="col">Tool</th>
+            <th scope="col">Model</th>
+            <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
     <% available_tools.each do |tool| %>
         <tr>
+            <td>
+                <%= tool.category_name %>
+            </td>
             <td>
                 <%= tool.name %>
             </td>

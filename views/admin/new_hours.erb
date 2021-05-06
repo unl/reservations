@@ -15,7 +15,7 @@
 
         	<label for="effective-date">Effective Date</label>
         	<div class="date-time-select">
-            	<span class="wdn-icon-calendar"></span>
+                <span class="nic-icon-calendar"></span>
                 <input style="width: 90%;" id="effective-date" name="effective_date" title="Effective Date" type="text" class="datepicker" value="<%= (space_hour.effective_date || Time.now).strftime('%m/%d/%Y') %>" />
             </div>
         </div>
@@ -96,7 +96,7 @@
             </div>
             <% end %>
         </div>
-        <button id="add-hours" type="button" class="dcf-btn wdn-button-complement">Add Hours</button>
+        <button id="add-hours" type="button" class="dcf-btn dcf-btn-secondary">Add Hours</button>
     </fieldset>
 
     <button type="submit" class="dcf-btn dcf-btn-primary">Submit</button>

@@ -7,14 +7,18 @@
 <table>
     <thead>
         <tr>
-            <th>Tool</th>
-            <th>Model</th>
-            <th>Actions</th>
+            <th scope="col">Category</th>
+            <th scope="col">Tool</th>
+            <th scope="col">Model</th>
+            <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
     <% tools.each do |tool| %>
         <tr>
+            <td>
+                <%= tool.category_name %>
+            </td>
             <td>
                 <%= tool.name %>
             </td>
