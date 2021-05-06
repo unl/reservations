@@ -15,7 +15,6 @@ get '/tools/?' do
 	tools.reject! {|tool| tool.needs_authorization && !@user.authorized_resource_ids.include?(tool.id)}
 	tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
 
-
 	erb :tools, :layout => :fixed, :locals => {
 		:available_tools => tools
 	}
