@@ -223,7 +223,7 @@ get '/admin/users/:user_id/manage/?' do
 	end
 
     # Get user tool options
-	tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
+    tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
     tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
 
 	erb :'admin/manage_authorizations', :layout => :fixed, :locals => {
