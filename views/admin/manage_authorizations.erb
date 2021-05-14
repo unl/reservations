@@ -1,32 +1,30 @@
 <div id="pagetitle">
-	<h3>Manage Tool Authorizations for <%= user.full_name %></h3>
+    <h3 class="dcf-txt-h4" id="manage-tool-authorizations-header">Manage Tool Authorizations for <%= user.full_name %></h3>
 </div>
 
-<form id="signup" action="" method="POST">
-<table>
-	<thead>
-		<th>
-			Tool
-		</th>
-		<th>
-			Authorized On
-		</th>
-	</thead>
-	<tbody>
-	<% tools.each do |tool| %>
-		<tr>
-			<td>
-		    	<input <%= 'checked="checked"' if user.authorized_resource_ids.include?(tool.id) %> type="checkbox" name="permission_<%= tool.id %>" id="permission-<%= tool.id %>">
-				<label for="permission-<%= tool.id %>"><%= tool.name %> - <%= tool.model %></label>
-			</td>
-			<td>
-				<% unless (auth = user.get_authorization(tool.id)).nil? || auth.authorized_date.nil? %>
-					<%= auth.authorized_date.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %>
-				<% end %>
-			</td>
-		</tr>
-	<% end %>
-	</tbody>
+<form class="dcf-form" id="signup" action="" method="POST">
+<table class="dcf-table dcf-table-bordered" aria-describedby="manage-tool-authorizations-header">
+    <thead>
+        <th scope="col">Tool</th>
+        <th scope="col">Authorized On</th>
+    </thead>
+    <tbody>
+    <% tools.each do |tool| %>
+        <tr>
+            <td>
+                <div class="dcf-input-checkbox">
+                    <input <%= 'checked="checked"' if user.authorized_resource_ids.include?(tool.id) %> type="checkbox" name="permission_<%= tool.id %>" id="permission-<%= tool.id %>">
+                    <label for="permission-<%= tool.id %>"><%=tool.category_name %> - <%= tool.name %> - <%= tool.model %></label>
+                </div>
+            </td>
+            <td>
+                <% unless (auth = user.get_authorization(tool.id)).nil? || auth.authorized_date.nil? %>
+                    <%= auth.authorized_date.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %>
+                <% end %>
+            </td>
+        </tr>
+    <% end %>
+    </tbody>
 </table>
 <br>
 <button class="dcf-btn dcf-btn-primary" type="submit">Save User</button>
