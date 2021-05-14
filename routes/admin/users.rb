@@ -221,7 +221,10 @@ get '/admin/users/:user_id/manage/?' do
 		flash :alert, "Not Found", "Sorry, that user was not found."
 		redirect '/admin/users/'
 	end
-	tools = Resource.where(:service_space_id => SS_ID).order(:name).all
+
+    # Get user tool options
+	tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
+    tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
 
 	erb :'admin/manage_authorizations', :layout => :fixed, :locals => {
 		:user => user,
