@@ -39,7 +39,7 @@ get '/admin/hours/?' do
 
 	upcoming_hours = SpaceHour.where(:service_space_id => SS_ID)
 		.where('effective_date >= ?', date.utc.strftime('%Y-%m-%d %H:%M:%S'))
-		.where('effective_date <= ?', (date+31.days).utc.strftime('%Y-%m-%d %H:%M:%S'))
+		.where('effective_date <= ?', (date+365.days).utc.strftime('%Y-%m-%d %H:%M:%S'))
 		.order(:effective_date).all
 
 	erb :'admin/hours', :layout => :fixed, :locals => {
