@@ -22,7 +22,7 @@
         <div class="dcf-col-100% dcf-col-75%-end@sm">
             <div class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
                 <div>
-                    <label>Studio Status:</label>
+                    <label for="studio-status">Studio Status:</label>
                     <select id="studio-status" name="studio_status" class="dcf-input-select">
                         <option value=""></option>
                         <% USER_STATII.each do |word| %>
@@ -31,7 +31,7 @@
                     </select>
                 </div>
                 <div>
-                    <label>Tool Authorization:</label>
+                    <label for="tool-authorization">Tool Authorization:</label>
                     <select id="tool-authorization" name="tool_authorization" class="dcf-input-select">
                         <option value=""></option>
                         <% tools.each do |tool| %>

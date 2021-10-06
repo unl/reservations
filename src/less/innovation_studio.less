@@ -178,8 +178,8 @@ select[multiple=multiple] {
 }
 
 .calendar-container.individual-day {
-	background-color: #f9f8f5;
-    border: 1px solid #d5d5d2;
+    background-color: var(--bg-light-gray);
+    border: 1px solid var(--b);
 	.time-labels {
 		width: 25%;
 	}
@@ -218,17 +218,17 @@ select[multiple=multiple] {
 }
 
 .toolbox, .visual-island {
-    background: #f9f8f5;
+    background: var(--bg-light-gray);
     margin-bottom: 1em;
     word-wrap: break-word;
 	padding: 0 !important;
 	.tools, .details {
 		padding: 1em;
-		border-left: 1px solid #d5d5d2;
-		border-right: 1px solid #d5d5d2;
-		border-bottom: 1px solid #d5d5d2;
+		border-left: 1px solid var(--b);
+		border-right: 1px solid var(--b);
+		border-bottom: 1px solid var(--b);
 		&.top-border {
-			border-top: 1px solid #d5d5d2;
+			border-top: 1px solid var(--b);
 		}
 	}
     h1, h2, h3, h4, h5, h6, .vi-header{
@@ -299,8 +299,8 @@ select[multiple=multiple] {
 
 .date-time-select {
     padding: 1em;
-    background-color: #f9f8f5;
-    border: 1px solid #d5d5d2;
+    background-color: var(--bg-light-gray);
+    border: 1px solid var(--b);
     margin-bottom: 0.75em;
     text-align: center;
     &.hours {
@@ -327,20 +327,28 @@ select[multiple=multiple] {
 	    	width: 90%;
 	    }
 	}
-	select {
-	    width: 14%;
-	    text-align: center;
-	    padding: 0;
-	}
 	> * {
 	  vertical-align: middle;
 	}
 }
 
 .expired {
-	color: #d00000;
+	color: var(--link);
 	font-weight: bold;
 	font-size: .85em;
+}
+
+.wdn_tabs>li {
+    background-color: var(--bg-tab);
+
+    .selected {
+        background-color: var(--bg-tab-selected);
+    }
+}
+
+.wdn_tabs_content {
+    background-color: var(--bg-tabs-panel);
+    border-color: var(--b-tab)
 }
 
 /* for mobile-tablet-ish sizes */
@@ -351,15 +359,5 @@ select[multiple=multiple] {
 
 	.medium-block {
 		display: block !important;
-	}
-
-	.date-time-select {
-		input {
-		    width: 100%;
-		}
-		select {
-		    width: 30%;
-		    text-align: center;
-		}
 	}
 }
