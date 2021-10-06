@@ -22,7 +22,7 @@
                     <div class="dcf-input-checkbox dcf-d-inline">
                         <input type="checkbox" <%= 'checked="checked"' unless event.max_signups.nil? %> id="limit-signups" name="limit_signups"><label class="dcf-label" for="limit-signups">Limit signups for this event to: </label>
                     </div>
-                    <input value="<%= event.max_signups %>" type="number" id="max-signups" name="max_signups" class="dcf-d-inline dcf-w-10" />
+                    <input value="<%= event.max_signups %>" type="number" id="max-signups" name="max_signups" class="dcf-d-inline dcf-w-10" aria-label="Number of signups to limit."/>
                 </div>
             </fieldset>
 

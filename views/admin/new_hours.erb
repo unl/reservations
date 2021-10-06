@@ -2,7 +2,7 @@
 	<h3>Set New Hours</h3>
 </div>
 
-<form id="create-hours" action="" method="POST">
+<form class="dcf-form" id="create-hours" action="" method="POST">
     <div class="dcf-grid dcf-col-gap-vw">
         <div class="dcf-col-100% dcf-col-50%-start@sm">
             <label for="day-of-week">Day Of Week</label>
@@ -15,7 +15,7 @@
 
         	<label for="effective-date">Effective Date</label>
         	<div class="date-time-select">
-                <span class="nic-icon-calendar"></span>
+                <span class="nic-icon-calendar dcf-float-left dcf-mt-2"></span>
                 <input style="width: 90%;" id="effective-date" name="effective_date" title="Effective Date" type="text" class="datepicker" value="<%= (space_hour.effective_date || Time.now).strftime('%m/%d/%Y') %>" />
             </div>
         </div>
@@ -23,19 +23,19 @@
 
     <fieldset>
         <legend>Hours</legend>
-        <label>Studio will be closed for all hours you do not indicate here.</label>
-        <input type="text" class="hidden" name="hours" id="hours" />
+        <span>Studio will be closed for all hours you do not indicate here.</span>
+        <input type="hidden" name="hours" id="hours" />
         <div id="hours-container">
             <% hours = [{:status => 'open', :start => 540, :end => 1020}] if hours.nil? %>
             <% hours.each_index do |x| %>
             <% record = hours[x] %>
             <div id="base-hours-<%=x%>" class="date-time-select hours-record">
-                <select class="hours-type dcf-input-select">
+                <select class="hours-type dcf-input-select" aria-label="Choose hours entry status.">
                     <option <%= 'selected="selected"' if record[:status] == 'open' %> value="open">Open</option>
                     <option <%= 'selected="selected"' if record[:status] == 'open_without_reservations' %> value="open_without_reservations">Open but Machine Reservations are Not Allowed</option>
                     <option <%= 'selected="selected"' if record[:status] == 'closed' %> value="closed">Closed</option>
                 </select>
-                <label for="start-date">from</label>
+                <label class="dcf-mt-4" for="start-date">from</label>
                 <div class="dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mt-4 dcf-mr-4">
                     <select class="start-time-hour dcf-flex-grow-1 dcf-input-select" title="Start Time Hour">
                         <option value=""></option>
@@ -52,18 +52,18 @@
                     </select>
 
                     <div class="am_pm dcf-mb-0 dcf-pl-3">
-                        <div class="dcf-d-flex dcf-ai-center">
-                            <label class="dcf-label dcf-2nd dcf-mt-0 dcf-ml-1" for="hours-start-am">AM</label>
+                        <div class="dcf-d-flex dcf-ai-center dcf-input-radio">
                             <input <%= 'checked="checked"' if record[:start] < 720 %> class="start-time-am-pm dcf-flex-shrink-0" title="AM" type="radio" value="am" name="<%= z = String.token %>">
+                            <label for="hours-start-am">AM</label>
                         </div>
-                        <div class="dcf-d-flex dcf-ai-center">
-                            <label class="dcf-label dcf-2nd dcf-mt-0 dcf-ml-1" for="hours-start-pm">PM</label>
+                        <div class="dcf-d-flex dcf-ai-center dcf-input-radio">
                             <input <%= 'checked="checked"' if record[:start] >= 720 %> class="start-time-am-pm dcf-flex-shrink-0" title="PM" type="radio" value="pm" name="<%= z %>">
+                            <label for="hours-start-pm">PM</label>
                         </div>
                     </div>
                 </div>
 
-                <label for="end-date">until</label>
+                <label class="dcf-mt-4" for="end-date">until</label>
                 <div class="dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mt-4 dcf-mr-4">
                     <select class="end-time-hour dcf-flex-grow-1 dcf-input-select" title="End Time Hour">
                         <option value=""></option>
@@ -80,13 +80,13 @@
                     </select>
 
                     <div class="am_pm dcf-mb-0 dcf-pl-3">
-                        <div class="dcf-d-flex dcf-ai-center">
-                            <label class="dcf-label dcf-2nd dcf-mt-0 dcf-ml-1" for="hours-end-am">AM</label>
+                        <div class="dcf-d-flex dcf-ai-center dcf-input-radio">
                             <input <%= 'checked="checked"' if record[:end] < 720 %> class="end-time-am-pm dcf-flex-shrink-0" title="AM" type="radio" value="am" name="<%= z = String.token %>">
+                            <label for="hours-end-am">AM</label>
                         </div>
-                        <div class="dcf-d-flex dcf-ai-center">
-                            <label class="dcf-label dcf-2nd dcf-mt-0 dcf-ml-1" for="hours-end-pm">PM</label>
+                        <div class="dcf-d-flex dcf-ai-center dcf-input-radio">
                             <input <%= 'checked="checked"' if record[:end] >= 720 %> class="end-time-am-pm dcf-flex-shrink-0" title="PM" type="radio" value="pm" name="<%= z %>">
+                            <label for="hours-end-pm">PM</label>
                         </div>
                     </div>
                 </div>

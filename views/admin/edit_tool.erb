@@ -60,7 +60,7 @@
                 <input type="radio" name="time_slot_type" id="time-slot-type-exact" value="exact" <%= 'checked="checked"' if tool.time_slot_type == 'exact' || tool.time_slot_type.nil? %>>
                 <label for="time-slot-type-exact">Exactly</label>
             </div>
-            <input type="number" name="minutes_per_reservation" id="minutes-per-reservation" value="<%= tool.minutes_per_reservation %>">
+            <input style="width: 100px" type="number" name="minutes_per_reservation" id="minutes-per-reservation" value="<%= tool.minutes_per_reservation %>" aria-label="The exact minute limit value.">
         </div>
 
         <div class="dcf-form-group dcf-mt-6">
