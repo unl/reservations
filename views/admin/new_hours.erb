@@ -53,11 +53,11 @@
 
                     <div class="am_pm dcf-mb-0 dcf-pl-3">
                         <div class="dcf-d-flex dcf-ai-center dcf-input-radio">
-                            <input <%= 'checked="checked"' if record[:start] < 720 %> class="start-time-am-pm dcf-flex-shrink-0" title="AM" type="radio" value="am" name="<%= z = String.token %>">
+                            <input <%= 'checked="checked"' if record[:start] < 720 %> class="start-time-am-pm dcf-flex-shrink-0" id="hours-start-am" title="AM" type="radio" value="am" name="<%= z = String.token %>">
                             <label for="hours-start-am">AM</label>
                         </div>
                         <div class="dcf-d-flex dcf-ai-center dcf-input-radio">
-                            <input <%= 'checked="checked"' if record[:start] >= 720 %> class="start-time-am-pm dcf-flex-shrink-0" title="PM" type="radio" value="pm" name="<%= z %>">
+                            <input <%= 'checked="checked"' if record[:start] >= 720 %> class="start-time-am-pm dcf-flex-shrink-0" id="hours-start-pm" title="PM" type="radio" value="pm" name="<%= z %>">
                             <label for="hours-start-pm">PM</label>
                         </div>
                     </div>
@@ -81,11 +81,11 @@
 
                     <div class="am_pm dcf-mb-0 dcf-pl-3">
                         <div class="dcf-d-flex dcf-ai-center dcf-input-radio">
-                            <input <%= 'checked="checked"' if record[:end] < 720 %> class="end-time-am-pm dcf-flex-shrink-0" title="AM" type="radio" value="am" name="<%= z = String.token %>">
+                            <input <%= 'checked="checked"' if record[:end] < 720 %> class="end-time-am-pm dcf-flex-shrink-0" id="hours-end-am" title="AM" type="radio" value="am" name="<%= z = String.token %>">
                             <label for="hours-end-am">AM</label>
                         </div>
                         <div class="dcf-d-flex dcf-ai-center dcf-input-radio">
-                            <input <%= 'checked="checked"' if record[:end] >= 720 %> class="end-time-am-pm dcf-flex-shrink-0" title="PM" type="radio" value="pm" name="<%= z %>">
+                            <input <%= 'checked="checked"' if record[:end] >= 720 %> class="end-time-am-pm dcf-flex-shrink-0" id="hours-end-pm" title="PM" type="radio" value="pm" name="<%= z %>">
                             <label for="hours-end-pm">PM</label>
                         </div>
                     </div>
