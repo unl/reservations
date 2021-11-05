@@ -121,24 +121,19 @@
                     <% unless session["notice"].nil? %>
                         <% notices = session.delete("notice") %>
                         <% notices.each do |notice| %>
-                        <% notice_class = '' %>
+                        <% notice_class = 'dcf-notice-info' %>
                         <% case notice[:type]
                             when 'success', :success
-                                notice_class = 'affirm'
+                                notice_class = 'dcf-notice-success'
                             when 'failure', :failure
-                                notice_class = 'negate'
+                                notice_class = 'dcf-notice-danger'
                             when 'alert', 'danger', 'error', :error, :alert, :danger
-                                notice_class = 'alert' %>
+                                notice_class = 'dcf-notice-warning' %>
                         <% end %>
-                        <div id="notice" class="wdn_notice <%= notice_class %>">
-                            <div class="close">
-                                <a href="#" title="Close this notice">Close this notice</a>
-                            </div>
-                            <div class="message">
-                                <h4><%= notice[:header] %></h4>
-                                <div class="message-content">
+                        <div id="notice" class="dcf-notice <%= notice_class %>" hidden>
+                            <h2><%= notice[:header] %></h2>
+                            <div class="message-content">
                                     <%= notice[:message] %>
-                                </div>
                             </div>
                         </div>
                         <% end %>
