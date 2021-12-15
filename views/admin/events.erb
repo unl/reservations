@@ -86,34 +86,32 @@
                 </table>
             </div>
             <% if total_pages > 1 %>
-                <% append_script_declaration("WDN.loadCSS('/wdn/templates_4.1/css/modules/pagination.css');") %>
-                <div style="text-align: center;">
-                    <div style="display: inline-block;">
-                        <ul id="pending-pagination" class="wdn_pagination" data-tab="pending" style="padding-left: 0;">
-                            <% if page != 1 %>
-                                <li class="arrow prev"><a href="?tab=<%= tab %>&amp;page=<%= page-1 %>" title="Go to the previous page">&#8592; prev</a></li>
+                <% append_script_declaration("WDN.initializePlugin('pagination');") %>
+                <nav class="dcf-pagination dcf-mt-3">
+                    <ol class="dcf-list-bare dcf-list-inline">
+                    <% if page != 1 %>
+                        <li><a class="dcf-pagination-prev" href="?tab=<%= tab %>&amp;page=<%= page-1 %>"">Prev</a></li>
+                    <% end %>
+                    <% before_ellipsis_shown = false; after_ellipsis_shown = false %>
+                    <% (1..total_pages).each do |i| %>
+                            <% if i == page %>
+                                <li><span class="dcf-pagination-selected"><%= i %></span></li>
+                            <% elsif (i <= 3 || i >= total_pages - 2 || i == page - 1 ||
+                                        i == page - 2 || i == page + 1 || $i == page + 2) %>
+                                <li><a href="?tab=<%= tab %>&amp;page=<%= i %>"><%= i %></a></li>
+                            <% elsif (i < page && !before_ellipsis_shown) %>
+                                <li><span class="dcf-pagination-ellipsis">...</span></li>
+                                <% before_ellipsis_shown = true %>
+                            <% elsif (i > page && !after_ellipsis_shown) %>
+                                <li><span class="dcf-pagination-ellipsis">...</span></li>
+                                <% after_ellipsis_shown = true %>
                             <% end %>
-                            <% before_ellipsis_shown = false; after_ellipsis_shown = false %>
-                            <% (1..total_pages).each do |i| %>
-                                    <% if i == page %>
-                                        <li class="selected"><span><%= i %></span></li>
-                                    <% elsif (i <= 3 || i >= total_pages - 2 || i == page - 1 || 
-                                                i == page - 2 || i == page + 1 || $i == page + 2) %>
-                                        <li><a href="?tab=<%= tab %>&amp;page=<%= i %>" title="Go to page <%= i %>"><%= i %></a></li>
-                                    <% elsif (i < page && !before_ellipsis_shown) %>
-                                        <li><span class="ellipsis">...</span></li>
-                                        <% before_ellipsis_shown = true %>
-                                    <% elsif (i > page && !after_ellipsis_shown) %>
-                                        <li><span class="ellipsis">...</span></li>
-                                        <% after_ellipsis_shown = true %>
-                                    <% end %>
-                            <% end %>
-                            <% if page != total_pages %>
-                                <li class="arrow next"><a href="?tab=<%= tab %>&amp;page=<%= page+1 %>" title="Go to the next page">next &#8594;</a></li>
-                            <% end %>
-                        </ul>
-                    </div>
-                </div>
+                    <% end %>
+                    <% if page != total_pages %>
+                        <li><a class="dcf-pagination-next" href="?tab=<%= tab %>&amp;page=<%= page+1 %>">Next</a></li>
+                    <% end %>
+                    </ol>
+                </nav>
             <% end %>
         </div>
     </div>
