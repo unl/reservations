@@ -25,13 +25,11 @@ Today's Hours
     The studio is open all day.
 <% end %>
 
-<h4>
-Today's Reservations
-</h4>
+<h4 id="todays-reservations">Today's Reservations</h4>
 <% if reservations.empty? %>
 No reservations today. Hopefully someone will still come in to use the space!<br>
 <% else %>
-<table class="dcf-w-100% dcf-table dcf-table-bordered">
+<table class="dcf-w-100% dcf-table dcf-table-bordered" aria-describedby="todays-reservations">
     <thead>
         <tr>
             <th>Name</th>
@@ -72,12 +70,12 @@ No reservations today. Hopefully someone will still come in to use the space!<br
 </table>
 <% end %>
 
-<h4 class="dcf-mt-4">Today's Events</h4>
+<h4 class="dcf-mt-4" id="todays-events">Today's Events</h4>
 <% if events.empty? %>
 No events today. Perhaps you'd like to create one?<br>
 <a href="/admin/events/create/" class="dcf-mt-6 dcf-btn dcf-btn-primary">New Event</a>
 <% else %>
-<table class="dcf-w-100% dcf-table dcf-table-bordered">
+<table class="dcf-w-100% dcf-table dcf-table-bordered" aria-describedby="todays-events">
     <thead>
         <tr>
             <th>Title</th>
