@@ -40,7 +40,7 @@
             </td>
             <td class="table-actions">
                 <a href="/tools/<%= reservation.resource.id %>/edit_reservation/<%= reservation.id %>/" class="dcf-mt-1 dcf-btn dcf-btn-primary">Edit</a>
-                <form method="POST" action="/tools/<%= reservation.resource.id %>/cancel/<%= reservation.id %>" class="delete-form">
+                <form method="POST" action="/tools/<%= reservation.resource.id %>/cancel/<%= reservation.id %>" class="dcf-form delete-form">
                     <button class="dcf-mt-1 dcf-btn dcf-btn-primary" type="submit">Remove</button>
                 </form>
             </td>
@@ -78,7 +78,7 @@ My Events
                 <%= event.location.name %>
             </td>
             <td class="table-actions">
-            	<form action="/events/<%= event.id %>/remove_signup/" method="POST" class="delete-form">
+                <form action="/events/<%= event.id %>/remove_signup/" method="POST" class="dcf-form delete-form">
 					<button class="dcf-btn dcf-btn-primary" type="submit">
 					Remove
 					</button>

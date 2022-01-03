@@ -18,14 +18,11 @@ end %>
 	<h3><%= reservation.nil? ? 'Reserve Time on ' : 'Edit Reservation for ' %><%= tool.name %></h3>
 </div>
 
-<form action="" method="POST">
+<form class="dcf-form" action="" method="POST">
 <section class="dcf-grid-full dcf-grid-thirds@sm dcf-col-gap-vw">
-    <div>
-    	<label for="date">Date</label>
-    	<div class="date-time-select">
-        <span class="nic-icon-calendar"></span>
-        <input style="width: 90%;" id="date" name="date" title="Reservation Date" type="text" class="datepicker" value="<%= day.strftime('%m/%d/%Y') %>" />
-        </div>
+    <div class="dcf-datepicker">
+        <label for="date">Date</label>
+        <input class="dcf-w-100%" id="date" name="date" title="Reservation Date" type="text" value="<%= day.strftime('%m/%d/%Y') %>" />
     </div>
     <div>
     	<label>Schedule for <span id="current-date"><%= day.strftime('%m/%d/%Y') %></span></label>
@@ -206,11 +203,9 @@ end %>
 </section>
 </form>
 
+<% append_script_declaration("WDN.initializePlugin('datepickers');") %>
 <% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {
     $ = require('jquery');
-    $('.datepicker').datepicker();
-    $("LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
-
     $('#date').change(function () {
         var date = $('#date').val().split('/');
         window.location = window.location.href.split('?')[0] + '?date=' + date[2] + '-' + date[0] + '-' + date[1];

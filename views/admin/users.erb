@@ -12,7 +12,7 @@
     </div>
 </div>
 
-<form id="find-controls">
+<form class="dcf-form" id="find-controls">
     <div class="dcf-grid dcf-col-gap-vw dcf-row-gap-6">
         <div class="dcf-col-100% dcf-col-25%-start@sm">
             <label style="font-size: 120%; margin-right: 20px;">Find users by:</label>
@@ -46,10 +46,10 @@
 
 <% if users.count > 0 %>
 <div>
-    <table class="event-list">
+    <table class="dcf-w-100% dcf-table dcf-table-bordered">
         <thead class="small-hidden">
             <tr>
-                <th style="max-width: 80px;">&nbsp;</th>
+                <th style="max-width: 80px;">Image</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Tool Authorizations</th>
@@ -88,7 +88,7 @@
                 <td class="table-actions">
                     <a href="/admin/users/<%= user.id %>/edit/" class="dcf-mt-1 dcf-btn dcf-btn-primary">Edit</a>
                     <a href="/admin/users/<%= user.id %>/manage/" class="dcf-mt-1 dcf-btn dcf-btn-secondary">Tools</a>
-                    <form class="delete-form delete-user" action="/admin/users/<%= user.id %>/delete/" method="POST">
+                    <form class="dcf-form delete-form delete-user" action="/admin/users/<%= user.id %>/delete/" method="POST">
                         <button type="submit" class="dcf-mt-1 dcf-btn dcf-btn-primary">Delete</button>
                     </form>
                 </td>

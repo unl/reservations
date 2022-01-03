@@ -7,8 +7,8 @@
 <div>
 	<h4>Update Profile</h4>
 </div>
-<form action="" method="POST">
-<section class="wdcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
+<form class="dcf-form" action="" method="POST">
+<section class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
 <div>
 	<label for="email">Email</label>
     <input type="text" id="email" name="email" value="<%= @user.email %>" />
@@ -28,7 +28,7 @@
 	<h4>Change Password</h4>
 </div>
 
-<form action="/change-password/" method="POST">
+<form class="dcf-form" action="/change-password/" method="POST">
 <section class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
 <div>
 	<label for="password">New Password</label>

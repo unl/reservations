@@ -5,18 +5,22 @@
 <form class="dcf-form" id="create-hours" action="" method="POST">
     <div class="dcf-grid dcf-col-gap-vw">
         <div class="dcf-col-100% dcf-col-50%-start@sm">
-            <label for="day-of-week">Day Of Week</label>
-            <select id="day-of-week" name="day_of_week" class="dcf-input-select">
-            <% (weekdays = %w(Sunday Monday Tuesday Wednesday Thursday Friday Saturday)).each_index do |i| %>
-                <option <%= 'selected="selected"' if space_hour.day_of_week == i && !space_hour.one_off %> value="<%= i %>"><%= weekdays[i] %></option>
-            <% end %>
-                <option <%= 'selected="selected"' if space_hour.one_off %> value="one_off">Set hours for a single day</option>
-            </select>
 
-        	<label for="effective-date">Effective Date</label>
-        	<div class="date-time-select">
-                <span class="nic-icon-calendar dcf-float-left dcf-mt-2"></span>
-                <input style="width: 90%;" id="effective-date" name="effective_date" title="Effective Date" type="text" class="datepicker" value="<%= (space_hour.effective_date || Time.now).strftime('%m/%d/%Y') %>" />
+            <div class="dcf-form-group">
+                <label for="day-of-week">Day Of Week</label>
+                <select id="day-of-week" name="day_of_week" class="dcf-input-select">
+                <% (weekdays = %w(Sunday Monday Tuesday Wednesday Thursday Friday Saturday)).each_index do |i| %>
+                    <option <%= 'selected="selected"' if space_hour.day_of_week == i && !space_hour.one_off %> value="<%= i %>"><%= weekdays[i] %></option>
+                <% end %>
+                    <option <%= 'selected="selected"' if space_hour.one_off %> value="one_off">Set hours for a single day</option>
+                </select>
+            </div>
+
+            <div class="dcf-form-group">
+                <div class="dcf-datepicker">
+                    <label for="effective-date">Effective Date</label>
+                    <input style="width: 90%;" id="effective-date" name="effective_date" title="Effective Date" type="text" value="<%= (space_hour.effective_date || Time.now).strftime('%m/%d/%Y') %>" />
+                </div>
             </div>
         </div>
     </div>
@@ -92,7 +96,7 @@
                 </div>
 
                 &nbsp;
-                <button title="Remove" type="button" class="<%= 'hidden' if x == 0 %> remove-hours dcf-btn">&times;</button>
+                <button title="Remove" type="button" class="<%= 'dcf-invisible' if x == 0 %> remove-hours dcf-btn">&times;</button>
             </div>
             <% end %>
         </div>
@@ -102,10 +106,9 @@
     <button type="submit" class="dcf-btn dcf-btn-primary">Submit</button>
 </form>
 
+<% append_script_declaration("WDN.initializePlugin('datepickers');") %>
 <% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {
     $ = require('jquery');
-    $('.datepicker').datepicker();
-    $("LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
 
     $('#hours-container').on('click', '.remove-hours', function(click) {
         click.preventDefault();
