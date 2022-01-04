@@ -18,7 +18,7 @@
     <% end %>
     <div class="dcf-tabs-faked <%= event_div_class %>">
         <h3>Events</h3>
-        <ol class="dcf-mb-0">
+        <ol class="dcf-tabs-list dcf-list-bare dcf-mb-0" role="tablist">
             <li class="dcf-tabs-list-item dcf-mb-0" role="presentation"><a id="tab-upcoming" href="?tab=upcoming" class="dcf-tab dcf-d-block" role="tab" <%='tabindex="-1" aria-selected="true"' if tab == 'upcoming' %>>Upcoming</a></li>
             <li class="dcf-tabs-list-item dcf-mb-0" role="presentation"><a id="tab-past" href="?tab=past" class="dcf-tab dcf-d-block" role="tab" <%='tabindex="-1" aria-selected="true"' if tab == 'past' %>>Past</a></li>
         </ol>
