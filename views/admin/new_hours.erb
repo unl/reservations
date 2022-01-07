@@ -1,6 +1,4 @@
-<div id="pagetitle">
-	<h3>Set New Hours</h3>
-</div>
+<h1 class="dcf-txt-h3">Set New Hours</h1>
 
 <form class="dcf-form" id="create-hours" action="" method="POST">
     <div class="dcf-grid dcf-col-gap-vw">
@@ -19,7 +17,7 @@
             <div class="dcf-form-group">
                 <div class="dcf-datepicker">
                     <label for="effective-date">Effective Date</label>
-                    <input style="width: 90%;" id="effective-date" name="effective_date" title="Effective Date" type="text" value="<%= (space_hour.effective_date || Time.now).strftime('%m/%d/%Y') %>" />
+                    <input id="effective-date" name="effective_date" title="Effective Date" type="text" value="<%= (space_hour.effective_date || Time.now).strftime('%m/%d/%Y') %>" />
                 </div>
             </div>
         </div>
@@ -57,12 +55,12 @@
 
                     <div class="am_pm dcf-mb-0 dcf-pl-3">
                         <div class="dcf-d-flex dcf-ai-center dcf-input-radio">
-                            <input <%= 'checked="checked"' if record[:start] < 720 %> class="start-time-am-pm dcf-flex-shrink-0" id="hours-start-am" title="AM" type="radio" value="am" name="<%= z = String.token %>">
-                            <label for="hours-start-am">AM</label>
+                            <input id="hours-start-am-<%=x%>" <%= 'checked="checked"' if record[:start] < 720 %> class="start-time-am-pm dcf-flex-shrink-0" id="hours-start-am" title="AM" type="radio" value="am" name="<%= z = String.token %>">
+                            <label for="hours-start-am-<%=x%>">AM</label>
                         </div>
                         <div class="dcf-d-flex dcf-ai-center dcf-input-radio">
-                            <input <%= 'checked="checked"' if record[:start] >= 720 %> class="start-time-am-pm dcf-flex-shrink-0" id="hours-start-pm" title="PM" type="radio" value="pm" name="<%= z %>">
-                            <label for="hours-start-pm">PM</label>
+                            <input id="hours-start-pm-<%=x%>" <%= 'checked="checked"' if record[:start] >= 720 %> class="start-time-am-pm dcf-flex-shrink-0" id="hours-start-pm" title="PM" type="radio" value="pm" name="<%= z %>">
+                            <label for="hours-start-pm-<%=x%>">PM</label>
                         </div>
                     </div>
                 </div>
@@ -85,12 +83,12 @@
 
                     <div class="am_pm dcf-mb-0 dcf-pl-3">
                         <div class="dcf-d-flex dcf-ai-center dcf-input-radio">
-                            <input <%= 'checked="checked"' if record[:end] < 720 %> class="end-time-am-pm dcf-flex-shrink-0" id="hours-end-am" title="AM" type="radio" value="am" name="<%= z = String.token %>">
+                            <input id="hours-end-am" <%= 'checked="checked"' if record[:end] < 720 %> class="end-time-am-pm dcf-flex-shrink-0" id="hours-end-am" title="AM" type="radio" value="am" name="<%= z = String.token %>">
                             <label for="hours-end-am">AM</label>
                         </div>
                         <div class="dcf-d-flex dcf-ai-center dcf-input-radio">
-                            <input <%= 'checked="checked"' if record[:end] >= 720 %> class="end-time-am-pm dcf-flex-shrink-0" id="hours-end-pm" title="PM" type="radio" value="pm" name="<%= z %>">
-                            <label for="hours-end-pm">PM</label>
+                            <input id="hours-end-pm-<%=x%>" <%= 'checked="checked"' if record[:end] >= 720 %> class="end-time-am-pm dcf-flex-shrink-0" id="hours-end-pm" title="PM" type="radio" value="pm" name="<%= z %>">
+                            <label for="hours-end-pm-<%=x%>">PM</label>
                         </div>
                     </div>
                 </div>
@@ -121,8 +119,16 @@
         var random2 = Math.random().toString(36).substring(7);
         var element = $('#base-hours-0').clone();
         element.find('.remove-hours').removeClass('hidden');
-        element.find('.start-time-am-pm').attr('name', random1);
-        element.find('.end-time-am-pm').attr('name', random2);
+        element.find('.start-time-am-pm').each(function(){
+            var id = random1 + '-' + Math.random().toString(36).substring(7);
+            $(this).attr('name', random1);
+            $(this).attr('id', id).next().attr('for', id);
+        });
+        element.find('.end-time-am-pm').each(function(){
+            var id = random2 + '-' + Math.random().toString(36).substring(7);
+            $(this).attr('name', random2);
+            $(this).attr('id', id).next().attr('for', id);
+        });
         $('#hours-container').append(element);
     });
 

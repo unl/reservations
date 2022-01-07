@@ -1,9 +1,7 @@
-<div id="pagetitle">
-<h3>Workshops
+<h1 class="dcf-txt-h3">Workshops
     <% if has_permission?(Permission::MANAGE_RESOURCES) %>
     (<a href="https://innovationstudio.unl.edu/user/login?destination=node/<%= drupal_node_lookup(:workshops_training_doc) %>/edit" target="_blank">Edit</a>)
     <% end %>
-</h3>
-</div>
+</h1>
 
 <%= content %>

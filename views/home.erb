@@ -2,9 +2,7 @@
     <a class="dcf-btn dcf-btn-primary" href="https://innovationstudio.unl.edu/covid-faq/">Covid FAQ</a>
 </div>
 
-<div id="pagetitle">
-	<h3>Welcome to Innovation Studio Manager</h3>
-</div>
+<h1 class="dcf-txt-h3">Welcome to Innovation Studio Manager</h1>
 
 <h5>Hello, <%= @user.full_name %> (<%= @user.username %>)</h5>
 
@@ -13,7 +11,7 @@
 <p>You have no upcoming reservations. You can <a href="/tools/trainings/">view upcoming trainings to get certified</a>, or <a href="/tools/">check out the list of tools you can reserve.</a></p>
 
 <% else %>
-<table>
+<table class="dcf-w-100% dcf-table dcf-table-bordered">
     <thead>
         <tr>
             <th>Tool</th>
@@ -59,7 +57,7 @@ My Events
 <% if events.empty? %>
 <p>You have not signed up for any upcoming events. Why not <a href="/calendar/">check out the calendar</a> to find some?</p>
 <% else %>
-<table>
+<table class="dcf-w-100% dcf-table dcf-table-bordered">
     <thead>
         <tr>
             <th>Title</th>
@@ -79,9 +77,7 @@ My Events
             </td>
             <td class="table-actions">
                 <form action="/events/<%= event.id %>/remove_signup/" method="POST" class="dcf-form delete-form">
-					<button class="dcf-btn dcf-btn-primary" type="submit">
-					Remove
-					</button>
+					<button class="dcf-btn dcf-btn-primary" type="submit">Remove</button>
 				</form>
             </td>
         </tr>

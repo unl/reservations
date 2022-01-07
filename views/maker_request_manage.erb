@@ -2,9 +2,8 @@
 require 'models/maker_request'
 %>
 
-<div id="pagetitle">
-<h3>Manage Maker Request</h3>
-</div>
+<h1 class="dcf-txt-h3">Manage Maker Request</h1>
+
 <figure class="dcf-mt-2 dcf-mb-4">
 <% if !maker_request.expired? %>
     <a class="dcf-btn dcf-btn-primary dcf-mb-2" href="/maker_request/<%= maker_request.uuid %>/edit/" role="button">Edit</a>

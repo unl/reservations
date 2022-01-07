@@ -1,17 +1,21 @@
-<div id="pagetitle">
-	<h3>Sign Up For <%= event.title %>
-	<span class="dcf-subhead"><%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %></span></h3>
-</div>
+<h1 class="dcf-txt-h3">
+    Sign Up For <%= event.title %>
+	<span class="dcf-subhead"><%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %></span>
+</h3>
 
 <form class="dcf-form" id="signup" action="" method="POST" novalidate="novalidate">
     <div class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
         <div>
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" />
+            <div class="dcf-form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" />
+            </div>
 
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" />
-            <br><br>
+            <div class="dcf-form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" />
+            </div>
+
             <button class="dcf-btn dcf-btn-primary" type="submit">Sign Up</button>
         </div>
     </div>

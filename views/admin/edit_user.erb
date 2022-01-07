@@ -1,6 +1,4 @@
-<div id="pagetitle">
-    <h3>Edit User <%= user.username %></h3>
-</div>
+<h1 class="dcf-txt-h3">Edit User <%= user.username %></h1>
 
 <form class="dcf-form" id="edit-user" action="" method="POST" enctype="multipart/form-data">
     <div class="dcf-grid dcf-col-gap-vw">
@@ -57,9 +55,10 @@
                 <div>
                     <% unless user.imagedata.nil? %>
                         <img src="<%= user.image_src %>" alt="Image for User <%= user.username %>">
-                        <br>
-                        <input type="checkbox" name="remove_image" id="remove-image">
-                        <label for="remove-image">Remove Image</label>
+                        <div class="dcf-input-checkbox">
+                            <input type="checkbox" name="remove_image" id="remove-image">
+                            <label for="remove-image">Remove Image</label>
+                        </div>
                     <% end %>
                     <input type="file" name="imagedata" id="imagedata" title="User Image">
                 </div>

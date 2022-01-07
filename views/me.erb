@@ -1,42 +1,45 @@
-<div id="pagetitle">
-    <h3>Manage My Account</h3>
-</div>
+<h1 class="dcf-txt-h3">Manage My Account</h1>
 
-<p><a href="/home/">View your scheduled events and reservations</a></p>
+<p class="dcf-txt-sm"><a href="/home/">View your scheduled events and reservations</a></p>
 
-<div>
-	<h4>Update Profile</h4>
-</div>
+<h4>Update Profile</h4>
 <form class="dcf-form" action="" method="POST">
 <section class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
 <div>
-	<label for="email">Email</label>
-    <input type="text" id="email" name="email" value="<%= @user.email %>" />
+    <div class="dcf-form-group">
+        <label for="email">Email</label>
+        <input type="text" id="email" name="email" value="<%= @user.email %>" />
+    </div>
 
-    <label for="first-name">First Name</label>
-    <input type="text" id="first-name" name="first_name" value="<%= @user.first_name %>" />
+    <div class="dcf-form-group">
+        <label for="first-name">First Name</label>
+        <input type="text" id="first-name" name="first_name" value="<%= @user.first_name %>" />
+    </div>
 
-    <label for="last-name">First Name</label>
-    <input type="text" id="last-name" name="last_name" value="<%= @user.last_name %>" />
-    <br><br>
+    <div class="dcf-form-group">
+        <label for="last-name">First Name</label>
+        <input type="text" id="last-name" name="last_name" value="<%= @user.last_name %>" />
+    </div>
+
     <button type="submit" class="dcf-btn dcf-btn-primary">Save</button>
 </div>
 </section>
 </form>
 
-<div>
-	<h4>Change Password</h4>
-</div>
-
+<h4 class="dcf-mt-6">Change Password</h4>
 <form class="dcf-form" action="/change-password/" method="POST">
 <section class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
 <div>
-	<label for="password">New Password</label>
-	<input type="password" id="password" name="password" />
+	<div class="dcf-form-group">
+	    <label for="password">New Password</label>
+	    <input type="password" id="password" name="password" />
+	</div>
 
-	<label for="password2">Confirm New Password</label>
-	<input type="password" id="password2" name="password2" />
-	<br><br>
+	<div class="dcf-form-group">
+	    <label for="password2">Confirm New Password</label>
+	    <input type="password" id="password2" name="password2" />
+	</div>
+
 	<button type="submit" class="dcf-btn dcf-btn-primary">Change Password</button>
 </div>
 </section>

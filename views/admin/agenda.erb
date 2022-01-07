@@ -1,20 +1,15 @@
-<form class="dcf-form dcf-float-right" style="max-width: 320px;">
+<form class="dcf-form dcf-float-right">
     <div class="offset-field-group">
         <label for="date">Go to another date:</label>
         <div class="dcf-datepicker">
-            <input style="width: 90%;" id="date" name="date" title="Reservation Date" type="text" value="<%= date.strftime('%m/%d/%Y') %>" />
+            <input id="date" name="date" title="Reservation Date" type="text" value="<%= date.strftime('%m/%d/%Y') %>" />
         </div>
     </div>
 </form>
 
-<div id="pagetitle">
-	<h3>Today's Agenda <span class="dcf-subhead"><%= date.strftime('%B %d, %Y') %></h3>
-</div>
+<h1 class="dcf-txt-h3">Today's Agenda <span class="dcf-subhead"><%= date.strftime('%B %d, %Y') %></h1>
 
-
-<h4>
-Today's Hours
-</h4>
+<h4>Today's Hours</h4>
 <% unless space_hour.nil? %>
     <%= space_hour.hours.map do |record|
         start_time = date + record[:start].minutes

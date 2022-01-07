@@ -2,7 +2,7 @@
     <div class="dcf-grid dcf-col-gap-vw">
         <div class="dcf-col-100% dcf-col-67%-start@sm">
             <fieldset>
-                <legend style="margin-top: 0">Event Details</legend>
+                <legend>Event Details</legend>
 
                 <div class="dcf-form-group">
                     <label for="title">Title <small class="dcf-required">Required</small></label>
@@ -21,7 +21,7 @@
 
                 <div class="dcf-form-group">
                     <label for="type">Type</label>
-                    <select id="type" name="type" class="use-select2" style="width: 100%;">
+                    <select id="type" name="type" class="use-select2">
                     <% types.each do |type| %>
                         <option <%= 'selected="selected"' if !event.type.nil? && event.type.id == type.id %> value="<%= type.id %>"><%= type.description %></option>
                     <% end %>
@@ -32,21 +32,24 @@
                     <div class="dcf-input-checkbox dcf-d-inline">
                         <input type="checkbox" <%= 'checked="checked"' unless event.max_signups.nil? %> id="limit-signups" name="limit_signups"><label class="dcf-label" for="limit-signups">Limit signups for this event to: </label>
                     </div>
+                    <label for="max-signups"><span class="dcf-sr-only">Max Signups</span></label>
                     <input value="<%= event.max_signups %>" type="number" id="max-signups" name="max_signups" class="dcf-d-inline dcf-w-10" aria-label="Number of signups to limit."/>
                 </div>
             </fieldset>
 
             <fieldset>
-            <legend style="font-size: 1.6em">Location, Date, and Time</legend>
-                <label for="location">Location <small class="dcf-required">Required</small></label>
-                <select id="location" name="location" class="use-select2" style="width: 100%;">
-                    <% locations.each do |location| %>
-                        <option <%= 'selected="selected"' if !event.location.nil? && event.location.id == location.id %> value="<%= location.id %>"><%= location.name %></option>
-                    <% end %>
-                    <option value="new">-- New Location --</option>
-                </select>
+            <legend>Location, Date, and Time</legend>
+                <div class="dcf-form-group">
+                    <label for="location">Location <small class="dcf-required">Required</small></label>
+                    <select id="location" name="location" class="use-select2">
+                        <% locations.each do |location| %>
+                            <option <%= 'selected="selected"' if !event.location.nil? && event.location.id == location.id %> value="<%= location.id %>"><%= location.name %></option>
+                        <% end %>
+                        <option value="new">-- New Location --</option>
+                    </select>
+                </div>
 
-                <div style="display: none;" class="offset-field-group" id="new-location-details">
+                <div style="display: none;" class="dcf-form-group offset-field-group" id="new-location-details">
                     <div class="dcf-form-group">
                         <label for="location-name">Name <small class="dcf-required">Required</small></label>
                         <input type="text" id="location-name" name="new_location[name]" />
@@ -91,7 +94,7 @@
                     </div>
                     <div id="tools-for-reserving" style="<%= 'display: none;' if !event.has_reservation %>">
                         <label for="tool">Tool</label>
-                        <select id="tools" name="tools[]" class="use-select2" style="width: 100%;" multiple>
+                        <select id="tools" name="tools[]" class="use-select2" multiple>
                             <% tools.each do |tool| %>
                                 <option <%= 'selected="selected"' if event.has_tool_reservation(tool.id) %> value="<%= tool.id %>"><%= "#{tool.category_name} - #{tool.name} - #{tool.model}" %></option>
                             <% end %>
@@ -189,10 +192,12 @@
                     <% unless event.imagedata.nil? %>
                         <img src="<%= event.image_src %>" alt="Image for Event <%= event.title %>">
                         <br>
-                        <input type="checkbox" name="remove_image" id="remove-image">
-                        <label for="remove-image">Remove Image</label> 
+                        <div class="dcf-input-checkbox">
+                            <input type="checkbox" name="remove_image" id="remove-image">
+                            <label for="remove-image">Remove Image</label>
+                        </div>
                     <% end %>
-                    <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata" title="Event Image">
+                    <input type="file" name="imagedata" id="imagedata" title="Event Image">
                 </div>
             </div>
             <div class="visual-island">

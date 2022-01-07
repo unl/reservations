@@ -14,9 +14,7 @@ unless reservation.nil?
     start_minute = reservation.start_time.in_time_zone.min
 end %>
 
-<div id="pagetitle">
-	<h3><%= reservation.nil? ? 'Reserve Time on ' : 'Edit Reservation for ' %><%= tool.name %></h3>
-</div>
+<h1 class="dcf-txt-h3"><%= reservation.nil? ? 'Reserve Time on ' : 'Edit Reservation for ' %><%= tool.name %></h1>
 
 <form class="dcf-form" action="" method="POST">
 <section class="dcf-grid-full dcf-grid-thirds@sm dcf-col-gap-vw">

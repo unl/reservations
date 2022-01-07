@@ -2,19 +2,17 @@
 	event.start_time.in_time_zone.strftime("%Y/%m/%d")
 end %>
 
-<div id="pagetitle">
-	<h3>
-		Innovation Studio Calendar
-		<span class="dcf-subhead">See all our upcoming events!</span>
-	</h3>
-</div>
+<h1 class="dcf-txt-h3">
+    Innovation Studio Calendar
+    <span class="dcf-subhead">See all our upcoming events!</span>
+</h1>
 
-<div style="margin-bottom: 16px;">
-<h4 style="text-align: center; margin: 0;">
+<div class="dcf-mb-3">
+<h4 class="dcf-txt-center">
 <%= month = sunday.strftime('%B %Y') %><%= (month2 = (sunday+6.days).strftime('%B %Y')) == month ? '' : " - #{month2}" %>
 </h4>
 <a href="/calendar/?date=<%= (date-7.days).strftime('%Y-%m-%d') %>" class="dcf-btn dcf-btn-secondary" id="prev-week">&lt; PREV</a>
-<a href="/calendar/?date=<%= (date+7.days).strftime('%Y-%m-%d') %>" class="dcf-btn dcf-btn-secondary" style="float: right;" id="next-week">NEXT &gt;</a>
+<a href="/calendar/?date=<%= (date+7.days).strftime('%Y-%m-%d') %>" class="dcf-btn dcf-btn-secondary dcf-float-right" id="next-week">NEXT &gt;</a>
 </div>
 
 <div class="calendar-container">

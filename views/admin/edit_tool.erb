@@ -1,6 +1,4 @@
-<div id="pagetitle">
-<h3><%= tool.id.nil? ? 'Create Tool' : "Edit #{tool.name}" %></h3>
-</div>
+<h1 class="dcf-txt-h3"><%= tool.id.nil? ? 'Create Tool' : "Edit #{tool.name}" %></h1>
 
 <form class="dcf-form" action="" method="POST">
     <div class="dcf-form-group">
@@ -60,7 +58,7 @@
                 <input type="radio" name="time_slot_type" id="time-slot-type-exact" value="exact" <%= 'checked="checked"' if tool.time_slot_type == 'exact' || tool.time_slot_type.nil? %>>
                 <label for="time-slot-type-exact">Exactly</label>
             </div>
-            <input style="width: 100px" type="number" name="minutes_per_reservation" id="minutes-per-reservation" value="<%= tool.minutes_per_reservation %>" aria-label="The exact minute limit value.">
+            <input class="dcf-w-10" type="number" name="minutes_per_reservation" id="minutes-per-reservation" value="<%= tool.minutes_per_reservation %>" aria-label="The exact minute limit value.">
         </div>
 
         <div class="dcf-form-group dcf-mt-6">
@@ -71,15 +69,15 @@
 
             <div class="dcf-form-group">
                 <label for="min-minutes-per-reservation">Min:</label>
-                <input style="width: 100px" type="number" name="min_minutes_per_reservation" id="min-minutes-per-reservation" value="<%= tool.min_minutes_per_reservation %>">
+                <input class="dcf-w-10" type="number" name="min_minutes_per_reservation" id="min-minutes-per-reservation" value="<%= tool.min_minutes_per_reservation %>">
             </div>
             <div class="dcf-form-group">
                 <label for="max-minutes-per-reservation">Max:</label>
-                <input style="width: 100px" type="number" name="max_minutes_per_reservation" id="max-minutes-per-reservation" value="<%= tool.max_minutes_per_reservation %>">
+                <input class="dcf-w-10" type="number" name="max_minutes_per_reservation" id="max-minutes-per-reservation" value="<%= tool.max_minutes_per_reservation %>">
             </div>
             <div class="dcf-form-group">
                 <label for="increment-minutes-per-reservation">Increment:</label>
-                <input style="width: 100px" type="number" name="increment_minutes_per_reservation" id="increment-minutes-per-reservation" value="<%= tool.increment_minutes_per_reservation %>">
+                <input class="dcf-w-10" type="number" name="increment_minutes_per_reservation" id="increment-minutes-per-reservation" value="<%= tool.increment_minutes_per_reservation %>">
             </div>
         </div>
     </fieldset>
