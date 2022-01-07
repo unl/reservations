@@ -6,12 +6,12 @@
 
 <h5>Hello, <%= @user.full_name %> (<%= @user.username %>)</h5>
 
-<h4>My Reservations</h4>
+<h4 id="my-reservations">My Reservations</h4>
 <% if reservations.empty? %>
 <p>You have no upcoming reservations. You can <a href="/tools/trainings/">view upcoming trainings to get certified</a>, or <a href="/tools/">check out the list of tools you can reserve.</a></p>
 
 <% else %>
-<table class="dcf-w-100% dcf-table dcf-table-bordered">
+<table class="dcf-w-100% dcf-table dcf-table-bordered" aria-describedby="my-reservations">
     <thead>
         <tr>
             <th>Tool</th>
@@ -51,13 +51,11 @@
     <a href="/tools/" class="dcf-btn dcf-btn-primary">Reserve Equipment</a>
 </p>
 
-<h4>
-My Events
-</h4>
+<h4 id="my-events">My Events</h4>
 <% if events.empty? %>
 <p>You have not signed up for any upcoming events. Why not <a href="/calendar/">check out the calendar</a> to find some?</p>
 <% else %>
-<table class="dcf-w-100% dcf-table dcf-table-bordered">
+<table class="dcf-w-100% dcf-table dcf-table-bordered" aria-describedby="my-events">
     <thead>
         <tr>
             <th>Title</th>

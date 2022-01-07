@@ -1,12 +1,10 @@
-<%
-require 'models/maker_request'
-%>
+<% require 'models/maker_request' %>
 
-<h1 class="dcf-txt-h3">Maker Request Lookup</h1>
+<h1 id="maker-requests-lookup-header" class="dcf-txt-h3">Maker Request Lookup</h1>
 
 <% if @user %>
 
- <table class="dcf-w-100% dcf-table dcf-table-bordered">
+<table class="dcf-w-100% dcf-table dcf-table-bordered" aria-describedby="maker-requests-lookup-header">
     <thead>
         <tr>
             <th>Project Title</th>
