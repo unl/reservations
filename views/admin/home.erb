@@ -29,7 +29,7 @@
 		<% end %>
 		<% if has_permission?(Permission::MANAGE_SPACE_HOURS) %>
 		<tr>
-			<th><strong>Hours</strong></th>
+			<th scope="row"><strong>Hours</strong></th>
 			<td>Today: 
 <% unless space_hour.nil? %>
     <%= space_hour.hours.map do |record|
