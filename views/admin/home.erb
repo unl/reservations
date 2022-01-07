@@ -8,21 +8,21 @@
 	<tbody>
 		<% if has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER) %>
 		<tr>
-			<th><strong>Users</strong></th>
+			<th scope="row"><strong>Users</strong></th>
 			<td><%= user_count %> users</td>
 			<td><a class="dcf-btn dcf-btn-primary" href="/admin/users/">Manage</a></td>
 		</tr>
 		<% end %>
 		<% if has_permission?(Permission::MANAGE_EVENTS) %>
 		<tr>
-			<th><strong>Events</strong></th>
+			<th scope="row"><strong>Events</strong></th>
 			<td><%= upcoming_event_count %> upcoming events</td>
 			<td><a class="dcf-btn dcf-btn-primary" href="/admin/events/">Manage</a></td>
 		</tr>
 		<% end %>
 		<% if has_permission?(Permission::MANAGE_RESOURCES) %>
 		<tr>
-			<th><strong>Tools</strong></th>
+			<th scope="row"><strong>Tools</strong></th>
 			<td><%= tool_count %> tools</td>
 			<td><a class="dcf-btn dcf-btn-primary" href="/admin/tools/">Manage</a></td>
 		</tr>
@@ -46,14 +46,14 @@
 		<% end %>
 		<% if has_permission?(Permission::MANAGE_EMAILS) %>
 		<tr>
-			<th><strong>Emails</strong></th>
+			<th scope="row"><strong>Emails</strong></th>
 			<td></td>
 			<td><a class="dcf-btn dcf-btn-primary" href="/admin/emails/">Manage</a></td>
 		</tr>
 		<% end %>
 		<% if has_permission?(Permission::SEE_AGENDA) %>
 		<tr>
-			<th><strong>Agenda</strong></th>
+			<th scope="row"><strong>Agenda</strong></th>
 			<td></td>
 			<td><a class="dcf-btn dcf-btn-primary" href="/admin/agenda/">View</a></td>
 		</tr>
