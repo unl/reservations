@@ -9,7 +9,7 @@
 
 <h1 class="dcf-txt-h3">Today's Agenda <span class="dcf-subhead"><%= date.strftime('%B %d, %Y') %></h1>
 
-<h4>Today's Hours</h4>
+<h2 class="dcf-txt-h4">Today's Hours</h2>
 <% unless space_hour.nil? %>
     <%= space_hour.hours.map do |record|
         start_time = date + record[:start].minutes
@@ -20,7 +20,7 @@
     The studio is open all day.
 <% end %>
 
-<h4 id="todays-reservations">Today's Reservations</h4>
+<h2 class="dcf-txt-h4" id="todays-reservations">Today's Reservations</h2>
 <% if reservations.empty? %>
 No reservations today. Hopefully someone will still come in to use the space!<br>
 <% else %>
@@ -65,7 +65,7 @@ No reservations today. Hopefully someone will still come in to use the space!<br
 </table>
 <% end %>
 
-<h4 class="dcf-mt-4" id="todays-events">Today's Events</h4>
+<h2 class="dcf-txt-h4 dcf-mt-4" id="todays-events">Today's Events</h4>
 <% if events.empty? %>
 No events today. Perhaps you'd like to create one?<br>
 <a href="/admin/events/create/" class="dcf-mt-6 dcf-btn dcf-btn-primary">New Event</a>

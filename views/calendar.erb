@@ -8,9 +8,9 @@ end %>
 </h1>
 
 <div class="dcf-mb-3">
-<h4 class="dcf-txt-center">
+<h2 class="dcf-txt-h4 dcf-txt-center">
 <%= month = sunday.strftime('%B %Y') %><%= (month2 = (sunday+6.days).strftime('%B %Y')) == month ? '' : " - #{month2}" %>
-</h4>
+</h2>
 <a href="/calendar/?date=<%= (date-7.days).strftime('%Y-%m-%d') %>" class="dcf-btn dcf-btn-secondary" id="prev-week">&lt; PREV</a>
 <a href="/calendar/?date=<%= (date+7.days).strftime('%Y-%m-%d') %>" class="dcf-btn dcf-btn-secondary dcf-float-right" id="next-week">NEXT &gt;</a>
 </div>
