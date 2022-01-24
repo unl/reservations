@@ -40,7 +40,7 @@
 	<% if !event.signup_allowed_for_type? %>
         Please read details above on how to signup for this event.
 	<% elsif event.max_signups.nil? || event.signups.count < event.max_signups %>
-        <form action="/events/<%= event.id %>/sign_up/" method="POST">
+        <form class="dcf-form" action="/events/<%= event.id %>/sign_up/" method="POST">
         <button type="submit" class="dcf-btn dcf-btn-primary">
             <% if event.free_event_type? %>
                 Note event on my homepage

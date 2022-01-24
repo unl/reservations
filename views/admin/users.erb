@@ -1,9 +1,7 @@
-<div id="pagetitle">
-    <h3>Manage Users <span class="dcf-subhead"><a id="show-toolbox" href="#">Show Toolbox</a></span></h3>
-</div>
+<h1 class="dcf-txt-h3">Manage Users <span class="dcf-subhead"><a id="show-toolbox" href="#">Show Toolbox</a></span></h1>
 
 <div id="toolbox" class="toolbox" style="display: none;">
-    <h3>Toolbox <span style="float: right;"><a style="color: white;" href="#" id="hide-toolbox">&ndash;</a></span></h3>
+    <h2 class="dcf-txt-h3">Toolbox <span class="dcf-float-right"><a style="color: white;" href="#" id="hide-toolbox">&ndash;</a></span></h2>
     <div class="tools">
         <a class="dcf-mt-1 dcf-btn dcf-btn-primary" href="/admin/users/create/">Create User</a>
         <a class="dcf-mt-1 dcf-btn dcf-btn-primary" href="/admin/users/<%= @user.id %>/edit/">Edit My User</a>
@@ -12,12 +10,12 @@
     </div>
 </div>
 
-<form id="find-controls">
+<form class="dcf-form dcf-mb-6" id="find-controls">
     <div class="dcf-grid dcf-col-gap-vw dcf-row-gap-6">
         <div class="dcf-col-100% dcf-col-25%-start@sm">
-            <label style="font-size: 120%; margin-right: 20px;">Find users by:</label>
+            <label>Find users by:</label>
             <br>
-            <a href="/admin/users/" class="dcf-btn dcf-btn-secondary" style="font-size: 60%">Clear</a>
+            <a href="/admin/users/" class="dcf-btn dcf-btn-secondary">Clear</a>
         </div>
         <div class="dcf-col-100% dcf-col-75%-end@sm">
             <div class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
@@ -46,15 +44,15 @@
 
 <% if users.count > 0 %>
 <div>
-    <table class="event-list">
-        <thead class="small-hidden">
+    <table class="dcf-w-100% dcf-table dcf-table-bordered dcf-table-responsive" aria-label="Users List">
+        <thead>
             <tr>
-                <th style="max-width: 80px;">&nbsp;</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Tool Authorizations</th>
-                <th>Expiration Date</th>
-                <th>Actions</th>
+                <th scope="col" style="max-width: 80px;">Image</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Tool Authorizations</th>
+                <th scope="col">Expiration Date</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -88,7 +86,7 @@
                 <td class="table-actions">
                     <a href="/admin/users/<%= user.id %>/edit/" class="dcf-mt-1 dcf-btn dcf-btn-primary">Edit</a>
                     <a href="/admin/users/<%= user.id %>/manage/" class="dcf-mt-1 dcf-btn dcf-btn-secondary">Tools</a>
-                    <form class="delete-form delete-user" action="/admin/users/<%= user.id %>/delete/" method="POST">
+                    <form class="dcf-form delete-form delete-user" action="/admin/users/<%= user.id %>/delete/" method="POST">
                         <button type="submit" class="dcf-mt-1 dcf-btn dcf-btn-primary">Delete</button>
                     </form>
                 </td>

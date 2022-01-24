@@ -6,27 +6,23 @@
         <div class="toolbox">
             <h3>Toolbox</h3>
             <div class="tools">
-                <div style="text-align: center; margin-bottom: .8em">
-                    <a class="dcf-btn dcf-btn-primary" href="/admin/events/create/">
-                    <span style="font-size: 2em; vertical-align: middle; font-weight: 600">+</span>
-                    <span style="vertical-align: middle;">New Event</span>
-                    </a>
+                <div class="dcf-txt-center">
+                    <a class="dcf-btn dcf-btn-primary" href="/admin/events/create/">+ New Event</a>
                 </div>
             </div>
         </div>
     </nav>
     <% end %>
-    <div class="<%= event_div_class %>">
-        <div id="pagetitle">
+    <div class="dcf-tabs-faked <%= event_div_class %>">
         <h3>Events</h3>
-        </div>
-        <ul class="wdn_tabs">
-            <li class="<%='selected' if tab == 'upcoming' %>"><a href="?tab=upcoming">Upcoming</a></li>
-            <li class="<%='selected' if tab == 'past' %>"><a href="?tab=past">Past</a></li>
-        </ul>
-        <div class="wdn_tabs_content">
+        <ol class="dcf-tabs-list dcf-list-bare dcf-mb-0" role="tablist">
+            <li class="dcf-tabs-list-item dcf-mb-0" role="presentation"><a id="tab-upcoming" href="?tab=upcoming" class="dcf-tab dcf-d-block" role="tab" <%='tabindex="-1" aria-selected="true"' if tab == 'upcoming' %>>Upcoming</a></li>
+            <li class="dcf-tabs-list-item dcf-mb-0" role="presentation"><a id="tab-past" href="?tab=past" class="dcf-tab dcf-d-block" role="tab" <%='tabindex="-1" aria-selected="true"' if tab == 'past' %>>Past</a></li>
+        </ol>
+         <section id="status-<%= tab %>" role="tabpanel" tabindex="-1" class="dcf-tabs-panel" aria-labelledby="tab-<%= tab %>">
             <div class="event-page">
-                <table class="event-list" aria-label="Event Listings">
+                <h4><%= tab.capitalize %> Event Items</h4>
+                <table class="dcf-w-100% dcf-table dcf-table-bordered" aria-label="Event Listings">
                     <thead>
                         <tr>
                             <th scope="col">Title</th>
@@ -46,7 +42,7 @@
                                 <% end %>
                             </td>
                             <td>
-                                <ul>
+                                <ul class="dcf-list-bare">
                                     <li>
                                         <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
                                         <%= event.location.name %>
@@ -75,7 +71,7 @@
                             </div>
                             <% end %>
                             <% if has_permission?(Permission::MANAGE_EVENTS) %>
-                            <form class="delete-event delete-form" action="/admin/events/<%=event.id%>/delete/" method="POST">
+                            <form class="dcf-form delete-event delete-form" action="/admin/events/<%=event.id%>/delete/" method="POST">
                             <button type="submit" class="dcf-mt-1 dcf-btn dcf-btn-primary">Delete</button>
                             </form>
                             <% end %>
@@ -84,7 +80,7 @@
                     <% end %>
                     </tbody>
                 </table>
-            </div>
+            </section>
             <% if total_pages > 1 %>
                 <% append_script_declaration("WDN.initializePlugin('pagination');") %>
                 <nav class="dcf-pagination dcf-mt-3">
@@ -117,6 +113,7 @@
     </div>
 </section>
 
+<% append_script_declaration("WDN.initializePlugin('tabs');") %>
 <% append_script_declaration(%q[require(['jquery'], function($) {
     $(document).ready(function() {
         $('.delete-event').submit(function (submit) {

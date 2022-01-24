@@ -1,34 +1,35 @@
-<div id="pagetitle">
-	<h3>NIS Manager Administration</h3>
-	<span class="dcf-subhead">Hello, <%= @user.full_name %> (<%= @user.username %>) <% if @user.is_super_user? %><br>Super User<% end %></span>
-</div>
+<h1 class="dcf-txt-h3">NIS Manager Administration</h1>
+<h2 class="dcf-txt-h5">
+    Hello, <%= @user.full_name %> (<%= @user.username %>)
+    <% if @user.is_super_user? %> <span class="dcf-form-help">Super User</span><% end %>
+</h2>
 
-<table>
+<table class="dcf-w-100% dcf-table dcf-table-bordered" aria-label="User Action List">
 	<tbody>
 		<% if has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER) %>
 		<tr>
-			<td><strong>Users</strong></td>
+			<th scope="row"><strong>Users</strong></th>
 			<td><%= user_count %> users</td>
 			<td><a class="dcf-btn dcf-btn-primary" href="/admin/users/">Manage</a></td>
 		</tr>
 		<% end %>
 		<% if has_permission?(Permission::MANAGE_EVENTS) %>
 		<tr>
-			<td><strong>Events</strong></td>
+			<th scope="row"><strong>Events</strong></th>
 			<td><%= upcoming_event_count %> upcoming events</td>
 			<td><a class="dcf-btn dcf-btn-primary" href="/admin/events/">Manage</a></td>
 		</tr>
 		<% end %>
 		<% if has_permission?(Permission::MANAGE_RESOURCES) %>
 		<tr>
-			<td><strong>Tools</strong></td>
+			<th scope="row"><strong>Tools</strong></th>
 			<td><%= tool_count %> tools</td>
 			<td><a class="dcf-btn dcf-btn-primary" href="/admin/tools/">Manage</a></td>
 		</tr>
 		<% end %>
 		<% if has_permission?(Permission::MANAGE_SPACE_HOURS) %>
 		<tr>
-			<td><strong>Hours</strong></td>
+			<th scope="row"><strong>Hours</strong></th>
 			<td>Today: 
 <% unless space_hour.nil? %>
     <%= space_hour.hours.map do |record|
@@ -45,14 +46,14 @@
 		<% end %>
 		<% if has_permission?(Permission::MANAGE_EMAILS) %>
 		<tr>
-			<td><strong>Emails</strong></td>
+			<th scope="row"><strong>Emails</strong></th>
 			<td></td>
 			<td><a class="dcf-btn dcf-btn-primary" href="/admin/emails/">Manage</a></td>
 		</tr>
 		<% end %>
 		<% if has_permission?(Permission::SEE_AGENDA) %>
 		<tr>
-			<td><strong>Agenda</strong></td>
+			<th scope="row"><strong>Agenda</strong></th>
 			<td></td>
 			<td><a class="dcf-btn dcf-btn-primary" href="/admin/agenda/">View</a></td>
 		</tr>

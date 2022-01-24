@@ -1,16 +1,14 @@
-<div id="pagetitle">
-	<h3>
-		Your Hours For The Week
-		<span class="dcf-subhead"><%= "#{sunday.strftime("%m/%d")} - #{(sunday+6.days).strftime("%m/%d")}" %></span>
-	</h3>
+<h1 id="your-hours-per-week" class="dcf-txt-h3">
+    Your Hours For The Week
+    <span class="dcf-subhead"><%= "#{sunday.strftime("%m/%d")} - #{(sunday+6.days).strftime("%m/%d")}" %></span>
+</h1>
+
+<div class="dcf-mb-3">
+    <a href="/admin/hours/?date=<%= (date-7.days).strftime('%Y-%m-%d') %>" class="dcf-btn dcf-btn-secondary" id="prev-week">&lt; PREV</a>
+    <a href="/admin/hours/?date=<%= (date+7.days).strftime('%Y-%m-%d') %>" class="dcf-btn dcf-btn-secondary dcf-float-right" id="next-week">NEXT &gt;</a>
 </div>
 
-<div style="margin-bottom: 16px;">
-<a href="/admin/hours/?date=<%= (date-7.days).strftime('%Y-%m-%d') %>" class="dcf-btn dcf-btn-secondary" id="prev-week">&lt; PREV</a>
-<a href="/admin/hours/?date=<%= (date+7.days).strftime('%Y-%m-%d') %>" class="dcf-btn dcf-btn-secondary" style="float: right;" id="next-week">NEXT &gt;</a>
-</div>
-
-<table>
+<table class="dcf-w-100% dcf-table dcf-table-bordered" aria-describedby="your-hours-per-week">
     <thead>
         <tr>
             <th>Day</th>
@@ -40,13 +38,13 @@
     </tbody>
 </table>
 
-<h3 class="dcf-mt-4">
-Upcoming Changes
-<span class="dcf-subhead">within the next 365 days</span>
+<h3 id="upcoming-changes" class="dcf-mt-4">
+    Upcoming Changes
+    <span class="dcf-subhead">within the next 365 days</span>
 </h3>
 <a class="dcf-btn dcf-btn-primary" href="/admin/hours/create/">Add Hours Change</a><br><br>
 
-<table>
+<table class="dcf-w-100% dcf-table dcf-table-bordered" aria-describedby="upcoming-changes">
     <thead>
         <tr>
             <th>Day</th>
@@ -78,7 +76,7 @@ Upcoming Changes
             </td>
             <td class="table-actions">
                 <a class="dcf-mt-1 dcf-btn dcf-btn-primary" href="/admin/hours/<%= space_hour.id %>/edit/">Edit</a>
-                <form class="delete-space-hour delete-form" action="/admin/hours/<%= space_hour.id %>/delete/" method="POST">
+                <form class="dcf-form delete-space-hour delete-form" action="/admin/hours/<%= space_hour.id %>/delete/" method="POST">
                     <button type="submit" class="dcf-mt-1 dcf-btn dcf-btn-primary">Remove</button>
                 </form>
             </td>

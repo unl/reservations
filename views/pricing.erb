@@ -1,11 +1,15 @@
-<div id="pagetitle">
-<h3>Material Pricing
+<h1 class="dcf-txt-h3">
+    Material Pricing
     <% if has_permission?(Permission::MANAGE_RESOURCES) %>
     (<a href="https://innovationstudio.unl.edu/user/login?destination=node/<%= drupal_node_lookup(:material_pricing) %>/edit" target="_blank">Edit</a>)
     <% end %>
-</h3>
-</div>
+</h1>
 
 <%= content %>
 
-
+<script>
+    var tables = document.querySelectorAll('table');
+    for (var i=0; i<=tables.length; i++) {
+        tables[i].classList.add('dcf-w-100%', 'dcf-table', 'dcf-table-bordered');
+    }
+</script>

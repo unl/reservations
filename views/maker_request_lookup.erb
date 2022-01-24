@@ -1,13 +1,10 @@
-<%
-require 'models/maker_request'
-%>
-<div id="pagetitle">
-<h3>Maker Request Lookup</h3>
-</div>
+<% require 'models/maker_request' %>
+
+<h1 id="maker-requests-lookup-header" class="dcf-txt-h3">Maker Request Lookup</h1>
 
 <% if @user %>
 
- <table>
+<table class="dcf-w-100% dcf-table dcf-table-bordered" aria-describedby="maker-requests-lookup-header">
     <thead>
         <tr>
             <th>Project Title</th>
@@ -48,10 +45,12 @@ require 'models/maker_request'
 <p>If you have an Innovation Studio Manager account you may login and view your list from this page.</p>
 
 <form class="dcf-form" id="maker_request_form" action="" method="POST" >
-    <label for="requestor-email">Email Address <small class="dcf-required">Required</small></label>
-    <input type="text" id="lookup-email" name="lookup_email" />
+    <div class="dcf-form-group">
+        <label for="requestor-email">Email Address <small class="dcf-required">Required</small></label>
+        <input type="text" id="lookup-email" name="lookup_email" />
+    </div>
 
-    <button class="dcf-btn dcf-btn-primary dcf-mt-6" type="submit">Submit</button>
+    <button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
 </form>
 
 <% end %>

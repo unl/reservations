@@ -6,12 +6,6 @@
 @import "lib/fonts.less";
 @import "lib/eventicon-embedded.less";
 
-.sans-serif-font() {
-    font-family: "Gotham SSm A", "Gotham SSm B", Verdana, "Verdana Ref", Geneva, Tahoma, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-}
-
 .clearfix:after {
    content: " "; /* Older browsers do not support empty content */
    visibility: hidden;
@@ -24,46 +18,19 @@ select[multiple=multiple] {
 	padding: .25em .75em;
 }
 
-#pagetitle h3 {
-	margin-top: 0;
-}
-
 .dcf-main-content form {
-	padding: 1em;
 
-	fieldset {
-		margin: 0;
-		margin-bottom: 1em;
-	}
-	legend {
-	    font-size: 1.5em;
-	    margin-top: 0.5em;
-	    margin-bottom: 1em;
-	    padding-bottom: 0;
-	}
 	&.delete-form, &.inline-form {
 	    display: inline;
 	    padding: 0;
 	}
-	input {
-	  	word-wrap: normal;
-	  	&[disabled] {
-	  		background: #CCCCCC;
-	  	}
-	}
-	textarea {
-		resize: vertical;
-	}
-	.helper {
-		font-family: "Gotham SSm A","Gotham SSm B",Verdana,"Verdana Ref",Geneva,Tahoma,"Lucida Grande","Lucida Sans Unicode","Lucida Sans","DejaVu Sans","Bitstream Vera Sans","Liberation Sans",sans-serif;
-	}
-
 	.offset-field-group {
-		background: @dark-triad;
+		border: solid 1px var(--b);
+		background: var(--bg-dialog);
 		border-radius: .5em;
 		padding: 1em;
 		label {
-			color: @cream;
+			color: var(--body);
 		}
 	}
 }
@@ -192,8 +159,8 @@ select[multiple=multiple] {
     margin-bottom: 1em;
     padding: 0 23px 1.777em;
     padding: 0 1.425rem 1.777em;
-    border-top: 5px solid #D00000;
-    background-color: #fff;
+    border-top: 5px solid var(--brand-alpha);
+    background-color: var(--bg-dialog);
     box-shadow: 0 0 0 1px fadeout(mix(#000, @cream, 92%), 90%);
 
     .date-wrapper,
@@ -201,19 +168,18 @@ select[multiple=multiple] {
     .location,
     .contact {
         display: block;
-        .sans-serif-font();
         font-size: 13px;
         font-size: 0.802rem;
 
         &:before {
-            color: @ui05;
+            color: var(--brand-alpha);
         }
     }
 
     .description {
         margin: 1em 0 0;
         padding-top: 1em;
-        border-top: 1px solid mix(#000, @cream, 24%);
+        border-top: 1px solid var(--b);
     }
 }
 
@@ -282,51 +248,12 @@ select[multiple=multiple] {
     }
 }
 
-.nic-icon-calendar::before {
-	display: inline-block;
-	font-family: wdn-icon, serif;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 400;
-	margin-right: .2em;
-	speak: none;
-	text-align: center;
-	text-decoration: inherit;
-	text-transform: none;
-	width: 1em;
-	content: "\e812";
-}
-
 .date-time-select {
     padding: 1em;
     background-color: var(--bg-light-gray);
     border: 1px solid var(--b);
     margin-bottom: 0.75em;
     text-align: center;
-    &.hours {
-    	text-align: left;
-    }
-    .nic-icon-calendar {
-	    margin-right: -2.3em;
-	    position: relative;
-	    z-index: 2;
-	    margin-left: 0.8em;
-	}
-	.am_pm {
-	    display: inline-block;
-	    font-family: "Gotham";
-	    font-size: .75em;
-	    margin-left: .75em;
-	}
-	input {
-	    padding-left: 2.3em;
-	    width: 40%;
-	    position: relative;
-	    text-align: center;
-	    &.full-width {
-	    	width: 90%;
-	    }
-	}
 	> * {
 	  vertical-align: middle;
 	}
@@ -336,19 +263,6 @@ select[multiple=multiple] {
 	color: var(--link);
 	font-weight: bold;
 	font-size: .85em;
-}
-
-.wdn_tabs>li {
-    background-color: var(--bg-tab);
-
-    .selected {
-        background-color: var(--bg-tab-selected);
-    }
-}
-
-.wdn_tabs_content {
-    background-color: var(--bg-tabs-panel);
-    border-color: var(--b-tab)
 }
 
 /* for mobile-tablet-ish sizes */

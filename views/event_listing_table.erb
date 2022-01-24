@@ -24,11 +24,11 @@
             <% elsif !event.signup_allowed_for_type? %>
                 <a href="<%= event.info_link %>">View for details on how to signup.</a>
             <% elsif event.machine_training_event_type? %>
-                <form class="inline-form" action="/tools/trainings/sign_up/<%= event.id %>/" method="POST">
+                <form class="dcf-form inline-form" action="/tools/trainings/sign_up/<%= event.id %>/" method="POST">
                     <button type="submit" class="dcf-btn dcf-btn-primary" href="/tools/trainings/sign_up/<%= event.id %>/">Sign Up!</button>
                 </form>
             <% else %>
-                <form class="inline-form" action="/workshops/sign_up/<%= event.id %>/" method="POST">
+                <form class="dcf-form inline-form" action="/workshops/sign_up/<%= event.id %>/" method="POST">
                     <button type="submit" class="dcf-btn dcf-btn-primary" href="/workshops/sign_up/<%= event.id %>/">Sign Up!</button>
                 </form>
             <% end %>

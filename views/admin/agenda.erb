@@ -1,21 +1,15 @@
-<form style="float: right; width: 320px;">
+<form class="dcf-form dcf-float-right">
     <div class="offset-field-group">
         <label for="date">Go to another date:</label>
-        <div class="date-time-select">
-            <span class="nic-icon-calendar"></span>
-            <input style="width: 90%;" id="date" name="date" title="Reservation Date" type="text" class="datepicker" value="<%= date.strftime('%m/%d/%Y') %>" />
+        <div class="dcf-datepicker">
+            <input id="date" name="date" title="Reservation Date" type="text" value="<%= date.strftime('%m/%d/%Y') %>" />
         </div>
     </div>
 </form>
 
-<div id="pagetitle">
-	<h3>Today's Agenda <span class="dcf-subhead"><%= date.strftime('%B %d, %Y') %></h3>
-</div>
+<h1 class="dcf-txt-h3">Today's Agenda <span class="dcf-subhead"><%= date.strftime('%B %d, %Y') %></h1>
 
-
-<h4>
-Today's Hours
-</h4>
+<h2 class="dcf-txt-h4">Today's Hours</h2>
 <% unless space_hour.nil? %>
     <%= space_hour.hours.map do |record|
         start_time = date + record[:start].minutes
@@ -26,13 +20,11 @@ Today's Hours
     The studio is open all day.
 <% end %>
 
-<h4>
-Today's Reservations
-</h4>
+<h2 class="dcf-txt-h4" id="todays-reservations">Today's Reservations</h2>
 <% if reservations.empty? %>
 No reservations today. Hopefully someone will still come in to use the space!<br>
 <% else %>
-<table>
+<table class="dcf-w-100% dcf-table dcf-table-bordered" aria-describedby="todays-reservations">
     <thead>
         <tr>
             <th>Name</th>
@@ -63,7 +55,7 @@ No reservations today. Hopefully someone will still come in to use the space!<br
             	<%= reservation.length %> minutes
             </td>
             <td>
-                <form class="delete-form" method="POST" action="/admin/agenda/reservations/<%= reservation.id %>/remove/">
+                <form class="dcf-form delete-form" method="POST" action="/admin/agenda/reservations/<%= reservation.id %>/remove/">
                 <button class="dcf-btn dcf-btn-primary" type="submit">Remove</button>
                 </form>
             </td>
@@ -73,14 +65,12 @@ No reservations today. Hopefully someone will still come in to use the space!<br
 </table>
 <% end %>
 
-<h4 class="dcf-mt-4">
-Today's Events
-</h4>
+<h2 class="dcf-txt-h4 dcf-mt-4" id="todays-events">Today's Events</h4>
 <% if events.empty? %>
 No events today. Perhaps you'd like to create one?<br>
 <a href="/admin/events/create/" class="dcf-mt-6 dcf-btn dcf-btn-primary">New Event</a>
 <% else %>
-<table>
+<table class="dcf-w-100% dcf-table dcf-table-bordered" aria-describedby="todays-events">
     <thead>
         <tr>
             <th>Title</th>
@@ -109,10 +99,9 @@ No events today. Perhaps you'd like to create one?<br>
 <a href="/admin/events/" class="dcf-btn dcf-btn-secondary">Go To Events</a>
 <% end %>
 
+<% append_script_declaration("WDN.initializePlugin('datepickers');") %>
 <% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {
     $ = require('jquery');
-    $('.datepicker').datepicker();
-    $("LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
 
     $('#date').change(function () {
         var date = $('#date').val().split('/');

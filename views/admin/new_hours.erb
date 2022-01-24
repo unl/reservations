@@ -1,22 +1,24 @@
-<div id="pagetitle">
-	<h3>Set New Hours</h3>
-</div>
+<h1 class="dcf-txt-h3">Set New Hours</h1>
 
 <form class="dcf-form" id="create-hours" action="" method="POST">
     <div class="dcf-grid dcf-col-gap-vw">
         <div class="dcf-col-100% dcf-col-50%-start@sm">
-            <label for="day-of-week">Day Of Week</label>
-            <select id="day-of-week" name="day_of_week" class="dcf-input-select">
-            <% (weekdays = %w(Sunday Monday Tuesday Wednesday Thursday Friday Saturday)).each_index do |i| %>
-                <option <%= 'selected="selected"' if space_hour.day_of_week == i && !space_hour.one_off %> value="<%= i %>"><%= weekdays[i] %></option>
-            <% end %>
-                <option <%= 'selected="selected"' if space_hour.one_off %> value="one_off">Set hours for a single day</option>
-            </select>
 
-        	<label for="effective-date">Effective Date</label>
-        	<div class="date-time-select">
-                <span class="nic-icon-calendar dcf-float-left dcf-mt-2"></span>
-                <input style="width: 90%;" id="effective-date" name="effective_date" title="Effective Date" type="text" class="datepicker" value="<%= (space_hour.effective_date || Time.now).strftime('%m/%d/%Y') %>" />
+            <div class="dcf-form-group">
+                <label for="day-of-week">Day Of Week</label>
+                <select id="day-of-week" name="day_of_week" class="dcf-input-select">
+                <% (weekdays = %w(Sunday Monday Tuesday Wednesday Thursday Friday Saturday)).each_index do |i| %>
+                    <option <%= 'selected="selected"' if space_hour.day_of_week == i && !space_hour.one_off %> value="<%= i %>"><%= weekdays[i] %></option>
+                <% end %>
+                    <option <%= 'selected="selected"' if space_hour.one_off %> value="one_off">Set hours for a single day</option>
+                </select>
+            </div>
+
+            <div class="dcf-form-group">
+                <div class="dcf-datepicker">
+                    <label for="effective-date">Effective Date</label>
+                    <input id="effective-date" name="effective_date" title="Effective Date" type="text" value="<%= (space_hour.effective_date || Time.now).strftime('%m/%d/%Y') %>" />
+                </div>
             </div>
         </div>
     </div>
@@ -53,12 +55,12 @@
 
                     <div class="am_pm dcf-mb-0 dcf-pl-3">
                         <div class="dcf-d-flex dcf-ai-center dcf-input-radio">
-                            <input <%= 'checked="checked"' if record[:start] < 720 %> class="start-time-am-pm dcf-flex-shrink-0" id="hours-start-am" title="AM" type="radio" value="am" name="<%= z = String.token %>">
-                            <label for="hours-start-am">AM</label>
+                            <input id="hours-start-am-<%=x%>" <%= 'checked="checked"' if record[:start] < 720 %> class="start-time-am-pm dcf-flex-shrink-0" id="hours-start-am" title="AM" type="radio" value="am" name="<%= z = String.token %>">
+                            <label for="hours-start-am-<%=x%>">AM</label>
                         </div>
                         <div class="dcf-d-flex dcf-ai-center dcf-input-radio">
-                            <input <%= 'checked="checked"' if record[:start] >= 720 %> class="start-time-am-pm dcf-flex-shrink-0" id="hours-start-pm" title="PM" type="radio" value="pm" name="<%= z %>">
-                            <label for="hours-start-pm">PM</label>
+                            <input id="hours-start-pm-<%=x%>" <%= 'checked="checked"' if record[:start] >= 720 %> class="start-time-am-pm dcf-flex-shrink-0" id="hours-start-pm" title="PM" type="radio" value="pm" name="<%= z %>">
+                            <label for="hours-start-pm-<%=x%>">PM</label>
                         </div>
                     </div>
                 </div>
@@ -81,18 +83,18 @@
 
                     <div class="am_pm dcf-mb-0 dcf-pl-3">
                         <div class="dcf-d-flex dcf-ai-center dcf-input-radio">
-                            <input <%= 'checked="checked"' if record[:end] < 720 %> class="end-time-am-pm dcf-flex-shrink-0" id="hours-end-am" title="AM" type="radio" value="am" name="<%= z = String.token %>">
+                            <input id="hours-end-am" <%= 'checked="checked"' if record[:end] < 720 %> class="end-time-am-pm dcf-flex-shrink-0" id="hours-end-am" title="AM" type="radio" value="am" name="<%= z = String.token %>">
                             <label for="hours-end-am">AM</label>
                         </div>
                         <div class="dcf-d-flex dcf-ai-center dcf-input-radio">
-                            <input <%= 'checked="checked"' if record[:end] >= 720 %> class="end-time-am-pm dcf-flex-shrink-0" id="hours-end-pm" title="PM" type="radio" value="pm" name="<%= z %>">
-                            <label for="hours-end-pm">PM</label>
+                            <input id="hours-end-pm-<%=x%>" <%= 'checked="checked"' if record[:end] >= 720 %> class="end-time-am-pm dcf-flex-shrink-0" id="hours-end-pm" title="PM" type="radio" value="pm" name="<%= z %>">
+                            <label for="hours-end-pm-<%=x%>">PM</label>
                         </div>
                     </div>
                 </div>
 
                 &nbsp;
-                <button title="Remove" type="button" class="<%= 'hidden' if x == 0 %> remove-hours dcf-btn">&times;</button>
+                <button title="Remove" type="button" class="<%= 'dcf-invisible' if x == 0 %> remove-hours dcf-btn">&times;</button>
             </div>
             <% end %>
         </div>
@@ -102,10 +104,9 @@
     <button type="submit" class="dcf-btn dcf-btn-primary">Submit</button>
 </form>
 
+<% append_script_declaration("WDN.initializePlugin('datepickers');") %>
 <% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {
     $ = require('jquery');
-    $('.datepicker').datepicker();
-    $("LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
 
     $('#hours-container').on('click', '.remove-hours', function(click) {
         click.preventDefault();
@@ -118,8 +119,16 @@
         var random2 = Math.random().toString(36).substring(7);
         var element = $('#base-hours-0').clone();
         element.find('.remove-hours').removeClass('hidden');
-        element.find('.start-time-am-pm').attr('name', random1);
-        element.find('.end-time-am-pm').attr('name', random2);
+        element.find('.start-time-am-pm').each(function(){
+            var id = random1 + '-' + Math.random().toString(36).substring(7);
+            $(this).attr('name', random1);
+            $(this).attr('id', id).next().attr('for', id);
+        });
+        element.find('.end-time-am-pm').each(function(){
+            var id = random2 + '-' + Math.random().toString(36).substring(7);
+            $(this).attr('name', random2);
+            $(this).attr('id', id).next().attr('for', id);
+        });
         $('#hours-container').append(element);
     });
 
