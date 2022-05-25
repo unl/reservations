@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby '2.6.5'
+#ruby '2.6.5'
 
 gem 'sinatra'
 gem 'sinatra-contrib'
@@ -11,6 +11,8 @@ gem 'unicorn'
 gem 'pony'
 gem 'rack', '2.2.3'
 gem 'rest-client'
+gem 'json'
+gem 'bigdecimal'
 
 group :development do
   gem 'shotgun'

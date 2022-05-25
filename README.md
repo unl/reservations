@@ -25,3 +25,10 @@ Quick Tutorial
 4. Events *may* include a resource reservation but do not have to.
 5. Admins with the right privilege can set the *hours* of the space, which indicate when reservations can be made.
 6. The agenda is a quick overview of the day for Admins to look at. 
+
+Deploying Updates on Production
+===============================
+```
+$ sudo -u innovationstudio -s -H
+$ systemctl --user restart unicorn
+```
