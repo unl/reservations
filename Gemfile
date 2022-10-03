@@ -13,7 +13,6 @@ gem 'rack', '2.2.3'
 gem 'rest-client'
 gem 'json'
 gem 'bigdecimal'
-gem 'recaptcha'
 
 group :development do
   gem 'shotgun'

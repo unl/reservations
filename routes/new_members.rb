@@ -1,14 +1,6 @@
 require 'models/event'
 require 'models/event_signup'
 require 'classes/emailer'
-require 'recaptcha'
-
-Recaptcha.configure do |config|
-	config.site_key = '6LdW9kwiAAAAAJfRJfLKV1V1qaFWSCGIQF_EYOWH'
-	config.secret_key = '6LdW9kwiAAAAAGI_PjHEk7HbiL-jlakndP6MFvIW'
-end
-
-include Recaptcha::Adapters::ViewMethods
 
 get '/new_members/?' do
 	@breadcrumbs << {:text => 'New Members'}
@@ -64,7 +56,7 @@ post '/new_members/sign_up/:event_id/?' do
 		:email => params[:email]
 	)
 
-	body = <<-EMAIL
+	body = <<EMAIL
 <p>Thank you, #{params[:name]} for signing up for #{event.title}. Don't forget that the event is</p>
 
 <p><strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
