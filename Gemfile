@@ -13,7 +13,9 @@ gem 'rack', '2.2.3'
 gem 'rest-client'
 gem 'json'
 gem 'bigdecimal'
-gem 'whenever'
+
+# Cron jobs
+gem 'whenever', require: false
 
 group :development do
   gem 'shotgun'

@@ -19,12 +19,17 @@
 
 # Learn more: http://github.com/javan/whenever
 
-# require './models/user'
+set :environment, "development"
+
+require './models/user'
 require_relative '../utils/language'
+require './Rakefile'
 
 every 1.minutes do
 
-    command '../scripts/email_expiring_users.rb'
+    # command '../scripts/email_expiring_users.rb'
+    rake ':email_expiring_users'
+    # ruby "email_expiring_users.rb"
 
     # users = User.where(:email => 'jjacobs10@huskers.unl.edu').all
 
