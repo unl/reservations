@@ -1,6 +1,5 @@
 require 'models/user'
-require 'config/schedule'
-# require 'scripts/email_expiring_users'
+require 'scripts/email_expiring_users'
 
 get '/me/?' do
   require_login
@@ -75,13 +74,13 @@ post '/forgot_password/' do
     user.send_reset_password_email
   end
 
-# post '/' do 
-#   users = User.where(:email => 'jjacobs10@huskers.unl.edu').all
+post '/' do 
+  users = User.where(:email => 'jjacobs10@huskers.unl.edu').all
 
-#   users.each do |user|
-#     user.send_membership_expiring_email
-#   end
-# end
+  users.each do |user|
+    user.send_membership_expiring_email
+  end
+end
 
   flash :success, 'Email sent', 'An email containing instructions to reset your password has been sent.'
   redirect '/login/'

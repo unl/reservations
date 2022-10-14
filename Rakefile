@@ -15,7 +15,3 @@ task :environment do
     # set up the database
     require 'utils/database'
 end
-
-task :email_expiring_users do
-    require 'email_expiring_users.rb'
-end

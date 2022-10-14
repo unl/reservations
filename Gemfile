@@ -14,9 +14,6 @@ gem 'rest-client'
 gem 'json'
 gem 'bigdecimal'
 
-# Cron jobs
-gem 'whenever', require: false
-
 group :development do
   gem 'shotgun'
   gem 'thin'

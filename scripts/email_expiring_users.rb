@@ -1,4 +1,4 @@
-require '../models/user'
+require 'models/user'
 require_relative '../utils/language'
 ENV['RACK_ENV'] ||= 'development'
 # load the config file
