@@ -13,6 +13,8 @@ gem 'rack', '2.2.3'
 gem 'rest-client'
 gem 'json'
 gem 'bigdecimal'
+gem 'whenever', :require => false
+gem 'capistrano'
 
 group :development do
   gem 'shotgun'

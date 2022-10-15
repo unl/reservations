@@ -1,6 +1,6 @@
 require 'active_record'
-require 'models/resource'
-require 'models/resource_field'
+require './models/resource'
+require './models/resource_field'
 
 class ResourceFieldData < ActiveRecord::Base
 	belongs_to :resource

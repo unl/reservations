@@ -1,9 +1,9 @@
 require 'active_record'
-require 'models/resource_approver'
-require 'models/resource_authorization'
-require 'models/resource_class'
-require 'models/resource_field'
-require 'models/resource_field_data'
+require './models/resource_approver'
+require './models/resource_authorization'
+require './models/resource_class'
+require './models/resource_field'
+require './models/resource_field_data'
 
 class Resource < ActiveRecord::Base
 	has_many :reservations, dependent: :destroy

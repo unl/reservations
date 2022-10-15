@@ -1,0 +1,277 @@
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `pwd': Operation not permitted - getcwd (Errno::EPERM)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `lockfile_contents'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:68:in `lockfile_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:22:in `bundler_version_with_reason'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:7:in `bundler_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:39:in `compatible?'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1037:in `block in find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `each'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems.rb:213:in `try_activate'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:123:in `rescue in require'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:34:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- executable-hooks/hooks (LoadError)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `pwd': Operation not permitted - getcwd (Errno::EPERM)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `lockfile_contents'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:68:in `lockfile_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:22:in `bundler_version_with_reason'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:7:in `bundler_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:39:in `compatible?'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1037:in `block in find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `each'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems.rb:213:in `try_activate'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:123:in `rescue in require'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:34:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- executable-hooks/hooks (LoadError)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `pwd': Operation not permitted - getcwd (Errno::EPERM)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `lockfile_contents'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:68:in `lockfile_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:22:in `bundler_version_with_reason'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:7:in `bundler_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:39:in `compatible?'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1037:in `block in find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `each'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems.rb:213:in `try_activate'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:123:in `rescue in require'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:34:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- executable-hooks/hooks (LoadError)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `pwd': Operation not permitted - getcwd (Errno::EPERM)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `lockfile_contents'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:68:in `lockfile_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:22:in `bundler_version_with_reason'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:7:in `bundler_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:39:in `compatible?'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1037:in `block in find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `each'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems.rb:213:in `try_activate'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:123:in `rescue in require'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:34:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- executable-hooks/hooks (LoadError)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `pwd': Operation not permitted - getcwd (Errno::EPERM)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `lockfile_contents'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:68:in `lockfile_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:22:in `bundler_version_with_reason'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:7:in `bundler_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:39:in `compatible?'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1037:in `block in find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `each'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems.rb:213:in `try_activate'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:123:in `rescue in require'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:34:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- executable-hooks/hooks (LoadError)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+rake aborted!
+No Rakefile found (looking for: rakefile, Rakefile, rakefile.rb, Rakefile.rb)
+/Users/joshuajacobs/.rvm/gems/ruby-2.6.5/gems/rake-13.0.6/exe/rake:27:in `<top (required)>'
+/Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:22:in `eval'
+/Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:22:in `<main>'
+(See full trace by running task with --trace)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+rake aborted!
+No Rakefile found (looking for: rakefile, Rakefile, rakefile.rb, Rakefile.rb)
+/Users/joshuajacobs/.rvm/gems/ruby-2.6.5/gems/rake-13.0.6/exe/rake:27:in `<top (required)>'
+/Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:22:in `eval'
+/Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:22:in `<main>'
+(See full trace by running task with --trace)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+rake aborted!
+No Rakefile found (looking for: rakefile, Rakefile, rakefile.rb, Rakefile.rb)
+/Users/joshuajacobs/.rvm/gems/ruby-2.6.5/gems/rake-13.0.6/exe/rake:27:in `<top (required)>'
+/Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:22:in `eval'
+/Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:22:in `<main>'
+(See full trace by running task with --trace)
+ruby: Operation not permitted -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+rake aborted!
+No Rakefile found (looking for: rakefile, Rakefile, rakefile.rb, Rakefile.rb)
+/Users/joshuajacobs/.rvm/gems/ruby-2.6.5/gems/rake-13.0.6/exe/rake:27:in `<top (required)>'
+/Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:22:in `eval'
+/Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:22:in `<main>'
+(See full trace by running task with --trace)
+ruby: No such file or directory -- /Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb (LoadError)
+rake aborted!
+No Rakefile found (looking for: rakefile, Rakefile, rakefile.rb, Rakefile.rb)
+/Users/joshuajacobs/.rvm/gems/ruby-2.6.5/gems/rake-13.0.6/exe/rake:27:in `<top (required)>'
+/Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:22:in `eval'
+/Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:22:in `<main>'
+(See full trace by running task with --trace)
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `pwd': Operation not permitted - getcwd (Errno::EPERM)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `lockfile_contents'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:68:in `lockfile_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:22:in `bundler_version_with_reason'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:7:in `bundler_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:39:in `compatible?'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1037:in `block in find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `each'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems.rb:213:in `try_activate'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:123:in `rescue in require'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:34:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- executable-hooks/hooks (LoadError)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `pwd': Operation not permitted - getcwd (Errno::EPERM)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `lockfile_contents'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:68:in `lockfile_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:22:in `bundler_version_with_reason'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:7:in `bundler_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:39:in `compatible?'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1037:in `block in find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `each'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems.rb:213:in `try_activate'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:123:in `rescue in require'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:34:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- executable-hooks/hooks (LoadError)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `pwd': Operation not permitted - getcwd (Errno::EPERM)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `lockfile_contents'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:68:in `lockfile_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:22:in `bundler_version_with_reason'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:7:in `bundler_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:39:in `compatible?'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1037:in `block in find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `each'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems.rb:213:in `try_activate'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:123:in `rescue in require'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:34:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- executable-hooks/hooks (LoadError)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `pwd': Operation not permitted - getcwd (Errno::EPERM)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `lockfile_contents'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:68:in `lockfile_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:22:in `bundler_version_with_reason'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:7:in `bundler_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:39:in `compatible?'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1037:in `block in find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `each'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems.rb:213:in `try_activate'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:123:in `rescue in require'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:34:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- executable-hooks/hooks (LoadError)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `pwd': Operation not permitted - getcwd (Errno::EPERM)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `lockfile_contents'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:68:in `lockfile_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:22:in `bundler_version_with_reason'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:7:in `bundler_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:39:in `compatible?'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1037:in `block in find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `each'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems.rb:213:in `try_activate'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:123:in `rescue in require'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:34:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- executable-hooks/hooks (LoadError)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `pwd': Operation not permitted - getcwd (Errno::EPERM)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `lockfile_contents'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:68:in `lockfile_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:22:in `bundler_version_with_reason'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:7:in `bundler_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:39:in `compatible?'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1037:in `block in find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `each'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems.rb:213:in `try_activate'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:123:in `rescue in require'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:34:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- executable-hooks/hooks (LoadError)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `pwd': Operation not permitted - getcwd (Errno::EPERM)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `lockfile_contents'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:68:in `lockfile_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:22:in `bundler_version_with_reason'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:7:in `bundler_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:39:in `compatible?'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1037:in `block in find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `each'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems.rb:213:in `try_activate'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:123:in `rescue in require'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:34:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- executable-hooks/hooks (LoadError)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `pwd': Operation not permitted - getcwd (Errno::EPERM)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:80:in `lockfile_contents'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:68:in `lockfile_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:22:in `bundler_version_with_reason'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:7:in `bundler_version'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/bundler_version_finder.rb:39:in `compatible?'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1037:in `block in find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `each'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/specification.rb:1036:in `find_by_path'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems.rb:213:in `try_activate'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:123:in `rescue in require'
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:34:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'
+/Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- executable-hooks/hooks (LoadError)
+	from /Users/joshuajacobs/.rvm/rubies/ruby-2.6.5/lib/ruby/site_ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+	from /Users/joshuajacobs/.rvm/gems/ruby-2.6.5/bin/ruby_executable_hooks:9:in `<main>'

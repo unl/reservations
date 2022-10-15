@@ -1,11 +1,11 @@
 require 'active_record'
 require 'bcrypt'
-require 'models/resource_authorization'
-require 'models/event_signup'
-require 'models/permission'
-require 'models/resource'
-require 'models/user_has_permission'
-require 'classes/emailer'
+require './models/resource_authorization'
+require './models/event_signup'
+require './models/permission'
+require './models/resource'
+require './models/user_has_permission'
+require './classes/emailer'
 
 class User < ActiveRecord::Base
   has_many :resource_authorizations

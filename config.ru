@@ -10,6 +10,10 @@ require 'utils/database'
 require 'sinatra'
 require 'app'
 
+# require 'whenever/capistrano'
+# require 'config/schedule.rb'
+require 'whenever/cron.rb'
+
 if ENV['RACK_ENV'] == 'development'
   # weird workaround for localhost cookie things
   set :cookie_options, :domain => nil

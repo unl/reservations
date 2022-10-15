@@ -1,3 +1,9 @@
+# require "bundler/capistrano"
+set :environment, "development"
+
+set :whenever_command, "bundle exec whenever"
+require "whenever/capistrano"
+
 pid_file = '/var/www/html/innovationstudio-manager.unl.edu/innovationstudio-manager.pid'
 
 def get_exit
