@@ -91,7 +91,9 @@ EMAIL
 		counter = counter + 1
 	end
 
-    user.save
+    user.space_status = 'expired'
+    user.service_space_id = SS_ID
+	user.save
 
 	# flash a message that this works
 	flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, orientation is #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}.")
