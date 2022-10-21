@@ -70,8 +70,15 @@ post '/new_members/sign_up/:event_id/?' do
 <p>Nebraska Innovation Studio</p>
 EMAIL
 
-	Emailer.mail(params[:email], "Nebraska Innovation Studio - #{event.title}", body)
-	
+	if 	URI::MailTo::EMAIL_REGEXP.match(params[:email])
+		print("matched")
+		Emailer.mail(params[:email], "Nebraska Innovation Studio - #{event.title}", body)
+	else
+		print("failed email")
+	end
+
+
+
 	params.delete("event_id")
 	user = User.new(params)
 
