@@ -1,37 +1,27 @@
-set :output, "#{path}/cron.log"
+# set :output, "#{path}/cron.log"
 set :environment, "development"
 
 # require_relative '../utils/language'
-# set :environment, :development
-# env :PATH, ENV['PATH']
+# require_relative '../utils/config_loader'
 
-# require './models/email_expiring_users.rb'
+# require './models/user'
+# require './utils/database'
 
-# runner "email_expiring_users.send_membership_expiring_email"
+# users = User.where(:email => 'jjacobs10@huskers.unl.edu').all
 
-# require 'Rakefile'
+# users.each do |user|
+#     user.send_membership_expiring_email
+# end
 
-# rake Rakefile:"apple"
-
-require_relative '../utils/language'
-require_relative '../utils/config_loader'
-
-require './models/user'
-require './utils/database'
-
-users = User.where(:email => 'jjacobs10@huskers.unl.edu').all
-
-users.each do |user|
-    user.send_membership_expiring_email
-end
+require './scripts/email_expiring_users.rb'
 
 every 1.minutes do
 
-    require_relative '../utils/language'
-    require_relative '../utils/config_loader'
+    # require_relative '../utils/language'
+    # require_relative '../utils/config_loader'
 
-    require './models/user'
-    require './utils/database'
+    # require './models/user'
+    # require './utils/database'
 
     # command "ruby '#{path}/scripts/email_expiring_users.rb'"
 
@@ -45,10 +35,12 @@ every 1.minutes do
 
     # command "ruby './scripts/email_expiring_users.rb'"
 
-    users = User.where(:email => 'jjacobs10@huskers.unl.edu').all
+    # users = User.where(:email => 'jjacobs10@huskers.unl.edu').all
 
-	users.each do |user|
-		user.send_membership_expiring_email
-	end
+	# users.each do |user|
+	# 	user.send_membership_expiring_email
+	# end
+
+    require './scripts/email_expiring_users.rb'
 
 end

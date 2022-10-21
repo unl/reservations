@@ -1,4 +1,7 @@
 # require "bundler/capistrano"
+set :whenever_command, "bundle exec whenever"
+require "whenever/capistrano"
+# require 'config/schedule.rb'
 set :environment, "development"
 
 set :whenever_command, "bundle exec whenever"
