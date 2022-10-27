@@ -1,45 +1,68 @@
-# set :output, "#{path}/cron.log"
-set :environment, "development"
+# env 'PATH', ENV['PATH']
+# env :PATH, ENV['PATH']
+# env :PATH, ENV['PATH']
+# env :GEM_PATH, ENV['GEM_PATH']
+# env :PATH, ENV['PATH']
+# ENV.each { |k, v| env(k, v) }
+# set :env_path, ''
+# env :PATH, @env_path if @env_path.present?
+require "whenever/cron.rb"
+set :environment, "production"
+set :output, "./cron_log.log"
+# require 'rake'
 
-# require_relative '../utils/language'
-# require_relative '../utils/config_loader'
+# Use this file to easily define all of your cron jobs.
+#
+# It's helpful, but not entirely necessary to understand cron before proceeding.
+# http://en.wikipedia.org/wiki/Cron
 
-# require './models/user'
-# require './utils/database'
-
-# users = User.where(:email => 'jjacobs10@huskers.unl.edu').all
-
-# users.each do |user|
-#     user.send_membership_expiring_email
+# Example:
+#
+# set :output, "/path/to/my/cron_log.log"
+#
+# every 2.hours do
+#   command "/usr/bin/some_great_command"
+#   runner "MyModel.some_method"
+#   rake "some:great:rake:task"
+# end
+#
+# every 4.days do
+#   runner "AnotherModel.prune_old_records"
 # end
 
-require './scripts/email_expiring_users.rb'
+# Learn more: http://github.com/javan/whenever
+
+# Rake:Task['email_expiring_users'].invoke
+# Rake:Task['email_expiring_users'].execute
+# Rake:Task[':email_expiring_users'].invoke
+# Rake:Task[':email_expiring_users'].execute
+# rake "email_expiring_users"
+# :rake "Rakefile:email_expiring_users"
+# rake 'task:email_expiring_users'
+
+
+# require './scripts/email_expiring_users.rb'
+# runner "user.email_expiration_test"
+
+# rake "rake:email_expiring_users"
+# command "ruby ./scripts/email_expiring_users.rb"
+# ruby "./scripts/email_expiring_users.rb"
 
 every 1.minutes do
 
-    # require_relative '../utils/language'
-    # require_relative '../utils/config_loader'
+    # rake "rake:environment"
+    # require './scripts/email_expiring_users.rb'
+    # runner "user.email_expiration_test"
+    # rake "rake:email_expiring_users"
+    # ruby "./scripts/email_expiring_users.rb"
+    puts "Hello there"
+    # command "ruby ./scripts/email_expiring_users.rb"
+    # command "ruby /scripts/email_expiring_users.rb"
 
-    # require './models/user'
-    # require './utils/database'
+    # rake 'task:email_expiring_users'
+    # rake ':email_expiring_users'
 
-    # command "ruby '#{path}/scripts/email_expiring_users.rb'"
 
-    # rake ":apple"
-
-    # command "rake apple"
-
-    # command "ruby '/Users/joshuajacobs/Documents/GitHub/reservations/scripts/email_expiring_users.rb'"
-    
-    # runner "email_expiring_users.send_membership_expiring_email"
-
-    # command "ruby './scripts/email_expiring_users.rb'"
-
-    # users = User.where(:email => 'jjacobs10@huskers.unl.edu').all
-
-	# users.each do |user|
-	# 	user.send_membership_expiring_email
-	# end
 
     require './scripts/email_expiring_users.rb'
 

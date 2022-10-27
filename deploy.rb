@@ -1,11 +1,13 @@
-# require "bundler/capistrano"
-set :whenever_command, "bundle exec whenever"
-require "whenever/capistrano"
-# require 'config/schedule.rb'
-set :environment, "development"
+# require 'bundler/setup'
+# require 'rake'
+# require 'sinatra'
+# require 'sinatra/reloader'
+# require 'sinatra/activerecord'
+# require 'sinatra/activerecord/rake'
 
-set :whenever_command, "bundle exec whenever"
-require "whenever/capistrano"
+# set :whenever_command, "bundle exec whenever"
+# require "whenever/capistrano"
+# require '/scripts/email_expiring_users.rb'
 
 pid_file = '/var/www/html/innovationstudio-manager.unl.edu/innovationstudio-manager.pid'
 

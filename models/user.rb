@@ -1,11 +1,11 @@
 require 'active_record'
 require 'bcrypt'
-require './models/resource_authorization'
-require './models/event_signup'
-require './models/permission'
-require './models/resource'
-require './models/user_has_permission'
-require './classes/emailer'
+require 'models/resource_authorization'
+require 'models/event_signup'
+require 'models/permission'
+require 'models/resource'
+require 'models/user_has_permission'
+require 'classes/emailer'
 
 class User < ActiveRecord::Base
   has_many :resource_authorizations
@@ -134,4 +134,26 @@ EMAIL
 
     Emailer.mail(self.email, 'Nebraska Innovation Studio Password Reset', body)
   end
+end
+
+def email_expiration_test
+  
+  require_relative '../utils/language'
+  ENV['RACK_ENV'] ||= 'development'
+  # load the config file
+  require_relative '../utils/config_loader'
+
+  # set up the database connection
+  require 'utils/database'
+
+  # script-necessary things
+  # require 'models/user'
+
+  # users = User.where(:email => 'jjacobs10@huskers.unl.edu').where(:service_space_id => 1).where('expiration_date >= ? AND expiration_date < ?', Time.now + 3.days, Time.now + 4.days).all
+  users = User.where(:email => 'jjacobs10@huskers.unl.edu').all
+
+  users.each do |user|
+    user.send_membership_expiring_email
+  end
+
 end
