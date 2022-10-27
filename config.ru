@@ -17,5 +17,11 @@ else
   set :cookie_options, :domain => 'innovationstudio-manager.unl.edu'
 end
 
+# system("ruby config/scheduler.rb")
+# require 'rufus-scheduler'
+# scheduler = Rufus::Scheduler.new
+# require 'quickstart.rb'
+# Rufus::Scheduler.singleton.every '5s' { puts "Hello there" }
+
 # run it
 run Sinatra::Application
