@@ -2,6 +2,7 @@ require 'sinatra'
 require 'models/user'
 require 'models/service_space'
 require 'models/event'
+# require 'quickstart.rb'
 
 use Rack::Session::Cookie, :key => 'rack.session',
                            :path => '/',
