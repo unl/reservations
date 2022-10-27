@@ -79,7 +79,6 @@
     <table class="dcf-w-100% dcf-table dcf-table-bordered dcf-table-responsive" aria-label="Users List">
         <thead>
             <tr>
-                <th scope="col" style="max-width: 80px;">Image</th>
                 <th scope="col">Name</th>
                 <th scope="col">Username</th>
                 <th scope="col">Email</th>
@@ -91,11 +90,6 @@
         <tbody>
         <% users.each do |user| %>
             <tr>
-                <td style="max-width: 80px;">
-                    <% if user.imagedata %>
-                    <img src="<%= user.image_src %>" alt="Image for User: <%= user.username %>">
-                    <% end %>
-                </td>
                 <td>
                     <%= user.full_name %><br>
                     <span class="dcf-txt-sm"><%= user.university_status %></span>
