@@ -2,7 +2,6 @@ source "https://rubygems.org"
 
 #ruby '2.6.5'
 
-gem 'rake'
 gem 'sinatra'
 gem 'sinatra-contrib'
 gem 'activerecord', ">= 6.0.3.5", :require => 'active_record'
@@ -14,9 +13,6 @@ gem 'rack', '2.2.3'
 gem 'rest-client'
 gem 'json'
 gem 'bigdecimal'
-gem 'capistrano'
-gem 'whenever', require: false
-
 
 group :development do
   gem 'shotgun'

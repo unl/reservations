@@ -1,11 +1,4 @@
 require 'models/user'
-# require './deploy'
-# require './config/schedule'
-# set :whenever_command, "bundle exec whenever"
-# system("bundle exec whenever")
-# require "whenever/capistrano"
-# require "whenever"
-# require './scripts/email_expiring_users.rb'
 
 get '/me/?' do
   require_login

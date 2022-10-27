@@ -1,25 +1,7 @@
-# require 'bundler/setup'
-# require 'rake'
-# require 'sinatra'
-# require 'sinatra/reloader'
-# require 'sinatra/activerecord'
-# require 'sinatra/activerecord/rake'
-
-# require 'sinatra'
-# require 'whenever/capistrano'
-# require 'deploy'
-# set :whenever_command, "bundle exec whenever"
-# require "whenever/capistrano"
-# require 'whenever'
-
+require 'sinatra'
 require 'models/user'
 require 'models/service_space'
 require 'models/event'
-# system("bundle exec whenever --update-crontab")
-# system("bundle exec whenever")
-# command "bundle exec whenever"
-# require './scripts/email_expiring_users.rb'
-
 
 use Rack::Session::Cookie, :key => 'rack.session',
                            :path => '/',
