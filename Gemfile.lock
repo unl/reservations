@@ -42,6 +42,7 @@ GEM
       guard (~> 2.0)
       guard-compat (~> 1.2)
       less (~> 2.3)
+    highlander (0.3.0)
     http-accept (1.7.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
@@ -140,6 +141,7 @@ DEPENDENCIES
   bigdecimal
   guard
   guard-less
+  highlander
   json
   mysql2
   pony
