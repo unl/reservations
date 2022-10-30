@@ -2,8 +2,6 @@ require 'sinatra'
 require 'models/user'
 require 'models/service_space'
 require 'models/event'
-# require 'quickstart.rb'
-# system("ruby config/initializers/scheduler.rb")
 
 use Rack::Session::Cookie, :key => 'rack.session',
                            :path => '/',

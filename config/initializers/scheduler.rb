@@ -1,12 +1,10 @@
-require 'highlander'
+require 'highlander'    # prevents scheduler from running more than once
 require 'rufus-scheduler'
 
 scheduler = Rufus::Scheduler::singleton
 
-# scheduler.cron '0 12 * * *' do    # Every day at 12 pm
-scheduler.every '5s' do
+scheduler.cron '0 12 * * *' do    # Every day at 12 pm
     system("ruby ././scripts/email_expiring_users.rb")
-    puts "Hello"
 end
 
 while 1 do
