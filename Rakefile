@@ -15,11 +15,3 @@ task :environment do
     # set up the database
     require 'utils/database'
 end
-
-task :email_expiring_users do
-    require 'scripts/email_expiring_users.rb'
-end
-
-task :start_scheduler do
-    require 'config/initializers/scheduler.rb'
-end
