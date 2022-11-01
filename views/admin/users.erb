@@ -184,10 +184,10 @@
         let search = buildSearchFilterList();
         let new_url = "?";
         if (name){
-            if ($('#sort-by-name').val() == "asc"){
-                new_url += "sort_by_name=desc";
-            } else {
+            if ($('#sort-by-name').val() == "desc"){
                 new_url += "sort_by_name=asc";
+            } else {
+                new_url += "sort_by_name=desc";
             }
         } else if(email){
             if ($('#sort-by-email').val() == "asc"){
