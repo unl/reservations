@@ -75,8 +75,8 @@ EMAIL
 		redirect "new_members/sign_up/#{params[:event_id]}"
 		print("failed email")
 	else
-		print("matched")7
-		#Emailer.mail(params[:email], "Nebraska Innovation Studio - #{event.title}", body)
+		print("matched")
+		Emailer.mail(params[:email], "Nebraska Innovation Studio - #{event.title}", body)
 
 		params.delete("event_id")
 		user = User.new(params)
