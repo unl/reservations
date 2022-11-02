@@ -63,14 +63,18 @@ post '/new_members/sign_up/:event_id/?' do
 
 <p>Our main entrance is on the northwest side of the Innovation Commons building on 19th St. just off Transformation Drive. Our address is 2021 Transformation Drive, Suite 1500, Entrance B.</p>
 
-<p>For parking, use our <a href="https://innovationstudio-manager.unl.edu/pdf/new-member-orientation-parking-map.pdf">new member orientation parking</a>. Vehicles parked at any other location will be ticketed $25.00.</p>
+<p>For parking, use our <a href="https://innovationstudio-manager.unl.edu/pdf/new-member-orientation-parking-map.pdf">new member orientation parking</a>. Vehicles parked at any other location will be ticketed $50.00.</p>
 
 <p>We'll see you there!</p>
 
 <p>Nebraska Innovation Studio</p>
 EMAIL
 
-	if 	!URI::MailTo::EMAIL_REGEXP.match(params[:email])
+
+	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
+
+
+	if 	!VALID_EMAIL_REGEX.match(params[:email])
 		flash(:danger, "Invalid Email", "Your email address didn't match any known email")
 		redirect "new_members/sign_up/#{params[:event_id]}"
 		print("failed email")
@@ -102,7 +106,7 @@ EMAIL
 		user.save
 
 		# flash a message that this works
-		flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, orientation is #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}.")
+		flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, orientation is #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}. Check your email for more information about the event and where to park.")
 		redirect '/new_members/'
 	end
 end
