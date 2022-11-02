@@ -70,16 +70,12 @@ post '/new_members/sign_up/:event_id/?' do
 <p>Nebraska Innovation Studio</p>
 EMAIL
 
-
 	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
-
 
 	if 	!VALID_EMAIL_REGEX.match(params[:email])
 		flash(:danger, "Invalid Email", "Your email address didn't match any known email")
 		redirect "new_members/sign_up/#{params[:event_id]}"
-		print("failed email")
 	else
-		print("matched")
 		Emailer.mail(params[:email], "Nebraska Innovation Studio - #{event.title}", body)
 
 		params.delete("event_id")

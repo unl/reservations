@@ -41,15 +41,6 @@
                     </select>
                 </div>
                 <div>
-                    <label for="tool-authorization">Tool Authorization:</label>
-                    <select id="tool-authorization" name="tool_authorization" class="dcf-input-select">
-                        <option value=""></option>
-                        <% tools.each do |tool| %>
-                            <option <%= 'selected="selected"' if tool_authorization.to_i == tool.id %> value="<%= tool.id %>"><%= tool.name %></option>
-                        <% end %>
-                    </select>
-                </div>
-                <div>
                     <label for="expiration-date">Expiration Date:</label>
                     <div class="dcf-grid dcf-col-gap-1 dcf-row-gap-2 dcf-flex-wrap">
                         <div class="dcf-col-100% dcf-col-33%-start@sm">
@@ -82,7 +73,6 @@
                 <th scope="col">Name</th>
                 <th scope="col">Username</th>
                 <th scope="col">Email</th>
-                <th scope="col">Tool Authorizations</th>
                 <th scope="col">Expiration Date</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -99,16 +89,6 @@
                 </td>
                 <td>
                     <%= user.email %>
-                </td>
-                <td>
-                    <% if user.authorized_resource_ids.count == 0 %>
-                        None
-                    <% else %>
-                        <%= user.resource_authorizations.map(&:resource).map(&:name).first(5).join('<br>') %>
-                        <% if user.authorized_resource_ids.count > 5 %>
-                        <br><a href="/admin/users/<%= user.id %>/manage/">... and <%= user.authorized_resource_ids.count - 5 %> more</a>
-                        <% end %>
-                    <% end %>
                 </td>
                 <td>
                 <%= user.expiration_date.strftime('%m/%d/%Y') if user.expiration_date %>
