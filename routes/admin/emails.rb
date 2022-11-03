@@ -12,6 +12,10 @@ get '/admin/email/?' do
 	erb :'admin/emails', :layout => :fixed
 end
 
+get '/admin/email/expiration_email' do
+	erb :'admin/manage_expiration_email', :layout => :fixed
+end
+
 get '/admin/email/send/?' do
 	@breadcrumbs << {:text => 'Admin Emails', :href => '/admin/email/'}
 	@breadcrumbs << {:text => 'Send Email'}
