@@ -265,9 +265,16 @@ select[multiple=multiple] {
 	font-size: .85em;
 }
 
-.sort svg {
-	cursor: pointer;
-	transform: translateY(25%);
+.sort {
+	display: flex;
+	align-items: center;
+	div {
+		display: flex;
+		flex-direction: column;
+		height: 27px;
+		margin-left: 5px;
+		cursor: pointer;
+	}
 }
 
 /* for mobile-tablet-ish sizes */

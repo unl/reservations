@@ -80,18 +80,33 @@
     <table class="dcf-w-100% dcf-table dcf-table-bordered dcf-table-responsive" aria-label="Users List">
         <thead>
             <tr>
-                <th scope="col" class="sort">
-                    Name
-                    <svg id="sort-by-name-btn" xmlns="http://www.w3.org/2000/svg" width="15" viewBox="0 0 24 24" aria-labelledby="filled-arrow-down-10-arrows-title" style="fill: rgb(208, 0, 0);<%= !sort_by_name.nil? && sort_by_name == "desc" ? "transform:rotate(180deg);" : ""%>" height="20"><title id="filled-arrow-down-10-arrows-title">arrow-down-10(arrows)</title><path d="M23.936,2.255C23.848,2.098,23.681,2,23.5,2h-23C0.32,2,0.153,2.098,0.065,2.255c-0.089,0.157-0.085,0.35,0.008,0.504 l11.5,19C11.663,21.908,11.826,22,12,22s0.337-0.092,0.428-0.241l11.5-19C24.021,2.605,24.025,2.412,23.936,2.255z"></path><path fill="none" d="M0 0H24V24H0z"></path></svg>
+                <th scope="col">
+                    <div class="sort">
+                        Name
+                        <div id="sort-by-name-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="11" viewBox="0 0 24 24" aria-labelledby="filled-arrow-down-10-arrows-title" style="<%= sort_by_name == "desc" ? "fill: rgb(245, 138, 31);" : "fill: rgb(208, 0, 0);" %>transform: rotate(180deg);" height="20"><title id="filled-arrow-down-10-arrows-title">arrow-down-10(arrows)</title><path d="M23.936,2.255C23.848,2.098,23.681,2,23.5,2h-23C0.32,2,0.153,2.098,0.065,2.255c-0.089,0.157-0.085,0.35,0.008,0.504 l11.5,19C11.663,21.908,11.826,22,12,22s0.337-0.092,0.428-0.241l11.5-19C24.021,2.605,24.025,2.412,23.936,2.255z"></path><path fill="none" d="M0 0H24V24H0z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="11" viewBox="0 0 24 24" aria-labelledby="filled-arrow-down-10-arrows-title" style="<%= sort_by_name == "asc" || (sort_by_name.nil? && sort_by_email.nil? && sort_by_expiration.nil?) ? "fill: rgb(245, 138, 31);" : "fill: rgb(208, 0, 0);" %>" height="20"><title id="filled-arrow-down-10-arrows-title">arrow-down-10(arrows)</title><path d="M23.936,2.255C23.848,2.098,23.681,2,23.5,2h-23C0.32,2,0.153,2.098,0.065,2.255c-0.089,0.157-0.085,0.35,0.008,0.504 l11.5,19C11.663,21.908,11.826,22,12,22s0.337-0.092,0.428-0.241l11.5-19C24.021,2.605,24.025,2.412,23.936,2.255z"></path><path fill="none" d="M0 0H24V24H0z"></path></svg>
+                        </div>
+                    </div>
                 </th>
                 <th scope="col">Username</th>
-                <th scope="col" class="sort">
-                    Email
-                    <svg id="sort-by-email-btn" xmlns="http://www.w3.org/2000/svg" width="15" viewBox="0 0 24 24" aria-labelledby="filled-arrow-down-10-arrows-title" style="fill: rgb(208, 0, 0);<%= !sort_by_email.nil? && sort_by_email == "desc" ? "transform:rotate(180deg);" : ""%>" height="20"><title id="filled-arrow-down-10-arrows-title">arrow-down-10(arrows)</title><path d="M23.936,2.255C23.848,2.098,23.681,2,23.5,2h-23C0.32,2,0.153,2.098,0.065,2.255c-0.089,0.157-0.085,0.35,0.008,0.504 l11.5,19C11.663,21.908,11.826,22,12,22s0.337-0.092,0.428-0.241l11.5-19C24.021,2.605,24.025,2.412,23.936,2.255z"></path><path fill="none" d="M0 0H24V24H0z"></path></svg>
+                <th scope="col">
+                    <div class="sort">
+                        Email
+                        <div id="sort-by-email-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="11" viewBox="0 0 24 24" aria-labelledby="filled-arrow-down-10-arrows-title" style="<%= sort_by_email == "desc" ? "fill: rgb(245, 138, 31);" : "fill: rgb(208, 0, 0);" %>transform: rotate(180deg);" height="20"><title id="filled-arrow-down-10-arrows-title">arrow-down-10(arrows)</title><path d="M23.936,2.255C23.848,2.098,23.681,2,23.5,2h-23C0.32,2,0.153,2.098,0.065,2.255c-0.089,0.157-0.085,0.35,0.008,0.504 l11.5,19C11.663,21.908,11.826,22,12,22s0.337-0.092,0.428-0.241l11.5-19C24.021,2.605,24.025,2.412,23.936,2.255z"></path><path fill="none" d="M0 0H24V24H0z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="11" viewBox="0 0 24 24" aria-labelledby="filled-arrow-down-10-arrows-title" style="<%= sort_by_email == "asc" ? "fill: rgb(245, 138, 31);" : "fill: rgb(208, 0, 0);" %>" height="20"><title id="filled-arrow-down-10-arrows-title">arrow-down-10(arrows)</title><path d="M23.936,2.255C23.848,2.098,23.681,2,23.5,2h-23C0.32,2,0.153,2.098,0.065,2.255c-0.089,0.157-0.085,0.35,0.008,0.504 l11.5,19C11.663,21.908,11.826,22,12,22s0.337-0.092,0.428-0.241l11.5-19C24.021,2.605,24.025,2.412,23.936,2.255z"></path><path fill="none" d="M0 0H24V24H0z"></path></svg>
+                        </div>
+                    </div>
                 </th>
-                <th scope="col" class="sort">
-                    Expiration Date
-                    <svg id="sort-by-expiration-btn" xmlns="http://www.w3.org/2000/svg" width="15" viewBox="0 0 24 24" aria-labelledby="filled-arrow-down-10-arrows-title" style="fill: rgb(208, 0, 0);<%= !sort_by_expiration.nil? && sort_by_expiration == "desc" ? "transform:rotate(180deg);" : ""%>" height="20"><title id="filled-arrow-down-10-arrows-title">arrow-down-10(arrows)</title><path d="M23.936,2.255C23.848,2.098,23.681,2,23.5,2h-23C0.32,2,0.153,2.098,0.065,2.255c-0.089,0.157-0.085,0.35,0.008,0.504 l11.5,19C11.663,21.908,11.826,22,12,22s0.337-0.092,0.428-0.241l11.5-19C24.021,2.605,24.025,2.412,23.936,2.255z"></path><path fill="none" d="M0 0H24V24H0z"></path></svg>
+                <th scope="col">
+                    <div class="sort">
+                        Expiration Date
+                        <div id="sort-by-expiration-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="11" viewBox="0 0 24 24" aria-labelledby="filled-arrow-down-10-arrows-title" style="<%= sort_by_expiration == "desc" ? "fill: rgb(245, 138, 31);" : "fill: rgb(208, 0, 0);" %>transform: rotate(180deg);" height="20"><title id="filled-arrow-down-10-arrows-title">arrow-down-10(arrows)</title><path d="M23.936,2.255C23.848,2.098,23.681,2,23.5,2h-23C0.32,2,0.153,2.098,0.065,2.255c-0.089,0.157-0.085,0.35,0.008,0.504 l11.5,19C11.663,21.908,11.826,22,12,22s0.337-0.092,0.428-0.241l11.5-19C24.021,2.605,24.025,2.412,23.936,2.255z"></path><path fill="none" d="M0 0H24V24H0z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="11" viewBox="0 0 24 24" aria-labelledby="filled-arrow-down-10-arrows-title" style="<%= sort_by_expiration == "asc" ? "fill: rgb(245, 138, 31);" : "fill: rgb(208, 0, 0);" %>" height="20"><title id="filled-arrow-down-10-arrows-title">arrow-down-10(arrows)</title><path d="M23.936,2.255C23.848,2.098,23.681,2,23.5,2h-23C0.32,2,0.153,2.098,0.065,2.255c-0.089,0.157-0.085,0.35,0.008,0.504 l11.5,19C11.663,21.908,11.826,22,12,22s0.337-0.092,0.428-0.241l11.5-19C24.021,2.605,24.025,2.412,23.936,2.255z"></path><path fill="none" d="M0 0H24V24H0z"></path></svg>
+                        </div>
+                    </div>
                 </th>
                 <th scope="col">Actions</th>
             </tr>
