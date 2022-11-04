@@ -12,8 +12,23 @@ get '/admin/email/?' do
 	erb :'admin/emails', :layout => :fixed
 end
 
-get '/admin/email/expiration_email' do
+get '/admin/email/expiration_email/?' do
 	erb :'admin/manage_expiration_email', :layout => :fixed
+end
+
+post '/admin/email/expiration_email/?' do
+	first_reminder = params[:days_before_sending_first_reminder].to_i
+	second_reminder = params[:days_before_sending_second_reminder].to_i
+	
+	if second_reminder >= first_reminder
+		flash :error, 'Error', 'Please ensure the second reminder happens after the first and is not on the same day'
+		redirect back
+	end
+
+	flash :success, 'Success', 'Your prefrences have been updated!'
+
+	erb :'admin/manage_expiration_email', :layout => :fixed
+
 end
 
 get '/admin/email/send/?' do
