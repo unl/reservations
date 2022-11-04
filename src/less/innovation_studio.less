@@ -254,7 +254,7 @@ select[multiple=multiple] {
     border: 1px solid var(--b);
     margin-bottom: 0.75em;
     text-align: center;
-	> * {
+	& > * {
 	  vertical-align: middle;
 	}
 }
@@ -263,6 +263,11 @@ select[multiple=multiple] {
 	color: var(--link);
 	font-weight: bold;
 	font-size: .85em;
+}
+
+.sort svg {
+	cursor: pointer;
+	transform: translateY(25%);
 }
 
 /* for mobile-tablet-ish sizes */
