@@ -1,5 +1,6 @@
 require 'models/user'
 require 'models/permission'
+require 'models/expiration_reminder'
 
 before '/admin/email*' do
 	unless has_permission?(Permission::MANAGE_EMAILS)
@@ -17,13 +18,20 @@ get '/admin/email/expiration_email/?' do
 end
 
 post '/admin/email/expiration_email/?' do
-	first_reminder = params[:days_before_sending_first_reminder].to_i
-	second_reminder = params[:days_before_sending_second_reminder].to_i
+	new_first_reminder = params[:days_before_sending_first_reminder].to_i
+	new_second_reminder = params[:days_before_sending_second_reminder].to_i
 	
-	if second_reminder >= first_reminder
+	if new_second_reminder >= new_first_reminder
 		flash :error, 'Error', 'Please ensure the second reminder happens after the first and is not on the same day'
 		redirect back
 	end
+
+	reminder = ExpirationReminder.first
+
+	reminder.first_reminder = new_first_reminder
+	reminder.second_reminder = new_second_reminder
+
+	reminder.save
 
 	flash :success, 'Success', 'Your prefrences have been updated!'
 
