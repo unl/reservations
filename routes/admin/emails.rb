@@ -14,7 +14,13 @@ get '/admin/email/?' do
 end
 
 get '/admin/email/expiration_email/?' do
-	erb :'admin/manage_expiration_email', :layout => :fixed
+
+	reminder = ExpirationReminder.first
+
+	erb :'admin/manage_expiration_email', :layout => :fixed, :locals => {
+		:firstReminder => reminder.first_reminder,
+		:secondReminder => reminder.second_reminder,
+	}
 end
 
 post '/admin/email/expiration_email/?' do
@@ -33,9 +39,19 @@ post '/admin/email/expiration_email/?' do
 
 	reminder.save
 
+	reminder = ExpirationReminder.first
+
+	if reminder.first_reminder != new_first_reminder && reminder.second_reminder != new_second_reminder
+		flash :error, 'Error', 'Failed to update prefrences please try again'
+		redirect back
+	end
+
 	flash :success, 'Success', 'Your prefrences have been updated!'
 
-	erb :'admin/manage_expiration_email', :layout => :fixed
+	erb :'admin/manage_expiration_email', :layout => :fixed, :locals => {
+		:firstReminder => reminder.first_reminder,
+		:secondReminder => reminder.second_reminder,
+	}
 
 end
 
