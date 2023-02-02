@@ -172,7 +172,7 @@ post '/admin/events/create/?' do
 
 	if event.end_time.in_time_zone < event.start_time.in_time_zone
 		event.delete
-		flash :alert, "Start and end times create a negative duration.", "Sorry, the selected times cannot be used to create an event. Please try different day or time."
+		flash :alert, "Start and end times create a negative duration.", "Sorry, the selected times cannot be used to create an event. Please try different day or time. Please double check your event information."
 		redirect back
 	end 
 
@@ -325,7 +325,7 @@ post '/admin/events/:event_id/edit/?' do
 
 	if event.end_time.in_time_zone < event.start_time.in_time_zone
 		event.update(start_time: original_event_start_time, end_time: original_event_end_time)
-		flash :alert, "Start and end times create a negative duration.", "Sorry, the selected times cannot be used to create an event. Please try different day or time."
+		flash :alert, "Start and end times create a negative duration.", "Sorry, the selected times cannot be used to create an event. Please try different day or time. Please double check your event information."
 		redirect back
 	end 
 
