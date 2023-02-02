@@ -3,7 +3,8 @@ require 'models/event'
 require 'routes/admin/events'
 
 get '/home/?' do
-	reservations = Reservation.joins(:resource).includes(:event).
+	if @user
+		reservations = Reservation.joins(:resource).includes(:event).
 		where(:resources => {:service_space_id => SS_ID}).
 		where(:user_id => @user.id).
 		where('end_time >= ?', Time.now).
@@ -24,4 +25,7 @@ get '/home/?' do
 		:events => user_events,
 		:trainer_events => trainer_events
 	}
+	else
+		redirect '/login/'
+	end
 end
