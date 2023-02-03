@@ -95,6 +95,9 @@
     <a href="/calendar/" class="dcf-mt-1 dcf-btn dcf-btn-secondary">View Full Calendar</a>
 </p>
 
+<h4 id="my-alerts">My Alerts</h4>
+<p>You are not signed up for any alerts. Check out the <a href="/alert_center/">alert center</a> to sign up for notifications.</p>
+
 <% if @user.is_trainer == 1 %>
     <h4 id="my-events">My Trainings</h4>
     <% if trainer_events.empty? %>
