@@ -1,1 +1,7 @@
-<div> Hello World </div>
+<div>
+    <input type="checkbox" name="update_params[copy]" value="Copy" /> Update the host <br/>
+
+    <% totals.each do |total| %>
+        <input type="checkbox" name="update_params[copy]" value="Copy" /> <% total %> <br/>
+    <% end %>
+</div>

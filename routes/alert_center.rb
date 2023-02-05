@@ -1,5 +1,9 @@
 get '/alert_center/?' do
 
-    erb :alert_center, :layout => :fixed
+    totals = ["hello", "world"]
+
+    erb :alert_center, :layout => :fixed, :locals => {
+        :totals => totals
+    }
 
 end
