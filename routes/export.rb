@@ -8,8 +8,8 @@ require 'date'
 get '/export/?' do
     require_login
     user_events = Event.includes(:event_type).joins(:event_signups).
-		where(:event_signups => {:user_id => @user.id}).
-		where('end_time >= ?', Time.now)
+	    where(:event_signups => {:user_id => @user.id}).
+	    where('end_time >= ?', Time.now)
     trainer_events = Event.where(:events => {:trainer_id => @user.id}).
         where('end_time >= ?', Time.now)
     csv_string = CSV.generate do |csv|
