@@ -1,7 +1,38 @@
-<div>
-    <input type="checkbox" name="update_params[copy]" value="Copy" /> Update the host <br/>
+<h1>Manage Your Alert Groups</h1>
 
-    <% totals.each do |total| %>
-        <input type="checkbox" name="update_params[copy]" value="Copy" /> <% total %> <br/>
-    <% end %>
-</div>
+<form method="POST">
+    <fieldset>
+        <div class="dcf-form-group">
+            <h4> General Alerts </h4>
+            <% generalAlerts.each do |alert| %>
+                <input type="checkbox" name=<%=alert%> value="Copy" /> <%= alert %> <br/>
+            <% end %>
+        </div>
+        <div class="dcf-form-group">
+            <h4> Woodshop Alerts </h4>
+            <% woodShopAlerts.each do |alert| %>
+                <input type="checkbox" name=<%=alert%> value="Copy" /> <%= alert %> <br/>
+            <% end %>
+        </div>
+        <div class="dcf-form-group">
+            <h4> Metalshop Alerts </h4>
+            <% metalShopAlerts.each do |alert| %>
+                <input type="checkbox" name=<%=alert%> value="Copy" /> <%= alert %> <br/>
+            <% end %>
+        </div>
+        <div class="dcf-form-group">
+            <h4> Digital Fabrication Alerts </h4>
+
+            <% digitalFabricationAlerts.each do |alert| %>
+                <input type="checkbox" name=<%=alert%> value="Copy" /> <%= alert %> <br/>
+            <% end %>
+        </div>
+        <div class="dcf-form-group">
+            <h4> Art Alerts </h4>
+            <% artAlerts.each do |alert| %>
+                <input type="checkbox" name=<%=alert%> value="Copy" /> <%= alert %> <br/>
+            <% end %>
+        </div>
+        <button class="dcf-mt-3 dcf-btn dcf-btn-primary">Update Groups</button>
+    </fieldset>
+</form>
