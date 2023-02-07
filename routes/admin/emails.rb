@@ -149,7 +149,7 @@ post '/admin/email/send/?' do
 		EMAIL
 	end
 
-	if invalid_emails.count > 1
+	if invalid_emails.count > 0
 		invalid_emails_body = "Invalid emails were found in the member database: " + invalid_emails.join(',')
 		# change the email to innovationstudio@unl.edu when done testing
 		Emailer.mail("adobrusky2@huskers.unl.edu", "Invalid Emails Found", invalid_emails_body, '', nil)
