@@ -1,8 +1,7 @@
 require 'models/alert'
 require 'models/alert_signup'
 
-
-get '/alert_center/?' do
+get '/alert_center/:user_id/?' do
 
     # if AlertSignup.all.where(user: ) is nil
     #     userAlerts = AlertSignup.create(user: , alert: nil)
@@ -32,7 +31,7 @@ get '/alert_center/?' do
 
 end
 
-post '/alert_center/?' do
+post '/alert_center/:user_id/?' do
 
     # userAlerts = AlertSignup.find_by(user:)
     # userAlerts.alert = params.value
