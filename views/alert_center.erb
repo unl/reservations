@@ -5,34 +5,39 @@
         <div class="dcf-form-group">
             <h4> General Alerts </h4>
             <% generalAlerts.each do |alert| %>
-                <input type="checkbox" name=<%=alert%> value="Copy" /> <%= alert %> <br/>
+                <input type="checkbox" name=<%=alert.name%> value=<%=alert.id%> /> <%= alert.name %> <br/>
+                <p>- <%=alert.description%> </p>
             <% end %>
         </div>
         <div class="dcf-form-group">
             <h4> Woodshop Alerts </h4>
             <% woodShopAlerts.each do |alert| %>
-                <input type="checkbox" name=<%=alert%> value="Copy" /> <%= alert %> <br/>
+                <input type="checkbox" name=<%=alert.name%> value=<%=alert.id%> /> <%= alert.name %> <br/>
+                <p>- <%=alert.description%> </p>
             <% end %>
         </div>
         <div class="dcf-form-group">
             <h4> Metalshop Alerts </h4>
             <% metalShopAlerts.each do |alert| %>
-                <input type="checkbox" name=<%=alert%> value="Copy" /> <%= alert %> <br/>
+                <input type="checkbox" name=<%=alert.name%> value=<%=alert.id%> /> <%= alert.name %> <br/>
+                <p>- <%=alert.description%> </p>
             <% end %>
         </div>
         <div class="dcf-form-group">
             <h4> Digital Fabrication Alerts </h4>
 
             <% digitalFabricationAlerts.each do |alert| %>
-                <input type="checkbox" name=<%=alert%> value="Copy" /> <%= alert %> <br/>
+                <input type="checkbox" name=<%=alert.name%> value=<%=alert.id%> /> <%= alert.name %> <br/>
+                <p>- <%=alert.description%> </p>
             <% end %>
         </div>
         <div class="dcf-form-group">
             <h4> Art Alerts </h4>
             <% artAlerts.each do |alert| %>
-                <input type="checkbox" name=<%=alert%> value="Copy" /> <%= alert %> <br/>
+                <input type="checkbox" name=<%=alert.name%> value=<%=alert.id%> /> <%= alert.name %> <br/>
+                <p>- <%=alert.description%> </p>
             <% end %>
         </div>
-        <button class="dcf-mt-3 dcf-btn dcf-btn-primary">Update Groups</button>
+        <button class="dcf-mt-3 dcf-btn dcf-btn-primary" type="submit">Update Groups</button>
     </fieldset>
 </form>
