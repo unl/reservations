@@ -19,9 +19,6 @@ get '/home/?' do
 		where(:events => {:trainer_id => @user.id}).
 		where('end_time >= ?', Time.now).
 		order(:start_time).all
-	# alerts = Alert.all
-
-	# user_alerts = AlertSignup.all.where(:user_id => @user.id)
 	user_alerts = AlertSignup.joins(:alert).where('user_id = ?', @user.id)
 
 	erb :home, :layout => :fixed, :locals => {
