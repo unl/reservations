@@ -1,6 +1,7 @@
 require 'models/reservation'
 require 'models/event'
 require 'routes/admin/events'
+require 'models/alert'
 
 get '/home/?' do
 	reservations = Reservation.joins(:resource).includes(:event).
@@ -18,10 +19,33 @@ get '/home/?' do
 		where(:events => {:trainer_id => @user.id}).
 		where('end_time >= ?', Time.now).
 		order(:start_time).all
+	# alerts = Alert.all
+
+	# user_alerts = AlertSignup.all.where(:user_id => @user.id)
+	user_alerts = AlertSignup.joins(:alert).where('user_id = ?', @user.id)
 
 	erb :home, :layout => :fixed, :locals => {
 		:reservations => reservations,
 		:events => user_events,
-		:trainer_events => trainer_events
+		:trainer_events => trainer_events,
+		:user_alerts => user_alerts
+		
 	}
+end
+
+post '/home/:alert_signup/remove_signup/:alert_id/?' do
+	require_login
+
+	# check that this is a valid alert signup
+	alert_signup = AlertSignup.find_by(:id => params[:alert_signup])
+	alert = Alert.find_by(:id => params[:alert_id])
+	if alert_signup.nil?
+		flash(:alert, 'Not Found', 'That alert signup does not exist.')
+		redirect '/home/'
+	end
+
+	alert_signup.destroy
+
+	flash(:success, 'Alert Deleted', "Your alert signup #{alert.name} has been deleted.")
+	redirect '/home/'
 end

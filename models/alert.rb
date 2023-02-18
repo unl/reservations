@@ -1,7 +1,8 @@
 require 'active_record'
 
 class Alert < ActiveRecord::Base
-    
+    has_many :alert_signups
+
     ALERT_CATEGORY_GENERAL_ALERTS = 1
     ALERT_CATEGORY_WOODSHOP_ALERTS = 2
     ALERT_CATEGORY_METALSHOP_ALERTS = 3
