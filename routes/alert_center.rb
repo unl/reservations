@@ -3,8 +3,12 @@ require 'models/alert_signup'
 
 get '/alert_center/:user_id/?' do
 
-    # if AlertSignup.all.where(user: ) is nil
-    #     userAlerts = AlertSignup.create(user: , alert: nil)
+    user_alerts = AlertSignup.joins(:alert).where('user_id = ?', @user.id)
+    alert_ids = Array.new
+
+    user_alerts.each do |alert|
+        alert_ids.append(alert.alert_id)
+    end
 
     generalAlerts = Alert.all.where(category_id: 1).to_a
 	generalAlerts.sort_by! {|generalAlerts| generalAlerts.name.downcase + generalAlerts.description.downcase}
@@ -26,16 +30,30 @@ get '/alert_center/:user_id/?' do
         :woodShopAlerts => woodShopAlerts,
         :metalShopAlerts => metalShopAlerts,
         :digitalFabricationAlerts => digitalFabricationAlerts,
-        :artAlerts => artAlerts
+        :artAlerts => artAlerts,
+        :alert_ids => alert_ids
     }
 
 end
 
 post '/alert_center/:user_id/?' do
 
-    # userAlerts = AlertSignup.find_by(user:)
-    # userAlerts.alert = params.value
-    # userAlerts.save
+    newAlerts = Array.new
+
+    params.each do |key, value|
+        if key.start_with?('alert_id_')
+            newAlerts.append(params[key].to_i)
+        end
+    end
+
+    users = AlertSignup.where(user_id: @user.id).all
+    users.destroy_all
+
+    newAlerts.each do |alert|
+        user_alert = AlertSignup.create(user_id: @user.id, alert_id: alert)
+    end
+
+    flash(:success, 'Alerts Updated', "Your selected alerts have been saved.")
 
     redirect '/home/'
 
