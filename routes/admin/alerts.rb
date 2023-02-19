@@ -1,5 +1,6 @@
 require 'models/permission'
 require 'models/alert'
+require 'models/alert_signup'
 
 before '/admin/alerts*' do
 	unless has_permission?(Permission::MANAGE_RESOURCES)
@@ -55,7 +56,9 @@ post '/admin/alerts/:alert_id/delete/?' do
 		flash(:alert, 'Not Found', 'That alert does not exist.')
 		redirect '/admin/alerts/'
 	end
-
+	# deleting alert sign-up records connected with the deleted alert
+	signup_alerts = AlertSignup.where(:alert_id => alert.id).all
+    signup_alerts.destroy_all
 	alert.destroy
 
 	flash(:success, 'Alert Deleted', "Your alert #{alert.name} has been deleted.")
