@@ -46,3 +46,36 @@ post '/home/:alert_signup/remove_signup/:alert_id/?' do
 	flash(:success, 'Alert Deleted', "Your alert signup #{alert.name} has been deleted.")
 	redirect '/home/'
 end
+
+post '/home/add_all/:category_id/' do
+	require_login
+	user_alerts = AlertSignup.joins(:alert).where('user_id = ?', @user.id).to_a
+	general_alerts = Alert.all.where('category_id = ?', params[:category_id]).to_a
+
+	newAlerts = Array.new
+	user_alerts.each do |alert|
+        newAlerts.append(alert.alert_id)
+    end
+	# adding only the alerts that the user does not have
+	general_alerts.each do |alert|
+		unless newAlerts.include?(alert.id)
+			user_alert = AlertSignup.create(user_id: @user.id, alert_id: alert.id)
+		end
+	end	
+
+	case params[:category_id]
+	when "1"
+		flash(:success, 'Added All General Alerts', "You sign up for All of the General Alerts.")
+	when "2"
+		flash(:success, 'Added All Woodshop Alerts', "You sign up for All of the Woodshop Alerts.")
+	when "3"
+		flash(:success, 'Added All Metalshop Alerts', "You sign up for All of the Metalshop Alerts.")
+	when "4"
+		flash(:success, 'Added All Digital Fabrication Alerts', "You sign up for All of the Digital Fabrication Alerts.")
+	when "5"
+		flash(:success, 'Added All Art Alerts', "You sign up for All of the Art Alerts.")
+	end
+
+	
+	redirect '/home/'
+end
