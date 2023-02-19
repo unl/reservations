@@ -14,8 +14,11 @@ get '/admin/alerts/?' do
 
 	alerts = Alert.all.order(:category_id).to_a
 	alerts.sort_by! {|alert| alert.category_name.downcase + alert.name.downcase + alert.description.downcase}
+	alerts_signups = AlertSignup.all
+
 	erb :'admin/alerts', :layout => :fixed, :locals => {
-		:alerts => alerts
+		:alerts => alerts,
+		:alerts_signups => alerts_signups
 	}
 
 end
