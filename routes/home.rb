@@ -76,6 +76,5 @@ post '/home/add_all/:category_id/' do
 		flash(:success, 'Added All Art Alerts', "You sign up for All of the Art Alerts.")
 	end
 
-	
 	redirect '/home/'
 end
