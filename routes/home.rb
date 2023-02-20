@@ -65,15 +65,15 @@ post '/home/add_all/:category_id/' do
 
 	case params[:category_id]
 	when "1"
-		flash(:success, 'Added All General Alerts', "You sign up for All of the General Alerts.")
+		flash(:success, 'Added All General Alerts', "You've been signed up for all General Alerts.")
 	when "2"
-		flash(:success, 'Added All Woodshop Alerts', "You sign up for All of the Woodshop Alerts.")
+		flash(:success, 'Added All Woodshop Alerts', "You've been signed up for all Woodshop Alerts.")
 	when "3"
-		flash(:success, 'Added All Metalshop Alerts', "You sign up for All of the Metalshop Alerts.")
+		flash(:success, 'Added All Metalshop Alerts', "You've been signed up for all Metalshop Alerts.")
 	when "4"
-		flash(:success, 'Added All Digital Fabrication Alerts', "You sign up for All of the Digital Fabrication Alerts.")
+		flash(:success, 'Added All Digital Fabrication Alerts', "You've been signed up for all Digital Fabrication Alerts.")
 	when "5"
-		flash(:success, 'Added All Art Alerts', "You sign up for All of the Art Alerts.")
+		flash(:success, 'Added All Art Alerts', "You've been signed up for all Art Alerts.")
 	end
 
 	redirect '/home/'

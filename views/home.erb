@@ -140,7 +140,7 @@
             <th>Alert Name</th>
             <th>Category</th>
             <th>Description</th>
-            <th>Actions</th>
+            <th>Remove Subscription</th>
         </tr>
     </thead>
     <tbody>
@@ -158,7 +158,7 @@
             </td>
             <td class="table-actions">
                 <form action="/home/<%= alert.id %>/remove_signup/<%= alert_data.id %>/" method="POST" class="dcf-form delete-form">
-					<button class="dcf-btn dcf-btn-primary" type="submit">Remove</button>
+					<button class="dcf-btn dcf-btn-primary" type="submit">Unsubscribe</button>
 				</form>
                 
             </td>
