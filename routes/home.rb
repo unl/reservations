@@ -43,7 +43,7 @@ post '/home/:alert_signup/remove_signup/:alert_id/?' do
 
 	alert_signup.destroy
 
-	flash(:success, 'Alert Deleted', "Your alert signup #{alert.name} has been deleted.")
+	flash(:success, 'Unsubscribed', "You've unsubscribed from #{alert.name}.")
 	redirect '/home/'
 end
 
