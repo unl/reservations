@@ -4,6 +4,7 @@ require 'models/resource_authorization'
 require 'models/event_signup'
 require 'models/permission'
 require 'models/resource'
+require 'models/vehicle'
 require 'models/user_has_permission'
 require 'classes/emailer'
 
@@ -209,6 +210,24 @@ body = <<EMAIL
 EMAIL
 
     Emailer.mail(self.email, "Nebraska Innovation Studio - Unconfirmed Training", body)
+  end
+
+  def send_vehicle_information_update
+    vehicles = Vehicle.where(:user_id => @user.id).all
+    if vehicles.count > 0
+      summary = ""
+      vehicles.each do |vehicle|
+        summary = summary + "State: #{vehicle.state}, Make: #{vehicle.make}, Model: #{vehicle.model}<br>"
+      end
+body = <<EMAIL
+<p>Hi, #{self.full_name.rstrip} needs their vehicle information to be updated in Passport Parking. Their most recent vehicle inforamtion is as follows:</p>
+
+<p>Nebraska Innovation Studio</p>
+EMAIL
+      # change this to innovationstudio after testing
+      Emailer.mail("adobrusky2@huskers.unl.edu", "Nebraska Innovation Studio - Vehicle Information Update", body)
+    end
+
   end
 
 end
