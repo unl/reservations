@@ -1,6 +1,7 @@
 require 'models/user'
 require 'models/permission'
 require 'models/expiration_reminder'
+require 'models/preset_email'
 require 'models/alert'
 require 'models/alert_signup'
 
@@ -179,4 +180,47 @@ post '/admin/email/send/?' do
 
 	flash :success, 'Email sent', "Your email was sent to #{output}."
 	redirect '/admin/email/send/'
+end
+
+get '/admin/email/presets/?' do
+	@breadcrumbs << {:text => 'Admin Emails', :href => '/admin/email/'} << {:text => 'Manage Preset Emails'}
+	preset_emails = PresetEmail.all
+
+	erb :'admin/email_presets', :layout => :fixed, :locals => {
+		:preset_emails => preset_emails
+	}
+end
+
+get '/admin/email/presets/create/?' do
+	@breadcrumbs << {:text => 'Admin Emails', :href => '/admin/email/'} << {:text => 'Manage Preset Emails', :href => '/admin/email/presets/'} << {:text => 'Create Preset Email'}
+
+	erb :'admin/new_preset_email', :layout => :fixed, :locals => {
+		:preset_email => PresetEmail.new
+	}
+end
+
+post '/admin/email/presets/create/?' do
+	preset_email = PresetEmail.new
+	name = params[:name]
+	subject = params[:subject]
+	description = params[:description]
+
+	if name.blank? || subject.blank? || description.blank?
+		flash(:error, 'Preset Email Creation Failed', "Please fill out all required fields.")
+		redirect back
+	else
+		begin
+			preset_email.name = name
+            preset_email.subject = subject
+			preset_email.description = description
+			preset_email.save
+
+			# notify that it worked
+			flash(:success, 'Preset Email Creation Successful', "Your preset email has been created.")
+			redirect '/admin/email/presets/'
+		rescue => exception
+			flash(:error, 'Preset Email Creation Failed', exception.message)
+			redirect back
+		end
+	end
 end
