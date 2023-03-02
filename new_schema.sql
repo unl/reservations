@@ -367,7 +367,7 @@ ALTER TABLE `reservation`.`events`
 ADD COLUMN `trainer_confirmed` TINYINT NULL DEFAULT 0 AFTER `trainer_id`;
 
 
--- Add preset emails has resource authorizations
+-- Add preset emails table
 CREATE TABLE IF NOT EXISTS `reservation`.`preset_emails` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NULL,
