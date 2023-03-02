@@ -173,12 +173,19 @@ post '/admin/users/:user_id/renew/?' do
     user.update({
         :expiration_date => Date.today + 30
     })
-
-    status = "expired"
-    if !user.get_expiration_date.nil? && user.get_expiration_date >= Date.today
-        status = "current"
+    
+    if user.space_status.include?("_no_email")
+        status = "expired_no_email"
+        if !user.get_expiration_date.nil? && user.get_expiration_date >= Date.today
+            status = "current_no_email"
+        end
+    else
+        status = "expired"
+        if !user.get_expiration_date.nil? && user.get_expiration_date >= Date.today
+            status = "current"
+        end
     end
-
+    
     user.space_status = status
     user.save
 
