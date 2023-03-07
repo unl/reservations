@@ -97,7 +97,11 @@ No events today. Perhaps you'd like to create one?<br>
                 <%= event.type.name %>
             </td>
             <td>
-                <%= trainers[event.trainer_id]%>
+                <% if event.trainer_id.nil?%>
+                    No trainer assigned
+                <% else %>
+                    <%= trainers[event.trainer_id]%>
+                <% end %>
             </td>
         </tr>
     <% end %>
