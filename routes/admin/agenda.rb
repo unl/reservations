@@ -17,7 +17,9 @@ get '/admin/agenda/' do
 	trainers = {}
 	for event in events
 		trainer = User.where('id = ?', event.trainer_id)
-		trainers[event.trainer_id] = trainer.first.full_name
+		if !trainer.first.nil?
+			trainers[event.trainer_id] = trainer.first.full_name
+		end
 	end
 
 	# get the hours for this day to show
