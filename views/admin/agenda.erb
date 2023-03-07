@@ -80,6 +80,7 @@ No events today. Perhaps you'd like to create one?<br>
             <th>Title</th>
             <th>Date/Location</th>
             <th>Type</th>
+            <th>Trainer</th>
         </tr>
     </thead>
     <tbody>
@@ -94,6 +95,9 @@ No events today. Perhaps you'd like to create one?<br>
             </td>
             <td>
                 <%= event.type.name %>
+            </td>
+            <td>
+                <%= trainers[event.trainer_id]%>
             </td>
         </tr>
     <% end %>

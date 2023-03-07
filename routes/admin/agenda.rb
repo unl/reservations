@@ -14,6 +14,12 @@ get '/admin/agenda/' do
  	end
 	events = Event.includes(:event_type).where(:service_space_id => SS_ID).in_day(date).order(:start_time)
 
+	trainers = {}
+	for event in events
+		trainer = User.where('id = ?', event.trainer_id)
+		trainers[event.trainer_id] = trainer.first.full_name
+	end
+
 	# get the hours for this day to show
 	hours = SpaceHour.where(:service_space_id => SS_ID)
 		.where('effective_date <= ?', date.utc.strftime('%Y-%m-%d %H:%M:%S'))
@@ -32,7 +38,8 @@ get '/admin/agenda/' do
 		:reservations => reservations,
 		:events => events,
 		:date => date,
-		:space_hour => correct_hour
+		:space_hour => correct_hour,
+		:trainers => trainers
 	}
 end
 
