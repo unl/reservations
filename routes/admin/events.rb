@@ -306,7 +306,7 @@ get '/admin/events/:event_id/edit/?' do
 			end
 		end
 	end
-	
+
 	tools = Resource.where(:service_space_id => SS_ID, :is_reservable => true).order(:name => :asc).all.to_a
 	tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
 	erb :'admin/new_event', :layout => :fixed, :locals => {
