@@ -36,6 +36,12 @@
                     <label for="max-signups"><span class="dcf-sr-only">Max Signups</span></label>
                     <input value="<%= preset_event.max_signups %>" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" type="number" id="max-signups" name="max_signups" class="dcf-d-inline dcf-w-10" aria-label="Number of signups to limit."/>
                 </div>
+
+                <div class="dcf-form-group">
+                    <div class="dcf-input-checkbox">
+                        <input type="checkbox" id="is_private" name="is_private"><label class="dcf-label" for="is_private">Private event</label>
+                    </div>
+                </div>
             </fieldset>
         </div>
     </div>

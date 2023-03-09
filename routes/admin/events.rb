@@ -140,7 +140,7 @@ get '/admin/events/create/?' do
 			:preset_event => nil,
 			:on_unl_events => false,
 			:on_main_calendar => false,
-			:duration => 0
+			:duration => 0,
 		}
 	else
 		preset = PresetEvents.find_by(:id => params[:preset_id])
@@ -160,7 +160,7 @@ get '/admin/events/create/?' do
 			:preset_event => preset,
 			:on_unl_events => false,
 			:on_main_calendar => false,
-			:duration => preset.duration
+			:duration => preset.duration,
 		}
 	end	
 end
@@ -306,7 +306,6 @@ get '/admin/events/:event_id/edit/?' do
 			end
 		end
 	end
-
 	tools = Resource.where(:service_space_id => SS_ID, :is_reservable => true).order(:name => :asc).all.to_a
 	tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
 	erb :'admin/new_event', :layout => :fixed, :locals => {
@@ -319,7 +318,7 @@ get '/admin/events/:event_id/edit/?' do
 		:authorized_tools_ids => authorized_tools_ids,
 		:on_unl_events => on_unl_events,
 		:on_main_calendar => on_main_calendar,
-		:duration => ((event.end_time - event.start_time)/60.0).round
+		:duration => ((event.end_time - event.start_time)/60.0).round,
 	}
 end
 
