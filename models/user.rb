@@ -47,6 +47,10 @@ class User < ActiveRecord::Base
     self.event_signups.map {|event_signup| event_signup.event_id}
   end
 
+  def is_current?
+    !self.get_expiration_date.nil? && self.get_expiration_date >= Date.today
+  end
+
   include BCrypt
 
   # now decides based on whether they have any admin permissions
@@ -75,6 +79,18 @@ class User < ActiveRecord::Base
 
   def get_expiration_date
     expiration_date
+  end
+
+  def set_expiration_date(exp)
+    if self.get_expiration_date.nil? && exp >= Date.today
+      self.send_vehicle_information_update
+      self.send_activation_email
+    end
+    if !self.get_expiration_date.nil? && self.get_expiration_date.nil? < Date.today && exp >= Date.today
+      self.send_vehicle_information_update
+    end
+    self.expiration_date = exp
+    self.save
   end
 
   def full_name
@@ -133,6 +149,7 @@ EMAIL
     begin
       token = String.token
     end while User.find_by(:reset_password_token => token) != nil
+
     self.reset_password_token = token
     self.reset_password_expiry = Time.now + 1.day
     self.save
@@ -146,6 +163,7 @@ body = <<EMAIL
 
 <p>Nebraska Innovation Studio</p>
 EMAIL
+
 
     Emailer.mail(self.email, 'Nebraska Innovation Studio Password Reset', body)
   end
@@ -218,16 +236,21 @@ EMAIL
     if vehicles.count > 0
       summary = ""
       vehicles.each do |vehicle|
-        summary = summary + "State: #{vehicle.state}, Make: #{vehicle.make}, Model: #{vehicle.model}<br>"
+        summary = summary + "<p>License Plate: #{vehicle.license_plate}, State: #{vehicle.state}, Make: #{vehicle.make}, Model: #{vehicle.model}</p><br>"
       end
 body = <<EMAIL
-<p>Hi, #{self.full_name.rstrip} needs their vehicle information to be updated in Passport Parking. Their most recent vehicle inforamtion is as follows:</p>
+<p>Hi, #{self.full_name.rstrip} your vehicle information has been updated or your account has been activated.</p> 
 
+<p>Your most recent vehicle information is as follows:</p>
+
+#{summary}
 <p>Nebraska Innovation Studio</p>
 EMAIL
-      # change this to innovationstudio after testing
-      Emailer.mail("adobrusky2@huskers.unl.edu,#{self.email}", "Nebraska Innovation Studio - Vehicle Information Update", body)
+      # change this to innovationstudio@unl.edu after testing instead of the email test user
+      email_tester = User.where("username like ?", "%emailtest%").first
+      Emailer.mail("#{email_tester.email},#{self.email}", "Nebraska Innovation Studio - Vehicle Information Update", body)
     end
+  end
 
   def send_activation_email
 body = <<EMAIL
@@ -262,10 +285,7 @@ FAILURE TO DO SO WILL RESULT IN UP TO A $60 TICKET EVERY TIME YOU PARK.</p>
 
 <p>Your Studio Staff</p>
 EMAIL
-      # change this to innovationstudio after testing
       Emailer.mail(self.email, "Nebraska Innovation Studio - Vehicle Information Update", body)
-    end
-
   end
 
 end

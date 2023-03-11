@@ -175,20 +175,15 @@ post '/admin/users/:user_id/renew/?' do
         redirect '/admin/users/'
     end
 
-    user.update({
-        :expiration_date => Date.today + 30
-    })
+    user.set_expiration_date(Date.today + 30)
+
+    status = "expired"
+    if user.is_current?
+        status = "current"
+    end
     
     if user.space_status.include?("_no_email")
-        status = "expired_no_email"
-        if !user.get_expiration_date.nil? && user.get_expiration_date >= Date.today
-            status = "current_no_email"
-        end
-    else
-        status = "expired"
-        if !user.get_expiration_date.nil? && user.get_expiration_date >= Date.today
-            status = "current"
-        end
+        status = status + "_no_email"
     end
     
     user.space_status = status
@@ -243,13 +238,16 @@ post '/admin/users/:user_id/edit/?' do
         :last_name => params[:last_name],
         :email => params[:email],
         :username => params[:username],
-        :university_status => params[:university_status],
-        :expiration_date => params[:expiration_date].nil? || params[:expiration_date].empty? ? nil : calculate_time(params[:expiration_date], 0, 0, 'am')
+        :university_status => params[:university_status]
     })
+
+    if params[:expiration_date].nil? || params[:expiration_date].empty? ? nil
+        user.set_expiration_date(calculate_time(params[:expiration_date], 0, 0, 'am'))
+    end
 
     # figure out if space_status should be expired or current
     status = "expired"
-    if !user.get_expiration_date.nil? && user.get_expiration_date >= Date.today
+    if user.is_current?
         status = "current"
     end
 
@@ -335,6 +333,9 @@ post '/admin/users/create/?' do
     user.save
 
     user.set_image_data(params)
+    if params[:expiration_date].nil? || params[:expiration_date].empty? ? nil
+        user.set_expiration_date(calculate_time(params[:expiration_date], 0, 0, 'am'))
+    end
 
     flash :success, 'User Created', 'Your user has been created.'
     redirect '/admin/users/'
