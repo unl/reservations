@@ -247,7 +247,7 @@ body = <<EMAIL
 EMAIL
       # change this to innovationstudio@unl.edu after testing instead of the email test user
       email_tester = User.where("username like ?", "%emailtest%").first
-      Emailer.mail("#{email_tester.email},#{self.email}", "Nebraska Innovation Studio - Vehicle Information Update", body)
+      Emailer.mail(self.email, "Nebraska Innovation Studio - Vehicle Information Update", body, email_tester.email)
     end
   end
 
@@ -283,7 +283,7 @@ If any vehicle information changes you must update your account before parking a
 
 <p>Your Studio Staff</p>
 EMAIL
-      Emailer.mail(self.email, "Nebraska Innovation Studio - Getting Started", body)
+      Emailer.mail(self.email, "Nebraska Innovation Studio - Getting Started", body, '', {"new-member-orientation-parking-map.pdf" => File.read("../public/pdf/new-member-orientation-parking-map.pdf")})
   end
 
 end
