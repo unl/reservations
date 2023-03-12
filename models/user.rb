@@ -236,7 +236,7 @@ EMAIL
     if vehicles.count > 0
       summary = ""
       vehicles.each do |vehicle|
-        summary = summary + "<p>License Plate: #{vehicle.license_plate}, State: #{vehicle.state}, Make: #{vehicle.make}, Model: #{vehicle.model}</p><br>"
+        summary = summary + "<p>License Plate: #{vehicle.license_plate}, State: #{vehicle.state}, Make: #{vehicle.make}, Model: #{vehicle.model}</p>"
       end
 body = <<EMAIL
 <p>Hi, #{self.full_name.rstrip}. You're receiving this email because either your vehicle information has been updated or your account has been activated.</p> 
