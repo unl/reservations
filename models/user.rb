@@ -283,7 +283,7 @@ If any vehicle information changes you must update your account before parking a
 
 <p>Your Studio Staff</p>
 EMAIL
-      Emailer.mail(self.email, "Nebraska Innovation Studio - Getting Started", body, '', {"new-member-orientation-parking-map.pdf" => File.read("../public/pdf/new-member-orientation-parking-map.pdf")})
+      Emailer.mail(self.email, "Nebraska Innovation Studio - Getting Started", body, '', {"new-member-orientation-parking-map.pdf" => File.read(File.expand_path("../public/pdf/new-member-orientation-parking-map.pdf", File.dirname(__FILE__)))})
   end
 
 end
