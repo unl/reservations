@@ -232,7 +232,7 @@ EMAIL
   end
 
   def send_vehicle_information_update
-    vehicles = Vehicle.where(:user_id => @user.id).all
+    vehicles = Vehicle.where(:user_id => self.id).all
     if vehicles.count > 0
       summary = ""
       vehicles.each do |vehicle|
