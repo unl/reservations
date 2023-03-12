@@ -260,7 +260,7 @@ body = <<EMAIL
 
 <p>http://#{ENV['RACK_ENV'] == 'development' ? 'localhost:9393' : 'innovationstudio-manager.unl.edu'}/login/ (Bookmark this link for future use)then enter the following:</p>
 
-<p>User Name: #{self.user_name}</p>
+<p>User Name: #{self.username}</p>
 <p>Temp Password: #{self.password}</p>
 
 
