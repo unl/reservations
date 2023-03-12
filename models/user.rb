@@ -86,7 +86,7 @@ class User < ActiveRecord::Base
       self.send_vehicle_information_update
       self.send_activation_email
     end
-    if !self.get_expiration_date.nil? && self.get_expiration_date.nil? < Date.today && exp >= Date.today
+    if !self.get_expiration_date.nil? && self.get_expiration_date < Date.today && exp >= Date.today
       self.send_vehicle_information_update
     end
     self.expiration_date = exp
