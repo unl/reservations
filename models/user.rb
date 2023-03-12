@@ -239,10 +239,9 @@ EMAIL
         summary = summary + "<p>License Plate: #{vehicle.license_plate}, State: #{vehicle.state}, Make: #{vehicle.make}, Model: #{vehicle.model}</p><br>"
       end
 body = <<EMAIL
-<p>Hi, #{self.full_name.rstrip} your vehicle information has been updated or your account has been activated.</p> 
+<p>Hi, #{self.full_name.rstrip}. You're receiving this email because either your vehicle information has been updated or your account has been activated.</p> 
 
 <p>Your most recent vehicle information is as follows:</p>
-
 #{summary}
 <p>Nebraska Innovation Studio</p>
 EMAIL
@@ -254,38 +253,37 @@ EMAIL
 
   def send_activation_email
 body = <<EMAIL
-<p>Thank you for attending New Member Orientation!</p>
+<strong>Thank you for attending New Member Orientation!</strong>
 
 <p>To activate your user account please go to:</p>
 
-<p>http://#{ENV['RACK_ENV'] == 'development' ? 'localhost:9393' : 'innovationstudio-manager.unl.edu'}/login/ (Bookmark this link for future use)then enter the following:</p>
+<p>http://#{ENV['RACK_ENV'] == 'development' ? 'localhost:9393' : 'innovationstudio-manager.unl.edu'}/login/ (Bookmark this link for future use) then enter the following:</p>
 
 <p>User Name: #{self.username}</p>
-<p>Temp Password: #{self.password}</p>
-
+<p>Temp Password: Welcome123</p>
 
 <p>After logging in you must:</p>
 
-<p>Click on “My Account” on far right side of red banner.
-Go to “Add Vehicle”Add  your vehicle information. 
-You can add up to 3 vehicles.You must  park in the lot shown  on the  attached map.
-If any vehicle information changes you must update your  account before parking at NIS.
-FAILURE TO DO SO WILL RESULT IN UP TO A $60 TICKET EVERY TIME YOU PARK.</p>
+<p>Click on “My Account” on the far right side of the red banner.
+Go to “Add Vehicle”. Add your vehicle information. 
+You can add up to 3 vehicles. You must park in the lot shown on the attached map.
+If any vehicle information changes you must update your account before parking at NIS.
+<u>FAILURE TO DO SO WILL RESULT IN UP TO A $60 TICKET EVERY TIME YOU PARK.</u></p>
 
-<p>TRAININGS AND RESERVATIONS</p>
+<strong>TRAININGS AND RESERVATIONS</strong>
 
 <p>You are now able to sign up for any trainings or workshops via this webpage by clicking on the VIEW TRAININGS, VIEW WORKSHOPS, VIEW FULL CALENDAR tabs on the main page or under the MANAGE YOUR STUDIO drop down tab.</p>
 
 <p>After you have been through required equipment training you will be able to reserve that equipment on the RESERVE EQUIPMENT tab on the main page or the drop-down tab. Not all equipment requires training or reservations.</p>
 
-<p>RENEWING YOUR MEMBERSHIP
+<strong>RENEWING YOUR MEMBERSHIP</strong>
 <p>To renew your membership you must do so in person. We accept credit cards and UNL N Cards or cost object numbers. No checks or cash are accepted. Renew as soon as you enter the studio or you will receive a parking ticket.</p>
 
 <p>Thank you and welcome aboard!</p>
 
 <p>Your Studio Staff</p>
 EMAIL
-      Emailer.mail(self.email, "Nebraska Innovation Studio - Vehicle Information Update", body)
+      Emailer.mail(self.email, "Nebraska Innovation Studio - Getting Started", body)
   end
 
 end
