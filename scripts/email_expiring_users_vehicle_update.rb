@@ -14,9 +14,9 @@ SS_ID = ServiceSpace.where(:name => 'Innovation Studio').first.id
 
 users_expiring_today = User.where(:service_space_id => SS_ID).where('expiration_date >= ? AND expiration_date < ?', Time.now - 1.days, Time.now).all
 if users_expiring_today.count > 0
-	body = "<p>Hello, the following users are expiring today and will need their parking information removed from passport parking:</p><br>"
+	body = "<p>Hello, the following users are expiring today and will need their parking information removed from passport parking:</p>"
 	users_expiring_today.each do |user|
-		body = body + "<p>Full name: #{user.first_name} #{user.last_name}, Username: #{user.username}</p><br>"
+		body = body + "<p>Full Name: #{user.first_name} #{user.last_name}, Username: #{user.username}/p>"
 	end
 	# change this to innovationstudio@unl.edu after testing instead of the email test user
 	email_tester = User.where("username like ?", "%emailtest%").first
