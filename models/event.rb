@@ -3,6 +3,7 @@ require 'active_record'
 class Event < ActiveRecord::Base
 	has_many :event_signups, :dependent => :destroy
 	has_many :reservation, :dependent => :destroy
+	has_many :event_authorizations, :dependent => :destroy
 	belongs_to :location
 	belongs_to :event_type
 	alias_method :type, :event_type
@@ -16,6 +17,18 @@ class Event < ActiveRecord::Base
     EVENT_TYPE_ID_FREE_EVENT = 6
     EVENT_TYPE_ID_RSVP_ONLY_EVENT = 7
     EVENT_TYPE_ID_TOUR = 8
+
+	def self.type_options
+        {
+            EVENT_TYPE_ID_NEW_MEMBER_ORIENTATION => 'New Member Orientation',
+            EVENT_TYPE_ID_MACHINE_TRAINING => 'Machine Training',
+			EVENT_TYPE_ID_ADV_SKILL_BASED_WORKSHOP => 'Advanced Skill-Based Workshop',
+			EVENT_TYPE_ID_CREATION_WORKSHOP => 'Creation Workshop',
+			EVENT_TYPE_ID_GENERAL_WORKSHOP => 'General Workshop',
+			EVENT_TYPE_ID_FREE_EVENT => 'Free Event',
+			EVENT_TYPE_ID_RSVP_ONLY_EVENT => 'RSVP Only Event',
+        }
+    end
 
     EVENT_TYPES_NOT_ALLOWED_FOR_SIGNUP = [EVENT_TYPE_ID_CREATION_WORKSHOP]
 
@@ -64,6 +77,10 @@ class Event < ActiveRecord::Base
 	    false
 	end
 
+	def has_authorization
+		!self.event_authorizations.nil? && self.event_authorizations.count > 0
+	end
+
 	def image_src
 		"/images/#{id}/"
 	end
@@ -79,6 +96,7 @@ class Event < ActiveRecord::Base
 		self.location_id = params[:location]
 		self.max_signups = params[:limit_signups] == 'on' ? params[:max_signups].to_i : nil
 		self.service_space_id = SS_ID
+		self.is_private = params[:is_private]
 		self.save
 	end
 
