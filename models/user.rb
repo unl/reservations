@@ -82,12 +82,14 @@ class User < ActiveRecord::Base
   end
 
   def set_expiration_date(exp)
-    if self.get_expiration_date.nil? && exp >= Date.today
-      self.send_vehicle_information_update
-      self.send_activation_email
-    end
-    if !self.get_expiration_date.nil? && self.get_expiration_date < Date.today && exp >= Date.today
-      self.send_vehicle_information_update
+    if !exp.nil?
+      if self.get_expiration_date.nil? && exp >= Date.today
+        self.send_vehicle_information_update
+        self.send_activation_email
+      end
+      if !self.get_expiration_date.nil? && self.get_expiration_date < Date.today && exp >= Date.today
+        self.send_vehicle_information_update
+      end
     end
     self.expiration_date = exp
     self.save
@@ -267,7 +269,7 @@ body = <<EMAIL
 <p>Click on “My Account” on the far right side of the red banner.
 Go to “Add Vehicle”. Add your vehicle information. 
 You can add up to 3 vehicles. You must park in the lot shown on the attached map.
-If any vehicle information changes you must update your account before parking at NIS.
+<i>If any vehicle information changes you must update your account before attending NIS.</i>
 <u>FAILURE TO DO SO WILL RESULT IN UP TO A $60 TICKET EVERY TIME YOU PARK.</u></p>
 
 <strong>TRAININGS AND RESERVATIONS</strong>

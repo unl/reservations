@@ -521,6 +521,10 @@ CREATE TABLE `reservation`.`vehicles` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1
 
+-- Add authorized_event column to resource_authorizations
+ALTER TABLE `reservation`.`resource_authorizations` 
+ADD COLUMN `authorized_event` INT(11) NULL DEFAULT NULL AFTER `authorized_date`;
+
 -- Create Scheduling Event Type
 INSERT INTO `reservation`.`event_types` (`id`, `description`, `service_space_id`) VALUES ('10', 'Scheduling', '1');
 
