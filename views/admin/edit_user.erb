@@ -71,6 +71,8 @@
                 </div>
             </fieldset>
             <fieldset>
+                <legend>Make Trainer</legend>
+                <p class="dcf-txt-sm">Once a user is made a trainer they will be able to be selected as a trainer when creating an event.</p>
                 <div class="dcf-input-checkbox">
                     <input <%= 'checked="checked"' if user.is_trainer == 1 %> type="checkbox" name="make_trainer" id="make-trainer">
                     <label for="make-trainer">Make Trainer</label>
