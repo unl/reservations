@@ -123,11 +123,17 @@ class User < ActiveRecord::Base
 
   def make_trainer_status
     self.is_trainer = 1
+    unless self.has_permission?(Permission::EVENTS_ADMIN_READ_ONLY)
+      self.permissions << Permission.find(Permission::EVENTS_ADMIN_READ_ONLY)
+    end
     self.save
   end
 
   def remove_trainer_status
     self.is_trainer = 0
+    unless !self.has_permission?(Permission::EVENTS_ADMIN_READ_ONLY)
+      self.permissions.delete(Permission::EVENTS_ADMIN_READ_ONLY)
+    end
     self.save
   end
 
