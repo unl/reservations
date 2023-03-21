@@ -6,6 +6,7 @@ require 'models/resource'
 require 'models/resource_authorization'
 require 'models/preset_event'
 require 'models/event_authorization'
+require 'models/preset_events_has_resource_reservation'
 
 before '/admin/events*' do
 	unless has_permission?(Permission::MANAGE_EVENTS) || has_permission?(Permission::EVENTS_ADMIN_READ_ONLY)
@@ -70,7 +71,7 @@ end
 
 post '/admin/events/:event_id/signup_list/?' do
 	event = Event.includes(:event_signups).find_by(:id => params[:event_id], :service_space_id => SS_ID)
-	tools = Reservation.where(:event_id => params[:event_id])
+	tools = EventAuthorization.where(:event_id => params[:event_id])
 
 	if event.nil?
 		# that event does not exist
@@ -192,7 +193,7 @@ post '/admin/events/create/?' do
 		redirect back
 	end 
 
-	if params.has_key?('reserve_tool') && params['reserve_tool'] == 'on'
+	if params.has_key?('reserve_tool') && params['reserve_tool'] == 'on' && !params[:tools].nil?
         # check for possible other reservations during this time period
         date = event.start_time.midnight.in_time_zone
         params[:tools].each do |tool_id|
@@ -217,7 +218,7 @@ post '/admin/events/create/?' do
         end
 	end
 
-	if params.checked?('authorize_tools_checkbox')
+	if params.checked?('authorize_tools_checkbox') and !params[:specific_tools].nil?
 		params[:specific_tools].each do |id|
 			event_authorization = EventAuthorization.create(:resource_id => id,:event_id => event.id)
 		end
@@ -366,7 +367,7 @@ post '/admin/events/:event_id/edit/?' do
 	end 
 
 	# check the tool reservation for this
-	checked = params.checked?('reserve_tool')
+	checked = params.checked?('reserve_tool') && !params[:tools].nil?
 
     if (checked)
         # check for possible other reservations during this time period
@@ -443,7 +444,7 @@ post '/admin/events/:event_id/edit/?' do
 	delete_old_authorizations = EventAuthorization.where(event_id: event.id).all
     delete_old_authorizations.destroy_all
 
-	if params.checked?('authorize_tools_checkbox')
+	if params.checked?('authorize_tools_checkbox') and !params[:specific_tools].nil?
 		params[:specific_tools].each do |id|
 			event_authorization = EventAuthorization.create(:resource_id => id,:event_id => event.id)
 		end
@@ -601,10 +602,13 @@ get '/admin/events/presets/create/?' do
 	event_types = EventType.where(:service_space_id => SS_ID).all
 	tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
     tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
+	reservable_tools = Resource.where(:service_space_id => SS_ID, :is_reservable => true).order(:name => :asc).all.to_a
+	reservable_tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
 	
 	erb :'admin/new_preset_event', :layout => :fixed, :locals => {
 		:preset_event => PresetEvents.new,
 		:event_types => event_types,
+		:reservable_tools => reservable_tools,
 		:tools => tools
 	}
 end
@@ -633,7 +637,9 @@ post '/admin/events/presets/create/?' do
 			preset.duration = duration
 			preset.save
 
-			# tie the tools that are checked to the preset event
+	
+
+			# tie the authorization tools that are checked to the preset event
 			params.each do |key, value|
 				if key.start_with?('tool_') && value == 'on'
 					id = key.split('tool_')[1].to_i
@@ -643,6 +649,19 @@ post '/admin/events/presets/create/?' do
 					)
 				end
 			end
+
+			
+			# tie the reservation tools that are checked to the preset event
+			params.each do |key, value|
+				if key.start_with?('reservation_tool_') && value == 'on'
+					id = key.split('reservation_tool_')[1].to_i
+					PresetEventsHasResourceReservation.create(
+						:preset_events_id => preset.id,
+						:resource_id => id
+					)
+				end
+			end
+			
 
 			# notify that it worked
 			flash(:success, 'Preset Event Created', "Your preset event #{preset.event_name} has been created.")
@@ -666,10 +685,13 @@ get '/admin/events/presets/:preset_id/edit/?' do
 
 	tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
     tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
+	reservable_tools = Resource.where(:service_space_id => SS_ID, :is_reservable => true).order(:name => :asc).all.to_a
+	reservable_tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
 	
 	erb :'admin/new_preset_event', :layout => :fixed, :locals => {
 		:preset_event => preset,
 		:event_types => event_types,
+		:reservable_tools => reservable_tools,
 		:tools => tools
 	}
 end
@@ -724,6 +746,22 @@ post '/admin/events/presets/:preset_id/edit/?' do
 				end
 			end
 
+			delete_old_reservations = PresetEventsHasResourceReservation.where(preset_events_id: preset.id).all
+    		delete_old_reservations.destroy_all
+
+			
+			# add the updated reservation tools that are checked when editing the preset event
+			params.each do |key, value|
+				if key.start_with?('reservation_tool_') && value == 'on'
+					id = key.split('reservation_tool_')[1].to_i
+					PresetEventsHasResourceReservation.create(
+						:preset_events_id => preset.id,
+						:resource_id => id
+					)
+				end
+			end
+			
+
 			# notify that it worked
 			flash(:success, 'Preset Event Updated', "Your preset event #{preset.event_name} has been updated.")
 			redirect '/admin/events/presets'
@@ -742,6 +780,9 @@ post '/admin/events/presets/:preset_id/delete/?' do
 		redirect '/admin/events/presets'
 	end
 	
+	delete_reservations = PresetEventsHasResourceReservation.where(preset_events_id: preset.id).all
+    delete_reservations.destroy_all
+
 	begin
 		preset.get_resource_ids.each do |resource_id|
 			PresetEventsHasResource.where(:preset_events_id => preset.id, :resources_id => resource_id).delete_all
