@@ -154,7 +154,8 @@ require(['jquery'], function ($) {
 				preset_emails.every(obj => {
 					if (obj.id == preset_id) {
 						$('#subject').val(obj.subject);
-						CKEDITOR.instances["body"].setData(obj.body);
+						// need to test emails on staging and make sure the emails send correctly after replacing \n with <br>
+						CKEDITOR.instances["body"].setData(obj.body.replace("\\n", "<br>"));
 						return false;
 					}
 					return true;

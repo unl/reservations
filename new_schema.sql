@@ -471,7 +471,7 @@ Clean up after yourself.  We need everyone to plan for an appropriate amount of 
 Thank you, 
 Your NIS Staff'
 );
-=======
+
 -- Create alerts table
 CREATE TABLE IF NOT EXISTS `alerts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
