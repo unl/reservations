@@ -534,7 +534,7 @@ ADD COLUMN `is_private` TINYINT(1) NULL DEFAULT 0 AFTER `trainer_confirmed`;
 
 -- Alter event table to include "event_code" column
 ALTER TABLE `reservation`.`events` 
-ADD COLUMN `event_code` VARCHAR(255) NULL AFTER `public`;
+ADD COLUMN `event_code` VARCHAR(255) NULL AFTER `is_private`;
 
 -- Add email status columns to users table
 ALTER TABLE `reservation`.`users`
