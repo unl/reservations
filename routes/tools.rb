@@ -8,14 +8,23 @@ require 'models/space_hour'
 get '/tools/?' do
 	@breadcrumbs << {:text => 'Tools'}
 	require_login
-	check_membership
+
+	workshop_category = params[:workshop_category]
 
 	# show tools that the user is authorized to use, as well as all those that do not require authorization
 	tools = Resource.where(:service_space_id => SS_ID).all.to_a
+
+	# Redefine the tools variable if there is a workshop category filter applied
+	unless workshop_category.nil? || workshop_category.length == 0
+		tools = Resource.where(:service_space_id => SS_ID).where(:category_id => workshop_category).all.to_a
+	end
+
 	tools.reject! {|tool| tool.needs_authorization && !@user.authorized_resource_ids.include?(tool.id)}
 	tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
+	
 
 	erb :tools, :layout => :fixed, :locals => {
+		:workshop_category => workshop_category,
 		:available_tools => tools
 	}
 end
@@ -23,7 +32,6 @@ end
 get '/tools/trainings/?' do
 	@breadcrumbs << {:text => 'Tools', :href => '/tools/'} << {:text => 'Upcoming Trainings'}
 	require_login
-	check_membership
 
 	WHERE_CLAUSE = 'start_time >= ?'
 
@@ -54,7 +62,6 @@ end
 
 post '/tools/trainings/sign_up/:event_id/?' do
 	require_login
-	check_membership
 
 	# check that is a valid event
 	machine_training_id = EventType.find_by(:description => 'Machine Training', :service_space_id => SS_ID).id
@@ -70,6 +77,19 @@ post '/tools/trainings/sign_up/:event_id/?' do
 		# that event is full
 		flash(:danger, 'Event Full', 'Sorry, that event is full.')
 		redirect '/tools/trainings/'
+	end
+
+
+	if event.event_code.present? && params[:event_code].blank?
+		# a code is required to sign up
+		flash(:danger, 'Code Required', 'Sorry, a code is required to signup for this event. You have not been signed up for this event.')
+		redirect '/tools/trainings/'
+	elsif !event.event_code.nil? && !params[:event_code].blank?
+		unless params[:event_code] == event.event_code
+			# incorrect code provided
+			flash(:danger, 'Incorrect Code', 'Sorry, the code you entered is incorrect. You have not been signed up for this event.')
+			redirect '/tools/trainings/'
+		end
 	end
 
 	EventSignup.create(
@@ -99,7 +119,6 @@ end
 get '/tools/:resource_id/reserve/?' do
 	@breadcrumbs << {:text => 'Tools', :href => '/tools/'} << {:text => 'Reserve'}
 	require_login
-	check_membership
 
 	# check that the user has authorization to reserve this tool, if tool requires auth
 	tool = Resource.find_by(:service_space_id => SS_ID, :id => params[:resource_id])
@@ -299,7 +318,6 @@ end
 
 post '/tools/:resource_id/reserve/?' do
 	require_login
-	check_membership
 
 	# check that the user has authorization to reserve this tool, if tool requires auth
 	tool = Resource.find_by(:service_space_id => SS_ID, :id => params[:resource_id])
@@ -400,7 +418,7 @@ post '/tools/:resource_id/reserve/?' do
 		:user_id => @user.id
 	)
 
-	flash(:success, 'Reservation Created', "You have successfully reserved #{tool.name} for #{params[:length]} minutes at #{start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}")
+	flash(:success, 'Reservation Created', "You have successfully reserved #{tool.name} for #{params[:length]} minutes on #{start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}")
 	redirect '/tools/'
 end
 

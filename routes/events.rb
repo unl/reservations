@@ -67,6 +67,18 @@ post '/events/:event_id/sign_up_as_non_member/?' do
         redirect back
 	end
 
+	if event.event_code.present? && params[:event_code].blank?
+		# a code is required to sign up
+		flash(:danger, 'Code Required', 'Sorry, a code is required to signup for this event. You have not been signed up for this event.')
+		redirect back
+	elsif !event.event_code.nil? && !params[:event_code].blank?
+		unless params[:event_code] == event.event_code
+			# incorrect code provided
+			flash(:danger, 'Incorrect Code', 'Sorry, the code you entered is incorrect. You have not been signed up for this event.')
+			redirect back
+		end
+	end
+
 	EventSignup.create(
 		:event_id => params[:event_id],
 		:name => params[:name],
@@ -113,8 +125,16 @@ post '/events/:event_id/sign_up/?' do
         redirect back
 	end
 
-	if event.machine_training_event_type?
-		check_membership
+	if event.event_code.present? && params[:event_code].blank?
+		# a code is required to sign up
+		flash(:danger, 'Code Required', 'Sorry, a code is required to signup for this event. You have not been signed up for this event.')
+		redirect back
+	elsif !event.event_code.nil? && !params[:event_code].blank?
+		unless params[:event_code] == event.event_code
+			# incorrect code provided
+			flash(:danger, 'Incorrect Code', 'Sorry, the code you entered is incorrect. You have not been signed up for this event.')
+			redirect back
+		end
 	end
 
 	EventSignup.create(
@@ -164,6 +184,22 @@ post '/events/:event_id/remove_signup/?' do
 
 	header = event.free_event_type? ? 'Event Removed' : 'Signup Removed'
 	message = event.free_event_type? ? "#{event.title} has been removed from your calendar." : "Your signup for #{event.title} has been removed."
+
+	flash :success, header, message
+	redirect '/home/'
+end
+
+post '/events/:event_id/confirm_trainer/?' do
+	require_login
+
+	# get the event
+	event = Event.includes(:event_type).where(:id => params[:event_id]).first
+
+	event.trainer_confirmed = 1
+	event.save
+
+	header = 'Training Confirmed'
+	message = "Your training #{event.title} has been confirmed."
 
 	flash :success, header, message
 	redirect '/home/'

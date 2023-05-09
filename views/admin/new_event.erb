@@ -29,11 +29,32 @@
                 </div>
 
                 <div class="dcf-form-group">
+                    <label for="trainer">Trainer:</label>
+                    <select id="trainer" name="trainer" class="use-select2">
+                    <option value=""></option>
+                    <% trainers.each do |trainer| %>
+                        <option <%= 'selected="selected"' if !event.trainer_id.nil? && event.trainer_id == trainer.id %> value="<%= trainer.id %>"><%= trainer.full_name %></option>
+                    <% end %>
+                    </select>
+                </div>
+
+                <div class="dcf-form-group">
                     <div class="dcf-input-checkbox dcf-d-inline">
                         <input type="checkbox" <%= 'checked="checked"' unless event.max_signups.nil? %> id="limit-signups" name="limit_signups"><label class="dcf-label" for="limit-signups">Limit signups for this event to: </label>
                     </div>
                     <label for="max-signups"><span class="dcf-sr-only">Max Signups</span></label>
                     <input value="<%= event.max_signups %>" type="number" id="max-signups" name="max_signups" class="dcf-d-inline dcf-w-10" aria-label="Number of signups to limit."/>
+                </div>
+
+                <div class="dcf-form-group">
+                    <div class="dcf-input-checkbox">
+                        <input type="checkbox" <%= 'checked="checked"' if event.is_private %> id="is_private" name="is_private"><label class="dcf-label" for="is_private">Private event</label>
+                    </div>
+                </div>
+
+                <div class="dcf-form-group">
+                    <label for="event-code">Require Code to Signup</label>
+                    <input class="dcf-w-100%" type="text" id="event-code" name="event_code" value="<%= event.event_code %>"/>
                 </div>
             </fieldset>
 
@@ -90,13 +111,42 @@
 
                 <div>
                     <div class="dcf-input-checkbox dcf-mt-6">
-                        <input type="checkbox" <%= 'checked="checked"' if event.has_reservation %> id="reserve-tool" name="reserve_tool"><label for="reserve-tool">Reserve a tool for this event</label>
+                        <input type="checkbox" <%= 'checked="checked"' if event.has_reservation || (event.id.nil? && !preset_event.nil?) %> id="reserve-tool" name="reserve_tool">
+                        <label for="reserve-tool">Reserve a tool for this event</label>
                     </div>
-                    <div id="tools-for-reserving" style="<%= 'display: none;' if !event.has_reservation %>">
-                        <label for="tool">Tool</label>
-                        <select id="tools" name="tools[]" class="use-select2" multiple>
+                    <div id="tools-for-reserving" >
+                        <label for="tool">Use Shift or Ctrl/Cmd to select multiple tools</label>
+                        <select id="tools" name="tools[]" class="use-select2" multiple size="8" >
                             <% tools.each do |tool| %>
-                                <option <%= 'selected="selected"' if event.has_tool_reservation(tool.id) %> value="<%= tool.id %>"><%= "#{tool.category_name} - #{tool.name} - #{tool.model}" %></option>
+                                <% if !tool.INOP %>
+                                    <% if event.id.nil? %>
+                                        <option <%= 'selected="selected"' if !preset_event.nil? and preset_event.get_resource_reservations_ids.include?(tool.id)  %> value="<%=tool.id%>"><%= "#{tool.category_name} - #{tool.name} - #{tool.model}" %></option>
+                                    <% else%>
+                                        <option <%= 'selected="selected"' if event.has_tool_reservation(tool.id) %> value="<%= tool.id %>"><%= "#{tool.category_name} - #{tool.name} - #{tool.model}" %></option>
+                                    <% end %>  
+                                <% end %>                              
+                            <% end %>
+                        </select>
+                    </div>
+                </div>
+                <br>
+
+                <div>
+                    <div class="dcf-input-checkbox dcf-mt-6">
+                        <input type="checkbox" <%= 'checked="checked"' if event.has_authorization || (event.id.nil? && !preset_event.nil?) %> id="authorize_tools_checkbox" name="authorize_tools_checkbox">
+                        <label for="authorize_tools_checkbox">Authorize a tool for this event</label>
+                    </div>
+                    <div id="tools-for-authorizing" >
+                        <label for="specific-group">Use Shift or Ctrl/Cmd to select multiple tools</label>
+                        <select id="specific-tools" name="specific_tools[]" class="use-select2" multiple size="8" >
+                            <% all_tools.each do |tool| %>
+                                <% if !tool.INOP %>
+                                    <% if event.id.nil? %>
+                                        <option <%= 'selected="selected"' if !preset_event.nil? and preset_event.get_resource_ids.include?(tool.id)  %> value="<%=tool.id%>"><%= "#{tool.category_name} - #{tool.name} - #{tool.model}" %></option>
+                                    <% else%>
+                                        <option <%= 'selected="selected"' if authorized_tools_ids.include?(tool.id) %> value="<%=tool.id%>"><%= "#{tool.category_name} - #{tool.name} - #{tool.model}" %></option>
+                                    <% end %>
+                                <% end %>
                             <% end %>
                         </select>
                     </div>
@@ -127,13 +177,13 @@
                         <div id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
                             <div class="dcf-d-flex dcf-ai-center">
                                 <div class="dcf-input-radio">
-                                    <input <%= 'checked="checked"' if event.start_time.nil? || event.start_time.in_time_zone.hour < 12 %> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm" class="dcf-flex-shrink-0">
+                                    <input <%= 'checked="checked"' if !event.start_time.nil? && event.start_time.in_time_zone.hour < 12 %> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm" class="dcf-flex-shrink-0">
                                     <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-am">AM</label>
                                 </div>
                             </div>
                             <div class="dcf-d-flex dcf-ai-center">
                                 <div class="dcf-input-radio">
-                                    <input <%= 'checked="checked"' if !event.start_time.nil? && event.start_time.in_time_zone.hour >= 12 %> id="start-time-am-pm-pm" title="PM" type="radio" value="pm" name="start_time_am_pm" class="dcf-flex-shrink-0">
+                                    <input <%= 'checked="checked"' if event.start_time.nil? || event.start_time.in_time_zone.hour >= 12 %> id="start-time-am-pm-pm" title="PM" type="radio" value="pm" name="start_time_am_pm" class="dcf-flex-shrink-0">
                                     <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-pm">PM</label>
                                 </div>
                             </div>
@@ -166,13 +216,13 @@
                         <div id="end-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
                             <div class="dcf-d-flex dcf-ai-center">
                                 <div class="dcf-input-radio">
-                                    <input <%= 'checked="checked"' if event.end_time.nil? || event.end_time.in_time_zone.hour < 12 %> id="end-time-am-pm-am" title="AM" type="radio" value="am" name="end_time_am_pm" class="dcf-flex-shrink-0">
+                                    <input <%= 'checked="checked"' if !event.end_time.nil? && event.end_time.in_time_zone.hour < 12 %> id="end-time-am-pm-am" title="AM" type="radio" value="am" name="end_time_am_pm" class="dcf-flex-shrink-0">
                                     <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-am">AM</label>
                                 </div>
                             </div>
                             <div class="dcf-d-flex dcf-ai-center">
                                 <div class="dcf-input-radio">
-                                    <input <%= 'checked="checked"' if !event.end_time.nil? && event.end_time.in_time_zone.hour >= 12 %> id="end-time-am-pm-pm" title="PM" type="radio" value="pm" name="end_time_am_pm" class="dcf-flex-shrink-0">
+                                    <input <%= 'checked="checked"' if event.end_time.nil? || event.end_time.in_time_zone.hour >= 12 %> id="end-time-am-pm-pm" title="PM" type="radio" value="pm" name="end_time_am_pm" class="dcf-flex-shrink-0">
                                     <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-pm">PM</label>
                                 </div>
                             </div>
@@ -182,6 +232,7 @@
             </fieldset>
 
         </div>
+        <input type="hidden" name="hidden-duration" id="duration" value="<%=duration%>">
         <div class="dcf-col-100% dcf-col-33%-end@sm">
             <div class="visual-island">
                 <div class="vi-header">
@@ -232,6 +283,32 @@
 <% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {
     $ = require('jquery');
 
+    // sets AM/PM radio buttons and mods the time passed if necessary
+    function setAMPM(time) {
+        if (time % 12 != 0 && time < 12) {
+            time = time % 12;
+            if ($('input[name="start_time_am_pm"]:checked').val() === 'pm') {
+                $('#end-time-am-pm-pm').prop('checked', true);
+                $('#end-time-am-pm-am').prop('checked', false);
+            } else {
+                $('#end-time-am-pm-am').prop('checked', true);
+                $('#end-time-am-pm-pm').prop('checked', false);
+            }
+        } else {
+            if (time % 12 != 0) {
+                time = time % 12;
+            }
+            if ($('input[name="start_time_am_pm"]:checked').val() === 'am') {
+                $('#end-time-am-pm-pm').prop('checked', true);
+                $('#end-time-am-pm-am').prop('checked', false);
+            } else {
+                $('#end-time-am-pm-am').prop('checked', true);
+                $('#end-time-am-pm-pm').prop('checked', false);
+            }
+        }
+        return time;
+    }
+
     $('#reserve-tool').click(function(click) {
         if ($('#reserve-tool').is(':checked')) {
             $('#tools-for-reserving').show();
@@ -256,4 +333,37 @@
             $('#consider-for-unl-main').attr('disabled', 'disabled');
         }
     }).change();
+
+    $('#start-time-hour').change(function (change) {
+        start_time_hour = parseInt($('#start-time-hour').val());
+        duration = parseInt($('#duration').val());
+        time = start_time_hour + ((duration - (duration % 60)) / 60);
+        time = setAMPM(time);
+        $('#end-time-hour').val(time);
+    }).change();
+    
+    $('#start-time-minute').change(function (change) {
+        start_time_minute = parseInt($('#start-time-minute').val());
+        start_time_hour = parseInt($('#start-time-hour').val());
+        duration = parseInt($('#duration').val());
+        time = start_time_minute + (duration % 60);
+        hour_time = start_time_hour + ((duration - (duration % 60)) / 60);
+        hour_time = setAMPM(hour_time);
+        hour = hour_time + Math.floor(time/60);
+        if (time >= 60){
+            $('#end-time-hour').val(hour % 12);
+            time = setAMPM(time);
+            $('#end-time-minute').val(time);
+        }
+        else {
+            $('#end-time-hour').val(hour);
+        }
+        $('#end-time-minute').val(time);
+    }).change();
+
+    $('#start-date').change(function (change) {
+        start_date = $('#start-date').val();
+        $('#end-date').val(start_date); 
+    }).change();
+
 }]);]) %>
