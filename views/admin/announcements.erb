@@ -1,6 +1,13 @@
 <h1 class="dcf-txt-h3">Announcements</h1>
 
 <form class="dcf-form" action="" method="POST">
+	<label for="first-name">Header (empty if no current announcement):</label>
+	<% if announcements %>
+		<input class="dcf-w-100%" type="text" id="header" name="header" value="<%= announcements.header %>"/>
+	<% else %>
+		<input class="dcf-w-100%" type="text" id="header" name="header"/>
+	<% end %>
+	<br>
 	<label for="body">Text (empty if no current announcement):</label>
 	<% if announcements %>	<%# If there is an existing announcement, display its text in the text box %>
 		<textarea class="ckeditor" style="min-height: 150px" id="text" name="text"><%= announcements.text %></textarea>

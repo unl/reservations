@@ -1,0 +1,131 @@
+<h1> New Members Yet to pay </h1>
+<h3> These Members are yet to be activated </h3>
+
+
+<form class="dcf-form" id="attendees" action="" method="POST">
+    <table class="dcf-w-100% dcf-table dcf-table-bordered">
+        <% if !attendees.empty? %>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Attended On</th>
+                    <th>Set Expiration Date</th>
+                </tr>
+            </thead>
+        <% else %>
+            <p> No Members needing Activation. </p>
+        <% end %>
+        <tbody>
+            <% attendees.each do |attendee| %>
+                <tr>
+                    <td>
+                        <%= attendee.name %><br>
+                    <span class="dcf-txt-sm"><%= attendee.university_status %></span>
+                    </td>
+                    <td><%= attendee.user_email %></td>
+                    <td><%= attendee.date_attended.strftime("%m/%d/%Y") %></td>
+                    <td>
+                        <div class="dcf-form-group">
+                            <div class="dcf-datepicker">
+                                <label for="expiration-date">Membership Expiration Date</label>
+                                <input id="expiration-date_<%= attendee.user_id %>" name="expiration-date_<%= attendee.user_id %>" title="Membership Expiration Date" type="text"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+    <br>
+    <button class="dcf-btn dcf-btn-primary" type="submit">Activate Members</button>
+</form>
+
+<% append_script_declaration("WDN.initializePlugin('datepickers');") %>
+<% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {
+    $ = require('jquery');
+
+    // sets AM/PM radio buttons and mods the time passed if necessary
+    function setAMPM(time) {
+        if (time % 12 != 0 && time < 12) {
+            time = time % 12;
+            if ($('input[name="start_time_am_pm"]:checked').val() === 'pm') {
+                $('#end-time-am-pm-pm').prop('checked', true);
+                $('#end-time-am-pm-am').prop('checked', false);
+            } else {
+                $('#end-time-am-pm-am').prop('checked', true);
+                $('#end-time-am-pm-pm').prop('checked', false);
+            }
+        } else {
+            if (time % 12 != 0) {
+                time = time % 12;
+            }
+            if ($('input[name="start_time_am_pm"]:checked').val() === 'am') {
+                $('#end-time-am-pm-pm').prop('checked', true);
+                $('#end-time-am-pm-am').prop('checked', false);
+            } else {
+                $('#end-time-am-pm-am').prop('checked', true);
+                $('#end-time-am-pm-pm').prop('checked', false);
+            }
+        }
+        return time;
+    }
+
+    $('#reserve-tool').click(function(click) {
+        if ($('#reserve-tool').is(':checked')) {
+            $('#tools-for-reserving').show();
+        } else {
+            $('#tools-for-reserving').hide();
+        }
+    });
+
+    $('#location').change(function (change) {
+        if ($(this).val() == 'new') {
+            $('#new-location-details').show();
+        } else {
+            $('#new-location-details').hide();
+        }
+    }).change();
+
+    $('#export-to-unl-events').change(function (change) {
+        if ($('#export-to-unl-events').is(':checked')) {
+            $('#consider-for-unl-main').removeAttr('disabled');
+        } else {
+            $('#consider-for-unl-main').attr('checked', false);
+            $('#consider-for-unl-main').attr('disabled', 'disabled');
+        }
+    }).change();
+
+    $('#start-time-hour').change(function (change) {
+        start_time_hour = parseInt($('#start-time-hour').val());
+        duration = parseInt($('#duration').val());
+        time = start_time_hour + ((duration - (duration % 60)) / 60);
+        time = setAMPM(time);
+        $('#end-time-hour').val(time);
+    }).change();
+    
+    $('#start-time-minute').change(function (change) {
+        start_time_minute = parseInt($('#start-time-minute').val());
+        start_time_hour = parseInt($('#start-time-hour').val());
+        duration = parseInt($('#duration').val());
+        time = start_time_minute + (duration % 60);
+        hour_time = start_time_hour + ((duration - (duration % 60)) / 60);
+        hour_time = setAMPM(hour_time);
+        hour = hour_time + Math.floor(time/60);
+        if (time >= 60){
+            $('#end-time-hour').val(hour % 12);
+            time = setAMPM(time);
+            $('#end-time-minute').val(time);
+        }
+        else {
+            $('#end-time-hour').val(hour);
+        }
+        $('#end-time-minute').val(time);
+    }).change();
+
+    $('#start-date').change(function (change) {
+        start_date = $('#start-date').val();
+        $('#end-date').val(start_date); 
+    }).change();
+
+}]);]) %>

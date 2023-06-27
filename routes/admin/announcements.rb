@@ -31,6 +31,11 @@ post '/admin/announcements/post/?' do
 		flash :error, 'Error', 'Please enter the text for the announcement'
 		redirect back
 	end
+	announcements.header = params[:header]
+	if announcements.header.empty?
+		flash :error, 'Error', 'Please enter the header for the announcement'
+		redirect back
+	end
 	announcements.save
 
 	flash :success, 'Success', 'Your announcement has been created!'

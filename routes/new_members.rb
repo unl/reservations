@@ -67,12 +67,6 @@ post '/new_members/sign_up/:event_id/?' do
 		redirect back
 	end
 
-	EventSignup.create(
-		:event_id => params[:event_id],
-		:name => params[:first_name] + " " + params[:last_name],
-		:email => params[:email]
-	)
-
 	body = <<EMAIL
 <p>Thank you, #{params[:name]} for signing up for #{event.title}. Don't forget that the event is</p>
 
@@ -240,6 +234,14 @@ EMAIL
 				vehicle3.save
 			end
 		end
+
+		# Creates a record in the event signups
+		EventSignup.create(
+			:event_id => params[:event_id],
+			:name => params[:first_name] + " " + params[:last_name],
+			:email => params[:email],
+			:user_id => user.id
+		)
 
 		Emailer.mail(params[:email], "Nebraska Innovation Studio - #{event.title}", body)
 
