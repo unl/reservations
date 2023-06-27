@@ -25,7 +25,7 @@ get '/home/?' do
 	user_alerts = AlertSignup.joins(:alert).where('user_id = ?', @user.id)
 
 	if Announcements.count > 0
-		flash(:info, 'Announcement', Announcements.first.text)
+		flash(:info, Announcements.first.header, Announcements.first.text)
 	end
 
 	erb :home, :layout => :fixed, :locals => {

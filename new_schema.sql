@@ -611,3 +611,18 @@ CREATE TABLE IF NOT EXISTS `reservation`.`announcements` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `text` VARCHAR(10000) NULL,
   PRIMARY KEY (`id`));
+
+-- Add Attended Orientation table
+CREATE TABLE IF NOT EXISTS `reservation`.`attended_orientations` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NULL,
+  `name` varchar(255) NULL,
+  `date_attended` datetime NULL,
+  `university_status` varchar(255) NULL,
+  `user_email` varchar(255) NULL,
+  `event_id` int(11) NULL,
+  PRIMARY KEY (`id`));
+
+-- Add header column to announcements table
+ALTER TABLE `reservation`.`announcements` 
+ADD COLUMN `header` VARCHAR(250) NULL DEFAULT NULL AFTER `text`;
