@@ -16,7 +16,7 @@
 
                 <div class="dcf-form-group">
                     <label for="body">Body <small class="dcf-required">Required</small></label>
-                    <textarea rows="4" id="body" name="body"><%= preset_email.body %></textarea>
+                    <textarea class="ckeditor" style="min-height: 150px" id="body" name="body"><%= preset_email.body %></textarea>
                 </div>
             </fieldset>
         </div>
@@ -29,3 +29,5 @@
     </div>
 </form>
 </div>
+
+<% append_script_tag('/js/lib/ckeditor/ckeditor.js') %>

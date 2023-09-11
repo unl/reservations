@@ -9,25 +9,36 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Attended</th>
+                <% if event_type_id == 1 %>
+                    <th>Delete Signup</th>
+                <% end %>
                 </tr>
             </thead>
         <% else %>
-            <p>So far, no one has signed up for this event yet.</p>
+            <p>So far, no one has signed up for this event.</p>
         <% end %>
-            <tbody>
-                <% event.signups.each do |signup| %>
-                    <tr>
-                        <td><%= signup.name %></td>
-                        <td><%= signup.email %></td>
+        <tbody>
+            <% event.signups.each do |signup| %>
+                <tr>
+                    <td><%= signup.name %></td>
+                    <td><%= signup.email %></td>
+                    <td>
+                        <div class="dcf-input-checkbox">
+                            <input <%= 'checked="checked"' if signup.attended == 1 %> id="attendance-checkbox_<%= signup.id %>" type="checkbox" name="attendance_<%= signup.id %>"  >
+                            <label for="attendance-checkbox_<%= signup.id %>"></label>
+                        </div>
+                    </td>
+                    <% if event_type_id == 1 %>
                         <td>
                             <div class="dcf-input-checkbox">
-                                <input <%= 'checked="checked"' if signup.attended == 1 %> id="attendance-checkbox_<%= signup.id %>" type="checkbox" name="attendance_<%= signup.id %>"  >
-                                <label for="attendance-checkbox_<%= signup.id %>"></label>
+                                <input id="deletion-checkbox_<%= signup.id %>" type="checkbox" name="deletion_<%= signup.id %>"  >
+                                <label for="deletion-checkbox_<%= signup.id %>"></label>
                             </div>
                         </td>
-                    </tr>
-                <% end %>
-            </tbody>
+                    <% end %>
+                </tr>
+            <% end %>
+        </tbody>
     </table>
     <br>
     <button class="dcf-btn dcf-btn-primary" type="submit">Save Signup List</button>

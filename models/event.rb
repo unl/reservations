@@ -96,7 +96,11 @@ class Event < ActiveRecord::Base
 		self.location_id = params[:location]
 		self.max_signups = params[:limit_signups] == 'on' ? params[:max_signups].to_i : nil
 		self.service_space_id = SS_ID
-		self.is_private = params[:is_private]
+		if params[:is_private].nil?
+			self.is_private = 0
+		else
+			self.is_private = params[:is_private]
+		end
 		self.event_code = params[:event_code]
 		self.save
 	end
