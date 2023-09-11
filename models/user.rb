@@ -103,6 +103,10 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
 
+  def get_username
+    username
+  end
+
   def sortable_name
     "#{last_name}, #{first_name}"
   end

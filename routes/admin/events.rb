@@ -66,7 +66,8 @@ get '/admin/events/:event_id/signup_list/?' do
 	end
 
 	erb :'admin/signup_list', :layout => :fixed, :locals => {
-		:event => event
+		:event => event,
+		:event_type_id => event.event_type_id
 	}
 end
 
@@ -83,8 +84,6 @@ post '/admin/events/:event_id/signup_list/?' do
 	# Checks if event is a new member orientation or not
 	if event.event_type_id == 1
 
-		# orientation_attendees = AttendedOrientation.all;
-
 		# removes users from attended orientation master list if they are unchecked
 		event.signups.each do |signup|
 			unless params.has_key?("attendance_#{signup.id}") && params["attendance_#{signup.id}"] == 'on'
@@ -97,29 +96,54 @@ post '/admin/events/:event_id/signup_list/?' do
 			end
 		end
 
+		# checks first if the deletion checkbox was selected and deletes the signup record aswell as the key
+		params.each do |key, value|
+
+			if key.start_with?('deletion_') && value == 'on'
+
+				signup_id = key.split('deletion_')[1].to_i
+				signup_record = EventSignup.find_by(:id => signup_id)
+
+				unless signup_record == nil
+					user = User.find_by(:id => signup_record.user_id)
+
+					if signup_record.attended == 1
+						orientation_attendance = AttendedOrientation.find_by(:user_id => user.id)
+						orientation_attendance.destroy
+					end
+
+					signup_record.destroy
+				end
+			end
+		end
+
 		# adds users to attended orienttaion master list if checked
 		params.each do |key, value|
+
 			if key.start_with?('attendance_') && value == 'on'
 
 				signup_id = key.split('attendance_')[1].to_i
 				signup_record = EventSignup.find_by(:id => signup_id)
-				user = User.find_by(:id => signup_record.user_id)
 
-				if signup_record.attended == 0
-					signup_record.attended = 1
-					signup_record.save
-				end
+				unless signup_record == nil
+					user = User.find_by(:id => signup_record.user_id)
 
-				# Check if user is already on list
-				unless AttendedOrientation.exists?(user_id: user.id)
-					AttendedOrientation.create(
-						:user_id => user.id,
-						:name => user.full_name,
-						:date_attended => event.end_time,
-						:university_status => user.university_status,
-						:user_email => user.email,
-						:event_id => event.id
-					)
+					if signup_record.attended == 0
+						signup_record.attended = 1
+						signup_record.save
+					end
+
+					# Check if user is already on list
+					unless AttendedOrientation.exists?(user_id: user.id)
+						AttendedOrientation.create(
+							:user_id => user.id,
+							:name => user.full_name,
+							:date_attended => event.end_time,
+							:university_status => user.university_status,
+							:user_email => user.email,
+							:event_id => event.id
+						)
+					end
 				end
 			end
 		end
@@ -197,7 +221,7 @@ get '/admin/events/create/?' do
 			:preset_event => nil,
 			:on_unl_events => false,
 			:on_main_calendar => false,
-			:duration => 0
+			:duration => 60
 		}
 	else
 		preset = PresetEvents.find_by(:id => params[:preset_id])

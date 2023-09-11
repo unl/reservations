@@ -35,9 +35,9 @@ Here are the upcoming dates we are holding orientations:
                 </td>
                 <td>
                     <% if event.max_signups.nil? || event.signups.count < event.max_signups %>
-                    <a class="dcf-btn dcf-btn-primary" href="/new_members/sign_up/<%= event.id %>/">Sign Up!</a>
+                        <a class="dcf-btn dcf-btn-primary" href="/new_members/sign_up/<%= event.id %>/">Sign Up!</a>
                     <% else %>
-                    <strong>FULL</strong>
+                        <strong>FULL</strong>
                     <% end %>
                 </td>
             </tr>

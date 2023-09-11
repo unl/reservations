@@ -285,29 +285,44 @@
 
     // sets AM/PM radio buttons and mods the time passed if necessary
     function setAMPM(time) {
-        if (time % 12 != 0 && time < 12) {
-            time = time % 12;
-            if ($('input[name="start_time_am_pm"]:checked').val() === 'pm') {
-                $('#end-time-am-pm-pm').prop('checked', true);
-                $('#end-time-am-pm-am').prop('checked', false);
-            } else {
-                $('#end-time-am-pm-am').prop('checked', true);
-                $('#end-time-am-pm-pm').prop('checked', false);
-            }
-        } else {
-            if (time % 12 != 0) {
-                time = time % 12;
-            }
-            if ($('input[name="start_time_am_pm"]:checked').val() === 'am') {
-                $('#end-time-am-pm-pm').prop('checked', true);
-                $('#end-time-am-pm-am').prop('checked', false);
-            } else {
-                $('#end-time-am-pm-am').prop('checked', true);
-                $('#end-time-am-pm-pm').prop('checked', false);
-            }
+        switch (time) {
+            case 13:
+                if ($('input[name="start_time_am_pm"]:checked').val() === 'pm') {
+                    $('#end-time-am-pm-pm').prop('checked', true);
+                    $('#end-time-am-pm-am').prop('checked', false);
+                } else {
+                    $('#end-time-am-pm-am').prop('checked', true);
+                    $('#end-time-am-pm-pm').prop('checked', false);
+                }
+                time = 1;
+                break;
+
+            case 12:
+                if ($('input[name="start_time_am_pm"]:checked').val() === 'am') {
+                    $('#end-time-am-pm-pm').prop('checked', true);
+                    $('#end-time-am-pm-am').prop('checked', false);
+                } else {
+                    $('#end-time-am-pm-am').prop('checked', true);
+                    $('#end-time-am-pm-pm').prop('checked', false);
+                }
+                break;
+
+            default:
+                if ($('input[name="start_time_am_pm"]:checked').val() === 'pm') {
+                    $('#end-time-am-pm-pm').prop('checked', true);
+                    $('#end-time-am-pm-am').prop('checked', false);
+                } else {
+                    $('#end-time-am-pm-am').prop('checked', true);
+                    $('#end-time-am-pm-pm').prop('checked', false);
+                }
+                break;
         }
         return time;
     }
+
+
+
+
 
     $('#reserve-tool').click(function(click) {
         if ($('#reserve-tool').is(':checked')) {

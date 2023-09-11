@@ -46,6 +46,21 @@ get '/admin/users/download/?' do
     csv_string
 end
 
+get '/admin/users/active_users/download/?' do
+    # load up a CSV with the data
+    users = User.where("expiration_date >= ?", Date.today)
+    csv_string = CSV.generate do |csv|
+        csv << ["User ID", "Username", "Email", "First Name", "Last Name", "University Status", "Date Created", "Space Status", "Expiration Date"]
+        users.each do |user|
+            csv << [user.id, user.username, user.email, user.first_name, user.last_name, user.university_status, (user.date_created.strftime('%Y-%m-%d') rescue ''), user.space_status, (user.expiration_date.strftime('%Y-%m-%d') rescue '')]
+        end
+    end
+
+    content_type 'application/csv'
+    attachment 'users.csv'
+    csv_string
+end
+
 get '/admin/users/vehicle/download/?' do
 # load up a CSV with the data
     todays_date = Date.today.strftime("%Y-%m-%d")

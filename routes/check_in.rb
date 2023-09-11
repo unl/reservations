@@ -35,5 +35,6 @@ post '/check_in/?' do
     checkIn.save
     
     session.clear
+    flash(:success, 'Checked In', 'You have been sucessfully checked in.')
     redirect '/check_in_login'
 end
