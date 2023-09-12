@@ -11,7 +11,7 @@
             </div>
 
             <div class="dcf-form-group">
-                <label for="email">Email Address</label>
+                <label for="email">Email Address <small class="dcf-required">Required</small></label>
                 <input class="dcf-w-100%" type="text" id="email" name="email" value="<%= user.email %>" />
             </div>
 
@@ -54,18 +54,6 @@
                     <input id="expiration-date" name="expiration_date" title="Membership Expiration Date" type="text" value="<%= user.expiration_date.strftime('%m/%d/%Y') if user.expiration_date %>" />
                 </div>
             </div>
-
-            <form action="/admin/users/<%=user.id%>/renew/?" method="POST" class="dcf-form">
-                <div class="dcf-grid dcf-col-gap-vw">
-                    <fieldset class="dcf-col-100% dcf-col-50%-start@sm">
-                        <label>Renew the user's membership to 30 days from today</label> 
-                        <br>
-                        <button id="renew-membership" class="dcf-btn dcf-btn-primary" type="submit">Renew Membership</button>
-                    </fieldset>
-                </div>
-            </form>
-
-            <br>
 
             <div class="dcf-form-group">
                 <h6>Primary Emergency Contact</h6>
@@ -149,6 +137,17 @@
 </form>
 
 <hr>
+
+<form action="/admin/users/<%=user.id%>/renew/?" method="POST" class="dcf-form">
+    <div class="dcf-grid dcf-col-gap-vw">
+        <fieldset class="dcf-col-100% dcf-col-50%-start@sm">
+            <label>Renew the user's membership to 30 days from today</label> 
+            <br>
+            <button id="renew-membership" class="dcf-btn dcf-btn-primary" type="submit">Renew Membership</button>
+        </fieldset>
+    </div>
+</form>
+
 
 <h2 class="dcf-txt-h4 dcf-mt-6">Update Vehicle Information</h2>
 <% if vehicles.count > 0 %>
