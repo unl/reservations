@@ -67,3 +67,13 @@ Use this command to kill the process ID
 ```
 sudo -u innovationstudio kill -9 pid
 ```
+
+CRON
+====
+```
+0 12 * * * ruby ././scripts/email_expiring_users.rb
+0 12 * * * ruby ././scripts/email_unconfirmed_trainers.rb
+0 22 * * * ruby ././scripts/email_expiring_users_vehicle_update.rb
+
+#@reboot /var/www/html/innovationstudio-manager.unl.edu/startup.sh
+```
