@@ -68,7 +68,7 @@
                     </thead>
                     <tbody>
                     <% events.each do |event| %>
-                        <% if !event.is_private || (event.is_private && @user.is_super_user?) %>
+                        <% if !event.is_private || (event.is_private && has_permission?(Permission::MANAGE_EVENTS)) %>
                         <tr>
                             <td class="small-hidden">
                                 <% if has_permission?(Permission::MANAGE_EVENTS) %>
