@@ -29,7 +29,7 @@
     <tbody>
     <% all_private = true %>
     <% events.each do |event| %>
-        <% if !event.is_private || (event.is_private && @user.is_super_user?) %>
+        <% if !event.is_private || (event.is_private && has_permission?(Permission::MANAGE_EVENTS)) %>
             <tr>
                 <td class="small-hidden">
                     <a href="<%= event.info_link %>"><%= event.title %></a>
