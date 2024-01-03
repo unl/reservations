@@ -860,7 +860,7 @@ post '/admin/events/presets/:preset_id/edit/?' do
 					id = key.split('reservation_tool_')[1].to_i
 					PresetEventsHasResourceReservation.create(
 						:preset_events_id => preset.id,
-						:resources_id => id
+						:resource_id => id
 					)
 				end
 			end
