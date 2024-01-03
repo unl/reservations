@@ -90,8 +90,8 @@ CREATE TABLE IF NOT EXISTS `reservation`.`preset_events_has_resources` (
   CONSTRAINT `fk_preset_events_has_resources_resources1`
     FOREIGN KEY (`resources_id`)
     REFERENCES `reservation`.`resources` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
 
 --Insert preset events into preset_events table
 INSERT INTO `reservation`.`preset_events` (`event_name`, `description`, `event_type_id`, `max_signups`, `duration`) VALUES (
