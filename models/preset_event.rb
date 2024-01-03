@@ -8,7 +8,7 @@ class PresetEvents < ActiveRecord::Base
     has_many :preset_events_has_resource_reservations
 
     def get_resource_ids
-        self.preset_events_has_resources.map {|resource| resource.resources_id}
+        self.preset_events_has_resources.map {|resource| resource.resource_id}
     end
 
 	def get_resource_reservations_ids

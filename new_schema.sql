@@ -78,9 +78,9 @@ CHANGE COLUMN `description` `description` VARCHAR(4000) NULL DEFAULT NULL;
 --Add preset_events_has_resources table
 CREATE TABLE IF NOT EXISTS `reservation`.`preset_events_has_resources` (
   `preset_events_id` INT(11) NOT NULL,
-  `resources_id` INT(11) NOT NULL,
-  PRIMARY KEY (`preset_events_id`, `resources_id`),
-  INDEX `fk_preset_events_has_resources_resources1_idx` (`resources_id` ASC) VISIBLE,
+  `resource_id` INT(11) NOT NULL,
+  PRIMARY KEY (`preset_events_id`, `resource_id`),
+  INDEX `fk_preset_events_has_resources_resources1_idx` (`resource_id` ASC) VISIBLE,
   INDEX `fk_preset_events_has_resources_preset_events1_idx` (`preset_events_id` ASC) VISIBLE,
   CONSTRAINT `fk_preset_events_has_resources_preset_events1`
     FOREIGN KEY (`preset_events_id`)
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `reservation`.`preset_events_has_resources` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_preset_events_has_resources_resources1`
-    FOREIGN KEY (`resources_id`)
+    FOREIGN KEY (`resource_id`)
     REFERENCES `reservation`.`resources` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
@@ -322,42 +322,42 @@ e)	Repeat for 3 sizes of tapped hole, 10-32, ¼-20, 3/8-16.
 ', '2', '2', '120');
 
 --Insert preset events tools into preset_events_has_resources
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('1', '772');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('1', '773');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('2', '791');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('2', '792');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('2', '793');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('2', '794');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('2', '795');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('2', '796');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('2', '797');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('9', '12');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('9', '732');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('9', '782');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('9', '818');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('10', '14');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('10', '49');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('10', '733');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('10', '739');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('10', '740');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('10', '742');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('10', '811');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('10', '812');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('10', '813');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('10', '821');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('10', '822');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('10', '824');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('10', '825');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('17', '734');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('18', '8');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('20', '23');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('21', '51');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('22', '743');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('23', '47');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('26', '757');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('27', '815');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('28', '770');
-INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resources_id`) VALUES ('28', '771');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('1', '772');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('1', '773');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('2', '791');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('2', '792');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('2', '793');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('2', '794');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('2', '795');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('2', '796');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('2', '797');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('9', '12');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('9', '732');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('9', '782');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('9', '818');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('10', '14');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('10', '49');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('10', '733');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('10', '739');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('10', '740');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('10', '742');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('10', '811');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('10', '812');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('10', '813');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('10', '821');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('10', '822');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('10', '824');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('10', '825');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('17', '734');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('18', '8');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('20', '23');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('21', '51');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('22', '743');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('23', '47');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('26', '757');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('27', '815');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('28', '770');
+INSERT INTO `reservation`.`preset_events_has_resources` (`preset_events_id`, `resource_id`) VALUES ('28', '771');
 
 -- Fix one of the durations of the preset_events
 UPDATE `preset_events` SET `duration`=60 where `id`=10; 
