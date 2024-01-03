@@ -749,7 +749,7 @@ post '/admin/events/presets/create/?' do
 					id = key.split('tool_')[1].to_i
 					PresetEventsHasResource.create(
 						:preset_events_id => preset.id,
-						:resource_id => id
+						:resources_id => id
 					)
 				end
 			end
@@ -832,7 +832,7 @@ post '/admin/events/presets/:preset_id/edit/?' do
 			# check for removed tools
 			preset.get_resource_ids.each do |resource_id|
 				unless params.has_key?("tool_#{resource_id}") && params["tool_#{resource_id}"] == 'on'
-					PresetEventsHasResource.where(:preset_events_id => preset.id, :resource_id => resource_id).delete_all
+					PresetEventsHasResource.where(:preset_events_id => preset.id, :resources_id => resource_id).delete_all
 				end
 			end
 		
@@ -844,7 +844,7 @@ post '/admin/events/presets/:preset_id/edit/?' do
 					unless preset.get_resource_ids.include?(id)
 						PresetEventsHasResource.create(
 							:preset_events_id => preset.id,
-							:resource_id => id
+							:resources_id => id
 						)
 					end
 				end
@@ -860,7 +860,7 @@ post '/admin/events/presets/:preset_id/edit/?' do
 					id = key.split('reservation_tool_')[1].to_i
 					PresetEventsHasResourceReservation.create(
 						:preset_events_id => preset.id,
-						:resource_id => id
+						:resources_id => id
 					)
 				end
 			end
@@ -889,7 +889,7 @@ post '/admin/events/presets/:preset_id/delete/?' do
 
 	begin
 		preset.get_resource_ids.each do |resource_id|
-			PresetEventsHasResource.where(:preset_events_id => preset.id, :resource_id => resource_id).delete_all
+			PresetEventsHasResource.where(:preset_events_id => preset.id, :resources_id => resource_id).delete_all
 		end
 		preset.destroy
 		flash(:success, 'Preset Event Deleted', "Your preset event #{preset.event_name} has been deleted.")
