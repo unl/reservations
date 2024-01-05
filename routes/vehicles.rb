@@ -61,6 +61,8 @@ post '/vehicle/:vehicle_id/edit/?' do
             vehicle.state = state
             vehicle.make = make
             vehicle.model = model
+			vehicle.save
+
             if params[:user_id].present?
 				user = User.find_by(:id => params[:user_id])
 				if user.nil?
@@ -76,7 +78,6 @@ post '/vehicle/:vehicle_id/edit/?' do
 					@user.send_vehicle_information_update
 				end
 			end
-			vehicle.save
 
 			# notify that it worked
 			flash(:success, 'Vehicle Update Successful', "Your vehicle has been updated.")
@@ -109,6 +110,8 @@ post '/vehicle/add/?' do
             vehicle.state = state
             vehicle.make = make
             vehicle.model = model
+			vehicle.save
+
 			if params[:user_id].present?
 				user = User.find_by(:id => params[:user_id])
 				if user.nil?
@@ -124,7 +127,6 @@ post '/vehicle/add/?' do
 					@user.send_vehicle_information_update
 				end
 			end
-			vehicle.save
 
 			# notify that it worked
 			flash(:success, 'Vehicle Addition Successful', "Your vehicle has been added.")
@@ -153,6 +155,8 @@ post '/vehicle/:vehicle_id/delete/?' do
 	end
 	
 	begin
+		vehicle.destroy
+
 		if params[:user_id].present?
 			user = User.find_by(:id => params[:user_id])
 			if user.nil?
@@ -166,7 +170,6 @@ post '/vehicle/:vehicle_id/delete/?' do
 				@user.send_vehicle_information_update
 			end
 		end
-		vehicle.destroy
 
 		flash(:success, 'Vehicle Successfully Deleted', "Your vehicle has been deleted.")
 		if params[:user_id].present?
