@@ -259,6 +259,25 @@ EMAIL
     end
   end
 
+  def send_vehicle_information_deleted
+    vehicles = Vehicle.where(:user_id => self.id).all
+    summary = "<p>You no longer have any vehicles associated with your account.</p>"
+    if vehicles.count > 0
+      summary = ""
+      vehicles.each do |vehicle|
+        summary = summary + "<p>License Plate: #{vehicle.license_plate}, State: #{vehicle.state}, Make: #{vehicle.make}, Model: #{vehicle.model}</p>"
+      end
+    end
+body = <<EMAIL
+<p>Hi, #{self.full_name.rstrip}. You're receiving this email because either your vehicle information has been updated or your account has been activated.</p> 
+
+<p>Your most recent vehicle information is as follows:</p>
+#{summary}
+<p>Nebraska Innovation Studio</p>
+EMAIL
+      Emailer.mail(self.email, "Nebraska Innovation Studio - Vehicle Information Update", body, "innovationstudio@unl.edu")
+  end
+
   def send_activation_email
 body = <<EMAIL
 <strong>Thank you for attending New Member Orientation!</strong>
