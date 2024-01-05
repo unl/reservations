@@ -163,11 +163,11 @@ post '/vehicle/:vehicle_id/delete/?' do
 				raise StandardError.new "A user does not exist with user ID #{params[:user_id]}"
 			end
 			if user.is_current?
-				user.send_vehicle_information_update
+				user.send_vehicle_information_deleted
 			end
 		else
 			if @user.is_current?
-				@user.send_vehicle_information_update
+				@user.send_vehicle_information_deleted
 			end
 		end
 
