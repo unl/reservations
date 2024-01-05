@@ -61,7 +61,6 @@ post '/vehicle/:vehicle_id/edit/?' do
             vehicle.state = state
             vehicle.make = make
             vehicle.model = model
-			vehicle.save
 
             if params[:user_id].present?
 				user = User.find_by(:id => params[:user_id])
@@ -69,11 +68,13 @@ post '/vehicle/:vehicle_id/edit/?' do
 					raise StandardError.new "A user does not exist with user ID #{params[:user_id]}"
 				end
 				vehicle.user_id = params[:user_id]
+				vehicle.save
 				if user.is_current?
 					user.send_vehicle_information_update
 				end
 			else
 				vehicle.user_id = @user.id
+				vehicle.save
 				if @user.is_current?
 					@user.send_vehicle_information_update
 				end
@@ -109,8 +110,7 @@ post '/vehicle/add/?' do
 			vehicle.license_plate = license_plate
             vehicle.state = state
             vehicle.make = make
-            vehicle.model = model
-			vehicle.save
+            vehicle.model = model			
 
 			if params[:user_id].present?
 				user = User.find_by(:id => params[:user_id])
@@ -118,11 +118,13 @@ post '/vehicle/add/?' do
 					raise StandardError.new "A user does not exist with user ID #{params[:user_id]}"
 				end
 				vehicle.user_id = params[:user_id]
+				vehicle.save
 				if user.is_current?
 					user.send_vehicle_information_update
 				end
 			else
 				vehicle.user_id = @user.id
+				vehicle.save
 				if @user.is_current?
 					@user.send_vehicle_information_update
 				end
