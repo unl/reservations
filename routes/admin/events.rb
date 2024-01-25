@@ -147,10 +147,9 @@ post '/admin/events/:event_id/signup_list/?' do
 						end
 					else 
 						AttendedOrientation.create(
-							:name => user.full_name,
+							:name => signup_record.name,
 							:date_attended => event.end_time,
-							:university_status => user.university_status,
-							:user_email => user.email,
+							:user_email => signup_record.email,
 							:event_id => event.id
 						)
 					end
