@@ -26,12 +26,18 @@
                     <td><%= attendee.user_email %></td>
                     <td><%= attendee.date_attended.strftime("%m/%d/%Y") %></td>
                     <td>
+                        <% if attendee.user_id %>
                         <div class="dcf-form-group">
                             <div class="dcf-datepicker">
                                 <label for="expiration-date">Membership Expiration Date</label>
                                 <input id="expiration-date_<%= attendee.user_id %>" name="expiration-date_<%= attendee.user_id %>" title="Membership Expiration Date" type="text"/>
                             </div>
                         </div>
+                        <% else %>
+                        <div>
+                            Attendee needs a user created
+                        </div>
+                        <% end %>
                     </td>
                 </tr>
             <% end %>

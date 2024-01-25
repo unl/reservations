@@ -133,10 +133,20 @@ post '/admin/events/:event_id/signup_list/?' do
 						signup_record.save
 					end
 
-					# Check if user is already on list
-					unless AttendedOrientation.exists?(user_id: user.id)
+					if user
+						# Check if user is already on list
+						unless AttendedOrientation.exists?(user_id: user.id)
+							AttendedOrientation.create(
+								:user_id => user.id,
+								:name => user.full_name,
+								:date_attended => event.end_time,
+								:university_status => user.university_status,
+								:user_email => user.email,
+								:event_id => event.id
+							)
+						end
+					else 
 						AttendedOrientation.create(
-							:user_id => user.id,
 							:name => user.full_name,
 							:date_attended => event.end_time,
 							:university_status => user.university_status,
