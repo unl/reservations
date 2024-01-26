@@ -89,7 +89,10 @@ post '/admin/events/:event_id/signup_list/?' do
 			unless params.has_key?("attendance_#{signup.id}") && params["attendance_#{signup.id}"] == 'on'
 				user_id = signup.user_id
 				if signup.attended == 1
-					AttendedOrientation.find_by(:user_id => user_id).delete
+					orientation_attendee = AttendedOrientation.find_by(:user_id => user_id)
+					if !orientation_attendee.nil?
+						orientation_attendee.delete
+					end
 					signup.attended = 0
 					signup.save
 				end 
@@ -106,12 +109,12 @@ post '/admin/events/:event_id/signup_list/?' do
 
 				unless signup_record == nil
 					user = User.find_by(:id => signup_record.user_id)
-
-					if signup_record.attended == 1
+					if !user.nil? && signup_record.attended == 1
 						orientation_attendance = AttendedOrientation.find_by(:user_id => user.id)
-						orientation_attendance.destroy
+						if !orientation_attendance.nil?
+							orientation_attendance.destroy
+						end
 					end
-
 					signup_record.destroy
 				end
 			end
@@ -133,7 +136,7 @@ post '/admin/events/:event_id/signup_list/?' do
 						signup_record.save
 					end
 
-					if user
+					if !user.nil?
 						# Check if user is already on list
 						unless AttendedOrientation.exists?(user_id: user.id)
 							AttendedOrientation.create(
@@ -145,13 +148,6 @@ post '/admin/events/:event_id/signup_list/?' do
 								:event_id => event.id
 							)
 						end
-					else 
-						AttendedOrientation.create(
-							:name => signup_record.name,
-							:date_attended => event.end_time,
-							:user_email => signup_record.email,
-							:event_id => event.id
-						)
 					end
 				end
 			end
@@ -190,20 +186,21 @@ post '/admin/events/:event_id/signup_list/?' do
 					signup_record.attended = 1
 					signup_record.save
 				end
-				
-				tools.each do |tool|
-					tool_id =  tool.resource_id 
-					# check if the user already has permission for this tool
-					unless user.authorized_resource_ids.include?(tool_id)
-						ResourceAuthorization.create(
-							:user_id => user.id,
-							:resource_id => tool_id,
-							:authorized_date => Time.now,
-							:authorized_event => signup_record.event_id
-						)
+
+				if !user.nil?
+					tools.each do |tool|
+						tool_id =  tool.resource_id 
+						# check if the user already has permission for this tool
+						unless user.authorized_resource_ids.include?(tool_id)
+							ResourceAuthorization.create(
+								:user_id => user.id,
+								:resource_id => tool_id,
+								:authorized_date => Time.now,
+								:authorized_event => signup_record.event_id
+							)
+						end
 					end
-				end 
-				
+				end
 			end
 		end
 	end

@@ -35,9 +35,15 @@ post '/admin/orientation_attended/?' do
             user.space_status = status
             user.save
 
-            EventSignup.find_by(:user_id => attendee.user_id, :event_id => attendee.event_id).delete
+            event_signup = EventSignup.find_by(:user_id => attendee.user_id, :event_id => attendee.event_id)
+            if !event_signup.nil?
+                event_signup.delete
+            end
 
-            AttendedOrientation.find_by(:user_id => attendee.user_id).delete
+            orientation_attendee = AttendedOrientation.find_by(:user_id => attendee.user_id)
+            if !orientation_attendee.nil?
+                orientation_attendee.delete
+            end
 
         end
     end

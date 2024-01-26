@@ -510,7 +510,10 @@ post '/admin/users/:user_id/manage/?' do
     # check for removed permissions
     user.authorized_resource_ids.each do |resource_id|
         unless params.has_key?("permission_#{resource_id}") && params["permission_#{resource_id}"] == 'on'
-            ResourceAuthorization.find_by(:user_id => user.id, :resource_id => resource_id).delete
+            resource_auth = ResourceAuthorization.find_by(:user_id => user.id, :resource_id => resource_id)
+            if !resource_auth.nil?
+                resource_auth.delete
+            end
         end
     end
 
