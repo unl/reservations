@@ -9,11 +9,11 @@ require 'models/user_has_permission'
 require 'classes/emailer'
 
 class User < ActiveRecord::Base
-  has_many :resource_authorizations
-  has_many :event_signups
-  has_many :user_has_permissions
+  has_many :resource_authorizations, dependent: :destroy
+  has_many :event_signups, dependent: :destroy
+  has_many :user_has_permissions, dependent: :destroy
   has_many :permissions, through: :user_has_permissions
-  has_many :alert_signups
+  has_many :alert_signups, dependent: :destroy
   
   def authorized_resource_ids
     self.resource_authorizations.map {|res_auth| res_auth.resource_id}
