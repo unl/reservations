@@ -2,6 +2,6 @@
 
 <form class="dcf-form" action="" method="POST">
     <label for="days-to-add">Days to add to ALL users' expiration dates:</label>
-    <input id="days-to-add" type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" name="days_to_add" />
+    <input id="days-to-add" name="days_to_add" type="number" value="0" min="-60" max="60" step="1">
     <button style="margin-top:15px;" class="dcf-btn dcf-btn-primary" type="submit">Modify</button>
 </form>
