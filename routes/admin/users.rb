@@ -483,7 +483,7 @@ end
 post '/admin/users/modify_expirations/?' do
     days_to_add = params[:days_to_add]
 
-    if !days_to_add.is_a?(Numeric)
+    if !(days_to_add =~ /^-?\d+$/)
         flash :alert, "Invalid Value", "Sorry, that value is not valid"
         redirect '/admin/users/'
     end
