@@ -482,6 +482,12 @@ end
 
 post '/admin/users/modify_expirations/?' do
     days_to_add = params[:days_to_add]
+
+    if !days_to_add.is_a?(Numeric)
+        flash :alert, "Invalid Value", "Sorry, that value is not valid"
+        redirect '/admin/users/'
+    end
+
     todays_date = Date.today.strftime("%Y-%m-%d")
     users = User.where("expiration_date IS NOT NULL AND STR_TO_DATE(expiration_date, '%Y-%m-%d') >= ?", todays_date).all
     users_updated = users.length
