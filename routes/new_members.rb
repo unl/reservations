@@ -58,8 +58,10 @@ end
 post '/new_members/sign_up/:event_id/?' do
 	# check if this is a new member signup orientation
 	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
+	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
+
 	event = Event.includes(:event_signups).find_by(:service_space_id => SS_ID, :id => params[:event_id])
-	if event.nil? || event.event_type_id != new_member_orientation_id
+	if event.nil? || (event.event_type_id != new_member_orientation_id && event.event_type_id != hrc_training_id)
 		# that event does not exist
 		flash(:danger, 'Not Found', 'That event does not exist')
 		redirect '/new_members/'
@@ -255,7 +257,7 @@ EMAIL
 		Emailer.mail(params[:email], "Nebraska Innovation Studio - #{event.title}", body)
 
 		# flash a message that this works
-		flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, orientation is #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}. Check your email for more information about the event and where to park.")
+		flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, this is at #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}. Check your email for more information about the event and where to park.")
 		redirect '/new_members/'
 	end
   
