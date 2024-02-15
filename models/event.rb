@@ -17,6 +17,7 @@ class Event < ActiveRecord::Base
     EVENT_TYPE_ID_FREE_EVENT = 6
     EVENT_TYPE_ID_RSVP_ONLY_EVENT = 7
     EVENT_TYPE_ID_TOUR = 8
+	EVENT_TYPE_HRC_TRAINING = 11
 
 	def self.type_options
         {
@@ -27,6 +28,7 @@ class Event < ActiveRecord::Base
 			EVENT_TYPE_ID_GENERAL_WORKSHOP => 'General Workshop',
 			EVENT_TYPE_ID_FREE_EVENT => 'Free Event',
 			EVENT_TYPE_ID_RSVP_ONLY_EVENT => 'RSVP Only Event',
+			EVENT_TYPE_HRC_TRAINING => 'HRC Training',
         }
     end
 
@@ -55,6 +57,8 @@ class Event < ActiveRecord::Base
 	def info_link
 		case type.description
 		when 'New Member Orientation'
+			"/new_members/sign_up/#{id}/"
+		when 'HRC Training'
 			"/new_members/sign_up/#{id}/"
 		else
 			"/events/#{id}/"
