@@ -1,1 +1,1 @@
-INSERT INTO event_types (id, description, service_space_id) VALUES (11, HRC Training, 1);
+INSERT INTO event_types (id, description, service_space_id) VALUES (11, "HRC Training", 1);
