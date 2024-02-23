@@ -20,7 +20,13 @@ get '/tools/?' do
 	end
 
 	tools.reject! {|tool| tool.needs_authorization && !@user.authorized_resource_ids.include?(tool.id)}
-	tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
+	tools.sort_by! do |tool|
+		[
+			tool.category_name.to_s.downcase,
+			tool.name.to_s.downcase,
+			tool.model.to_s.downcase
+		]
+	end
 	
 
 	erb :tools, :layout => :fixed, :locals => {

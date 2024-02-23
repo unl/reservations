@@ -58,7 +58,6 @@ class Resource < ActiveRecord::Base
 				return data.data
 			end	
 		end
-		super
 	end
 
 	def get_field_data
