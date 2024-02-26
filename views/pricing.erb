@@ -8,14 +8,14 @@
 <% current_category = nil %>
 <% current_subcategory = nil %>
 
-<div>
+<div class="dcf-columns-1 dcf-columns-2@md">
     <% material_prices.each do |material_price| %>
         <% if current_category != material_price.category %>
             <% unless current_category.nil? %>
                 </tbody>
                 </table>
             <% end %>
-            <table class="dcf-table dcf-table-striped dcf-mb-4">
+            <table class="dcf-table dcf-table-striped dcf-mb-8 dcf-w-100%">
             <caption><%= material_price.category %></caption>
             <thead>
                 <tr>
