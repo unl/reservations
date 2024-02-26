@@ -77,7 +77,7 @@ def require_login(redirect_after_login=nil)
   end
 end
 
-def drupal_node_lookup(key)
+def drupal_link_lookup(key)
     nodes = {
         material_pricing: 79,
         sop_training_doc: 80,
