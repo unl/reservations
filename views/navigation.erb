@@ -12,8 +12,6 @@
     <li><a href="/training-documents" title="Nebraska Innovation Studio Training Documents">Training Documents</a>
         <ul>
             <li><a href="/training-documents/sop/" title="SOP">SOP</a></li>
-            <li><a href="/training-documents/workshops/" title="Workshops">Workshops</a></li>
-            <li><a href="/training-documents/tips-and-tricks/" title="Tips and Tricks">Tips and Tricks</a></li>
         </ul>
     </li>
     <% end %>
@@ -68,7 +66,7 @@
                 <% end %>
                 <% if has_permission?(Permission::MANAGE_RESOURCES) %>
                 <li><a href="/admin/material_prices/">Edit Material Pricing</a></li>
-                <li><a href="https://innovationstudio.unl.edu/user/login?destination=node/<%= drupal_link_lookup(:sop_training_doc) %>/edit" target="_blank">Edit SOP</a></li>
+                <li><a href="https://innovationstudio.unl.edu#{drupal_link_lookup(:sop_training_doc)}" target="_blank">Edit SOP</a></li>
                 <% end %>
                 <% if has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER) %>
                 <li><a href="/admin/view_check_in/" title="CheckIns">Check In Log</a></li>
