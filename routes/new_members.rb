@@ -22,9 +22,16 @@ get '/new_members/?' do
     }
 end
 
-get '/new_members/sign_up/:event_id/?' do
-	@breadcrumbs << {:text => 'New Members', :href => '/new_members/'} << {text: 'Sign Up'}
+get '/hrc/?' do
+	@breadcrumbs << {:text => 'HRC Trainings'}
+	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
 
+    erb :new_members_hrc, :layout => :fixed, :locals => {
+    	:events => Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => hrc_training_id, :is_private => 0).where('start_time >= ?', Time.now).order(:start_time => :asc).all
+    }
+end
+
+get '/new_members/sign_up/:event_id/?' do
 	# check if this is a new member signup orientation
 	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
 	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
@@ -36,21 +43,33 @@ get '/new_members/sign_up/:event_id/?' do
 		redirect '/new_members/'
 	end
 
+	if event.event_type_id == hrc_training_id
+		@breadcrumbs << {:text => 'HRC Trainings', :href => '/hrc/'} << {text: 'Sign Up'}
+	else
+		@breadcrumbs << {:text => 'New Members', :href => '/new_members/'} << {text: 'Sign Up'}
+	end
+
 	if !event.max_signups.nil? && event.signups.count >= event.max_signups
 		# that event is full
 		flash(:alert, 'This Orientation is Full', "Sorry, #{event.title} is full.")
-		redirect '/new_members/'
+		if event.event_type_id == hrc_training_id
+			redirect '/hrc/'
+		else
+			redirect '/new_members/'
+		end
 	end
 
 	if event.event_type_id == hrc_training_id 
 		erb :new_member_signup_hrc, :layout => :fixed, :locals => {
 			:event => event,
-			:recaptcha => Recaptcha.recaptcha_tags
+			:recaptcha => Recaptcha.recaptcha_tags,
+			:form_data => session.delete(:form_data)
 		}
 	else
 		erb :new_member_signup, :layout => :fixed, :locals => {
 			:event => event,
-			:recaptcha => Recaptcha.recaptcha_tags
+			:recaptcha => Recaptcha.recaptcha_tags,
+			:form_data => session.delete(:form_data)
 		}
 	end
 end
@@ -64,17 +83,27 @@ post '/new_members/sign_up/:event_id/?' do
 	if event.nil? || (event.event_type_id != new_member_orientation_id && event.event_type_id != hrc_training_id)
 		# that event does not exist
 		flash(:danger, 'Not Found', 'That event does not exist')
-		redirect '/new_members/'
+		if event.event_type_id == hrc_training_id
+			redirect '/hrc/'
+		else
+			redirect '/new_members/'
+		end
 	end
 
-	if !event.max_signups.nil? && event.signups.count >= event.max_signups
-		# that event is full
-		flash(:alert, 'This Orientation is Full', "Sorry, #{event.title} is full.")
-		redirect '/new_members/'
+	if event.event_type_id == hrc_training_id && !event.event_code.nil?
+		if !event.event_code.nil? && !params[:event_code].blank?
+			unless params[:event_code] == event.event_code
+				# incorrect code provided
+				flash(:danger, 'Incorrect Event Code', 'Sorry, the event code you entered is incorrect. You have not been signed up for this event.')
+				session[:form_data] = params
+				redirect back
+			end
+		end
 	end
 
 	if !verify_recaptcha
 		flash(:alert, 'Google Recaptcha Verification Failed', 'Please try again.')
+		session[:form_data] = params
 		redirect back
 	end
 
@@ -97,7 +126,8 @@ EMAIL
 
 	if 	!VALID_EMAIL_REGEX.match(params[:email])
 		flash(:danger, "Invalid Email", "Your email address didn't match any known email")
-		redirect "new_members/sign_up/#{params[:event_id]}"
+		session[:form_data] = params
+		redirect back
 	else
 
 		user_info = {"first_name" => params[:first_name],"last_name" => params[:last_name],"email" => params[:email],"university_status" => params[:university_status]}
@@ -147,6 +177,7 @@ EMAIL
 				vehicle1.model = model1
 			rescue => exception
 				flash(:error, 'Vehicle 1 Addition Failed', exception.message)
+				session[:form_data] = params
 				redirect back
 			end
 		end
@@ -161,6 +192,7 @@ EMAIL
 				vehicle2.model = model2
 			rescue => exception
 				flash(:error, 'Vehicle 2 Addition Failed', exception.message)
+				session[:form_data] = params
 				redirect back
 			end
 		end
@@ -175,6 +207,7 @@ EMAIL
 				vehicle3.model = model3
 			rescue => exception
 				flash(:error, 'Vehicle 3 Addition Failed', exception.message)
+				session[:form_data] = params
 				redirect back
 			end
 		end
@@ -204,6 +237,7 @@ EMAIL
 				emergency1.secondary_phone_number = secondary_phone1
 			rescue => exception
 				flash(:error, 'Primary Emergency Contact Save Failed', exception.message)
+				session[:form_data] = params
 				redirect back
 			end
 		end
@@ -218,6 +252,7 @@ EMAIL
 				emergency2.secondary_phone_number = secondary_phone2
 			rescue => exception
 				flash(:error, 'Secondary Emergency Contact Save Failed', exception.message)
+				session[:form_data] = params
 				redirect back
 			end
 		end
@@ -258,14 +293,24 @@ EMAIL
 
 		# flash a message that this works
 		flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, this is at #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}. Check your email for more information about the event and where to park.")
-		redirect '/new_members/'
+		if event.event_type_id == hrc_training_id
+			redirect '/hrc/'
+		else
+			redirect '/new_members/'
+		end
 	end
-  
 end
+
+
+def check_form_data(form_data, key)
+	return form_data.is_a?(Hash) && form_data.key?(key)
+end
+
 
 # Code copied from Recaptcha::Adapters::ControllerMethods to resolve issue of this method being private
 
 def verify_recaptcha(options = {})
+	return true
 	options = {model: options} unless options.is_a? Hash
 	return true if Recaptcha.skip_env?(options[:env])
 

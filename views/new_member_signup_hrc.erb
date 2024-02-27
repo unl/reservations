@@ -3,28 +3,77 @@
 	<span class="dcf-subhead"><%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %></span>
 </h1>
 
+<% if !event.max_signups.nil? && event.signups.count >= event.max_signups %>
+	<p>This Event Is Full</p>
+<% end %>
+
 <form class="dcf-form" id="signup" action="" method="POST" enctype="multipart/form-data">
     <div class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
         <fieldset>
+            <% unless event.event_code.nil? %>
+                <div class="dcf-form-group">
+                    <label for="event_code">Event Code<small class="dcf-required">Required</small></label>
+                    <input
+                        class="dcf-w-100%"
+                        type="text"
+                        id="event_code"
+                        name="event_code"
+                        aria-describedby="event_code_help"
+                        value="<%= form_data[:event_code] if check_form_data(form_data, :event_code) %>"
+                        required
+                    />
+                    <p class="dcf-form-help" id="event_code_help">
+                        This code is required to be correct to sign up for the event, so make sure to double check it is entered correctly
+                    </p>
+                </div>
+            <% end %>
+
             <div class="dcf-form-group">
                 <label for="first-name">First Name <small class="dcf-required">Required</small></label>
-                <input class="dcf-w-100%" type="text" id="first-name" name="first_name" required/>
+                <input
+                    class="dcf-w-100%"
+                    type="text"
+                    id="first-name"
+                    name="first_name"
+                    value="<%= form_data[:first_name] if check_form_data(form_data, :first_name) %>"
+                    required
+                />
             </div>
 
             <div class="dcf-form-group">
                 <label for="last-name">Last Name <small class="dcf-required">Required</small></label>
-                <input class="dcf-w-100%" type="text" id="last-name" name="last_name" required/>
+                <input
+                    class="dcf-w-100%"
+                    type="text"
+                    id="last-name"
+                    name="last_name"
+                    value="<%= form_data[:last_name] if check_form_data(form_data, :last_name) %>"
+                    required
+                />
             </div>
 
             <div class="dcf-form-group">
                 <label for="email">Email Address <small class="dcf-required">Required</small></label>
-                <input class="dcf-w-100%" type="text" id="email" name="email" required/>
+                <input
+                    class="dcf-w-100%"
+                    type="text"
+                    id="email"
+                    name="email"
+                    value="<%= form_data[:email] if check_form_data(form_data, :email) %>"
+                    required
+                />
             </div>
 
             <div class="dcf-form-group">
                 <div class="dcf-datepicker">
                     <label for="date-of-birth">Date of Birth <small class="dcf-required">Required</small></label>
-                    <input id="date-of-birth" name="date-of-birth" type="text" required/>
+                    <input
+                        id="date-of-birth"
+                        name="date-of-birth"
+                        type="text"
+                        value="<%= form_data["date-of-birth"] if check_form_data(form_data, "date-of-birth") %>"
+                        required
+                    />
                 </div>
             </div>
             
@@ -33,28 +82,54 @@
                     <h6>Vehicle #1</h6>
                     <div class="dcf-form-group">
                         <label for="license-plate1">Vehicle License Plate</label>
-                        <input type="text" id="license-plate1" name="license_plate1"/>
+                        <input
+                            type="text"
+                            id="license-plate1"
+                            name="license_plate1"
+                            value="<%= form_data[:license_plate1] if check_form_data(form_data, :license_plate1) %>"
+                        />
                     </div>
 
                     <div class="dcf-form-group">
                         <label for="state1">Vehicle State</label>
-                        <input type="text" id="state1" name="state1"/>
+                        <input
+                            type="text"
+                            id="state1"
+                            name="state1"
+                            value="<%= form_data[:state1] if check_form_data(form_data, :state1) %>"
+                        />
                     </div>
 
                     <div class="dcf-form-group">
                         <label for="make1">Vehicle Make</label>
-                        <input type="text" id="make1" name="make1"/>
+                        <input
+                            type="text"
+                            id="make1"
+                            name="make1"
+                            value="<%= form_data[:state1] if check_form_data(form_data, :state1) %>"
+                        />
                     </div>
 
                     <div class="dcf-form-group">
                         <label for="model1">Vehicle Model</label>
-                        <input type="text" id="model1" name="model1"/>
+                        <input
+                            type="text"
+                            id="model1"
+                            name="model1"
+                            value="<%= form_data[:state1] if check_form_data(form_data, :state1) %>"
+                        />
                     </div>
                 </div>
             </div>
 
             <div class="dcf-input-checkbox dcf-mt-5">
-                <input type="checkbox" name="vehicle-update" id="vehicle-update" required>
+                <input
+                    type="checkbox"
+                    name="vehicle-update"
+                    id="vehicle-update"
+                    <%= "checked='checked'" if check_form_data(form_data, "vehicle-update") && form_data["vehicle-update"] === "on" %>
+                    required
+                >
                 <label for="vehicle-update">I UNDERSTAND I MUST UPDATE VEHICLE INFORMATION AS CHANGES OCCUR. <small class="dcf-required">Required</small></label>
             </div>
 
@@ -62,22 +137,45 @@
                 <h6>Primary Emergency Contact</h6>
                 <div class="dcf-form-group">
                     <label for="name1">Name <small class="dcf-required">Required</small></label>
-                    <input type="text" id="name1" name="name1" required/>
+                    <input
+                        type="text"
+                        id="name1"
+                        name="name1"
+                        value="<%= form_data[:name1] if check_form_data(form_data, :name1) %>"
+                        required
+                    />
                 </div>
  
                 <div class="dcf-form-group">
                     <label for="relationship1">Relationship <small class="dcf-required">Required</small></label>
-                    <input type="text" id="relationship1" name="relationship1" required/>
+                    <input
+                        type="text"
+                        id="relationship1"
+                        name="relationship1"
+                        value="<%= form_data[:relationship1] if check_form_data(form_data, :relationship1) %>"
+                        required
+                    />
                 </div>
 
                 <div class="dcf-form-group">
                     <label for="primary-phone1">Primary Phone Number <small class="dcf-required">Required</small></label>
-                    <input type="text" id="primary_phone1" name="primary_phone1" required/>
+                    <input
+                        type="text"
+                        id="primary_phone1"
+                        name="primary_phone1"
+                        value="<%= form_data[:primary_phone1] if check_form_data(form_data, :primary_phone1) %>"
+                        required
+                    />
                 </div>
 
                 <div class="dcf-form-group">
                     <label for="secondary_phone1">Secondary Phone Number</label>
-                    <input type="text" id="secondary_phone1" name="secondary_phone1"/>
+                    <input
+                        type="text"
+                        id="secondary_phone1"
+                        name="secondary_phone1"
+                        value="<%= form_data[:secondary_phone1] if check_form_data(form_data, :secondary_phone1) %>"
+                    />
                 </div>
             </div>
 
