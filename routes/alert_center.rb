@@ -11,19 +11,44 @@ get '/alert_center/:user_id/?' do
     end
 
     generalAlerts = Alert.all.where(category_id: 1).to_a
-	generalAlerts.sort_by! {|generalAlerts| generalAlerts.name.downcase + generalAlerts.description.downcase}
+    generalAlerts.sort_by! do |generalAlerts|
+		[
+			generalAlerts.name.to_s.downcase,
+			generalAlerts.description.to_s.downcase
+		]
+	end
 
     woodShopAlerts = Alert.all.where(category_id: 2).to_a
-	woodShopAlerts.sort_by! {|woodShopAlerts| woodShopAlerts.name.downcase + woodShopAlerts.description.downcase}
+    woodShopAlerts.sort_by! do |woodShopAlerts|
+		[
+			woodShopAlerts.name.to_s.downcase,
+			woodShopAlerts.description.to_s.downcase
+		]
+	end
 
     metalShopAlerts = Alert.all.where(category_id: 3).to_a
-	metalShopAlerts.sort_by! {|metalShopAlerts| metalShopAlerts.name.downcase + metalShopAlerts.description.downcase}
+    metalShopAlerts.sort_by! do |metalShopAlerts|
+		[
+			metalShopAlerts.name.to_s.downcase,
+			metalShopAlerts.description.to_s.downcase
+		]
+	end
 
     digitalFabricationAlerts = Alert.all.where(category_id: 4).to_a
-	generalAlerts.sort_by! {|digitalFabricationAlerts| digitalFabricationAlerts.name.downcase + digitalFabricationAlerts.description.downcase}
+    digitalFabricationAlerts.sort_by! do |digitalFabricationAlerts|
+		[
+			digitalFabricationAlerts.name.to_s.downcase,
+			digitalFabricationAlerts.description.to_s.downcase
+		]
+	end
 
     artAlerts = Alert.all.where(category_id: 5).to_a
-	artAlerts.sort_by! {|artAlerts| artAlerts.name.downcase + artAlerts.description.downcase}
+    artAlerts.sort_by! do |artAlerts|
+		[
+			artAlerts.name.to_s.downcase,
+			artAlerts.description.to_s.downcase
+		]
+	end
 
     erb :alert_center, :layout => :fixed, :locals => {
         :generalAlerts => generalAlerts,

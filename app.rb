@@ -77,15 +77,13 @@ def require_login(redirect_after_login=nil)
   end
 end
 
-def drupal_node_lookup(key)
-    nodes = {
-        material_pricing: 79,
-        sop_training_doc: 80,
-        workshops_training_doc: 81,
-        tips_training_doc: 82
-    }
+def drupal_link_lookup(key)
+  # Leading and Trailing Slash IMPORTANT
+  nodes = {
+      sop_training_doc: '/sop-training-documents/',
+  }
 
-    return nodes[key] if nodes.key?(key)
+  return nodes[key] if nodes.key?(key)
 end
 
 not_found do

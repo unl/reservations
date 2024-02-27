@@ -13,7 +13,13 @@ get '/admin/alerts/?' do
 	@breadcrumbs << {:text => 'Admin Alerts'}
 
 	alerts = Alert.all.order(:category_id).to_a
-	alerts.sort_by! {|alert| alert.category_name.downcase + alert.name.downcase + alert.description.downcase}
+	alerts.sort_by! do |alert|
+		[
+			alert.category_name.to_s.downcase,
+			alert.name.to_s.downcase,
+			alert.description.to_s.downcase
+		]
+	end
 	alerts_signups = AlertSignup.all
 
 	erb :'admin/alerts', :layout => :fixed, :locals => {

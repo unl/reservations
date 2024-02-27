@@ -213,8 +213,21 @@ get '/admin/events/create/?' do
 	@breadcrumbs << {:text => 'Admin Events', :href => '/admin/events/'} << {text: 'Create Event'}
 	tools = Resource.where(:service_space_id => SS_ID, :is_reservable => true).order(:name => :asc).all.to_a
 	all_tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
-    all_tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
-	tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
+	tools.sort_by! do |tool|
+		[
+			tool.category_name.to_s.downcase,
+			tool.name.to_s.downcase,
+			tool.model.to_s.downcase
+		]
+	end
+	all_tools.sort_by! do |tool|
+		[
+			tool.category_name.to_s.downcase,
+			tool.name.to_s.downcase,
+			tool.model.to_s.downcase
+		]
+	end
+	
 	if params[:preset_id].nil? || Integer(params[:preset_id]) == 0
 		
 		erb :'admin/new_event', :layout => :fixed, :locals => {
@@ -380,7 +393,13 @@ get '/admin/events/:event_id/edit/?' do
 	@breadcrumbs << {:text => 'Admin Events', :href => '/admin/events/'} << {text: 'Edit Event'}
 	event = Event.includes(:event_type, :location, :reservation => :resource).find_by(:id => params[:event_id], :service_space_id => SS_ID)
 	all_tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
-    all_tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
+	all_tools.sort_by! do |tool|
+		[
+			tool.category_name.to_s.downcase,
+			tool.name.to_s.downcase,
+			tool.model.to_s.downcase
+		]
+	end
 	event_authorized_tools = EventAuthorization.joins(:event).where('event_id = ?', event.id)
     authorized_tools_ids = Array.new
 
@@ -411,7 +430,13 @@ get '/admin/events/:event_id/edit/?' do
 	end
 
 	tools = Resource.where(:service_space_id => SS_ID, :is_reservable => true).order(:name => :asc).all.to_a
-	tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
+	tools.sort_by! do |tool|
+		[
+			tool.category_name.to_s.downcase,
+			tool.name.to_s.downcase,
+			tool.model.to_s.downcase
+		]
+	end
 	erb :'admin/new_event', :layout => :fixed, :locals => {
 		:event => event,
 		:types => EventType.where(:service_space_id => SS_ID).all,
@@ -711,9 +736,21 @@ get '/admin/events/presets/create/?' do
 	@breadcrumbs << {:text => 'Manage Event Presets', :href => '/admin/events/presets/'}  << {text: 'Create Preset Event'}
 	event_types = EventType.where(:service_space_id => SS_ID).all
 	tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
-    tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
+	tools.sort_by! do |tool|
+		[
+			tool.category_name.to_s.downcase,
+			tool.name.to_s.downcase,
+			tool.model.to_s.downcase
+		]
+	end
 	reservable_tools = Resource.where(:service_space_id => SS_ID, :is_reservable => true).order(:name => :asc).all.to_a
-	reservable_tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
+	reservable_tools.sort_by! do |tool|
+		[
+			tool.category_name.to_s.downcase,
+			tool.name.to_s.downcase,
+			tool.model.to_s.downcase
+		]
+	end
 	
 	erb :'admin/new_preset_event', :layout => :fixed, :locals => {
 		:preset_event => PresetEvents.new,
@@ -794,9 +831,22 @@ get '/admin/events/presets/:preset_id/edit/?' do
 	end
 
 	tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
-    tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
+	tools.sort_by! do |tool|
+		[
+			tool.category_name.to_s.downcase,
+			tool.name.to_s.downcase,
+			tool.model.to_s.downcase
+		]
+	end
+	
 	reservable_tools = Resource.where(:service_space_id => SS_ID, :is_reservable => true).order(:name => :asc).all.to_a
-	reservable_tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
+	reservable_tools.sort_by! do |tool|
+		[
+			tool.category_name.to_s.downcase,
+			tool.name.to_s.downcase,
+			tool.model.to_s.downcase
+		]
+	end
 	
 	erb :'admin/new_preset_event', :layout => :fixed, :locals => {
 		:preset_event => preset,

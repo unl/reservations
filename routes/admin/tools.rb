@@ -15,7 +15,13 @@ get '/admin/tools/?' do
 	@breadcrumbs << {:text => 'Admin Tools'}
 
 	tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
-	tools.sort_by! {|tool| tool.category_name.downcase + tool.name.downcase + tool.model.downcase}
+	tools.sort_by! do |tool|
+		[
+			tool.category_name.to_s.downcase,
+			tool.name.to_s.downcase,
+			tool.model.to_s.downcase
+		]
+	end
 	erb :'admin/tools', :layout => :fixed, :locals => {
 		:tools => tools
 	}	

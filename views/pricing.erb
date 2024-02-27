@@ -1,15 +1,51 @@
 <h1 class="dcf-txt-h3">
     Material Pricing
     <% if has_permission?(Permission::MANAGE_RESOURCES) %>
-    (<a href="https://innovationstudio.unl.edu/user/login?destination=node/<%= drupal_node_lookup(:material_pricing) %>/edit" target="_blank">Edit</a>)
+    (<a href="/admin/material_prices/">Edit</a>)
     <% end %>
 </h1>
 
-<%= content %>
+<% current_category = nil %>
+<% current_subcategory = nil %>
 
-<script>
-    var tables = document.querySelectorAll('table');
-    for (var i=0; i<=tables.length; i++) {
-        tables[i].classList.add('dcf-w-100%', 'dcf-table', 'dcf-table-bordered');
-    }
-</script>
+<div class="dcf-columns-1 dcf-columns-2@md">
+    <% material_prices.each do |material_price| %>
+        <% if current_category != material_price.category %>
+            <% unless current_category.nil? %>
+                </tbody>
+                </table>
+            <% end %>
+            <table class="dcf-table dcf-table-striped dcf-mb-8 dcf-w-100%">
+            <caption><%= material_price.category %></caption>
+            <thead>
+                <tr>
+                <th scope="col">Model</th>
+                <th scope="col">Price</th>
+                <th scope="col">Unit</th>
+                </tr>
+            </thead>
+            <tbody>
+            
+
+            <% current_category = material_price.category %>
+            <% current_subcategory = nil %>
+        <% end %>
+
+        <% if current_subcategory != material_price.subcategory %>
+            <tr>
+                <th scope="row" colspan="3"><%= material_price.subcategory %></th>
+            </tr>
+            <% current_subcategory = material_price.subcategory %>
+        <% end %>
+
+        <tr>
+            <td><%= material_price.name %></td>
+            <td>$<%= sprintf('%.2f', (material_price.price_cents / 100.0)) %></td>
+            <td><%= material_price.price_per_unit %></td>
+        </tr>
+    <% end %>
+    <% if material_prices.length > 0 %>
+            </tbody>
+        </table>
+    <% end%>
+</div>

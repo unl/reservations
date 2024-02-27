@@ -1,0 +1,260 @@
+<h1 id="page_heading" class="dcf-txt-h3">
+    Material Prices
+    (<a href="/pricing/">View</a>)
+</h1>
+
+<form id="material_form" class="dcf-form" method="post" action="">
+    <table class="dcf-table dcf-table-striped dcf-table-responsive" aria-describedby="page_heading">
+        <thead>
+            <tr>
+                <th scope="col">Category</th>
+                <th scope="col">Subcategory</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Price Per Unit</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody id="material_list">
+            <% material_prices.each do |material_price| %>
+                <tr>
+                    <th class="dcf-d-none" scope="row">
+                        <input id="id_<%= material_price.id %>" name="id[]" type="hidden" value="<%= material_price.id %>">
+                    </th>
+                    <td data-label="Category">
+                        <div class="dcf-form-input">
+                            <label for="category_<%= material_price.id %>" class="dcf-sr-only">Category Name for id <%= material_price.id %></label>
+                            <input id="category_<%= material_price.id %>" name="category[]" type="text" value="<%= material_price.category %>" required>
+                        </div>
+                    </td>
+                    <td data-label="Subcategory">
+                        <div class="dcf-form-input">
+                            <label for="subcategory_<%= material_price.id %>" class="dcf-sr-only">Subcategory Name for id <%= material_price.id %></label>
+                            <input id="subcategory_<%= material_price.id %>" name="subcategory[]" type="text" value="<%= material_price.subcategory %>">
+                        </div>
+                    </td>
+                    <td data-label="Name">
+                        <div class="dcf-form-input">
+                            <label for="name_<%= material_price.id %>" class="dcf-sr-only">Material Name for id <%= material_price.id %></label>
+                            <input id="name_<%= material_price.id %>" name="name[]" type="text" value="<%= material_price.name %>">
+                        </div>
+                    </td>
+                    <td data-label="Price">
+                        <div class="dcf-form-input">
+                            <label for="price_<%= material_price.id %>" class="dcf-sr-only">Material Price for id <%= material_price.id %></label>
+                            <div class="dcf-input-group">
+                                <span class="dcf-input-group-addon">$</span>
+                                <input id="price_<%= material_price.id %>" name="price[]" type="number" value="<%= sprintf('%.2f', (material_price.price_cents / 100.0)) %>" min="0.00" step="0.01">
+                            </div>
+                            
+                        </div>
+                    </td>
+                    <td data-label="Price Per Unit">
+                        <div class="dcf-form-input">
+                            <label for="unit_<%= material_price.id %>" class="dcf-sr-only">Material Price Unit for id <%= material_price.id %></label>
+                            <input id="unit_<%= material_price.id %>" name="unit[]" type="text" value="<%= material_price.price_per_unit %>">
+                        </div>
+                    </td>
+                    <td data-label="Row Actions">
+                        <button class="delete_row dcf-btn dcf-btn-secondary" type="button" data-id="<%= material_price.id %>">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="dcf-h-4 dcf-w-4 dcf-d-block dcf-fill-current" style="rotate: 45deg;" viewBox="0 0 24 24">
+                                <path d="M21.4,9.4h-6.7V2.6C14.6,1.2,13.5,0,12,0c-1.4,0-2.6,1.2-2.6,2.6l0,6.7H2.6C1.2,9.4,0,10.6,0,12
+                                    c0,1.4,1.2,2.6,2.6,2.6h6.8l0,6.7c0,0.7,0.3,1.4,0.8,1.9c0.5,0.5,1.2,0.8,1.9,0.8
+                                    c1.4,0,2.6-1.2,2.6-2.6v-6.7h6.7c1.4,0,2.6-1.2,2.6-2.6C24,10.6,22.8,9.4,21.4,9.4z"/>
+                                <g>
+                                    <path fill="none" d="M0,0h24v24H0V0z"/>
+                                </g>
+                            </svg>
+                            <span class="dcf-sr-only">Delete Row</span>
+                        </button>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+    <div class="dcf-btn-group dcf-mt-4">
+        <button id="add_new_row" type="button" class="dcf-btn dcf-btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="dcf-h-4 dcf-w-4 dcf-d-block dcf-fill-current" viewBox="0 0 24 24">
+                <path d="M21.4,9.4h-6.7V2.6C14.6,1.2,13.5,0,12,0c-1.4,0-2.6,1.2-2.6,2.6l0,6.7H2.6C1.2,9.4,0,10.6,0,12
+                    c0,1.4,1.2,2.6,2.6,2.6h6.8l0,6.7c0,0.7,0.3,1.4,0.8,1.9c0.5,0.5,1.2,0.8,1.9,0.8
+                    c1.4,0,2.6-1.2,2.6-2.6v-6.7h6.7c1.4,0,2.6-1.2,2.6-2.6C24,10.6,22.8,9.4,21.4,9.4z"/>
+                <g>
+                    <path fill="none" d="M0,0h24v24H0V0z"/>
+                </g>
+            </svg>
+            <span class="dcf-sr-only">Add New Row</span>
+        </button>
+        <input class="dcf-btn dcf-btn-primary" type="submit" value="Save">
+    </div>
+
+    <div id="deleted_rows" class="dcf-d-none">
+    </div>
+</form>
+
+<template id="new_row_template">
+    <tr>
+        <th class="dcf-d-none" scope="row">
+            <input name="id[]" type="hidden" value="new">
+        </th>
+        <td data-label="Category">
+            <div class="dcf-form-input">
+                <label for="category_new_" class="dcf-sr-only">Category Name for id</label>
+                <input id="category_new_" name="category[]" type="text" value="" required>
+            </div>
+        </td>
+        <td data-label="Subcategory">
+            <div class="dcf-form-input">
+                <label for="subcategory_new_" class="dcf-sr-only">Subcategory Name for id</label>
+                <input id="subcategory_new_" name="subcategory[]" type="text" value="">
+            </div>
+        </td>
+        <td data-label="Name">
+            <div class="dcf-form-input">
+                <label for="name_new_" class="dcf-sr-only">Material Name for id</label>
+                <input id="name_new_" name="name[]" type="text" value="None">
+            </div>
+        </td>
+        <td data-label="Price">
+            <div class="dcf-form-input">
+                <label for="price_new_" class="dcf-sr-only">Material Price for id</label>
+                <div class="dcf-input-group">
+                    <span class="dcf-input-group-addon">$</span>
+                    <input id="price_new_" name="price[]" type="number" value="0.00" min="0.00" step="0.01">
+                </div>
+                
+            </div>
+        </td>
+        <td data-label="Price Per Unit">
+            <div class="dcf-form-input">
+                <label for="unit_new_" class="dcf-sr-only">Material Price Unit for id</label>
+                <input id="unit_new_" name="unit[]" type="text" value="">
+            </div>
+        </td>
+        <td data-label="Row Actions">
+            <button class="delete_row dcf-btn dcf-btn-secondary" type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" class="dcf-h-4 dcf-w-4 dcf-d-block dcf-fill-current" style="rotate: 45deg;" viewBox="0 0 24 24">
+                    <path d="M21.4,9.4h-6.7V2.6C14.6,1.2,13.5,0,12,0c-1.4,0-2.6,1.2-2.6,2.6l0,6.7H2.6C1.2,9.4,0,10.6,0,12
+                        c0,1.4,1.2,2.6,2.6,2.6h6.8l0,6.7c0,0.7,0.3,1.4,0.8,1.9c0.5,0.5,1.2,0.8,1.9,0.8
+                        c1.4,0,2.6-1.2,2.6-2.6v-6.7h6.7c1.4,0,2.6-1.2,2.6-2.6C24,10.6,22.8,9.4,21.4,9.4z"/>
+                    <g>
+                        <path fill="none" d="M0,0h24v24H0V0z"/>
+                    </g>
+                </svg>
+                <span class="dcf-sr-only">Delete Row</span>
+            </button>
+        </td>
+    </tr>
+</template>
+
+<script defer>
+    const material_form = document.getElementById('material_form');
+    const material_list = document.getElementById('material_list');
+    const deleted_rows = document.getElementById('deleted_rows');
+    const add_new_row = document.getElementById('add_new_row');
+    const new_row_template = document.getElementById('new_row_template');
+    let new_row_count = 0;
+
+    material_form.addEventListener('keydown', (e) => {
+        const target = e.target;
+        if ( !('tagName' in target && target.tagName === 'INPUT')) { return; }
+
+        if (e.code === "Enter") {
+            e.preventDefault();
+            dispatch_tab_press();
+            return false;
+        }
+    }, true);
+
+    material_form.addEventListener('focusout', (e) => {
+        const target = e.target;
+        if ( !('tagName' in target && target.tagName === 'INPUT')) { return; }
+        if ( target.getAttribute('name') !== 'price[]') { return; }
+
+        target.value = Number.parseFloat(target.value).toFixed(2);
+    }, true);
+
+    material_form.addEventListener('click', (e) => {
+        const target = e.target;
+        const target_button = e.target.closest('button');
+
+        if ( target_button === null) { return; }
+        if ( !target_button.classList.contains('delete_row')) { return; }
+
+        const target_row = target_button.closest('tr');
+        const target_id = target_button.dataset.id ?? null;
+        console.log(target_row, target_id);
+
+        target_row.remove();
+
+        if (target_id !== null) {
+            const deleted_id_input = document.createElement('input');
+            deleted_id_input.setAttribute('type', 'hidden');
+            deleted_id_input.setAttribute('name', 'deleted_id[]');
+            deleted_id_input.setAttribute('value', target_id);
+            deleted_rows.append(deleted_id_input);
+        }
+
+    }, true);
+
+    add_new_row.addEventListener('click', (e) => {
+        const template_content = new_row_template.content.cloneNode(true);
+
+        template_content.querySelector('#category_new_').setAttribute('id', `category_new_${new_row_count}`);
+        template_content.querySelector('[for="category_new_"]').innerHTML += ` New ${new_row_count}`;
+        template_content.querySelector('[for="category_new_"]').setAttribute('for', `category_new_${new_row_count}`);
+        template_content.querySelector('#subcategory_new_').setAttribute('id', `subcategory_new_${new_row_count}`);
+        template_content.querySelector('[for="subcategory_new_"]').innerHTML += ` New ${new_row_count}`;
+        template_content.querySelector('[for="subcategory_new_"]').setAttribute('for', `subcategory_new_${new_row_count}`);
+
+        template_content.querySelector('#name_new_').setAttribute('id', `name_new_${new_row_count}`);
+        template_content.querySelector('[for="name_new_"]').innerHTML += ` New ${new_row_count}`;
+        template_content.querySelector('[for="name_new_"]').setAttribute('for', `name_new_${new_row_count}`);
+
+        template_content.querySelector('#price_new_').setAttribute('id', `price_new_${new_row_count}`);
+        template_content.querySelector('[for="price_new_"]').innerHTML += ` New ${new_row_count}`;
+        template_content.querySelector('[for="price_new_"]').setAttribute('for', `price_new_${new_row_count}`);
+
+        template_content.querySelector('#unit_new_').setAttribute('id', `unit_new_${new_row_count}`);
+        template_content.querySelector('[for="unit_new_"]').innerHTML += ` New ${new_row_count}`;
+        template_content.querySelector('[for="unit_new_"]').setAttribute('for', `unit_new_${new_row_count}`);
+
+        material_list.append(template_content);
+        new_row_count++;
+    });
+
+    function dispatch_tab_press() {
+        let tabElements = get_tab_elements();
+
+        // If the current focused element is a -1 then we wont find the index in the elements list, got to the start
+        if (document.activeElement.tabIndex === -1) {
+            tabElements[0].focus();
+            return;
+        }
+
+        // find the current index in the tab list of the currently focused element
+        const currentIndex = tabElements.findIndex(e => e === document.activeElement);
+
+        // get the next element in the list ("%" will loop the index around to 0)
+        const nextIndex = (currentIndex + 1) % tabElements.length;
+        tabElements[nextIndex].focus();
+    }
+
+    function get_tab_elements() {
+        return Array.from(document
+            // Get all elements that can be focusable
+        .querySelectorAll('a, button, input, textarea, select, details, [tabindex]'))
+        
+        // remove any that have a tabIndex of -1
+        .filter(element => element.tabIndex > -1)
+        
+        // split elements into two arrays, explicit tabIndexs and implicit ones
+        .reduce((prev, next) => {  
+            return next.tabIndex > 0
+                ? [[...prev[0], next].sort((a, b) => a.tabIndex > b.tabIndex ? -1 : 1), prev[1]]
+                : [prev[0], [...prev[1], next]];
+            }, [[], []])
+            
+        // flatten the two-dimensional array
+            .flatMap(element => element);
+    }
+</script>
