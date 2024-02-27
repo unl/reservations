@@ -1,24 +1,24 @@
-<h1 class="dcf-txt-h3">
+<h1 id="page_heading" class="dcf-txt-h3">
     Material Prices
     (<a href="/pricing/">View</a>)
 </h1>
 
 <form id="material_form" class="dcf-form" method="post" action="">
-    <table class="dcf-table dcf-table-striped dcf-table-responsive">
+    <table class="dcf-table dcf-table-striped dcf-table-responsive" aria-describedby="page_heading">
         <thead>
             <tr>
-                <th>Category</th>
-                <th>Subcategory</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Price Per Unit</th>
-                <th></th>
+                <th scope="col">Category</th>
+                <th scope="col">Subcategory</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Price Per Unit</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody id="material_list">
             <% material_prices.each do |material_price| %>
                 <tr>
-                    <th class="dcf-d-none">
+                    <th class="dcf-d-none" scope="row">
                         <input id="id_<%= material_price.id %>" name="id[]" type="hidden" value="<%= material_price.id %>">
                     </th>
                     <td data-label="Category">
@@ -93,7 +93,7 @@
 
 <template id="new_row_template">
     <tr>
-        <th class="dcf-d-none">
+        <th class="dcf-d-none" scope="row">
             <input name="id[]" type="hidden" value="new">
         </th>
         <td data-label="Category">
