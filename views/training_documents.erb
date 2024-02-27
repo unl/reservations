@@ -3,7 +3,7 @@
 <ul>
     <li><a href="/training-documents/sop">SOP</a>
         <% if has_permission?(Permission::MANAGE_RESOURCES) %>
-        (<a href="https://innovationstudio.unl.edu#{drupal_link_lookup(:sop_training_doc)}t" target="_blank">Edit</a>)
+        (<a href="https://innovationstudio.unl.edu<%= drupal_link_lookup(:sop_training_doc) %>" target="_blank">Edit</a>)
         <% end %>
     </li>
 </ul>
