@@ -310,7 +310,6 @@ end
 # Code copied from Recaptcha::Adapters::ControllerMethods to resolve issue of this method being private
 
 def verify_recaptcha(options = {})
-	return true
 	options = {model: options} unless options.is_a? Hash
 	return true if Recaptcha.skip_env?(options[:env])
 
