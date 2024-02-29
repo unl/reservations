@@ -295,8 +295,8 @@ EMAIL
 		flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, this is at #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}. Check your email for more information about the event and where to park.")
 		if event.event_type_id == hrc_training_id
 			robotics_email = <<EMAIL
-<p>There was a new sign up for "#{event.name}" that is at <strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
-<p>The person who signed up is #{params[:first_name] + " " + params[:last_name]} and their email is <a href="emailto:#{params[:email]}">#{params[:email]}</a>.</p>
+<p>There was a new sign up for "#{event.title}" that is at <strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
+<p>The person who signed up is <strong>#{params[:first_name] + " " + params[:last_name]}</strong> and their email is <a href="emailto:#{params[:email]}">#{params[:email]}</a>.</p>
 EMAIL
 
 			Emailer.mail("nisrobotics@unl.edu", "New HRC Training Sign up", robotics_email);
