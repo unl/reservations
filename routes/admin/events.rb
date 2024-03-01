@@ -411,6 +411,7 @@ end
 
 get '/admin/events/:event_id/edit/?' do
 	@breadcrumbs << {:text => 'Admin Events', :href => '/admin/events/'} << {text: 'Edit Event'}
+	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
 	event = Event.includes(:event_type, :location, :reservation => :resource).find_by(:id => params[:event_id], :service_space_id => SS_ID)
 	all_tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
 	all_tools.sort_by! do |tool|
@@ -467,7 +468,8 @@ get '/admin/events/:event_id/edit/?' do
 		:authorized_tools_ids => authorized_tools_ids,
 		:on_unl_events => on_unl_events,
 		:on_main_calendar => on_main_calendar,
-		:duration => ((event.end_time - event.start_time)/60.0).round
+		:duration => ((event.end_time - event.start_time)/60.0).round,
+		:hrc_training_id => hrc_training_id
 	}
 end
 
