@@ -105,6 +105,11 @@ class Event < ActiveRecord::Base
 		else
 			self.is_private = params[:is_private]
 		end
+		if params[:hrc_feed].nil?
+			self.hrc_feed = 0
+		else
+			self.hrc_feed = 1
+		end
 		self.event_code = params[:event_code]
 		self.save
 	end

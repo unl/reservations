@@ -221,6 +221,7 @@ end
 
 get '/admin/events/create/?' do
 	@breadcrumbs << {:text => 'Admin Events', :href => '/admin/events/'} << {text: 'Create Event'}
+	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
 	tools = Resource.where(:service_space_id => SS_ID, :is_reservable => true).order(:name => :asc).all.to_a
 	all_tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
     all_tools.sort_by! do |tool|
@@ -257,7 +258,8 @@ get '/admin/events/create/?' do
 			:preset_event => nil,
 			:on_unl_events => false,
 			:on_main_calendar => false,
-			:duration => 60
+			:duration => 60,
+			:hrc_training_id => hrc_training_id
 		}
 	else
 		preset = PresetEvents.find_by(:id => params[:preset_id])
@@ -277,7 +279,8 @@ get '/admin/events/create/?' do
 			:preset_event => preset,
 			:on_unl_events => false,
 			:on_main_calendar => false,
-			:duration => preset.duration
+			:duration => preset.duration,
+			:hrc_training_id => hrc_training_id
 		}
 	end	
 end
