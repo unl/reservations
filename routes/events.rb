@@ -57,7 +57,7 @@ post '/events/:event_id/sign_up_as_non_member/?' do
 		flash(:warning, 'Signup not required', 'This event is a Free Event and is open to anyone. No signup is required.')
 		redirect event.info_link
 	end
-	if params[:name].trim.empty? || params[:email].trim.empty?
+	if params[:name].nil? || params[:name].trim.empty? || params[:email].trim.empty?
 		flash(:danger, 'All Fields Required', 'Name and email are both required.')
 		redirect back
 	end
