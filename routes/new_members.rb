@@ -26,8 +26,14 @@ get '/hrc/?' do
 	@breadcrumbs << {:text => 'HRC Trainings'}
 	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
 
+	hrc_events = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => hrc_training_id, :is_private => 0).where('start_time >= ?', Time.now).order(:start_time => :asc).all
+	hrc_feed_events = Event.includes(:event_signups).where(:service_space_id => SS_ID, :hrc_feed => 1, :is_private => 0).where('start_time >= ?', Time.now).order(:start_time => :asc).all
+
+	combined_events = (hrc_events + hrc_feed_events).sort_by(&:start_time)
+
     erb :new_members_hrc, :layout => :fixed, :locals => {
-    	:events => Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => hrc_training_id, :is_private => 0).where('start_time >= ?', Time.now).order(:start_time => :asc).all
+    	:events => combined_events,
+		:hrc_training_id => hrc_training_id
     }
 end
 

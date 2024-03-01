@@ -1,4 +1,4 @@
-<h1 id="new-members-header" class="dcf-txt-h3">HRC Trainings</h1>
+<h1 id="new-members-header" class="dcf-txt-h3">HRC Events</h1>
 
 <p>
 Welcome to the Nebraska Innovation Studio!
@@ -33,7 +33,11 @@ Welcome to the Nebraska Innovation Studio!
                 </td>
                 <td>
                     <% if event.max_signups.nil? || event.signups.count < event.max_signups %>
-                        <a class="dcf-btn dcf-btn-primary" href="/new_members/sign_up/<%= event.id %>/">Sign Up!</a>
+                        <% if event.event_type_id == hrc_training_id %>
+                            <a class="dcf-btn dcf-btn-primary" href="/new_members/sign_up/<%= event.id %>/">Sign Up!</a>
+                        <% else %>
+                            <a class="dcf-btn dcf-btn-primary" href="/events/<%= event.id %>/">View Event</a>
+                        <% end %>
                     <% else %>
                         <strong>FULL</strong>
                     <% end %>
@@ -45,6 +49,6 @@ Welcome to the Nebraska Innovation Studio!
 </div>
 <% else %>
 <p>
-There are no member orientations scheduled right now. Please check back again soon!
+There are no HRC events scheduled right now. Please check back again soon!
 </p>
 <% end %>
