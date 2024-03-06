@@ -36,7 +36,7 @@ Welcome to the Nebraska Innovation Studio!
                         <% if event.event_type_id == hrc_training_id %>
                             <a class="dcf-btn dcf-btn-primary" href="/new_members/sign_up/<%= event.id %>/">Sign Up!</a>
                         <% else %>
-                            <a class="dcf-btn dcf-btn-primary" href="/events/<%= event.id %>/">View Event</a>
+                            <a class="dcf-btn dcf-btn-primary" href="<%= event.info_link %>">View Event</a>
                         <% end %>
                     <% else %>
                         <strong>FULL</strong>
