@@ -7,11 +7,21 @@
     <div class="dcf-modal-content">
         <p>To sign up for this event, please enter the code that you received from the NIS administrators.
 
-        <form class="dcf-form inline-form" id="signup-with-code-form" action="" method="POST">                                                         
+        <form class="dcf-form inline-form" id="signup-with-code-form" action="" method="POST">
             <div class="dcf-form-group">
-                <label for="code">Event Signup Code:</label>
-                <input type="text" id="event_code" name="event_code" />
+                <label for="event_code">Event Signup Code:</label>
+                <input type="text" id="event_code" name="event_code" >
             </div>
+			<% unless @user %>
+			<div class="dcf-form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" >
+            </div>
+			<div class="dcf-form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" >
+            </div>
+			<% end %>
             <button type="submit" class="dcf-btn dcf-btn-primary">Sign Up!</button>
         </form>
     </div>
@@ -72,6 +82,8 @@
 	<% else %>
 	    All slots for this event are filled.
 	<% end %>
+<% elsif event.hrc_training? %>
+	<a href='<%= event.info_link %>' class="dcf-btn dcf-btn-primary">Sign up for this event</a>
 <% else %>
 	<% # a non user. May still sign up for the event UNLESS it is a tool training %>
 	<% if !event.machine_training_event_type? %>

@@ -136,6 +136,10 @@ class Event < ActiveRecord::Base
 	    self.type.id == EVENT_TYPE_ID_FREE_EVENT
 	end
 
+	def hrc_training?
+	    self.type.id == EVENT_TYPE_HRC_TRAINING
+	end
+
 	def machine_training_event_type?
 	    self.type.id == EVENT_TYPE_ID_MACHINE_TRAINING
 	end
