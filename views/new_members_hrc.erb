@@ -1,0 +1,54 @@
+<h1 id="new-members-header" class="dcf-txt-h3">HRC Events</h1>
+
+<p>
+Welcome to the Nebraska Innovation Studio!
+</p>
+
+<% if events.count > 0 %>
+<div class="event-page">
+    <table class="dcf-w-100% dcf-table dcf-table-bordered" aria-describedby="new-members-header">
+        <thead class="small-hidden">
+            <tr>
+                <th>Title</th>
+                <th>Date/Location</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        <% events.each do |event| %>
+            <tr>
+                <td class="small-hidden">
+                    <%= event.title %>
+                </td>
+                <td>
+                    <div class="small-block hidden calendar-event-title">
+                        <%= event.title %>
+                    </div>
+                    <ul>
+                        <li>
+                            <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
+                            <%= event.location.name %>
+                        </li>
+                    </ul>
+                </td>
+                <td>
+                    <% if event.max_signups.nil? || event.signups.count < event.max_signups %>
+                        <% if event.event_type_id == hrc_training_id %>
+                            <a class="dcf-btn dcf-btn-primary" href="/new_members/sign_up/<%= event.id %>/">Sign Up!</a>
+                        <% else %>
+                            <a class="dcf-btn dcf-btn-primary" href="<%= event.info_link %>">View Event</a>
+                        <% end %>
+                    <% else %>
+                        <strong>FULL</strong>
+                    <% end %>
+                </td>
+            </tr>
+        <% end %>
+        </tbody>
+    </table>
+</div>
+<% else %>
+<p>
+There are no HRC events scheduled right now. Please check back again soon!
+</p>
+<% end %>

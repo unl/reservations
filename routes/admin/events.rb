@@ -72,6 +72,7 @@ get '/admin/events/:event_id/signup_list/?' do
 end
 
 post '/admin/events/:event_id/signup_list/?' do
+	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
 	event = Event.includes(:event_signups).find_by(:id => params[:event_id], :service_space_id => SS_ID)
 	tools = EventAuthorization.where(:event_id => params[:event_id])
 
@@ -82,20 +83,22 @@ post '/admin/events/:event_id/signup_list/?' do
 	end
 
 	# Checks if event is a new member orientation or not
-	if event.event_type_id == 1
+	if event_type_allow_signup_deletions(event.event_type_id)
 
-		# removes users from attended orientation master list if they are unchecked
-		event.signups.each do |signup|
-			unless params.has_key?("attendance_#{signup.id}") && params["attendance_#{signup.id}"] == 'on'
-				user_id = signup.user_id
-				if signup.attended == 1
-					orientation_attendee = AttendedOrientation.find_by(:user_id => user_id)
-					if !orientation_attendee.nil?
-						orientation_attendee.delete
+		if event.event_type_id == new_member_orientation_id
+			# removes users from attended orientation master list if they are unchecked
+			event.signups.each do |signup|
+				unless params.has_key?("attendance_#{signup.id}") && params["attendance_#{signup.id}"] == 'on'
+					user_id = signup.user_id
+					if signup.attended == 1
+						orientation_attendee = AttendedOrientation.find_by(:user_id => user_id)
+						if !orientation_attendee.nil?
+							orientation_attendee.delete
+						end
+						signup.attended = 0
+						signup.save
 					end
-					signup.attended = 0
-					signup.save
-				end 
+				end
 			end
 		end
 
@@ -109,7 +112,7 @@ post '/admin/events/:event_id/signup_list/?' do
 
 				unless signup_record == nil
 					user = User.find_by(:id => signup_record.user_id)
-					if !user.nil? && signup_record.attended == 1
+					if !user.nil? && signup_record.attended == 1 && event.event_type_id == new_member_orientation_id
 						orientation_attendance = AttendedOrientation.find_by(:user_id => user.id)
 						if !orientation_attendance.nil?
 							orientation_attendance.destroy
@@ -136,7 +139,7 @@ post '/admin/events/:event_id/signup_list/?' do
 						signup_record.save
 					end
 
-					if !user.nil?
+					if !user.nil? && event.event_type_id == new_member_orientation_id
 						# Check if user is already on list
 						unless AttendedOrientation.exists?(user_id: user.id)
 							AttendedOrientation.create(
@@ -209,10 +212,25 @@ post '/admin/events/:event_id/signup_list/?' do
 	redirect '/admin/events/'
 end
 
+def event_type_allow_signup_deletions(event_type_id)
+	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
+	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
+
+	return event_type_id == new_member_orientation_id || event_type_id == hrc_training_id
+end
+
 get '/admin/events/create/?' do
 	@breadcrumbs << {:text => 'Admin Events', :href => '/admin/events/'} << {text: 'Create Event'}
+	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
 	tools = Resource.where(:service_space_id => SS_ID, :is_reservable => true).order(:name => :asc).all.to_a
 	all_tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
+    all_tools.sort_by! do |tool|
+		[
+			tool.category_name.to_s.downcase,
+			tool.name.to_s.downcase,
+			tool.model.to_s.downcase
+		]
+	end
 	tools.sort_by! do |tool|
 		[
 			tool.category_name.to_s.downcase,
@@ -240,7 +258,8 @@ get '/admin/events/create/?' do
 			:preset_event => nil,
 			:on_unl_events => false,
 			:on_main_calendar => false,
-			:duration => 60
+			:duration => 60,
+			:hrc_training_id => hrc_training_id
 		}
 	else
 		preset = PresetEvents.find_by(:id => params[:preset_id])
@@ -260,7 +279,8 @@ get '/admin/events/create/?' do
 			:preset_event => preset,
 			:on_unl_events => false,
 			:on_main_calendar => false,
-			:duration => preset.duration
+			:duration => preset.duration,
+			:hrc_training_id => hrc_training_id
 		}
 	end	
 end
@@ -391,6 +411,7 @@ end
 
 get '/admin/events/:event_id/edit/?' do
 	@breadcrumbs << {:text => 'Admin Events', :href => '/admin/events/'} << {text: 'Edit Event'}
+	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
 	event = Event.includes(:event_type, :location, :reservation => :resource).find_by(:id => params[:event_id], :service_space_id => SS_ID)
 	all_tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
 	all_tools.sort_by! do |tool|
@@ -447,7 +468,8 @@ get '/admin/events/:event_id/edit/?' do
 		:authorized_tools_ids => authorized_tools_ids,
 		:on_unl_events => on_unl_events,
 		:on_main_calendar => on_main_calendar,
-		:duration => ((event.end_time - event.start_time)/60.0).round
+		:duration => ((event.end_time - event.start_time)/60.0).round,
+		:hrc_training_id => hrc_training_id
 	}
 end
 

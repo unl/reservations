@@ -23,7 +23,11 @@
                     <label for="type">Type</label>
                     <select id="type" name="type" class="use-select2">
                     <% types.each do |type| %>
-                        <option <%= 'selected="selected"' if !event.type.nil? && event.type.id == type.id %> value="<%= type.id %>"><%= type.description %></option>
+                        <option
+                            <%= 'selected="selected"' if !event.type.nil? && event.type.id == type.id %>
+                            value="<%= type.id %>"
+                            <%= 'data-hrc="true"' if type.id == hrc_training_id %>
+                        ><%= type.description %></option>
                     <% end %>
                     </select>
                 </div>
@@ -52,8 +56,14 @@
                     </div>
                 </div>
 
-                <div class="dcf-form-group">
-                    <label for="event-code">Require Code to Signup</label>
+                <div id="hrc_feed_container" class="dcf-form-group">
+                    <div class="dcf-input-checkbox">
+                        <input type="checkbox" <%= 'checked="checked"' if event.hrc_feed %> id="hrc_feed" name="hrc_feed"><label class="dcf-label" for="hrc_feed">Show on HRC events page</label>
+                    </div>
+                </div>
+
+                <div id="event_code_container" class="dcf-form-group">
+                    <label for="event-code">Require Code to Signup <small id="event-code-required" class="dcf-required">Required</small></label>
                     <input class="dcf-w-100%" type="text" id="event-code" name="event_code" value="<%= event.event_code %>"/>
                 </div>
             </fieldset>
@@ -280,6 +290,33 @@
 <br>
 
 <% append_script_declaration("WDN.initializePlugin('datepickers');") %>
+<% append_script_declaration(%q[
+    const type_select = document.getElementById('type');
+    const event_code = document.getElementById('event-code');
+    const event_code_required = document.getElementById('event-code-required');
+    const hrc_feed_container = document.getElementById('hrc_feed_container');
+    const hrc_feed_input = document.getElementById('hrc_feed');
+
+    function update_hrc_inputs() {
+        const selected_type = type_select.options[type_select.selectedIndex];
+        const select_type_has_hrc = 'hrc' in selected_type.dataset;
+        console.log(selected_type, select_type_has_hrc);
+
+        if (select_type_has_hrc) {
+            hrc_feed_container.classList.add('dcf-d-none');
+            hrc_feed_input.checked = false;
+            event_code.setAttribute('required', 'required');
+            event_code_required.classList.remove('dcf-d-none');
+        } else {
+            hrc_feed_container.classList.remove('dcf-d-none');
+            event_code.removeAttribute('required', 'required');
+            event_code_required.classList.add('dcf-d-none');
+        }
+    }
+
+    update_hrc_inputs();
+    type_select.addEventListener('input', update_hrc_inputs);
+])%>
 <% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {
     $ = require('jquery');
 

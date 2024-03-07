@@ -17,6 +17,7 @@ class Event < ActiveRecord::Base
     EVENT_TYPE_ID_FREE_EVENT = 6
     EVENT_TYPE_ID_RSVP_ONLY_EVENT = 7
     EVENT_TYPE_ID_TOUR = 8
+	EVENT_TYPE_HRC_TRAINING = 11
 
 	def self.type_options
         {
@@ -27,6 +28,7 @@ class Event < ActiveRecord::Base
 			EVENT_TYPE_ID_GENERAL_WORKSHOP => 'General Workshop',
 			EVENT_TYPE_ID_FREE_EVENT => 'Free Event',
 			EVENT_TYPE_ID_RSVP_ONLY_EVENT => 'RSVP Only Event',
+			EVENT_TYPE_HRC_TRAINING => 'HRC Training',
         }
     end
 
@@ -55,6 +57,8 @@ class Event < ActiveRecord::Base
 	def info_link
 		case type.description
 		when 'New Member Orientation'
+			"/new_members/sign_up/#{id}/"
+		when 'HRC Training'
 			"/new_members/sign_up/#{id}/"
 		else
 			"/events/#{id}/"
@@ -101,6 +105,11 @@ class Event < ActiveRecord::Base
 		else
 			self.is_private = params[:is_private]
 		end
+		if params[:hrc_feed].nil?
+			self.hrc_feed = 0
+		else
+			self.hrc_feed = 1
+		end
 		self.event_code = params[:event_code]
 		self.save
 	end
@@ -125,6 +134,10 @@ class Event < ActiveRecord::Base
 
 	def free_event_type?
 	    self.type.id == EVENT_TYPE_ID_FREE_EVENT
+	end
+
+	def hrc_training?
+	    self.type.id == EVENT_TYPE_HRC_TRAINING
 	end
 
 	def machine_training_event_type?
