@@ -83,7 +83,7 @@
 	    All slots for this event are filled.
 	<% end %>
 <% elsif event.hrc_training? %>
-	<a href='<%= event.info_link %>' class="dcf-btn dcf-btn-primary">Sign up for this event</a>
+	<a href='/new_members/sign_up/<%= event.id %>/' class="dcf-btn dcf-btn-primary">Sign up for this event</a>
 <% else %>
 	<% # a non user. May still sign up for the event UNLESS it is a tool training %>
 	<% if !event.machine_training_event_type? %>
