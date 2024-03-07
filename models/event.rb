@@ -58,8 +58,6 @@ class Event < ActiveRecord::Base
 		case type.description
 		when 'New Member Orientation'
 			"/new_members/sign_up/#{id}/"
-		when 'HRC Training'
-			"/new_members/sign_up/#{id}/"
 		else
 			"/events/#{id}/"
 		end
