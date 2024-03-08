@@ -80,7 +80,7 @@ end
 def drupal_link_lookup(key)
   # Leading and Trailing Slash IMPORTANT
   nodes = {
-      sop_training_doc: '/sop-training-documents/',
+      sop_training_doc: '/equipment/sop-training-documents/',
   }
 
   return nodes[key] if nodes.key?(key)
