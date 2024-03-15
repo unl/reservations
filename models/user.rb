@@ -140,6 +140,8 @@ class User < ActiveRecord::Base
   end
 
   def send_membership_expiring_email
+    if self.email && !self.email.empty?
+
 body = <<EMAIL
 <p>Hello, #{self.full_name.rstrip}. Your Innovation Studio account is expiring soon! Our records show that your account expires on
 #{self.expiration_date.strftime('%m-%d-%Y')}.
@@ -151,7 +153,8 @@ Please visit us to keep your membership active.
 <p>Nebraska Innovation Studio</p>
 EMAIL
 
-    Emailer.mail(self.email, 'Nebraska Innovation Studio Membership Expiring', body)
+      Emailer.mail(self.email, 'Nebraska Innovation Studio Membership Expiring', body)
+    end
   end
 
   def send_reset_password_email
