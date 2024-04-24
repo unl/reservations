@@ -108,6 +108,11 @@ class Event < ActiveRecord::Base
 		else
 			self.hrc_feed = 1
 		end
+		if params[:hrc_parking].nil?
+			self.hrc_parking = 0
+		else
+			self.hrc_parking = 1
+		end
 		self.event_code = params[:event_code]
 		self.save
 	end

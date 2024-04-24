@@ -1,0 +1,1 @@
+ALTER TABLE `events` ADD COLUMN `hrc_parking` tinyint(1) NOT NULL DEFAULT 1 AFTER `hrc_feed`;
