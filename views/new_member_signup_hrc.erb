@@ -76,62 +76,64 @@
                     />
                 </div>
             </div>
-            
-            <div class="dcf-form-group">
-                <div id="vehicle-info">
-                    <h6>Vehicle #1</h6>
-                    <div class="dcf-form-group">
-                        <label for="license-plate1">Vehicle License Plate</label>
-                        <input
-                            type="text"
-                            id="license-plate1"
-                            name="license_plate1"
-                            value="<%= form_data[:license_plate1] if check_form_data(form_data, :license_plate1) %>"
-                        />
-                    </div>
 
-                    <div class="dcf-form-group">
-                        <label for="state1">Vehicle State</label>
-                        <input
-                            type="text"
-                            id="state1"
-                            name="state1"
-                            value="<%= form_data[:state1] if check_form_data(form_data, :state1) %>"
-                        />
-                    </div>
+            <% if event.hrc_parking %>
+                <div class="dcf-form-group">
+                    <div id="vehicle-info">
+                        <h6>Vehicle #1</h6>
+                        <div class="dcf-form-group">
+                            <label for="license-plate1">Vehicle License Plate</label>
+                            <input
+                                type="text"
+                                id="license-plate1"
+                                name="license_plate1"
+                                value="<%= form_data[:license_plate1] if check_form_data(form_data, :license_plate1) %>"
+                            />
+                        </div>
 
-                    <div class="dcf-form-group">
-                        <label for="make1">Vehicle Make</label>
-                        <input
-                            type="text"
-                            id="make1"
-                            name="make1"
-                            value="<%= form_data[:state1] if check_form_data(form_data, :state1) %>"
-                        />
-                    </div>
+                        <div class="dcf-form-group">
+                            <label for="state1">Vehicle State</label>
+                            <input
+                                type="text"
+                                id="state1"
+                                name="state1"
+                                value="<%= form_data[:state1] if check_form_data(form_data, :state1) %>"
+                            />
+                        </div>
 
-                    <div class="dcf-form-group">
-                        <label for="model1">Vehicle Model</label>
-                        <input
-                            type="text"
-                            id="model1"
-                            name="model1"
-                            value="<%= form_data[:state1] if check_form_data(form_data, :state1) %>"
-                        />
+                        <div class="dcf-form-group">
+                            <label for="make1">Vehicle Make</label>
+                            <input
+                                type="text"
+                                id="make1"
+                                name="make1"
+                                value="<%= form_data[:state1] if check_form_data(form_data, :state1) %>"
+                            />
+                        </div>
+
+                        <div class="dcf-form-group">
+                            <label for="model1">Vehicle Model</label>
+                            <input
+                                type="text"
+                                id="model1"
+                                name="model1"
+                                value="<%= form_data[:state1] if check_form_data(form_data, :state1) %>"
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="dcf-input-checkbox dcf-mt-5">
-                <input
-                    type="checkbox"
-                    name="vehicle-update"
-                    id="vehicle-update"
-                    <%= "checked='checked'" if check_form_data(form_data, "vehicle-update") && form_data["vehicle-update"] === "on" %>
-                    required
-                >
-                <label for="vehicle-update">I UNDERSTAND I MUST UPDATE VEHICLE INFORMATION AS CHANGES OCCUR. <small class="dcf-required">Required</small></label>
-            </div>
+                <div class="dcf-input-checkbox dcf-mt-5">
+                    <input
+                        type="checkbox"
+                        name="vehicle-update"
+                        id="vehicle-update"
+                        <%= "checked='checked'" if check_form_data(form_data, "vehicle-update") && form_data["vehicle-update"] === "on" %>
+                        required
+                    >
+                    <label for="vehicle-update">I UNDERSTAND I MUST UPDATE VEHICLE INFORMATION AS CHANGES OCCUR. <small class="dcf-required">Required</small></label>
+                </div>
+            <% end %>
 
             <div class="dcf-form-group dcf-mt-4">
                 <h6>Primary Emergency Contact</h6>

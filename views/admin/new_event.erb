@@ -56,9 +56,15 @@
                     </div>
                 </div>
 
-                <div id="hrc_feed_container" class="dcf-form-group">
+                <div id="not_hrc_feed_container" class="dcf-form-group">
                     <div class="dcf-input-checkbox">
                         <input type="checkbox" <%= 'checked="checked"' if event.hrc_feed %> id="hrc_feed" name="hrc_feed"><label class="dcf-label" for="hrc_feed">Show on HRC events page</label>
+                    </div>
+                </div>
+
+                <div id="hrc_feed_container" class="dcf-form-group">
+                    <div class="dcf-input-checkbox">
+                        <input type="checkbox" <%= 'checked="checked"' if event.hrc_parking %> id="hrc_parking" name="hrc_parking"><label class="dcf-label" for="hrc_parking">HRC event has parking</label>
                     </div>
                 </div>
 
@@ -295,20 +301,24 @@
     const event_code = document.getElementById('event-code');
     const event_code_required = document.getElementById('event-code-required');
     const hrc_feed_container = document.getElementById('hrc_feed_container');
+    const not_hrc_feed_container = document.getElementById('not_hrc_feed_container');
     const hrc_feed_input = document.getElementById('hrc_feed');
+    const hrc_parking_input = document.getElementById('hrc_parking');
 
     function update_hrc_inputs() {
         const selected_type = type_select.options[type_select.selectedIndex];
         const select_type_has_hrc = 'hrc' in selected_type.dataset;
-        console.log(selected_type, select_type_has_hrc);
 
         if (select_type_has_hrc) {
-            hrc_feed_container.classList.add('dcf-d-none');
+            hrc_feed_container.classList.remove('dcf-d-none');
+            not_hrc_feed_container.classList.add('dcf-d-none');
             hrc_feed_input.checked = false;
             event_code.setAttribute('required', 'required');
             event_code_required.classList.remove('dcf-d-none');
         } else {
-            hrc_feed_container.classList.remove('dcf-d-none');
+            hrc_feed_container.classList.add('dcf-d-none');
+            not_hrc_feed_container.classList.remove('dcf-d-none');
+            hrc_parking_input.checked = false;
             event_code.removeAttribute('required', 'required');
             event_code_required.classList.add('dcf-d-none');
         }
