@@ -1,0 +1,57 @@
+<div id="announcement-notice-container" class="dcf-d-none">
+    <div id="announcement-notice" class="dcf-notice dcf-notice-info" data-no-close-button="true" hidden>
+    <h2><span id="announcement-header"></span></h2>
+    <div><span id="announcement-body"></span></div>
+    </div>
+</div>
+
+<script>
+    const announcement_notice_container = document.getElementById('announcement-notice-container');
+    const announcement_notice = document.getElementById('announcement-notice');
+    const announcement_url = "/api/announcements/";
+    const announcement_refresh_rate_ms = 30 * 1000;
+
+    async function fetch_notice() {
+            const announcement_notice_header = document.getElementById('announcement-header');
+            const announcement_notice_body = document.getElementById('announcement-body');
+        try {
+            const response = await fetch(announcement_url);
+            if (!response.ok) { console.err('Could Not Get Announcements'); return;}
+
+            const announcement_json = await response.json();
+            if ( !('has_announcement' in announcement_json && 'header' in announcement_json && 'body' in announcement_json)){
+                console.error('Bad Announcement JSON');
+                return;
+            }
+            if (
+                typeof announcement_json['has_announcement'] !== "boolean" ||
+                typeof announcement_json['header'] !== "string" ||
+                typeof announcement_json['body'] !== "string"
+            ) {
+                console.error('Bad Announcement JSON data');
+                return;
+            }
+
+            if (announcement_json['has_announcement'] === true) {
+                announcement_notice_container.classList.remove('dcf-d-none');
+                announcement_notice_header.innerText = announcement_json['header'];
+                announcement_notice_body.innerHTML = announcement_json['body'];
+            } else {
+                announcement_notice_container.classList.add('dcf-d-none');
+            }
+
+        } catch(err) {
+            console.error(err);
+        }
+    }
+
+    window.addEventListener('inlineJSReady', function() {
+        let check_interval = setInterval(() => {
+            if (announcement_notice.classList.contains('dcf-notice-initialized')) {
+                clearInterval(check_interval);
+                setInterval(fetch_notice, announcement_refresh_rate_ms);
+                fetch_notice();
+            }
+        }, 200);
+    }, false);
+</script>
