@@ -213,10 +213,8 @@ post '/admin/events/:event_id/signup_list/?' do
 end
 
 def event_type_allow_signup_deletions(event_type_id)
-	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
-	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
-
-	return event_type_id == new_member_orientation_id || event_type_id == hrc_training_id
+	# We used to have code here to only allow deletes on new membership orientation events and HRC events
+	return true;
 end
 
 get '/admin/events/create/?' do
