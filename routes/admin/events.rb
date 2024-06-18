@@ -82,43 +82,18 @@ post '/admin/events/:event_id/signup_list/?' do
 		redirect '/admin/events/'
 	end
 
-	# Checks if event is a new member orientation or not
-	if event_type_allow_signup_deletions(event.event_type_id)
-
-		if event.event_type_id == new_member_orientation_id
-			# removes users from attended orientation master list if they are unchecked
-			event.signups.each do |signup|
-				unless params.has_key?("attendance_#{signup.id}") && params["attendance_#{signup.id}"] == 'on'
-					user_id = signup.user_id
-					if signup.attended == 1
-						orientation_attendee = AttendedOrientation.find_by(:user_id => user_id)
-						if !orientation_attendee.nil?
-							orientation_attendee.delete
-						end
-						signup.attended = 0
-						signup.save
+	if event.event_type_id == new_member_orientation_id
+		# removes users from attended orientation master list if they are unchecked
+		event.signups.each do |signup|
+			unless params.has_key?("attendance_#{signup.id}") && params["attendance_#{signup.id}"] == 'on'
+				user_id = signup.user_id
+				if signup.attended == 1
+					orientation_attendee = AttendedOrientation.find_by(:user_id => user_id)
+					if !orientation_attendee.nil?
+						orientation_attendee.delete
 					end
-				end
-			end
-		end
-
-		# checks first if the deletion checkbox was selected and deletes the signup record aswell as the key
-		params.each do |key, value|
-
-			if key.start_with?('deletion_') && value == 'on'
-
-				signup_id = key.split('deletion_')[1].to_i
-				signup_record = EventSignup.find_by(:id => signup_id)
-
-				unless signup_record == nil
-					user = User.find_by(:id => signup_record.user_id)
-					if !user.nil? && signup_record.attended == 1 && event.event_type_id == new_member_orientation_id
-						orientation_attendance = AttendedOrientation.find_by(:user_id => user.id)
-						if !orientation_attendance.nil?
-							orientation_attendance.destroy
-						end
-					end
-					signup_record.destroy
+					signup.attended = 0
+					signup.save
 				end
 			end
 		end
@@ -155,53 +130,71 @@ post '/admin/events/:event_id/signup_list/?' do
 				end
 			end
 		end
+	end
 
+	# checks first if the deletion checkbox was selected and deletes the signup record aswell as the key
+	params.each do |key, value|
 
-	else
+		if key.start_with?('deletion_') && value == 'on'
 
-		# remove the given tool permissions when the attended member is unchecked 
-		event.signups.each do |signup|
-			unless params.has_key?("attendance_#{signup.id}") && params["attendance_#{signup.id}"] == 'on' 
-				user_id = signup.user_id
-				if signup.attended == 1
-					tools.each do |tool|
-						tool_id =  tool.resource_id 
-						auth_tool=ResourceAuthorization.find_by(:user_id => user_id, :resource_id => tool_id)
-						if !auth_tool.authorized_event.nil? && auth_tool.authorized_event  == event.id
-							ResourceAuthorization.find_by(:user_id => user_id, :resource_id => tool_id, :authorized_event => event.id ).delete
-						end
-					end 
-					signup.attended = 0
-					signup.save
-				end 
-			end	
-		end
+			signup_id = key.split('deletion_')[1].to_i
+			signup_record = EventSignup.find_by(:id => signup_id)
 
-		#  add new tool permissions for checked members in signup list
-		params.each do |key, value|
-			if key.start_with?('attendance_') && value == 'on'
-
-				signup_id = key.split('attendance_')[1].to_i
-				signup_record = EventSignup.find_by(:id => signup_id)
+			unless signup_record == nil
 				user = User.find_by(:id => signup_record.user_id)
-
-				if signup_record.attended == 0
-					signup_record.attended = 1
-					signup_record.save
+				if !user.nil? && signup_record.attended == 1 && event.event_type_id == new_member_orientation_id
+					orientation_attendance = AttendedOrientation.find_by(:user_id => user.id)
+					if !orientation_attendance.nil?
+						orientation_attendance.destroy
+					end
 				end
+				signup_record.destroy
+			end
+		end
+	end
 
-				if !user.nil?
-					tools.each do |tool|
-						tool_id =  tool.resource_id 
-						# check if the user already has permission for this tool
-						unless user.authorized_resource_ids.include?(tool_id)
-							ResourceAuthorization.create(
-								:user_id => user.id,
-								:resource_id => tool_id,
-								:authorized_date => Time.now,
-								:authorized_event => signup_record.event_id
-							)
-						end
+	# remove the given tool permissions when the attended member is unchecked 
+	event.signups.each do |signup|
+		unless params.has_key?("attendance_#{signup.id}") && params["attendance_#{signup.id}"] == 'on' 
+			user_id = signup.user_id
+			if signup.attended == 1
+				tools.each do |tool|
+					tool_id =  tool.resource_id 
+					auth_tool=ResourceAuthorization.find_by(:user_id => user_id, :resource_id => tool_id)
+					if !auth_tool.authorized_event.nil? && auth_tool.authorized_event  == event.id
+						ResourceAuthorization.find_by(:user_id => user_id, :resource_id => tool_id, :authorized_event => event.id ).delete
+					end
+				end 
+				signup.attended = 0
+				signup.save
+			end 
+		end	
+	end
+
+	#  add new tool permissions for checked members in signup list
+	params.each do |key, value|
+		if key.start_with?('attendance_') && value == 'on'
+
+			signup_id = key.split('attendance_')[1].to_i
+			signup_record = EventSignup.find_by(:id => signup_id)
+			user = User.find_by(:id => signup_record.user_id)
+
+			if signup_record.attended == 0
+				signup_record.attended = 1
+				signup_record.save
+			end
+
+			if !user.nil?
+				tools.each do |tool|
+					tool_id =  tool.resource_id 
+					# check if the user already has permission for this tool
+					unless user.authorized_resource_ids.include?(tool_id)
+						ResourceAuthorization.create(
+							:user_id => user.id,
+							:resource_id => tool_id,
+							:authorized_date => Time.now,
+							:authorized_event => signup_record.event_id
+						)
 					end
 				end
 			end
