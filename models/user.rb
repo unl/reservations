@@ -59,8 +59,13 @@ class User < ActiveRecord::Base
   end
   alias_method :admin?, :is_admin?
 
-  def is_super_user?
+  def is_real_super_user?
     self.permissions.include?(Permission.find(Permission::SUPER_USER))
+  end
+  alias_method :real_super_user?, :is_real_super_user?
+
+  def is_super_user?
+    self.permissions.include?(Permission.find(Permission::SUPER_USER)) || self.permissions.include?(Permission.find(Permission::SUB_SUPER_USER))
   end
   alias_method :super_user?, :is_super_user?
 
