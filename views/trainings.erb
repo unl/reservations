@@ -11,7 +11,7 @@ type of equipment. Here, you can sign up for upcoming trainings. Take a look at 
 
 <div class="event-page dcf-mt-6">
     <h4 id="trainings-table">Trainings</h4>
-    <%= erb :'event_listing_table', locals: {:events => events, :events_advanced => 'trainings-table'} %>
+    <%= erb :'event_listing_table', locals: {:id => 4, :events => events, :events_advanced => 'trainings-table'} %>
 
     <%= erb :'workshop_listings', locals: {:events_advanced => events_advanced, :events_creation => events_creation, :events_general => events_general} %>
 </div>
