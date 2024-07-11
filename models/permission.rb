@@ -10,4 +10,5 @@ class Permission < ActiveRecord::Base
 	SEE_AGENDA = 7
 	USER_ACCESS = 8
 	EVENTS_ADMIN_READ_ONLY = 9
+	SUB_SUPER_USER = 10
 end

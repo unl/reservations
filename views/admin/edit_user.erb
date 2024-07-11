@@ -113,15 +113,24 @@
                     </div>
                 <% end %>
             </fieldset>
-            <fieldset>
-                <legend>Make Super User</legend>
-                <p class="dcf-txt-sm">Super Users can edit any user's permissions in the space and can create new Super Users, as well as
-                remove your Super User status. Only give Super User to someone you <em>absolutely</em> trust.</p>
-                <div class="dcf-mt-3 dcf-input-checkbox">
-                    <input <%= 'checked="checked"' if user.permissions.include?(su_permission) %> type="checkbox" id="permission-<%= su_permission.id %>" name="permission_<%= su_permission.id %>">
-                    <label for="permission-<%= su_permission.id %>"><%= su_permission.name %></label>
-                </div>
-            </fieldset>
+            <% if @user.is_real_super_user? %>
+                <fieldset>
+                    <legend>Make Super User</legend>
+                    <p class="dcf-txt-sm">Super Users can edit any user's permissions in the space and can create new Super Users, as well as
+                    remove your Super User status. Only give Super User to someone you <em>absolutely</em> trust.</p>
+                    <div class="dcf-mt-3 dcf-input-checkbox">
+                        <input <%= 'checked="checked"' if user.permissions.include?(su_permission) %> type="checkbox" id="permission-<%= su_permission.id %>" name="permission_<%= su_permission.id %>">
+                        <label for="permission-<%= su_permission.id %>"><%= su_permission.name %></label>
+                    </div>
+
+                    <p class="dcf-txt-sm">Sub-Super Users can edit any user's permissions in the space. Sub-Super Users can NOT create new Super Users,
+                    and can NOT remove your Super User status. Only give Sub-Super User to someone you <em>absolutely</em> trust.</p>
+                    <div class="dcf-mt-3 dcf-input-checkbox">
+                        <input <%= 'checked="checked"' if user.permissions.include?(sub_su_permission) %> type="checkbox" id="permission-<%= sub_su_permission.id %>" name="permission_<%= sub_su_permission.id %>">
+                        <label for="permission-<%= sub_su_permission.id %>"><%= sub_su_permission.name %></label>
+                    </div>
+                </fieldset>
+            <% end %>
             <fieldset>
                 <legend>Make Trainer</legend>
                 <p class="dcf-txt-sm">Once a user is made a trainer they will be able to be selected as a trainer when creating an event.</p>

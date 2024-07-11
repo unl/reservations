@@ -237,8 +237,9 @@ get '/admin/users/:user_id/edit/?' do
     erb :'admin/edit_user', :layout => :fixed, :locals => {
         :user => user,
         :vehicles => Vehicle.where(:user_id => user.id).all,
-        :permissions => Permission.where.not(:id => Permission::SUPER_USER).all,
+        :permissions => Permission.where.not(:id => [Permission::SUPER_USER, Permission::SUB_SUPER_USER]).all,
         :su_permission => Permission.find(Permission::SUPER_USER),
+        :sub_su_permission => Permission.find(Permission::SUB_SUPER_USER),
         :primary_emergency_contact => primary_emergency_contact,
         :secondary_emergency_contact => secondary_emergency_contact
     }
