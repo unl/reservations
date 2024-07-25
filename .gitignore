@@ -12,6 +12,11 @@
 /db/scripts/private/
 .idea
 
+## Service start up configs
+.config
+unicorn.rb
+startup.sh
+
 ## Documentation cache and generated files:
 /.yardoc/
 /_yardoc/

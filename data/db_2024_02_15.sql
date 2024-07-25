@@ -240,7 +240,7 @@ INSERT INTO `event_types` (`id`, `description`, `service_space_id`) VALUES
 (7, 'RSVP Only Event', 1),
 (8, 'Tour', 1),
 (9, 'Conference', 4),
-(10, 'Scheduling', 1);
+(10, 'Scheduling', 1),
 (11, 'HRC Training', 1);
 
 -- --------------------------------------------------------

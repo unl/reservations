@@ -1,0 +1,11 @@
+[Unit]
+Description=Unicorn
+
+[Service]
+Environment=GEM_PATH=/var/www/html/innovationstudio-manager.unl.edu/gems:$GEM_PATH
+WorkingDirectory=/var/www/html/innovationstudio-manager.unl.edu
+ExecStart=/bin/bundle exec unicorn -l /run/httpd-local/innovationstudio.sock -E production -c /var/www/html/innovationstudio-manager.unl.edu/unicorn.rb
+Restart=always
+
+[Install]
+WantedBy=default.target
