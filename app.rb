@@ -22,11 +22,12 @@ def flash(type, header, message)
   }
 end
 
-SS_ID = ServiceSpace.where(:name => 'Innovation Studio').first.id
+SS_ID = ServiceSpace.where(:id => CONFIG['app']['service_space_id']).first.id
 
 before do
     # site defaults
     @inline_body_script_content = ''
+    @affiliation = 'Nebraska Innovation Campus'
     @title = 'Innovation Studio Manager'
     @breadcrumbs = [
       {
@@ -43,6 +44,27 @@ before do
         :text => 'Innovation Studio Manager'
       }
     ]
+
+    if SS_ID == 8
+      @inline_body_script_content = ''
+      @affiliation = 'College of Engineering'
+      @title = 'Engineering Garage'
+      @breadcrumbs = [
+        {
+          :href => 'https://www.unl.edu/',
+          :text => 'Nebraska',
+          :title => 'University of Nebraska&ndash;Lincoln Home'
+        },
+        {
+          :href => 'https://engineering.unl.edu/',
+          :text => 'College of Engineering'
+        },
+        {
+          :href => '/',
+          :text => 'Engineering Garage'
+        }
+      ]
+    end
 
     session[:init] = true
 

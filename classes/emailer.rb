@@ -28,7 +28,7 @@ class Emailer
           :bcc => bcc_group,
           :subject => subject,
           :html_body => body,
-          :from => 'innovationstudio@unl.edu',
+          :from => CONFIG['app']['email_from'],
           :via => self.method,
           :via_options => self.method_options,
           :attachments => attachments
@@ -40,7 +40,7 @@ class Emailer
         :bcc => bcc,
         :subject => subject,
         :html_body => body,
-        :from => 'innovationstudio@unl.edu',
+        :from => CONFIG['app']['email_from'],
         :via => self.method,
         :via_options => self.method_options,
         :attachments => attachments
