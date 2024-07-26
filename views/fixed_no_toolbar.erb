@@ -16,8 +16,8 @@
     <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/head-2-local.html"))).result.gsub('$DEP_VERSION$', template_dep_version) %>
     <!-- TemplateBeginEditable name="head" -->
     <!-- Place optional header elements here -->
-    <link rel="stylesheet" href="/css/innovation_studio.css?cb=2024022701">
-    <link rel="stylesheet" href="/css/jquery-ui.min-custom.css">
+    <link rel="stylesheet" href="/css/main.css?cb=<%= CONFIG['app']['cb_version'] %>">
+    <link rel="stylesheet" href="/css/jquery-ui.min-custom.css?cb=<%= CONFIG['app']['cb_version'] %>">
     <!-- TemplateEndEditable -->
     <!-- TemplateParam name="class" type="text" value="" -->
     <main class="dcf-main" id="dcf-main" role="main" tabindex="-1" style="padding: 25px;">

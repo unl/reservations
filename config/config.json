@@ -15,7 +15,8 @@
 		"service_space_id": "8",
 		"URL": "https://innovationstudio.unl.edu/",
 		"cookie_domain": "innovationstudio.unl.edu",
-		"email_from": "innovationstudio@unl.edu"
+		"email_from": "innovationstudio@unl.edu",
+		"cb_version": "2024022701"
 	},
 	"email" : {
 		"via": ":smtp",
