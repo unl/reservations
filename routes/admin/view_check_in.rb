@@ -2,17 +2,6 @@ require 'models/check_ins'
 require 'models/studio_space.rb'
 
 
-USER_STATII = [
-    'None',
-    'NU Student (UNL, UNO, UNMC, UNK)',
-    'NU Faculty (UNL, UNO, UNMC, UNK)',
-    'NU Staff (UNL, UNO, UNMC, UNK)',
-    'NU Alumni (UNL, UNO, UNMC, UNK)',
-    'Non-NU Student (All Other Institutions)',
-    'NIS/NIC Partner (NIS/NIC Affiliated Business Employee, Military Veterans)',
-    'Community'
-]
-
 before '/admin/view_check_in*' do
     unless has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER)
         raise Sinatra::NotFound
