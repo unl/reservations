@@ -10,7 +10,7 @@ require 'utils/database'
 require 'models/user'
 require 'models/service_space'
 
-SS_ID = ServiceSpace.where(:name => 'Innovation Studio').first.id
+SS_ID = ServiceSpace.where(:id => CONFIG['app']['service_space_id']).first.id
 
 users_expiring_today = User.where(:service_space_id => SS_ID).where('expiration_date >= ? AND expiration_date < ?', Time.now - 1.days, Time.now).all
 if users_expiring_today.count > 0
@@ -18,5 +18,5 @@ if users_expiring_today.count > 0
 	users_expiring_today.each do |user|
 		body = body + "<p>Full Name: #{user.first_name} #{user.last_name}, Username: #{user.username}</p>"
 	end
-	Emailer.mail("innovationstudio@unl.edu", "Expiring Users' Parking Information Update", body, '', nil)
+	Emailer.mail(CONFIG['app']['email_from'], "Expiring Users' Parking Information Update", body, '', nil)
 end

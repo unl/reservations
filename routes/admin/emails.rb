@@ -95,7 +95,7 @@ post '/admin/email/send/?' do
 		body = params[:body]
 		body = <<-EMAIL
 		#{body}
-		<hr>If you no longer want to receive emails from us, please email <a href="mailto:innovationstudio@unl.edu">innovationstudio@unl.edu</a>.
+		<hr>If you no longer want to receive emails from us, please email <a href="mailto:#{CONFIG['app']['email_from']}">#{CONFIG['app']['email_from']}</a>.
 		EMAIL
 
 	# Promotional emails
@@ -105,7 +105,7 @@ post '/admin/email/send/?' do
 		body = params[:body]
 		body = <<-EMAIL
 		#{body}
-		<hr>If you no longer want to receive emails from us you can adjust your email preferences <a href="http://#{ENV['RACK_ENV'] == 'development' ? 'localhost:9393' : 'innovationstudio-manager.unl.edu'}/opt_out/" target="_blank">here</a>.
+		<hr>If you no longer want to receive emails from us you can adjust your email preferences <a href="#{CONFIG['app']['URL']}/opt_out/" target="_blank">here</a>.
 		EMAIL
 		
 	end
@@ -188,7 +188,7 @@ post '/admin/email/send/?' do
 
 	if invalid_emails.count > 0
 		invalid_emails_body = "Invalid emails were found in the member database: " + invalid_emails.join(',')
-		Emailer.mail("innovationstudio@unl.edu", "Invalid Emails Found", invalid_emails_body, '', nil)
+		Emailer.mail(CONFIG['app']['email_from'], "Invalid Emails Found", invalid_emails_body, '', nil)
 	end
 
 	# correctly choose how to send
