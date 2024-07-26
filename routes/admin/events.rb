@@ -212,7 +212,10 @@ end
 
 get '/admin/events/create/?' do
 	@breadcrumbs << {:text => 'Admin Events', :href => '/admin/events/'} << {text: 'Create Event'}
-	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
+	hrc_training_id = nil
+	if SS_ID == 1
+		hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
+	end
 	tools = Resource.where(:service_space_id => SS_ID, :is_reservable => true).order(:name => :asc).all.to_a
 	all_tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
     all_tools.sort_by! do |tool|

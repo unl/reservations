@@ -56,17 +56,19 @@
                     </div>
                 </div>
 
-                <div id="not_hrc_feed_container" class="dcf-form-group">
-                    <div class="dcf-input-checkbox">
-                        <input type="checkbox" <%= 'checked="checked"' if event.hrc_feed %> id="hrc_feed" name="hrc_feed"><label class="dcf-label" for="hrc_feed">Show on HRC events page</label>
+                <% if SS_ID == 1 %>
+                    <div id="not_hrc_feed_container" class="dcf-form-group">
+                        <div class="dcf-input-checkbox">
+                            <input type="checkbox" <%= 'checked="checked"' if event.hrc_feed %> id="hrc_feed" name="hrc_feed"><label class="dcf-label" for="hrc_feed">Show on HRC events page</label>
+                        </div>
                     </div>
-                </div>
 
-                <div id="hrc_feed_container" class="dcf-form-group">
-                    <div class="dcf-input-checkbox">
-                        <input type="checkbox" <%= 'checked="checked"' if event.hrc_parking %> id="hrc_parking" name="hrc_parking"><label class="dcf-label" for="hrc_parking">HRC event has parking</label>
+                    <div id="hrc_feed_container" class="dcf-form-group">
+                        <div class="dcf-input-checkbox">
+                            <input type="checkbox" <%= 'checked="checked"' if event.hrc_parking %> id="hrc_parking" name="hrc_parking"><label class="dcf-label" for="hrc_parking">HRC event has parking</label>
+                        </div>
                     </div>
-                </div>
+                <% end %>
 
                 <div id="event_code_container" class="dcf-form-group">
                     <label for="event-code">Require Code to Signup <small id="event-code-required" class="dcf-required">Required</small></label>
@@ -267,6 +269,7 @@
                     <input type="file" name="imagedata" id="imagedata" title="Event Image">
                 </div>
             </div>
+            <% if SS_ID == 1 %>
             <div class="visual-island">
                 <div class="vi-header">
                     <label>Export</label>
@@ -283,6 +286,7 @@
                     </div>
                 </div>
             </div>
+            <% end %>
         </div>
     </div>
 
@@ -296,6 +300,7 @@
 <br>
 
 <% append_script_declaration("WDN.initializePlugin('datepickers');") %>
+<% if SS_ID == 1 %>
 <% append_script_declaration(%q[
     const type_select = document.getElementById('type');
     const event_code = document.getElementById('event-code');
@@ -327,6 +332,7 @@
     update_hrc_inputs();
     type_select.addEventListener('input', update_hrc_inputs);
 ])%>
+<% end %>
 <% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {
     $ = require('jquery');
 

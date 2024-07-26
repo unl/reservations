@@ -23,6 +23,8 @@ get '/new_members/?' do
 end
 
 get '/hrc/?' do
+	not_found if SS_ID != 1
+
 	@breadcrumbs << {:text => 'HRC Trainings'}
 	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
 
@@ -299,14 +301,18 @@ EMAIL
 
 		# flash a message that this works
 		flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, this is at #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}. Check your email for more information about the event and where to park.")
-		if event.event_type_id == hrc_training_id
-			robotics_email = <<EMAIL
+		if SS_ID = 1
+			if event.event_type_id == hrc_training_id
+				robotics_email = <<EMAIL
 <p>There was a new sign up for "#{event.title}" that is at <strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
 <p>The person who signed up is <strong>#{params[:first_name] + " " + params[:last_name]}</strong> and their email is <a href="emailto:#{params[:email]}">#{params[:email]}</a>.</p>
 EMAIL
 
-			Emailer.mail("nisrobotics@unl.edu", "New HRC Training Sign up", robotics_email);
-			redirect '/hrc/'
+				Emailer.mail("nisrobotics@unl.edu", "New HRC Training Sign up", robotics_email);
+				redirect '/hrc/'
+			else
+				redirect '/new_members/'
+			end
 		else
 			redirect '/new_members/'
 		end
