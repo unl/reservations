@@ -24,7 +24,17 @@ UNL reservation system for schedule resources, classes, etc.
 8. Install the WDN Framework into the `public/wdn` directory...see [WDN Documentation](http://wdn.unl.edu/documentation).
 9. Start the server by going to the root directory and doing `bundle exec shotgun -o 0.0.0.0 -p 9393`. This launches the server on localhost port 9393, listening everywhere (you can use your iimlemburg.unl.edu or whichever), and the server will automatically update to new code. If you add gems to the bundle, you will need to re-execute this command.
 10. Navigate to `localhost:9393/` or similar and begin!
-11. In another terminal, type `bundle exec guard` in the project root to execute LESS compilation.
+
+### Less
+
+I couldn't get Guard to work for me locally so I also added a npm version of less complication
+
+The traditional way to compile less `bundle exec guard`
+
+The NPM way to compile less
+
+1. Run `npm ci` to install less
+2. Run `npm run less` to compile less
 
 ## Installation on server
 

@@ -1,0 +1,14 @@
+{
+  "name": "reservations",
+  "version": "1.0.0",
+  "description": "UNL reservation system for schedule resources, classes, etc.",
+  "scripts": {
+    "less": "npx lessc src/less/innovation_studio.less public/css/innovation_studio.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "less": "^4.2.0"
+  }
+}

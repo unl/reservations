@@ -11,6 +11,7 @@
 /public/wdn
 /db/scripts/private/
 .idea
+node_modules
 
 ## Service start up configs
 .config
