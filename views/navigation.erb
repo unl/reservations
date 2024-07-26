@@ -1,36 +1,40 @@
 <ul>
     <% unless @user.nil? %>
-    <li><a href="/" title="Nebraska Innovation Studio Manager Home">Manage Your Studio</a>
-    <ul>
-        <li><a href="/tools/trainings/" title="Trainings">Trainings</a></li>
-        <li><a href="/workshops/" title="Workshops">Workshops</a></li>
-        <li><a href="/calendar/" title="Calendar of Events">Event Calendar</a></li>
-        <li><a href="/pricing/" title="Material Pricing">Material Pricing</a></li>
-    </ul>
-    </li>
-    <li><a href="/tools/" title="Reserve Equipment">Reserve Equipment</a></li>
-    <li><a href="/training-documents" title="Nebraska Innovation Studio Training Documents">Training Documents</a>
+        <li><a href="/">Manage Your Studio</a>
         <ul>
-            <li><a href="/training-documents/sop/" title="SOP">SOP</a></li>
+            <li><a href="/tools/trainings/">Trainings</a></li>
+            <li><a href="/workshops/">Workshops</a></li>
+            <li><a href="/calendar/">Event Calendar</a></li>
+            <li><a href="/pricing/">Material Pricing</a></li>
         </ul>
-    </li>
+        </li>
+        <li><a href="/tools/">Reserve Equipment</a></li>
+        <% if SS_ID == 1 %>
+            <li><a href="/training-documents">Training Documents</a>
+                <ul>
+                    <li><a href="/training-documents/sop/">SOP</a></li>
+                </ul>
+            </li>
+        <% end %>
     <% end %>
-    <% if @user.nil? %>
-    <li><a href="/maker_request" title="Nebraska Innovation Studio Maker Requests">Maker&nbsp;Requests</a>
-        <ul>
-            <li><a href="/maker_request" title="Create Request">Create Request</a></li>
-            <li><a href="/maker_request/lookup" title="Lookup My Requests">Lookup My Requests</a></li>
-        </ul>
-    </li>
-    <% else %>
-    <li><a href="/maker_request/list" title="Nebraska Innovation Studio Maker Requests">Maker Requests</a>
-        <ul>
-            <li><a href="/maker_request/how_to" title="Maker How To">Maker How To</a></li>
-            <li><a href="/maker_request/list" title="View Open Requests">View Open Requests</a></li>
-            <li><a href="/maker_request" title="Create Request">Create Request</a></li>
-            <li><a href="/maker_request/lookup" title="View My Requests">View My Requests</a></li>
-        </ul>
-    </li>
+    <% if SS_ID == 1 %>
+        <% if @user.nil? %>
+        <li><a href="/maker_request">Maker&nbsp;Requests</a>
+            <ul>
+                <li><a href="/maker_request">Create Request</a></li>
+                <li><a href="/maker_request/lookup">Lookup My Requests</a></li>
+            </ul>
+        </li>
+        <% else %>
+        <li><a href="/maker_request/list">Maker Requests</a>
+            <ul>
+                <li><a href="/maker_request/how_to">Maker How To</a></li>
+                <li><a href="/maker_request/list">View Open Requests</a></li>
+                <li><a href="/maker_request">Create Request</a></li>
+                <li><a href="/maker_request/lookup">View My Requests</a></li>
+            </ul>
+        </li>
+        <% end %>
     <% end %>
 
 <%
@@ -41,38 +45,38 @@
     </li>
 =end %>
     <% unless @user.nil? || !@user.is_admin? %>
-        <li><a href="/admin/" title="Admin">Admin</a>
+        <li><a href="/admin/">Admin</a>
             <ul>
                 <% if has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER) %>
-                <li><a href="/admin/users/" title="Users">Users</a></li>
+                <li><a href="/admin/users/">Users</a></li>
                 <% end %>
                 <% if has_permission?(Permission::MANAGE_EVENTS) || has_permission?(Permission::EVENTS_ADMIN_READ_ONLY) %>
-                <li><a href="/admin/events/" title="Events">Events</a></li>
+                <li><a href="/admin/events/">Events</a></li>
                 <% end %>
                 <% if has_permission?(Permission::MANAGE_RESOURCES) %>
-                <li><a href="/admin/tools/" title="Tools">Tools</a></li>
+                <li><a href="/admin/tools/">Tools</a></li>
                 <% end %>
                 <% if has_permission?(Permission::MANAGE_SPACE_HOURS) %>
-                <li><a href="/admin/hours/" title="Hours">Hours</a></li>
+                <li><a href="/admin/hours/">Hours</a></li>
                 <% end %>
                 <% if has_permission?(Permission::MANAGE_EMAILS) %>
-                <li><a href="/admin/email/" title="Email">Email</a></li>
+                <li><a href="/admin/email/">Email</a></li>
                 <% end %>
                 <% if has_permission?(Permission::SEE_AGENDA) %>
-                <li><a href="/admin/agenda/" title="Agenda">Agenda</a></li>
+                <li><a href="/admin/agenda/">Agenda</a></li>
                 <% end %>
                 <% if has_permission?(Permission::SUPER_USER) %>
-                <li><a href="/admin/announcements/" title="Hours">Announcements</a></li>
+                <li><a href="/admin/announcements/">Announcements</a></li>
                 <% end %>
                 <% if has_permission?(Permission::MANAGE_RESOURCES) %>
                 <li><a href="/admin/material_prices/">Edit Material Pricing</a></li>
                 <li><a href="https://innovationstudio.unl.edu<%= drupal_link_lookup(:sop_training_doc) %>" target="_blank">Edit SOP</a></li>
                 <% end %>
                 <% if has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER) %>
-                <li><a href="/admin/view_check_in/" title="CheckIns">Check In Log</a></li>
+                <li><a href="/admin/view_check_in/">Check In Log</a></li>
                 <% end %>
                 <% if has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER) %>
-                <li><a href="/admin/orientation_attended/" title="Activate Members">Activate Members</a></li>
+                <li><a href="/admin/orientation_attended/">Activate Members</a></li>
                 <% end %>
             </ul>
         </li>
