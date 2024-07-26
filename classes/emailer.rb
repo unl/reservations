@@ -69,8 +69,11 @@ class Emailer
 
   def self.method
     if ENV['RACK_ENV'] == 'development'
-      :sendmail
-#     :smtp
+      if CONFIG['email']['via'] == ":smtp"
+        :smtp
+      else
+        :sendmail
+      end
     else
       :sendmail
     end
@@ -79,8 +82,8 @@ class Emailer
   def self.method_options
     if ENV['RACK_ENV'] == 'development'
       {
-        :address => '127.0.0.1',
-        :port => '1025'
+        :address => CONFIG['email']['address'],
+        :port => CONFIG['email']['port']
       }
     else
       {}

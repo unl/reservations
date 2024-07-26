@@ -16,5 +16,10 @@
 		"URL": "https://innovationstudio.unl.edu/",
 		"cookie_domain": "innovationstudio.unl.edu",
 		"email_from": "innovationstudio@unl.edu"
+	},
+	"email" : {
+		"via": ":smtp",
+		"via_address": "localhost",
+		"via_port": "25"
 	}
 }

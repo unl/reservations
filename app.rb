@@ -28,7 +28,8 @@ before do
     # site defaults
     @inline_body_script_content = ''
     @affiliation = 'Nebraska Innovation Campus'
-    @title = 'Innovation Studio Manager'
+    @affiliation_link = 'https://innovate.unl.edu/'
+    CONFIG['app']['title'] = 'Innovation Studio Manager'
     @breadcrumbs = [
       {
         :href => 'https://www.unl.edu/',
@@ -41,14 +42,15 @@ before do
       },
       {
         :href => '/',
-        :text => 'Innovation Studio Manager'
+        :text => CONFIG['app']['title']
       }
     ]
 
     if SS_ID == 8
       @inline_body_script_content = ''
       @affiliation = 'College of Engineering'
-      @title = 'Engineering Garage'
+      @affiliation_link = 'https://engineering.unl.edu/'
+      CONFIG['app']['title'] = 'Engineering Garage'
       @breadcrumbs = [
         {
           :href => 'https://www.unl.edu/',
@@ -61,7 +63,7 @@ before do
         },
         {
           :href => '/',
-          :text => 'Engineering Garage'
+          :text => CONFIG['app']['title']
         }
       ]
     end
