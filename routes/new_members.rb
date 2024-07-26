@@ -115,21 +115,6 @@ post '/new_members/sign_up/:event_id/?' do
 		redirect back
 	end
 
-	body = <<EMAIL
-<p>Thank you, #{params[:name]} for signing up for #{event.title}. Don't forget that the event is</p>
-
-<p><strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
-
-<p>Our main entrance is on the northwest side of the Innovation Commons building on 19th St. just off Transformation Drive. Our address is 2021 Transformation Drive, Suite 1500, Entrance B.</p>
-
-<p>For parking, use our <a href="https://innovationstudio-manager.unl.edu/pdf/new-member-orientation-parking-map.pdf">new member orientation parking</a>. Vehicles parked at any other location will be ticketed $50.00.</p>
-
-<p>We'll see you there!</p>
-
-<p>Nebraska Innovation Studio</p>
-EMAIL
-
-
 	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
 
 	if 	!VALID_EMAIL_REGEX.match(params[:email])
@@ -297,16 +282,26 @@ EMAIL
 			:user_id => user.id
 		)
 
-		Emailer.mail(params[:email], "Nebraska Innovation Studio - #{event.title}", body)
+		@name = params[:first_name] + " " + params[:last_name]
+		@event = event
+
+		template_path = "#{ROOT}/views/innovationstudio/new_member_email.erb"
+		template = File.read(template_path)
+		body = ERB.new(template).result(binding)
+
+		Emailer.mail(params[:email], "#{CONFIG['app']['title']} - #{event.title}", body)
 
 		# flash a message that this works
 		flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, this is at #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}. Check your email for more information about the event and where to park.")
 		if SS_ID = 1
 			if event.event_type_id == hrc_training_id
-				robotics_email = <<EMAIL
-<p>There was a new sign up for "#{event.title}" that is at <strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
-<p>The person who signed up is <strong>#{params[:first_name] + " " + params[:last_name]}</strong> and their email is <a href="emailto:#{params[:email]}">#{params[:email]}</a>.</p>
-EMAIL
+				@name = params[:first_name] + " " + params[:last_name]
+				@email = params[:email]
+				@event = event
+
+				template_path = "#{ROOT}/views/innovationstudio/hrc_signup_email.erb"
+				template = File.read(template_path)
+				body = ERB.new(template).result(binding)
 
 				Emailer.mail("nisrobotics@unl.edu", "New HRC Training Sign up", robotics_email);
 				redirect '/hrc/'

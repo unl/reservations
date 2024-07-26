@@ -146,19 +146,13 @@ class User < ActiveRecord::Base
 
   def send_membership_expiring_email
     if self.email && !self.email.empty?
+      @user = self
 
-body = <<EMAIL
-<p>Hello, #{self.full_name.rstrip}. Your Innovation Studio account is expiring soon! Our records show that your account expires on
-#{self.expiration_date.strftime('%m-%d-%Y')}.
-Please visit us to keep your membership active.
-</p>
+      template_path = "#{ROOT}/views/innovationstudio/expiring_email.erb"
+      template = File.read(template_path)
+      body = ERB.new(template).result(binding)
 
-<p>We hope to see you soon!</p>
-
-<p>Nebraska Innovation Studio</p>
-EMAIL
-
-      Emailer.mail(self.email, 'Nebraska Innovation Studio Membership Expiring', body)
+      Emailer.mail(self.email, "#{CONFIG['app']['title']} Membership Expiring", body)
     end
   end
 
@@ -172,164 +166,129 @@ EMAIL
     self.reset_password_expiry = Time.now + 1.day
     self.save
 
-body = <<EMAIL
-<p>We received a request to reset your Innovation Studio Manager password. Please click the link below to reset your password.</p>
+    @token = token
 
-<p><a href="http://#{ENV['RACK_ENV'] == 'development' ? 'localhost:9393' : 'innovationstudio-manager.unl.edu'}/reset_password/#{token}/">http://#{ENV['RACK_ENV'] == 'development' ? 'localhost:9393' : 'innovationstudio-manager.unl.edu'}/reset_password/#{token}/</a></p>
+    template_path = "#{ROOT}/views/innovationstudio/password_email.erb"
+    template = File.read(template_path)
+    body = ERB.new(template).result(binding)
 
-<p>This link will only be active for 24 hours. If you did not request to reset your password, you may safely disregard this email.</p>
-
-<p>Nebraska Innovation Studio</p>
-EMAIL
-
-
-    Emailer.mail(self.email, 'Nebraska Innovation Studio Password Reset', body)
+    Emailer.mail(self.email, "#{CONFIG['app']['title']} Password Reset", body)
   end
 
   def notify_trainer_of_new_event(event)
-body = <<EMAIL
-<p>Hi, #{self.full_name.rstrip}. You have been assigned as a trainer for <strong>#{event.title}</strong>. Don't forget that this event is</p>
+    @user = self
+    @event = event
 
-<p><strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
+    template_path = "#{ROOT}/views/innovationstudio/new_event_email.erb"
+    template = File.read(template_path)
+    body = ERB.new(template).result(binding)
 
-<p>Please visit your <a href="http://#{ENV['RACK_ENV'] == 'development' ? 'localhost:9393' : 'innovationstudio-manager.unl.edu'}/home/" target="_blank">home page</a> to confirm your assignment.</p>
-
-<p>Nebraska Innovation Studio</p>
-EMAIL
-
-    Emailer.mail(self.email, "Nebraska Innovation Studio - Assigned as Trainer for #{event.title}", body)
+    Emailer.mail(self.email, "#{CONFIG['app']['title']} - Assigned as Trainer for #{event.title}", body)
   end
 
   def notify_trainer_of_modified_event(event)
-body = <<EMAIL
-<p>Hi, #{self.full_name.rstrip}. You are receiving this email because an event you are training has been modified:</p>
+    @user = self
+    @event = event
 
-<p><strong>#{event.title}</strong></p>
+    template_path = "#{ROOT}/views/innovationstudio/modified_event_email.erb"
+    template = File.read(template_path)
+    body = ERB.new(template).result(binding)
 
-<p>You can see the event details on your <a href="http://#{ENV['RACK_ENV'] == 'development' ? 'localhost:9393' : 'innovationstudio-manager.unl.edu'}/home/" target="_blank">home page</a>.</p>
-
-
-<p>Nebraska Innovation Studio</p>
-EMAIL
-
-    Emailer.mail(self.email, "Nebraska Innovation Studio - Event Modified: #{event.title}", body)
+    Emailer.mail(self.email, "#{CONFIG['app']['title']} - Event Modified: #{event.title}", body)
   end
 
   def notify_trainer_of_removal_from_event(event)
-body = <<EMAIL
-<p>Hi, #{self.full_name.rstrip}. You are receiving this email because you are no longer a trainer for the following event:</p>
+    @user = self
+    @event = event
 
-<p><strong>#{event.title}</strong></p>
+    template_path = "#{ROOT}/views/innovationstudio/removed_event_email.erb"
+    template = File.read(template_path)
+    body = ERB.new(template).result(binding)
 
-<p>Nebraska Innovation Studio</p>
-EMAIL
-
-    Emailer.mail(self.email, "Nebraska Innovation Studio - Event Modified: #{event.title}", body)
+    Emailer.mail(self.email, "#{CONFIG['app']['title']} - Event Modified: #{event.title}", body)
   end
 
   def notify_trainer_of_deleted_event(event)
-body = <<EMAIL
-<p>Hi, #{self.full_name.rstrip}. You are receiving this email because the following event you are scheduled to train has been deleted:</p>
+    @user = self
+    @event = event
 
-<p><strong>#{event.title}</strong></p>
+    template_path = "#{ROOT}/views/innovationstudio/deleted_event_email.erb"
+    template = File.read(template_path)
+    body = ERB.new(template).result(binding)
 
-<p>Nebraska Innovation Studio</p>
-EMAIL
-
-    Emailer.mail(self.email, "Nebraska Innovation Studio - Event Deleted: #{event.title}", body)
+    Emailer.mail(self.email, "#{CONFIG['app']['title']} - Event Deleted: #{event.title}", body)
   end
 
   def send_trainer_confirmation_reminder
-body = <<EMAIL
-<p>Hi, #{self.full_name.rstrip}. You are receiving this email because you have not confirmed your trainer assignment for one or more events. Please visit your <a href="http://#{ENV['RACK_ENV'] == 'development' ? 'localhost:9393' : 'innovationstudio-manager.unl.edu'}/home/" target="_blank">home page</a> to confirm an event.</p>
+    @user = self
 
-<p>Nebraska Innovation Studio</p>
-EMAIL
+    template_path = "#{ROOT}/views/innovationstudio/confirmation_reminder_email.erb"
+    template = File.read(template_path)
+    body = ERB.new(template).result(binding)
 
-    Emailer.mail(self.email, "Nebraska Innovation Studio - Unconfirmed Training", body)
+    Emailer.mail(self.email, "#{CONFIG['app']['title']} - Unconfirmed Training", body)
   end
 
   def send_vehicle_information_update
     vehicles = Vehicle.where(:user_id => self.id).all
     if vehicles.count > 0
-      summary = ""
+      @summary = ""
+      @user = self
       vehicles.each do |vehicle|
-        summary = summary + "<p>License Plate: #{vehicle.license_plate}, State: #{vehicle.state}, Make: #{vehicle.make}, Model: #{vehicle.model}</p>"
+        @summary = @summary + "<p>License Plate: #{vehicle.license_plate}, State: #{vehicle.state}, Make: #{vehicle.make}, Model: #{vehicle.model}</p>"
       end
-body = <<EMAIL
-<p>Hi, #{self.full_name.rstrip}. You're receiving this email because either your vehicle information has been updated or your account has been activated.</p> 
 
-<p>Your most recent vehicle information is as follows:</p>
-#{summary}
-<p>Nebraska Innovation Studio</p>
-EMAIL
-      Emailer.mail(self.email, "Nebraska Innovation Studio - Vehicle Information Update", body, "innovationstudio@unl.edu")
+      template_path = "#{ROOT}/views/innovationstudio/vehicle_info_emails.erb"
+      template = File.read(template_path)
+      body = ERB.new(template).result(binding)
+
+      Emailer.mail(self.email, "#{CONFIG['app']['title']} - Vehicle Information Update", body, CONFIG['app']['email_from'])
     end
   end
 
   def send_vehicle_information_deleted
     vehicles = Vehicle.where(:user_id => self.id).all
-    summary = "<p>You no longer have any vehicles associated with your account.</p>"
+    @summary = "<p>You no longer have any vehicles associated with your account.</p>"
+    @user = self
     if vehicles.count > 0
-      summary = ""
+      @summary = ""
       vehicles.each do |vehicle|
-        summary = summary + "<p>License Plate: #{vehicle.license_plate}, State: #{vehicle.state}, Make: #{vehicle.make}, Model: #{vehicle.model}</p>"
+        @summary = @summary + "<p>License Plate: #{vehicle.license_plate}, State: #{vehicle.state}, Make: #{vehicle.make}, Model: #{vehicle.model}</p>"
       end
     end
-body = <<EMAIL
-<p>Hi, #{self.full_name.rstrip}. You're receiving this email because either your vehicle information has been updated or your account has been activated.</p> 
 
-<p>Your most recent vehicle information is as follows:</p>
-#{summary}
-<p>Nebraska Innovation Studio</p>
-EMAIL
-      Emailer.mail(self.email, "Nebraska Innovation Studio - Vehicle Information Update", body, "innovationstudio@unl.edu")
+    template_path = "#{ROOT}/views/innovationstudio/vehicle_info_emails.erb"
+    template = File.read(template_path)
+    body = ERB.new(template).result(binding)
+    
+    Emailer.mail(self.email, "#{CONFIG['app']['title']} - Vehicle Information Update", body, CONFIG['app']['email_from'])
   end
 
   def send_activation_email
-body = <<EMAIL
-<strong>Thank you for attending New Member Orientation!</strong>
+    @user = self
+    template_path = "#{ROOT}/views/innovationstudio/activation_email.erb"
+    template = File.read(template_path)
+    body = ERB.new(template).result(binding)
 
-<p>To activate your user account please go to:</p>
+    attachments = {}
+    if SS_ID == 1
+      attachments = {
+        "new-member-orientation-parking-map.pdf" => File.read(File.expand_path("../public/pdf/new-member-orientation-parking-map.pdf", File.dirname(__FILE__)))
+      }
+    end
 
-<p>http://#{ENV['RACK_ENV'] == 'development' ? 'localhost:9393' : 'innovationstudio-manager.unl.edu'}/login/ (Bookmark this link for future use) then enter the following:</p>
-
-<p>User Name: #{self.username}</p>
-<p>Temp Password: Welcome123</p>
-
-<p>After logging in you must:</p>
-
-<p>Click on “My Account” on the far right side of the red banner.
-Go to “Add Vehicle”. Add your vehicle information. 
-You can add up to 3 vehicles. You must park in the lot shown on the attached map.
-<i>If any vehicle information changes you must update your account before attending NIS.</i>
-<u>FAILURE TO DO SO WILL RESULT IN UP TO A $60 TICKET EVERY TIME YOU PARK.</u></p>
-
-<strong>TRAININGS AND RESERVATIONS</strong>
-
-<p>You are now able to sign up for any trainings or workshops via this webpage by clicking on the VIEW TRAININGS, VIEW WORKSHOPS, VIEW FULL CALENDAR tabs on the main page or under the MANAGE YOUR STUDIO drop down tab.</p>
-
-<p>After you have been through required equipment training you will be able to reserve that equipment on the RESERVE EQUIPMENT tab on the main page or the drop-down tab. Not all equipment requires training or reservations.</p>
-
-<strong>RENEWING YOUR MEMBERSHIP</strong>
-<p>To renew your membership you must do so in person. We accept credit cards and UNL N Cards or cost object numbers. No checks or cash are accepted. Renew as soon as you enter the studio or you will receive a parking ticket.</p>
-
-<p>Thank you and welcome aboard!</p>
-
-<p>Your Studio Staff</p>
-EMAIL
-      Emailer.mail(self.email, "Nebraska Innovation Studio - Getting Started", body, '', {"new-member-orientation-parking-map.pdf" => File.read(File.expand_path("../public/pdf/new-member-orientation-parking-map.pdf", File.dirname(__FILE__)))})
+    Emailer.mail(self.email, "#{CONFIG['app']['title']} - Getting Started", body, '', attachments)
   end
 
   def notify_user_of_broken_equipment(reservation)
-    resource = Resource.find(reservation.resource_id)
-body = <<EMAIL
-<p>Hi, #{self.full_name.rstrip}. You are receiving this email because your reservation for <strong>#{resource.name}</strong> on <strong>#{reservation.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong> has been canceled due to broken equipment. We apologize for this inconvenience.</p>
+    @reservation = reservation
+    @resource = Resource.find(reservation.resource_id)
+    @user = self
+    template_path = "#{ROOT}/views/innovationstudio/broken_equipment_email.erb"
+    template = File.read(template_path)
+    body = ERB.new(template).result(binding)
 
-<p>Nebraska Innovation Studio</p>
-EMAIL
-
-    Emailer.mail(self.email, "Nebraska Innovation Studio - Reservation Canceled for #{reservation.start_time.strftime('%m-%d-%Y')}", body)
+    Emailer.mail(self.email, "#{CONFIG['app']['title']} - Reservation Canceled for #{@reservation.start_time.strftime('%m-%d-%Y')}", body)
   end
 
 end

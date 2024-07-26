@@ -68,17 +68,13 @@ post '/workshops/sign_up/:event_id/?' do
 		:email => @user.email
 	)
 
-	body = <<EMAIL
-<p>Thank you, #{@user.full_name} for signing up for #{event.title}. Don't forget that this workshop is</p>
+	@event = event
 
-<p><strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
+	template_path = "#{ROOT}/views/innovationstudio/workshop_signup_email.erb"
+	template = File.read(template_path)
+	body = ERB.new(template).result(binding)
 
-<p>We'll see you there!</p>
-
-<p>Nebraska Innovation Studio</p>
-EMAIL
-
-	Emailer.mail(@user.email, "Nebraska Innovation Studio - #{event.title}", body)
+	Emailer.mail(@user.email, "#{CONFIG['app']['title']} - #{event.title}", body)
 
 	# flash a message that this works
 	flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, #{event.title} is #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}.")
