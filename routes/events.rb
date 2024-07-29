@@ -88,7 +88,7 @@ post '/events/:event_id/sign_up_as_non_member/?' do
 	@name = params[:name]
 	@event = event
 
-	template_path = "#{ROOT}/views/innovationstudio/event_signup_nonmember_email.erb"
+	template_path = "#{ROOT}/views/innovationstudio/email_templates/event_signup_nonmember_email.erb"
 	template = File.read(template_path)
 	body = ERB.new(template).result(binding)
 
@@ -144,7 +144,7 @@ post '/events/:event_id/sign_up/?' do
 	if !event.free_event_type?
 		@event = event
 
-		template_path = "#{ROOT}/views/innovationstudio/event_signup_email.erb"
+		template_path = "#{ROOT}/views/innovationstudio/email_templates/event_signup_email.erb"
 		template = File.read(template_path)
 		body = ERB.new(template).result(binding)
 

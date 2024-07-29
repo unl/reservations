@@ -107,7 +107,7 @@ post '/tools/trainings/sign_up/:event_id/?' do
 
 	@event = event
 
-	template_path = "#{ROOT}/views/innovationstudio/training_signup_email.erb"
+	template_path = "#{ROOT}/views/innovationstudio/email_templates/training_signup_email.erb"
 	template = File.read(template_path)
 	body = ERB.new(template).result(binding)
 

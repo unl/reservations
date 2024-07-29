@@ -148,7 +148,7 @@ class User < ActiveRecord::Base
     if self.email && !self.email.empty?
       @user = self
 
-      template_path = "#{ROOT}/views/innovationstudio/expiring_email.erb"
+      template_path = "#{ROOT}/views/innovationstudio/email_templates/expiring_email.erb"
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
 
@@ -168,7 +168,7 @@ class User < ActiveRecord::Base
 
     @token = token
 
-    template_path = "#{ROOT}/views/innovationstudio/password_email.erb"
+    template_path = "#{ROOT}/views/innovationstudio/email_templates/password_email.erb"
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
 
@@ -179,7 +179,7 @@ class User < ActiveRecord::Base
     @user = self
     @event = event
 
-    template_path = "#{ROOT}/views/innovationstudio/new_event_email.erb"
+    template_path = "#{ROOT}/views/innovationstudio/email_templates/new_event_email.erb"
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
 
@@ -190,7 +190,7 @@ class User < ActiveRecord::Base
     @user = self
     @event = event
 
-    template_path = "#{ROOT}/views/innovationstudio/modified_event_email.erb"
+    template_path = "#{ROOT}/views/innovationstudio/email_templates/modified_event_email.erb"
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
 
@@ -201,7 +201,7 @@ class User < ActiveRecord::Base
     @user = self
     @event = event
 
-    template_path = "#{ROOT}/views/innovationstudio/removed_event_email.erb"
+    template_path = "#{ROOT}/views/innovationstudio/email_templates/removed_event_email.erb"
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
 
@@ -212,7 +212,7 @@ class User < ActiveRecord::Base
     @user = self
     @event = event
 
-    template_path = "#{ROOT}/views/innovationstudio/deleted_event_email.erb"
+    template_path = "#{ROOT}/views/innovationstudio/email_templates/deleted_event_email.erb"
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
 
@@ -222,7 +222,7 @@ class User < ActiveRecord::Base
   def send_trainer_confirmation_reminder
     @user = self
 
-    template_path = "#{ROOT}/views/innovationstudio/confirmation_reminder_email.erb"
+    template_path = "#{ROOT}/views/innovationstudio/email_templates/confirmation_reminder_email.erb"
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
 
@@ -238,7 +238,7 @@ class User < ActiveRecord::Base
         @summary = @summary + "<p>License Plate: #{vehicle.license_plate}, State: #{vehicle.state}, Make: #{vehicle.make}, Model: #{vehicle.model}</p>"
       end
 
-      template_path = "#{ROOT}/views/innovationstudio/vehicle_info_emails.erb"
+      template_path = "#{ROOT}/views/innovationstudio/email_templates/vehicle_info_emails.erb"
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
 
@@ -257,7 +257,7 @@ class User < ActiveRecord::Base
       end
     end
 
-    template_path = "#{ROOT}/views/innovationstudio/vehicle_info_emails.erb"
+    template_path = "#{ROOT}/views/innovationstudio/email_templates/vehicle_info_emails.erb"
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
     
@@ -266,7 +266,7 @@ class User < ActiveRecord::Base
 
   def send_activation_email
     @user = self
-    template_path = "#{ROOT}/views/innovationstudio/activation_email.erb"
+    template_path = "#{ROOT}/views/innovationstudio/email_templates/activation_email.erb"
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
 
@@ -284,7 +284,7 @@ class User < ActiveRecord::Base
     @reservation = reservation
     @resource = Resource.find(reservation.resource_id)
     @user = self
-    template_path = "#{ROOT}/views/innovationstudio/broken_equipment_email.erb"
+    template_path = "#{ROOT}/views/innovationstudio/email_templates/broken_equipment_email.erb"
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
 

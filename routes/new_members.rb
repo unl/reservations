@@ -285,7 +285,7 @@ post '/new_members/sign_up/:event_id/?' do
 		@name = params[:first_name] + " " + params[:last_name]
 		@event = event
 
-		template_path = "#{ROOT}/views/innovationstudio/new_member_email.erb"
+		template_path = "#{ROOT}/views/innovationstudio/email_templates/new_member_email.erb"
 		template = File.read(template_path)
 		body = ERB.new(template).result(binding)
 
@@ -299,7 +299,7 @@ post '/new_members/sign_up/:event_id/?' do
 				@email = params[:email]
 				@event = event
 
-				template_path = "#{ROOT}/views/innovationstudio/hrc_signup_email.erb"
+				template_path = "#{ROOT}/views/innovationstudio/email_templates/hrc_signup_email.erb"
 				template = File.read(template_path)
 				body = ERB.new(template).result(binding)
 
