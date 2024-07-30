@@ -27,7 +27,7 @@ get '/admin/events/?' do
 	page = page.to_i >= 1 ? page.to_i : 1
 	page_size = 10
 	tab = ['upcoming', 'past'].include?(params[:tab]) ? params[:tab] : 'upcoming'
-	preset_events = PresetEvents.order(event_name: :asc).all.to_a
+	preset_events = PresetEvents.where(:service_space_id => SS_ID).order(event_name: :asc).all.to_a
 	event_type = params[:event_type]
 
 	case tab
@@ -405,7 +405,10 @@ end
 
 get '/admin/events/:event_id/edit/?' do
 	@breadcrumbs << {:text => 'Admin Events', :href => '/admin/events/'} << {text: 'Edit Event'}
-	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
+	hrc_training_id = nil
+	if SS_ID == 1
+		hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
+	end
 	event = Event.includes(:event_type, :location, :reservation => :resource).find_by(:id => params[:event_id], :service_space_id => SS_ID)
 	all_tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
 	all_tools.sort_by! do |tool|
@@ -735,7 +738,7 @@ end
 
 get '/admin/events/presets/?' do
 	@breadcrumbs << {:text => 'Manage Event Presets', :href => '/admin/events/presets'}
-	preset_events = PresetEvents.order(event_name: :asc).all.to_a
+	preset_events = PresetEvents.where(:service_space_id => SS_ID).order(event_name: :asc).all.to_a
 	event_type_objects = EventType.where(:service_space_id => SS_ID)
 	event_types = {}
 	event_type_objects.each do |type|

@@ -28,7 +28,7 @@ get '/admin/email/expiration_email/?' do
 end
 
 get '/admin/email/preset_emails_json/?' do
-	presets = PresetEmail.all
+	presets = PresetEmail.where(:service_space_id => SS_ID).all
 	content_type :json
 	presets.to_json
 end
@@ -71,7 +71,7 @@ get '/admin/email/send/?' do
 	users = User.where(:service_space_id => SS_ID).all
 	tools = Resource.where(:service_space_id => SS_ID).order(:name).all
 	alerts = Alert.order(:name).all
-	preset_emails = PresetEmail.all
+	preset_emails = PresetEmail.where(:service_space_id => SS_ID).all
 	
 	erb :'admin/send_email', :layout => :fixed, :locals => {
 		:users => users,
@@ -210,7 +210,7 @@ end
 
 get '/admin/email/presets/?' do
 	@breadcrumbs << {:text => 'Admin Emails', :href => '/admin/email/'} << {:text => 'Manage Preset Emails'}
-	preset_emails = PresetEmail.all
+	preset_emails = PresetEmail.where(:service_space_id => SS_ID).all
 
 	erb :'admin/email_presets', :layout => :fixed, :locals => {
 		:preset_emails => preset_emails
@@ -221,12 +221,12 @@ get '/admin/email/presets/create/?' do
 	@breadcrumbs << {:text => 'Admin Emails', :href => '/admin/email/'} << {:text => 'Manage Preset Emails', :href => '/admin/email/presets/'} << {:text => 'Create Preset Email'}
 
 	erb :'admin/new_preset_email', :layout => :fixed, :locals => {
-		:preset_email => PresetEmail.new
+		:preset_email => PresetEmail.where(:service_space_id => SS_ID).new
 	}
 end
 
 post '/admin/email/presets/create/?' do
-	preset_email = PresetEmail.new
+	preset_email = PresetEmail.where(:service_space_id => SS_ID).new
 	name = params[:name]
 	subject = params[:subject]
 	body = params[:body]
@@ -252,7 +252,7 @@ end
 
 get '/admin/email/presets/:preset_id/edit/?' do
 	@breadcrumbs << {:text => 'Admin Emails', :href => '/admin/email/'} << {:text => 'Manage Preset Emails', :href => '/admin/email/presets/'} << {:text => 'Edit Preset Email'}
-	preset = PresetEmail.find_by(:id => params[:preset_id])
+	preset = PresetEmail.where(:service_space_id => SS_ID).find_by(:id => params[:preset_id])
 	if preset.nil?
 		# that preset does not exist
 		flash(:danger, 'Not Found', 'That preset email does not exist')
@@ -268,7 +268,7 @@ post '/admin/email/presets/:preset_id/edit/?' do
 	name = params[:name]
 	subject = params[:subject]
 	body = params[:body]
-    preset_email = PresetEmail.find_by(:id => params[:preset_id])
+    preset_email = PresetEmail.where(:service_space_id => SS_ID).find_by(:id => params[:preset_id])
 	if preset_email.nil?
 		# that preset does not exist
 		flash(:danger, 'Not Found', 'That preset email does not exist')
@@ -295,7 +295,7 @@ post '/admin/email/presets/:preset_id/edit/?' do
 end
 
 post '/admin/email/presets/:preset_id/delete/?' do
-	preset = PresetEmail.find_by(:id => params[:preset_id])
+	preset = PresetEmail.where(:service_space_id => SS_ID).find_by(:id => params[:preset_id])
 	if preset.nil?
 		# that preset does not exist
 		flash(:danger, 'Not Found', 'That preset email does not exist')

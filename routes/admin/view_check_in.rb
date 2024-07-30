@@ -54,7 +54,7 @@ get '/admin/view_check_in/?' do
 
     checkIns.order(datetime: :desc)
 
-    studios = StudioSpace.pluck(:name)
+    studios = StudioSpace.where(:service_space_id => SS_ID).pluck(:name)
     counts = CheckIn.where(datetime: (Time.current - 7.days)..Time.current).where(studio_used: studios).group(:studio_used).count
     
     total = 0
@@ -82,7 +82,7 @@ get '/admin/view_check_in/?' do
 end
 
 get '/admin/view_check_in/studio_spaces/?' do
-    studios = StudioSpace.all
+    studios = StudioSpace.where(:service_space_id => SS_ID).all
     @breadcrumbs << {:text => 'Manage Studio Spaces'}
     erb :'admin/manage_studio_spaces', :layout => :fixed, :locals => {
         :studios => studios
@@ -109,7 +109,7 @@ post '/admin/view_check_in/studio_spaces/:studio_id/delete/?' do
 	require_login
 
 	# check that this is a valid studio
-	studio = StudioSpace.find_by(:id => params[:studio_id])
+	studio = StudioSpace.where(:service_space_id => SS_ID).find_by(:id => params[:studio_id])
 	if studio.nil?
 		flash(:alert, 'Not Found', 'That studio does not exist.')
 		redirect '/admin/view_check_in/studio_spaces/'
