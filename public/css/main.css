@@ -167,6 +167,7 @@ select[multiple=multiple] {
   text-align: left;
   padding: 3px;
   word-wrap: break-word;
+  color: black;
 }
 .calendar-container .event.new-member-orientation,
 .calendar-container .reservation.new-member-orientation {
