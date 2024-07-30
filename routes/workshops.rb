@@ -11,7 +11,10 @@ get '/workshops/?' do
 
 	events_advanced = nil
 	events_creation = nil
-	events_general = nil
+
+	workshop_id = EventType.find_by(:description => 'General Workshop', :service_space_id => SS_ID).id
+	events_general = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => workshop_id).
+					where('start_time >= ?', Time.now).order(:start_time => :asc).all
 
 	if SS_ID == 1
 		workshop_id = EventType.find_by(:description => 'Advanced Skill-Based Workshop', :service_space_id => SS_ID).id
@@ -28,17 +31,24 @@ get '/workshops/?' do
 	end
 
 	erb :workshops, :layout => :fixed, :locals => {
-		:events_advanced => events_advanced, :events_creation => events_creation, :events_general => events_general
+		:events_advanced => events_advanced,
+		:events_creation => events_creation,
+		:events_general => events_general
 	}
 end
 
 post '/workshops/sign_up/:event_id/?' do
 	require_login
 
+	workshop_id_advanced = nil
+	workshop_id_creation = nil
+	workshop_id_general = EventType.find_by(:description => 'General Workshop', :service_space_id => SS_ID).id
+	if SS_ID == 1
+		workshop_id_advanced = EventType.find_by(:description => 'Advanced Skill-Based Workshop', :service_space_id => SS_ID).id
+		workshop_id_creation ||= EventType.find_by(:description => 'Creation Workshop', :service_space_id => SS_ID).id
+	end
+
 	# check that is a valid event
-	workshop_id_advanced = EventType.find_by(:description => 'Advanced Skill-Based Workshop', :service_space_id => SS_ID).id
-	workshop_id_creation ||= EventType.find_by(:description => 'Creation Workshop', :service_space_id => SS_ID).id
-	workshop_id_general ||= EventType.find_by(:description => 'General Workshop', :service_space_id => SS_ID).id
 	event = Event.find_by(:service_space_id => SS_ID, :event_type_id => workshop_id_advanced, :id => params[:event_id])
 	event ||= Event.find_by(:service_space_id => SS_ID, :event_type_id => workshop_id_creation, :id => params[:event_id])
 	event ||= Event.find_by(:service_space_id => SS_ID, :event_type_id => workshop_id_general, :id => params[:event_id])

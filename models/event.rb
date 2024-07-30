@@ -21,7 +21,9 @@ class Event < ActiveRecord::Base
 	EVENT_TYPE_HRC_TRAINING = 11
 
 	# Serivce Space ID 8
-	EVENT_TYPE_ID_NEW_ENGINEERING_MEMBER_ORIENTATION = 12
+	EVENT_TYPE_ID_ENGINEERING_NEW_MEMBER_ORIENTATION = 12
+	EVENT_TYPE_ID_ENGINEERING_MACHINE_TRAINING = 13
+	EVENT_TYPE_ID_ENGINEERING_GENERAL_WORKSHOP = 14
 
 	def self.type_options
 		# These correspond with event_types table
@@ -38,7 +40,9 @@ class Event < ActiveRecord::Base
 			}
 		elsif SS_ID == 8
 			{
-				EVENT_TYPE_ID_NEW_MEMBER_ORIENTATION => 'New Member Orientation'
+				EVENT_TYPE_ID_ENGINEERING_NEW_MEMBER_ORIENTATION => 'New Member Orientation',
+				EVENT_TYPE_ID_ENGINEERING_MACHINE_TRAINING => 'Machine Training',
+				EVENT_TYPE_ID_ENGINEERING_GENERAL_WORKSHOP => 'General Workshop',
 			}
 		end
     end
@@ -155,6 +159,6 @@ class Event < ActiveRecord::Base
 	end
 
 	def machine_training_event_type?
-	    self.type.id == EVENT_TYPE_ID_MACHINE_TRAINING
+	    self.type.id == EVENT_TYPE_ID_MACHINE_TRAINING || self.type.id == EVENT_TYPE_ID_ENGINEERING_MACHINE_TRAINING
 	end
 end
