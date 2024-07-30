@@ -238,7 +238,7 @@ class User < ActiveRecord::Base
         @summary = @summary + "<p>License Plate: #{vehicle.license_plate}, State: #{vehicle.state}, Make: #{vehicle.make}, Model: #{vehicle.model}</p>"
       end
 
-      template_path = "#{ROOT}/views/innovationstudio/email_templates/vehicle_info_emails.erb"
+      template_path = "#{ROOT}/views/innovationstudio/email_templates/vehicle_info_email.erb"
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
 
@@ -257,7 +257,7 @@ class User < ActiveRecord::Base
       end
     end
 
-    template_path = "#{ROOT}/views/innovationstudio/email_templates/vehicle_info_emails.erb"
+    template_path = "#{ROOT}/views/innovationstudio/email_templates/vehicle_info_email.erb"
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
     
