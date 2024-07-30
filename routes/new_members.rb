@@ -42,7 +42,10 @@ end
 get '/new_members/sign_up/:event_id/?' do
 	# check if this is a new member signup orientation
 	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
-	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
+	hrc_training_id = nil
+	if SS_ID == 1
+		hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
+	end
 
 	event = Event.includes(:event_signups).find_by(:service_space_id => SS_ID, :id => params[:event_id])
 	if event.nil? || (event.event_type_id != new_member_orientation_id && event.event_type_id != hrc_training_id)
@@ -85,7 +88,10 @@ end
 post '/new_members/sign_up/:event_id/?' do
 	# check if this is a new member signup orientation
 	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
-	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
+	hrc_training_id = nil
+	if SS_ID == 1
+		hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
+	end
 
 	event = Event.includes(:event_signups).find_by(:service_space_id => SS_ID, :id => params[:event_id])
 	if event.nil? || (event.event_type_id != new_member_orientation_id && event.event_type_id != hrc_training_id)

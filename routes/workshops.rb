@@ -9,17 +9,23 @@ get '/workshops/?' do
 	@breadcrumbs << {:text => 'Workshops'}
 	require_login
 
-	workshop_id = EventType.find_by(:description => 'Advanced Skill-Based Workshop', :service_space_id => SS_ID).id
-	events_advanced = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => workshop_id).
-					where('start_time >= ?', Time.now).order(:start_time => :asc).all
+	events_advanced = nil
+	events_creation = nil
+	events_general = nil
 
-	workshop_id = EventType.find_by(:description => 'Creation Workshop', :service_space_id => SS_ID).id
-	events_creation = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => workshop_id).
-					where('start_time >= ?', Time.now).order(:start_time => :asc).all
+	if SS_ID == 1
+		workshop_id = EventType.find_by(:description => 'Advanced Skill-Based Workshop', :service_space_id => SS_ID).id
+		events_advanced = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => workshop_id).
+						where('start_time >= ?', Time.now).order(:start_time => :asc).all
 
-	workshop_id = EventType.find_by(:description => 'General Workshop', :service_space_id => SS_ID).id
-	events_general = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => workshop_id).
-					where('start_time >= ?', Time.now).order(:start_time => :asc).all
+		workshop_id = EventType.find_by(:description => 'Creation Workshop', :service_space_id => SS_ID).id
+		events_creation = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => workshop_id).
+						where('start_time >= ?', Time.now).order(:start_time => :asc).all
+
+		workshop_id = EventType.find_by(:description => 'General Workshop', :service_space_id => SS_ID).id
+		events_general = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => workshop_id).
+						where('start_time >= ?', Time.now).order(:start_time => :asc).all
+	end
 
 	erb :workshops, :layout => :fixed, :locals => {
 		:events_advanced => events_advanced, :events_creation => events_creation, :events_general => events_general
