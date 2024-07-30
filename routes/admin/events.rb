@@ -107,7 +107,7 @@ post '/admin/events/:event_id/signup_list/?' do
 				signup_record = EventSignup.find_by(:id => signup_id)
 
 				unless signup_record == nil
-					user = User.find_by(:id => signup_record.user_id)
+					user = User.find_by(:id => signup_record.user_id, :service_space_id => SS_ID)
 
 					if signup_record.attended == 0
 						signup_record.attended = 1
@@ -141,7 +141,7 @@ post '/admin/events/:event_id/signup_list/?' do
 			signup_record = EventSignup.find_by(:id => signup_id)
 
 			unless signup_record == nil
-				user = User.find_by(:id => signup_record.user_id)
+				user = User.find_by(:id => signup_record.user_id, :service_space_id => SS_ID)
 				if !user.nil? && signup_record.attended == 1 && event.event_type_id == new_member_orientation_id
 					orientation_attendance = AttendedOrientation.find_by(:user_id => user.id)
 					if !orientation_attendance.nil?
@@ -177,7 +177,7 @@ post '/admin/events/:event_id/signup_list/?' do
 
 			signup_id = key.split('attendance_')[1].to_i
 			signup_record = EventSignup.find_by(:id => signup_id)
-			user = User.find_by(:id => signup_record.user_id)
+			user = User.find_by(:id => signup_record.user_id, :service_space_id => SS_ID)
 
 			if signup_record.attended == 0
 				signup_record.attended = 1
@@ -245,7 +245,7 @@ get '/admin/events/create/?' do
 		erb :'admin/new_event', :layout => :fixed, :locals => {
 			:event => Event.new,
 			:types => EventType.where(:service_space_id => SS_ID).all,
-			:trainers => User.where(:is_trainer => 1).all,
+			:trainers => User.where(:is_trainer => 1, :service_space_id => SS_ID).all,
 			:locations => Location.where(:service_space_id => SS_ID).all,
 			:tools => tools,
 			:all_tools => all_tools,
@@ -266,7 +266,7 @@ get '/admin/events/create/?' do
 		erb :'admin/new_event', :layout => :fixed, :locals => {
 			:event => event,
 			:types => EventType.where(:service_space_id => SS_ID).all,
-			:trainers => User.where(:is_trainer => 1).all,
+			:trainers => User.where(:is_trainer => 1, :service_space_id => SS_ID).all,
 			:locations => Location.where(:service_space_id => SS_ID).all,
 			:tools => tools,
 			:all_tools => all_tools,
@@ -392,7 +392,7 @@ post '/admin/events/create/?' do
 	end
 
 	# email the assigned trainer
-	trainer_to_email = User.where('id = ?', event.trainer_id)
+	trainer_to_email = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_id)
 
 	trainer_to_email.each do |user|
 		user.notify_trainer_of_new_event(event)
@@ -455,7 +455,7 @@ get '/admin/events/:event_id/edit/?' do
 	erb :'admin/new_event', :layout => :fixed, :locals => {
 		:event => event,
 		:types => EventType.where(:service_space_id => SS_ID).all,
-		:trainers => User.where(:is_trainer => 1).all,
+		:trainers => User.where(:is_trainer => 1, :service_space_id => SS_ID).all,
 		:locations => Location.where(:service_space_id => SS_ID).all,
 		:tools => tools,
 		:all_tools => all_tools,
@@ -490,7 +490,7 @@ post '/admin/events/:event_id/edit/?' do
 		redirect back
 	end
 
-	old_trainer = User.where('id = ?', event.trainer_id)
+	old_trainer = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_id)
 
     # remember original start/end times
     original_event_start_time = event.start_time
@@ -681,7 +681,7 @@ post '/admin/events/:event_id/edit/?' do
 		end
 	end
 
-	trainer_to_email = User.where('id = ?', event.trainer_id)
+	trainer_to_email = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_id)
 
 	# if trainer has changed
 	if(old_trainer != trainer_to_email)
@@ -718,7 +718,7 @@ post '/admin/events/:event_id/delete/?' do
 		redirect '/admin/events/'
 	end
 
-	trainer_to_email = User.where('id = ?', event.trainer_id)
+	trainer_to_email = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_id)
 
 	trainer_to_email.each do |user|
 		user.notify_trainer_of_deleted_event(event)

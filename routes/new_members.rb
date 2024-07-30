@@ -135,7 +135,7 @@ post '/new_members/sign_up/:event_id/?' do
 		# Create a new user name based on the username_parameters, if the name already exists, increment the name.
 		counter = 2
 		while true
-			if User.find_by(:username => "#{username_parameters + counter.to_s}").nil?
+			if User.find_by(:username => "#{username_parameters + counter.to_s}", :service_space_id => SS_ID).nil?
 				user.username = "#{username_parameters + counter.to_s}"
 				break
 			end
@@ -293,7 +293,7 @@ post '/new_members/sign_up/:event_id/?' do
 
 		# flash a message that this works
 		flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, this is at #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}. Check your email for more information about the event and where to park.")
-		if SS_ID = 1
+		if SS_ID == 1
 			if event.event_type_id == hrc_training_id
 				@name = params[:first_name] + " " + params[:last_name]
 				@email = params[:email]

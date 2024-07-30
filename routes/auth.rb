@@ -161,7 +161,7 @@ get '/check_in_login/?' do
 end
 
 post '/check_in_login/?' do
-  user = User.where(:username => params[:username]).first
+  user = User.where(:username => params[:username], :service_space_id => SS_ID).first
   # check user existence and password correctness
   if user.nil? || user.password != params[:password]
     flash(:danger, 'Incorrect Password', 'Username/password combination is incorrect.')
@@ -178,7 +178,7 @@ get '/forgot_password_check_in/' do
 end
 
 post '/forgot_password_check_in/' do
-  user = User.find_by(:username => params[:username].trim)
+  user = User.find_by(:username => params[:username].trim, :service_space_id => SS_ID)
   unless user.nil?
     user.send_reset_password_email
   end
@@ -198,7 +198,7 @@ get '/login/?' do
 end
 
 post '/login/?' do
-  user = User.where(:username => params[:username]).first
+  user = User.where(:username => params[:username], :service_space_id => SS_ID).first
   next_page = params[:next_page]
   # check user existence and password correctness
   if user.nil? || user.password != params[:password]
@@ -223,7 +223,7 @@ get '/forgot_password/' do
 end
 
 post '/forgot_password/' do
-  user = User.find_by(:username => params[:username].trim)
+  user = User.find_by(:username => params[:username].trim, :service_space_id => SS_ID)
   unless user.nil?
     user.send_reset_password_email
   end
@@ -233,7 +233,7 @@ post '/forgot_password/' do
 end
 
 get '/reset_password/:token/?' do
-  user = User.find_by(:reset_password_token => params[:token])
+  user = User.find_by(:reset_password_token => params[:token], :service_space_id => SS_ID)
   not_found if user.nil? || user.reset_password_expiry < Time.now
 
   @section = nil
@@ -243,7 +243,7 @@ get '/reset_password/:token/?' do
 end
 
 post '/reset_password/?' do
-  user = User.find_by(:reset_password_token => params[:token])
+  user = User.find_by(:reset_password_token => params[:token], :service_space_id => SS_ID)
   not_found if user.nil? || user.reset_password_expiry + 5.minutes < Time.now
 
   # check password is at least 8 characters

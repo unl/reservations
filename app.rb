@@ -127,7 +127,7 @@ get '/' do
 end
 
 get '/images/user/:user_id/?' do
-  user = User.find_by(:id => params[:user_id])
+  user = User.find_by(:id => params[:user_id], :service_space_id => SS_ID)
   if user.nil? || user.imagedata.nil?
     raise Sinatra::NotFound
   end

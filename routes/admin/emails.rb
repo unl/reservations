@@ -68,7 +68,7 @@ end
 get '/admin/email/send/?' do
 	@breadcrumbs << {:text => 'Admin Emails', :href => '/admin/email/'}
 	@breadcrumbs << {:text => 'Send Email'}
-	users = User.all
+	users = User.where(:service_space_id => SS_ID).all
 	tools = Resource.where(:service_space_id => SS_ID).order(:name).all
 	alerts = Alert.order(:name).all
 	preset_emails = PresetEmail.all

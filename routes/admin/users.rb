@@ -48,7 +48,7 @@ end
 
 get '/admin/users/active_users/download/?' do
     # load up a CSV with the data
-    users = User.where("expiration_date >= ?", Date.today)
+    users = User.where(:service_space_id => SS_ID).where("expiration_date >= ?", Date.today)
     csv_string = CSV.generate do |csv|
         csv << ["User ID", "Username", "Email", "First Name", "Last Name", "University Status", "Date Created", "Space Status", "Expiration Date"]
         users.each do |user|
@@ -258,7 +258,7 @@ post '/admin/users/:user_id/edit/?' do
     end
 
     # check that username is not taken
-    name_user = User.find_by(:username => params[:username])
+    name_user = User.find_by(:username => params[:username], :service_space_id => SS_ID)
     unless name_user.nil? || name_user == user
         flash(:alert, 'Username Taken', 'Sorry, another user has already taken that username.')
         redirect back
@@ -417,7 +417,7 @@ end
 
 post '/admin/users/create/?' do
     # check that username is not taken
-    unless User.find_by(:username => params[:username]).nil?
+    unless User.find_by(:username => params[:username], :service_space_id => SS_ID).nil?
         flash(:alert, 'Username Taken', 'Sorry, another user has already taken that username.')
         redirect back
     end
@@ -496,7 +496,7 @@ post '/admin/users/modify_expirations/?' do
     end
 
     todays_date = Date.today.strftime("%Y-%m-%d")
-    users = User.where("expiration_date IS NOT NULL AND STR_TO_DATE(expiration_date, '%Y-%m-%d') >= ?", todays_date).all
+    users = User.where(:service_space_id => SS_ID).where("expiration_date IS NOT NULL AND STR_TO_DATE(expiration_date, '%Y-%m-%d') >= ?", todays_date).all
     users_updated = users.length
     for user in users do
         user.expiration_date = user.expiration_date + days_to_add.to_i.day

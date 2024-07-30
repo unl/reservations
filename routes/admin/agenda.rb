@@ -25,7 +25,7 @@ get '/admin/agenda/' do
 
 	trainers = {}
 	for event in events
-		trainer = User.where('id = ?', event.trainer_id)
+		trainer = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_id)
 		if !trainer.first.nil?
 			trainers[event.trainer_id] = trainer.first.full_name
 		end

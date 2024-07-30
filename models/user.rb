@@ -160,7 +160,7 @@ class User < ActiveRecord::Base
     token = ''
     begin
       token = String.token
-    end while User.find_by(:reset_password_token => token) != nil
+    end while User.find_by(:reset_password_token => token, :service_space_id => SS_ID) != nil
 
     self.reset_password_token = token
     self.reset_password_expiry = Time.now + 1.day
