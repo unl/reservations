@@ -114,6 +114,9 @@ post '/tools/trainings/sign_up/:event_id/?' do
 	@event = event
 
 	template_path = "#{ROOT}/views/innovationstudio/email_templates/training_signup_email.erb"
+	if SS_ID == 8
+		template_path = "#{ROOT}/views/engineering_garage/email_templates/training_signup_email.erb"
+	end
 	template = File.read(template_path)
 	body = ERB.new(template).result(binding)
 

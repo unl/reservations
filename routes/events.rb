@@ -89,6 +89,9 @@ post '/events/:event_id/sign_up_as_non_member/?' do
 	@event = event
 
 	template_path = "#{ROOT}/views/innovationstudio/email_templates/event_signup_nonmember_email.erb"
+	if SS_ID == 8
+		template_path = "#{ROOT}/views/engineering_garage/email_templates/event_signup_nonmember_email.erb"
+	end
 	template = File.read(template_path)
 	body = ERB.new(template).result(binding)
 
@@ -145,6 +148,9 @@ post '/events/:event_id/sign_up/?' do
 		@event = event
 
 		template_path = "#{ROOT}/views/innovationstudio/email_templates/event_signup_email.erb"
+		if SS_ID == 8
+			template_path = "#{ROOT}/views/engineering_garage/email_templates/event_signup_email.erb"
+		end
 		template = File.read(template_path)
 		body = ERB.new(template).result(binding)
 

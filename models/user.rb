@@ -149,6 +149,9 @@ class User < ActiveRecord::Base
       @user = self
 
       template_path = "#{ROOT}/views/innovationstudio/email_templates/expiring_email.erb"
+      if SS_ID == 8
+        template_path = "#{ROOT}/views/engineering_garage/email_templates/expiring_email.erb"
+      end
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
 
@@ -169,6 +172,9 @@ class User < ActiveRecord::Base
     @token = token
 
     template_path = "#{ROOT}/views/innovationstudio/email_templates/password_email.erb"
+    if SS_ID == 8
+      template_path = "#{ROOT}/views/engineering_garage/email_templates/password_email.erb"
+    end
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
 
@@ -180,6 +186,9 @@ class User < ActiveRecord::Base
     @event = event
 
     template_path = "#{ROOT}/views/innovationstudio/email_templates/new_event_email.erb"
+    if SS_ID == 8
+      template_path = "#{ROOT}/views/engineering_garage/email_templates/new_event_email.erb"
+    end
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
 
@@ -191,6 +200,9 @@ class User < ActiveRecord::Base
     @event = event
 
     template_path = "#{ROOT}/views/innovationstudio/email_templates/modified_event_email.erb"
+    if SS_ID == 8
+      template_path = "#{ROOT}/views/engineering_garage/email_templates/modified_event_email.erb"
+    end
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
 
@@ -202,6 +214,9 @@ class User < ActiveRecord::Base
     @event = event
 
     template_path = "#{ROOT}/views/innovationstudio/email_templates/removed_event_email.erb"
+    if SS_ID == 8
+      template_path = "#{ROOT}/views/engineering_garage/email_templates/removed_event_email.erb"
+    end
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
 
@@ -213,6 +228,9 @@ class User < ActiveRecord::Base
     @event = event
 
     template_path = "#{ROOT}/views/innovationstudio/email_templates/deleted_event_email.erb"
+    if SS_ID == 8
+      template_path = "#{ROOT}/views/engineering_garage/email_templates/deleted_event_email.erb"
+    end
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
 
@@ -223,6 +241,9 @@ class User < ActiveRecord::Base
     @user = self
 
     template_path = "#{ROOT}/views/innovationstudio/email_templates/confirmation_reminder_email.erb"
+    if SS_ID == 8
+      template_path = "#{ROOT}/views/engineering_garage/email_templates/confirmation_reminder_email.erb"
+    end
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
 
@@ -239,6 +260,9 @@ class User < ActiveRecord::Base
       end
 
       template_path = "#{ROOT}/views/innovationstudio/email_templates/vehicle_info_email.erb"
+      if SS_ID == 8
+        template_path = "#{ROOT}/views/engineering_garage/email_templates/vehicle_info_email.erb"
+      end
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
 
@@ -258,6 +282,9 @@ class User < ActiveRecord::Base
     end
 
     template_path = "#{ROOT}/views/innovationstudio/email_templates/vehicle_info_email.erb"
+    if SS_ID == 8
+      template_path = "#{ROOT}/views/engineering_garage/email_templates/vehicle_info_email.erb"
+    end
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
     
@@ -267,6 +294,9 @@ class User < ActiveRecord::Base
   def send_activation_email
     @user = self
     template_path = "#{ROOT}/views/innovationstudio/email_templates/activation_email.erb"
+    if SS_ID == 8
+      template_path = "#{ROOT}/views/engineering_garage/email_templates/activation_email.erb"
+    end
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
 
@@ -285,6 +315,9 @@ class User < ActiveRecord::Base
     @resource = Resource.find(reservation.resource_id)
     @user = self
     template_path = "#{ROOT}/views/innovationstudio/email_templates/broken_equipment_email.erb"
+    if SS_ID == 8
+      template_path = "#{ROOT}/views/engineering_garage/email_templates/broken_equipment_email.erb"
+    end
     template = File.read(template_path)
     body = ERB.new(template).result(binding)
 
