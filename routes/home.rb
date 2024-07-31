@@ -33,7 +33,6 @@ get '/home/?' do
 		:events => user_events,
 		:trainer_events => trainer_events,
 		:user_alerts => user_alerts
-		
 	}
 end
 
