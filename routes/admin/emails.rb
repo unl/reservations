@@ -105,7 +105,7 @@ post '/admin/email/send/?' do
 		body = params[:body]
 		body = <<-EMAIL
 		#{body}
-		<hr>If you no longer want to receive emails from us you can adjust your email preferences <a href="#{CONFIG['app']['URL']}/opt_out/" target="_blank">here</a>.
+		<hr>If you no longer want to receive emails from us you can adjust your email preferences <a href="#{CONFIG['app']['URL']}opt_out/" target="_blank">here</a>.
 		EMAIL
 		
 	end
