@@ -13,8 +13,8 @@
 	},
 	"app" : {
 		"service_space_id": "1",
-		"URL": "https://innovationstudio.unl.edu/",
-		"cookie_domain": "innovationstudio.unl.edu",
+		"URL": "https://innovationstudio-manager.unl.edu/",
+		"cookie_domain": "innovationstudio-manager.unl.edu",
 		"email_from": "innovationstudio@unl.edu",
 		"cb_version": "2024022701"
 	},
