@@ -10,10 +10,10 @@ require 'utils/database'
 require 'sinatra'
 require 'app'
 
-if CONFIG['app']['URL'].empty?
+if CONFIG['app']['cookie_domain'].empty?
   set :cookie_options, :domain => nil
 else
-  set :cookie_options, :domain => CONFIG['app']['URL']
+  set :cookie_options, :domain => CONFIG['app']['cookie_domain']
 end
 
 # start scheduler on new thread so program doesn't hang waiting for it to finish

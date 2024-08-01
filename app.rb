@@ -5,7 +5,7 @@ require 'models/event'
 
 use Rack::Session::Cookie, :key => 'rack.session',
                            :path => '/',
-                           :domain => (ENV['RACK_ENV'] == 'development' ? nil : 'innovationstudio-manager.unl.edu'),
+                           :domain => CONFIG['app']['cookie_domain'],
                            :secret => 'averymanteroldfatherbesseyhamilton',
                            :old_secret => 'averymanteroldfatherbesseyhamilton',
                            :expire_after => 30*24*60*60
