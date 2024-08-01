@@ -171,92 +171,129 @@ class User < ActiveRecord::Base
 
     @token = token
 
-    template_path = "#{ROOT}/views/innovationstudio/email_templates/password_email.erb"
-    if SS_ID == 8
-      template_path = "#{ROOT}/views/engineering_garage/email_templates/password_email.erb"
-    end
-    template = File.read(template_path)
-    body = ERB.new(template).result(binding)
+    if self.email && !self.email.empty?
+      template_path = "#{ROOT}/views/innovationstudio/email_templates/password_email.erb"
+      if SS_ID == 8
+        template_path = "#{ROOT}/views/engineering_garage/email_templates/password_email.erb"
+      end
+      template = File.read(template_path)
+      body = ERB.new(template).result(binding)
 
-    Emailer.mail(self.email, "#{CONFIG['app']['title']} Password Reset", body)
+      Emailer.mail(self.email, "#{CONFIG['app']['title']} Password Reset", body)
+    end
   end
 
   def notify_trainer_of_new_event(event)
-    @user = self
-    @event = event
+    if self.email && !self.email.empty?
+      @user = self
+      @event = event
 
-    template_path = "#{ROOT}/views/innovationstudio/email_templates/new_event_email.erb"
-    if SS_ID == 8
-      template_path = "#{ROOT}/views/engineering_garage/email_templates/new_event_email.erb"
+      template_path = "#{ROOT}/views/innovationstudio/email_templates/new_event_email.erb"
+      if SS_ID == 8
+        template_path = "#{ROOT}/views/engineering_garage/email_templates/new_event_email.erb"
+      end
+      template = File.read(template_path)
+      body = ERB.new(template).result(binding)
+
+      Emailer.mail(self.email, "#{CONFIG['app']['title']} - Assigned as Trainer for #{event.title}", body)
     end
-    template = File.read(template_path)
-    body = ERB.new(template).result(binding)
-
-    Emailer.mail(self.email, "#{CONFIG['app']['title']} - Assigned as Trainer for #{event.title}", body)
   end
 
   def notify_trainer_of_modified_event(event)
-    @user = self
-    @event = event
+    if self.email && !self.email.empty?
+      @user = self
+      @event = event
 
-    template_path = "#{ROOT}/views/innovationstudio/email_templates/modified_event_email.erb"
-    if SS_ID == 8
-      template_path = "#{ROOT}/views/engineering_garage/email_templates/modified_event_email.erb"
+      template_path = "#{ROOT}/views/innovationstudio/email_templates/modified_event_email.erb"
+      if SS_ID == 8
+        template_path = "#{ROOT}/views/engineering_garage/email_templates/modified_event_email.erb"
+      end
+      template = File.read(template_path)
+      body = ERB.new(template).result(binding)
+
+      Emailer.mail(self.email, "#{CONFIG['app']['title']} - Event Modified: #{event.title}", body)
     end
-    template = File.read(template_path)
-    body = ERB.new(template).result(binding)
-
-    Emailer.mail(self.email, "#{CONFIG['app']['title']} - Event Modified: #{event.title}", body)
   end
 
   def notify_trainer_of_removal_from_event(event)
-    @user = self
-    @event = event
+    if self.email && !self.email.empty?
+      @user = self
+      @event = event
 
-    template_path = "#{ROOT}/views/innovationstudio/email_templates/removed_event_email.erb"
-    if SS_ID == 8
-      template_path = "#{ROOT}/views/engineering_garage/email_templates/removed_event_email.erb"
+      template_path = "#{ROOT}/views/innovationstudio/email_templates/removed_event_email.erb"
+      if SS_ID == 8
+        template_path = "#{ROOT}/views/engineering_garage/email_templates/removed_event_email.erb"
+      end
+      template = File.read(template_path)
+      body = ERB.new(template).result(binding)
+
+      Emailer.mail(self.email, "#{CONFIG['app']['title']} - Event Modified: #{event.title}", body)
     end
-    template = File.read(template_path)
-    body = ERB.new(template).result(binding)
-
-    Emailer.mail(self.email, "#{CONFIG['app']['title']} - Event Modified: #{event.title}", body)
   end
 
   def notify_trainer_of_deleted_event(event)
-    @user = self
-    @event = event
+    if self.email && !self.email.empty?
+      @user = self
+      @event = event
 
-    template_path = "#{ROOT}/views/innovationstudio/email_templates/deleted_event_email.erb"
-    if SS_ID == 8
-      template_path = "#{ROOT}/views/engineering_garage/email_templates/deleted_event_email.erb"
+      template_path = "#{ROOT}/views/innovationstudio/email_templates/deleted_event_email.erb"
+      if SS_ID == 8
+        template_path = "#{ROOT}/views/engineering_garage/email_templates/deleted_event_email.erb"
+      end
+      template = File.read(template_path)
+      body = ERB.new(template).result(binding)
+
+      Emailer.mail(self.email, "#{CONFIG['app']['title']} - Event Deleted: #{event.title}", body)
     end
-    template = File.read(template_path)
-    body = ERB.new(template).result(binding)
-
-    Emailer.mail(self.email, "#{CONFIG['app']['title']} - Event Deleted: #{event.title}", body)
   end
 
   def send_trainer_confirmation_reminder
-    @user = self
+    if self.email && !self.email.empty?
+      @user = self
 
-    template_path = "#{ROOT}/views/innovationstudio/email_templates/confirmation_reminder_email.erb"
-    if SS_ID == 8
-      template_path = "#{ROOT}/views/engineering_garage/email_templates/confirmation_reminder_email.erb"
+      template_path = "#{ROOT}/views/innovationstudio/email_templates/confirmation_reminder_email.erb"
+      if SS_ID == 8
+        template_path = "#{ROOT}/views/engineering_garage/email_templates/confirmation_reminder_email.erb"
+      end
+      template = File.read(template_path)
+      body = ERB.new(template).result(binding)
+
+      Emailer.mail(self.email, "#{CONFIG['app']['title']} - Unconfirmed Training", body)
     end
-    template = File.read(template_path)
-    body = ERB.new(template).result(binding)
-
-    Emailer.mail(self.email, "#{CONFIG['app']['title']} - Unconfirmed Training", body)
   end
 
   def send_vehicle_information_update
-    vehicles = Vehicle.where(:user_id => self.id).all
-    if vehicles.count > 0
-      @summary = ""
+    if self.email && !self.email.empty?
+      vehicles = Vehicle.where(:user_id => self.id).all
+      if vehicles.count > 0
+        @summary = ""
+        @user = self
+        vehicles.each do |vehicle|
+          @summary = @summary + "<p>License Plate: #{vehicle.license_plate}, State: #{vehicle.state}, Make: #{vehicle.make}, Model: #{vehicle.model}</p>"
+        end
+
+        template_path = "#{ROOT}/views/innovationstudio/email_templates/vehicle_info_email.erb"
+        if SS_ID == 8
+          template_path = "#{ROOT}/views/engineering_garage/email_templates/vehicle_info_email.erb"
+        end
+        template = File.read(template_path)
+        body = ERB.new(template).result(binding)
+
+        Emailer.mail(self.email, "#{CONFIG['app']['title']} - Vehicle Information Update", body, CONFIG['app']['email_from'])
+      end
+    end
+  end
+
+  def send_vehicle_information_deleted
+    if self.email && !self.email.empty?
+      vehicles = Vehicle.where(:user_id => self.id).all
+      @summary = "<p>You no longer have any vehicles associated with your account.</p>"
       @user = self
-      vehicles.each do |vehicle|
-        @summary = @summary + "<p>License Plate: #{vehicle.license_plate}, State: #{vehicle.state}, Make: #{vehicle.make}, Model: #{vehicle.model}</p>"
+      if vehicles.count > 0
+        @summary = ""
+        vehicles.each do |vehicle|
+          @summary = @summary + "<p>License Plate: #{vehicle.license_plate}, State: #{vehicle.state}, Make: #{vehicle.make}, Model: #{vehicle.model}</p>"
+        end
       end
 
       template_path = "#{ROOT}/views/innovationstudio/email_templates/vehicle_info_email.erb"
@@ -265,63 +302,46 @@ class User < ActiveRecord::Base
       end
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
-
+      
       Emailer.mail(self.email, "#{CONFIG['app']['title']} - Vehicle Information Update", body, CONFIG['app']['email_from'])
     end
   end
 
-  def send_vehicle_information_deleted
-    vehicles = Vehicle.where(:user_id => self.id).all
-    @summary = "<p>You no longer have any vehicles associated with your account.</p>"
-    @user = self
-    if vehicles.count > 0
-      @summary = ""
-      vehicles.each do |vehicle|
-        @summary = @summary + "<p>License Plate: #{vehicle.license_plate}, State: #{vehicle.state}, Make: #{vehicle.make}, Model: #{vehicle.model}</p>"
-      end
-    end
-
-    template_path = "#{ROOT}/views/innovationstudio/email_templates/vehicle_info_email.erb"
-    if SS_ID == 8
-      template_path = "#{ROOT}/views/engineering_garage/email_templates/vehicle_info_email.erb"
-    end
-    template = File.read(template_path)
-    body = ERB.new(template).result(binding)
-    
-    Emailer.mail(self.email, "#{CONFIG['app']['title']} - Vehicle Information Update", body, CONFIG['app']['email_from'])
-  end
-
   def send_activation_email
-    @user = self
-    template_path = "#{ROOT}/views/innovationstudio/email_templates/activation_email.erb"
-    if SS_ID == 8
-      template_path = "#{ROOT}/views/engineering_garage/email_templates/activation_email.erb"
-    end
-    template = File.read(template_path)
-    body = ERB.new(template).result(binding)
+    if self.email && !self.email.empty?
+      @user = self
+      template_path = "#{ROOT}/views/innovationstudio/email_templates/activation_email.erb"
+      if SS_ID == 8
+        template_path = "#{ROOT}/views/engineering_garage/email_templates/activation_email.erb"
+      end
+      template = File.read(template_path)
+      body = ERB.new(template).result(binding)
 
-    attachments = {}
-    if SS_ID == 1
-      attachments = {
-        "new-member-orientation-parking-map.pdf" => File.read(File.expand_path("../public/pdf/new-member-orientation-parking-map.pdf", File.dirname(__FILE__)))
-      }
-    end
+      attachments = {}
+      if SS_ID == 1
+        attachments = {
+          "new-member-orientation-parking-map.pdf" => File.read(File.expand_path("../public/pdf/new-member-orientation-parking-map.pdf", File.dirname(__FILE__)))
+        }
+      end
 
-    Emailer.mail(self.email, "#{CONFIG['app']['title']} - Getting Started", body, '', attachments)
+      Emailer.mail(self.email, "#{CONFIG['app']['title']} - Getting Started", body, '', attachments)
+    end
   end
 
   def notify_user_of_broken_equipment(reservation)
-    @reservation = reservation
-    @resource = Resource.find(reservation.resource_id)
-    @user = self
-    template_path = "#{ROOT}/views/innovationstudio/email_templates/broken_equipment_email.erb"
-    if SS_ID == 8
-      template_path = "#{ROOT}/views/engineering_garage/email_templates/broken_equipment_email.erb"
-    end
-    template = File.read(template_path)
-    body = ERB.new(template).result(binding)
+    if self.email && !self.email.empty?
+      @reservation = reservation
+      @resource = Resource.find(reservation.resource_id)
+      @user = self
+      template_path = "#{ROOT}/views/innovationstudio/email_templates/broken_equipment_email.erb"
+      if SS_ID == 8
+        template_path = "#{ROOT}/views/engineering_garage/email_templates/broken_equipment_email.erb"
+      end
+      template = File.read(template_path)
+      body = ERB.new(template).result(binding)
 
-    Emailer.mail(self.email, "#{CONFIG['app']['title']} - Reservation Canceled for #{@reservation.start_time.strftime('%m-%d-%Y')}", body)
+      Emailer.mail(self.email, "#{CONFIG['app']['title']} - Reservation Canceled for #{@reservation.start_time.strftime('%m-%d-%Y')}", body)
+    end
   end
 
 end

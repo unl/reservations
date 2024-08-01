@@ -86,14 +86,16 @@ post '/workshops/sign_up/:event_id/?' do
 
 	@event = event
 
-	template_path = "#{ROOT}/views/innovationstudio/email_templates/workshop_signup_email.erb"
-	if SS_ID == 8
-		template_path = "#{ROOT}/views/engineering_garage/email_templates/workshop_signup_email.erb"
+	if @user.email && !@user.email.empty?
+		template_path = "#{ROOT}/views/innovationstudio/email_templates/workshop_signup_email.erb"
+		if SS_ID == 8
+			template_path = "#{ROOT}/views/engineering_garage/email_templates/workshop_signup_email.erb"
+		end
+		template = File.read(template_path)
+		body = ERB.new(template).result(binding)
+		
+		Emailer.mail(@user.email, "#{CONFIG['app']['title']} - #{event.title}", body)
 	end
-	template = File.read(template_path)
-	body = ERB.new(template).result(binding)
-
-	Emailer.mail(@user.email, "#{CONFIG['app']['title']} - #{event.title}", body)
 
 	# flash a message that this works
 	flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, #{event.title} is #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}.")
