@@ -36,6 +36,12 @@ The NPM way to compile less
 1. Run `npm ci` to install less
 2. Run `npm run less` to compile less
 
+### Local Email Testing
+
+A quick way to test emails without having to set up email stuff is to run a SMTP debug server in python
+
+`sudo python -m smtpd -n -c DebuggingServer localhost:25`
+
 ## Installation on server
 
 1. Run `sudo -u {user} -s` run commands as a user and navigate to your project's root
