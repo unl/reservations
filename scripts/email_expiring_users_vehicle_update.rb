@@ -1,3 +1,5 @@
+require 'bundler/setup'
+
 require_relative '../utils/language'
 ENV['RACK_ENV'] ||= 'development'
 # load the config file
