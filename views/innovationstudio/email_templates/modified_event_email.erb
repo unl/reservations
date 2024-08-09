@@ -1,0 +1,8 @@
+<p>Hi, <%= @user.full_name.rstrip %>. You are receiving this email because an event you are training has been modified:</p>
+
+<p><strong><%= @event.title %></strong></p>
+
+<p>You can see the event details on your <a href="<%= CONFIG['app']['URL'] %>home/" target="_blank" rel="noopener">home page</a>.</p>
+
+
+<p>Nebraska Innovation Studio</p>

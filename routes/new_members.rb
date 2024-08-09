@@ -23,6 +23,8 @@ get '/new_members/?' do
 end
 
 get '/hrc/?' do
+	not_found if SS_ID != 1
+
 	@breadcrumbs << {:text => 'HRC Trainings'}
 	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
 
@@ -40,7 +42,10 @@ end
 get '/new_members/sign_up/:event_id/?' do
 	# check if this is a new member signup orientation
 	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
-	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
+	hrc_training_id = nil
+	if SS_ID == 1
+		hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
+	end
 
 	event = Event.includes(:event_signups).find_by(:service_space_id => SS_ID, :id => params[:event_id])
 	if event.nil? || (event.event_type_id != new_member_orientation_id && event.event_type_id != hrc_training_id)
@@ -83,7 +88,10 @@ end
 post '/new_members/sign_up/:event_id/?' do
 	# check if this is a new member signup orientation
 	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
-	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
+	hrc_training_id = nil
+	if SS_ID == 1
+		hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
+	end
 
 	event = Event.includes(:event_signups).find_by(:service_space_id => SS_ID, :id => params[:event_id])
 	if event.nil? || (event.event_type_id != new_member_orientation_id && event.event_type_id != hrc_training_id)
@@ -113,21 +121,6 @@ post '/new_members/sign_up/:event_id/?' do
 		redirect back
 	end
 
-	body = <<EMAIL
-<p>Thank you, #{params[:name]} for signing up for #{event.title}. Don't forget that the event is</p>
-
-<p><strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
-
-<p>Our main entrance is on the northwest side of the Innovation Commons building on 19th St. just off Transformation Drive. Our address is 2021 Transformation Drive, Suite 1500, Entrance B.</p>
-
-<p>For parking, use our <a href="https://innovationstudio-manager.unl.edu/pdf/new-member-orientation-parking-map.pdf">new member orientation parking</a>. Vehicles parked at any other location will be ticketed $50.00.</p>
-
-<p>We'll see you there!</p>
-
-<p>Nebraska Innovation Studio</p>
-EMAIL
-
-
 	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
 
 	if 	!VALID_EMAIL_REGEX.match(params[:email])
@@ -148,7 +141,7 @@ EMAIL
 		# Create a new user name based on the username_parameters, if the name already exists, increment the name.
 		counter = 2
 		while true
-			if User.find_by(:username => "#{username_parameters + counter.to_s}").nil?
+			if User.find_by(:username => "#{username_parameters + counter.to_s}", :service_space_id => SS_ID).nil?
 				user.username = "#{username_parameters + counter.to_s}"
 				break
 			end
@@ -295,18 +288,38 @@ EMAIL
 			:user_id => user.id
 		)
 
-		Emailer.mail(params[:email], "Nebraska Innovation Studio - #{event.title}", body)
+		@name = params[:first_name] + " " + params[:last_name]
+		@event = event
+
+		template_path = "#{ROOT}/views/innovationstudio/email_templates/new_member_email.erb"
+		if SS_ID == 8
+			template_path = "#{ROOT}/views/engineering_garage/email_templates/new_member_email.erb"
+		end
+		template = File.read(template_path)
+		body = ERB.new(template).result(binding)
+
+		Emailer.mail(params[:email], "#{CONFIG['app']['title']} - #{event.title}", body)
 
 		# flash a message that this works
 		flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, this is at #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}. Check your email for more information about the event and where to park.")
-		if event.event_type_id == hrc_training_id
-			robotics_email = <<EMAIL
-<p>There was a new sign up for "#{event.title}" that is at <strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
-<p>The person who signed up is <strong>#{params[:first_name] + " " + params[:last_name]}</strong> and their email is <a href="emailto:#{params[:email]}">#{params[:email]}</a>.</p>
-EMAIL
+		if SS_ID == 1
+			if event.event_type_id == hrc_training_id
+				@name = params[:first_name] + " " + params[:last_name]
+				@email = params[:email]
+				@event = event
 
-			Emailer.mail("nisrobotics@unl.edu", "New HRC Training Sign up", robotics_email);
-			redirect '/hrc/'
+				template_path = "#{ROOT}/views/innovationstudio/email_templates/hrc_signup_email.erb"
+				if SS_ID == 8
+					template_path = "#{ROOT}/views/engineering_garage/email_templates/hrc_signup_email.erb"
+				end
+				template = File.read(template_path)
+				body = ERB.new(template).result(binding)
+
+				Emailer.mail("nisrobotics@unl.edu", "New HRC Training Sign up", robotics_email);
+				redirect '/hrc/'
+			else
+				redirect '/new_members/'
+			end
 		else
 			redirect '/new_members/'
 		end
@@ -323,6 +336,7 @@ end
 
 def verify_recaptcha(options = {})
 	options = {model: options} unless options.is_a? Hash
+	return true if CONFIG['reCaptcha']['site_key'].empty?
 	return true if Recaptcha.skip_env?(options[:env])
 
 	model = options[:model]

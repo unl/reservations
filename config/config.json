@@ -10,5 +10,17 @@
 	"reCaptcha" : {
 		"site_key" : "",
 		"secret_key" : ""
+	},
+	"app" : {
+		"service_space_id": "1",
+		"URL": "https://innovationstudio-manager.unl.edu/",
+		"cookie_domain": "innovationstudio-manager.unl.edu",
+		"email_from": "innovationstudio@unl.edu",
+		"cb_version": "2024022701"
+	},
+	"email" : {
+		"via": ":smtp",
+		"via_address": "localhost",
+		"via_port": "25"
 	}
 }

@@ -1,7 +1,7 @@
 <div id="announcement-notice-container" class="dcf-d-none">
     <div id="announcement-notice" class="dcf-notice dcf-notice-info" data-no-close-button="true" hidden>
-    <h2><span id="announcement-header"></span></h2>
-    <div><span id="announcement-body"></span></div>
+        <h2></h2>
+        <div></div>
     </div>
 </div>
 
@@ -12,8 +12,13 @@
     const announcement_refresh_rate_ms = 30 * 1000;
 
     async function fetch_notice() {
-            const announcement_notice_header = document.getElementById('announcement-header');
-            const announcement_notice_body = document.getElementById('announcement-body');
+            const announcement_notice_header = announcement_notice.querySelector('.dcf-notice-heading');
+            const announcement_notice_body = announcement_notice.querySelector('.dcf-notice-message');
+
+            if (announcement_notice_header == null || announcement_notice_body == null) {
+                console.error('Could Not Find Notice Header or Body');
+                return;
+            }
         try {
             const response = await fetch(announcement_url);
             if (!response.ok) { console.err('Could Not Get Announcements'); return;}

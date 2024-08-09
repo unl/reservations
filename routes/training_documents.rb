@@ -1,11 +1,15 @@
 require 'net/http'
 
 get '/training-documents/?' do
+	not_found if SS_ID != 1
+
 	@breadcrumbs << {:text => 'Training Documents'}
 	erb :training_documents, :layout => :fixed
 end
 
 get '/training-documents/sop/?' do
+	not_found if SS_ID != 1
+
 	@breadcrumbs << {:text => 'Training Documents', :href => '/training-documents'}
 	@breadcrumbs << {:text => 'SOP'}
 

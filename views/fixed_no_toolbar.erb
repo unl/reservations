@@ -11,16 +11,73 @@
       $Id$
     -->
     <!-- TemplateBeginEditable name="doctitle" -->
-    <title><%= @title %> | University of Nebraska&ndash;Lincoln</title>
+    <title><%= CONFIG['app']['title'] %> | University of Nebraska&ndash;Lincoln</title>
     <!-- TemplateEndEditable -->
     <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/head-2-local.html"))).result.gsub('$DEP_VERSION$', template_dep_version) %>
     <!-- TemplateBeginEditable name="head" -->
     <!-- Place optional header elements here -->
-    <link rel="stylesheet" href="/css/innovation_studio.css?cb=2024022701">
-    <link rel="stylesheet" href="/css/jquery-ui.min-custom.css">
+    <link rel="stylesheet" href="/css/main.css?cb=<%= CONFIG['app']['cb_version'] %>">
+    <link rel="stylesheet" href="/css/jquery-ui.min-custom.css?cb=<%= CONFIG['app']['cb_version'] %>">
     <!-- TemplateEndEditable -->
     <!-- TemplateParam name="class" type="text" value="" -->
-    <main class="dcf-main" id="dcf-main" role="main" tabindex="-1" style="padding: 25px;">
+  </head>
+  <body class="unl" data-version="5.3">
+    <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/skip-nav.html"))).result %>
+    <header class="dcf-header dcf-d-none" id="dcf-header" role="banner">
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/header-global-1.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/cta-header-1.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/visit-header-1.html"))).result %>
+      <!-- InstanceBeginEditable name="headervisit" -->
+      <!-- InstanceEndEditable -->
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/visit-header-2.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/apply-header-1.html"))).result %>
+      <!-- InstanceBeginEditable name="headerapply" -->
+      <!-- InstanceEndEditable -->
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/apply-header-2.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/give-header-1.html"))).result %>
+      <!-- InstanceBeginEditable name="headergive" -->
+      <!-- InstanceEndEditable -->
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/give-header-2.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/cta-header-2.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/search.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/header-global-2.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/logo-lockup-1.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/site-affiliation-1.html"))).result %>
+      <!-- InstanceBeginEditable name="affiliation" -->
+      <a href="<%= @affiliation_link %>"><%= @affiliation %></a>
+      <!-- InstanceEndEditable -->
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/site-affiliation-2.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/site-title-1.html"))).result %>
+      <!-- InstanceBeginEditable name="titlegraphic" -->
+      <a class="dcf-txt-h5" href="/"><%= CONFIG['app']['title'] %></a>
+      <!-- InstanceEndEditable -->
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/site-title-2.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/logo-lockup-2.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/html_patches/patched-nav-toggle-group.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/nav-menu-1.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/nav-toggle-btn.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/nav-menu-child-1.html"))).result %>
+      <!-- InstanceBeginEditable name="navlinks" -->
+      <%= erb :'navigation' %>
+      <!-- InstanceEndEditable -->
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/cta-nav-1.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/visit-nav-1.html"))).result %>
+      <!-- InstanceBeginEditable name="navvisit" -->
+      <!-- InstanceEndEditable -->
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/visit-nav-2.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/apply-nav-1.html"))).result %>
+      <!-- InstanceBeginEditable name="navapply" -->
+      <!-- InstanceEndEditable -->
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/apply-nav-2.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/give-nav-1.html"))).result %>
+      <!-- InstanceBeginEditable name="navgive" -->
+      <!-- InstanceEndEditable -->
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/give-nav-2.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/cta-nav-2.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/nav-menu-child-2.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/nav-menu-2.html"))).result %>
+    </header>
+    <main class="dcf-main dcf-pt-8" id="dcf-main" role="main" tabindex="-1">
       <div class="dcf-main-content dcf-wrapper">
         <!-- TemplateBeginEditable name="maincontentarea" -->
             <div class="dcf-bleed">
@@ -54,6 +111,16 @@
             <!-- TemplateEndEditable -->
       </div>
     </main>
+    <footer class="dcf-footer dcf-d-none" id="dcf-footer" role="contentinfo">
+      <!-- TemplateBeginEditable name="optionalfooter" -->
+      <!-- TemplateEndEditable -->
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/footer-global-1.html"))).result %>
+      <!-- TemplateBeginEditable name="contactinfo" -->
+      <%= erb :'local_footer' %>
+      <!-- TemplateEndEditable -->
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/footer-global-2.html"))).result %>
+      <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/noscript.html"))).result %>
+    </footer>
     <%= ERB.new(File.read(File.expand_path("#{ROOT}/public/wdn/templates_5.3/includes/global/js-body-local.html"))).result.gsub('$DEP_VERSION$', template_dep_version) %>
     <!-- TemplateBeginEditable name="jsbody" -->
     <!-- put your custom javascript here -->

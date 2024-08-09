@@ -23,7 +23,7 @@
 
     <div class="dcf-form-group dcf-input-checkbox">
         <input type="checkbox" id="promotional-opt-out" name="promotional_opt_out" <%= 'checked="checked"' if !@user.promotional_email_status %> />
-        <label for="promotional-opt-out">I no longer want to receive promotional emails from Nebraska Innovation Studio.</label>
+        <label for="promotional-opt-out">I no longer want to receive promotional emails from <%= CONFIG['app']['title'] %>.</label>
     </div>
 
     <div class="dcf-form-group">

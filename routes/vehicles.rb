@@ -63,7 +63,7 @@ post '/vehicle/:vehicle_id/edit/?' do
             vehicle.model = model
 
             if params[:user_id].present?
-				user = User.find_by(:id => params[:user_id])
+				user = User.find_by(:id => params[:user_id], :service_space_id => SS_ID)
 				if user.nil?
 					raise StandardError.new "A user does not exist with user ID #{params[:user_id]}"
 				end
@@ -113,7 +113,7 @@ post '/vehicle/add/?' do
             vehicle.model = model			
 
 			if params[:user_id].present?
-				user = User.find_by(:id => params[:user_id])
+				user = User.find_by(:id => params[:user_id], :service_space_id => SS_ID)
 				if user.nil?
 					raise StandardError.new "A user does not exist with user ID #{params[:user_id]}"
 				end
@@ -160,7 +160,7 @@ post '/vehicle/:vehicle_id/delete/?' do
 		vehicle.destroy
 
 		if params[:user_id].present?
-			user = User.find_by(:id => params[:user_id])
+			user = User.find_by(:id => params[:user_id], :service_space_id => SS_ID)
 			if user.nil?
 				raise StandardError.new "A user does not exist with user ID #{params[:user_id]}"
 			end

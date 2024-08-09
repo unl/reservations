@@ -3,6 +3,8 @@ require 'models/event_signup'
 require 'classes/emailer'
 
 get '/tours/?' do
+	not_found if SS_ID != 1
+
 	@breadcrumbs << {:text => 'Tours'}
 	tour_id = EventType.find_by(:description => 'Tour', :service_space_id => SS_ID).id
 
@@ -12,6 +14,8 @@ get '/tours/?' do
 end
 
 get '/tours/sign_up/:event_id/?' do
+	not_found if SS_ID != 1
+
 	@breadcrumbs << {:text => 'Tours', :href => '/tours/'} << {text: 'Sign Up'}
 
 	# check if this is a tour signup
@@ -33,6 +37,8 @@ get '/tours/sign_up/:event_id/?' do
 end
 
 post '/tours/sign_up/:event_id/?' do
+	not_found if SS_ID != 1
+
 	# check if this is a new member signup orientation
 	tour_id = EventType.find_by(:description => 'Tour', :service_space_id => SS_ID).id
 	event = Event.includes(:event_signups).find_by(:service_space_id => SS_ID, :id => params[:event_id])

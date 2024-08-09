@@ -6,6 +6,8 @@ require 'csv'
 require 'date'
 
 get '/export/?' do
+    not_found if SS_ID != 1
+
     require_login
     user_events = Event.includes(:event_type).joins(:event_signups).
 	    where(:event_signups => {:user_id => @user.id}).

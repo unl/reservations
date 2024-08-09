@@ -3,7 +3,7 @@ require 'models/studio_space.rb'
 
 get '/check_in/?' do
 
-    studios = StudioSpace.pluck(:name)
+    studios = StudioSpace.where(:service_space_id => SS_ID).pluck(:name)
 
     reasons = ['Training', 'Personal Project', 'Business Project', 'Class Project']
 

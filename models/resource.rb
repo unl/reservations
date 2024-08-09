@@ -17,6 +17,7 @@ class Resource < ActiveRecord::Base
 	has_many :resource_field_datas, dependent: :destroy
 	alias_method :approvers, :resource_approvers
 
+	# For sercice space 1
     CATEGORY_ART_STUDIO = 1
     CATEGORY_GENERAL = 2
     CATEGORY_METAL_SHOP = 3
@@ -24,7 +25,11 @@ class Resource < ActiveRecord::Base
     CATEGORY_TEXTILES = 5
     CATEGORY_WOOD_SHOP = 6
 
+	# For service space 8
+    CATEGORY_GARAGE = 7
+
     def self.category_options
+		if SS_ID == 1
         {
             CATEGORY_ART_STUDIO => 'Art Studio',
             CATEGORY_GENERAL => 'General',
@@ -33,6 +38,11 @@ class Resource < ActiveRecord::Base
             CATEGORY_TEXTILES => 'Textiles',
             CATEGORY_WOOD_SHOP => 'Wood Shop',
         }
+		elsif SS_ID == 8
+			{
+				CATEGORY_GARAGE => 'Engineering Garage',
+			}
+		end
     end
 
     def self.valid_category_id?(category_id)

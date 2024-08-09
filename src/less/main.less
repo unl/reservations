@@ -3,7 +3,6 @@
 @import "lib/lesshat.less";
 @import "lib/breakpoints.less";
 @import "lib/colors.less";
-@import "lib/fonts.less";
 @import "lib/eventicon-embedded.less";
 
 .clearfix:after {
@@ -46,7 +45,7 @@ select[multiple=multiple] {
 }
 
 .calendar-container {
-	font-family: "Gotham SSm A","Gotham SSm B",Verdana,"Verdana Ref",Geneva,Tahoma,"Lucida Grande","Lucida Sans Unicode","Lucida Sans","DejaVu Sans","Bitstream Vera Sans","Liberation Sans",sans-serif;
+	font-family: Work Sans,"Sans Serif Fallback",sans-serif;
 	width: 100%;
 	text-align: center;
 	.time-labels {
@@ -93,6 +92,7 @@ select[multiple=multiple] {
 		text-align: left;
 		padding: 3px;
 		word-wrap: break-word;
+		color: black;
 		&.new-member-orientation {
 			background: #FFFFB8;
 			border-color: darken(#FFFFB8, 50%);
@@ -206,7 +206,7 @@ select[multiple=multiple] {
 		font-size: .802em !important;
 		margin: 0;
 		border-bottom: 1px solid #474746;
-		font-family: "Gotham SSm A","Gotham SSm B",Verdana,"Verdana Ref",Geneva,Tahoma,"Lucida Grande","Lucida Sans Unicode","Lucida Sans","DejaVu Sans","Bitstream Vera Sans","Liberation Sans",sans-serif;
+		font-family: Work Sans,"Sans Serif Fallback",sans-serif;
 		width: 100%;
 		background-color: #474746;
 		padding: 1em;
@@ -225,7 +225,7 @@ select[multiple=multiple] {
 		margin: 0;
 	    a {
 	    	border-bottom: none;
-	    	font-family: "Gotham SSm A","Gotham SSm B",Verdana,"Verdana Ref",Geneva,Tahoma,"Lucida Grande","Lucida Sans Unicode","Lucida Sans","DejaVu Sans","Bitstream Vera Sans","Liberation Sans",sans-serif;
+			font-family: Work Sans,"Sans Serif Fallback",sans-serif;
 	    }
 	}
 }

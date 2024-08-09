@@ -15,7 +15,7 @@
 less_options = {
   all_on_start: true,
   all_after_change: true,
-  patterns: ['Guardfile', 'src/less/innovation_studio.less'],
+  patterns: ['Guardfile', 'src/less/main.less'],
   output: 'public/css',
   compress: true
 }

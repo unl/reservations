@@ -24,7 +24,7 @@ post '/admin/orientation_attended/?' do
 
     attendees.each do |attendee|
         if params.has_key?("expiration-date_#{attendee.user_id}") && params["expiration-date_#{attendee.user_id}"] != ""
-            user = User.find_by(:id => attendee.user_id)
+            user = User.find_by(:id => attendee.user_id, :service_space_id => SS_ID)
             user.set_expiration_date(calculate_time(params[:"expiration-date_#{attendee.user_id}"], 0, 0, 'am'))
 
             status = "expired"

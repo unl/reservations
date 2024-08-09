@@ -49,9 +49,17 @@
             </div>
 
             <div class="dcf-form-group">
-                <div class="dcf-datepicker">
-                    <label for="expiration-date">Membership Expiration Date</label>
-                    <input id="expiration-date" name="expiration_date" title="Membership Expiration Date" type="text" value="<%= user.expiration_date.strftime('%m/%d/%Y') if user.expiration_date %>" />
+                <h6>Membership</h6>
+                <div class="dcf-form-group dcf-input-checkbox">
+                    <input type="checkbox" id="activate" name="activate" <%= 'checked="checked"' if user.is_active %> />
+                    <label for="activate">Activate</label>
+                </div>
+
+                <div id="expiration-date" class="dcf-form-group <%= 'dcf-d-none' if !user.is_active %>">
+                    <div class="dcf-datepicker">
+                        <label for="expiration-date">Membership Expiration Date</label>
+                        <input id="expiration-date" name="expiration_date" title="Membership Expiration Date" type="text" value="<%= user.expiration_date.strftime('%m/%d/%Y') if user.expiration_date %>" />
+                    </div>
                 </div>
             </div>
 
@@ -217,3 +225,15 @@
         });
     });
 });]) %>
+
+<% append_script_declaration(%q[
+    let activate_checkbox = document.getElementById('activate');
+    let expiration_date_div = document.getElementById('expiration-date');
+    activate_checkbox.addEventListener('change', () => {
+        if ( activate_checkbox.checked ) {
+            expiration_date_div.classList.remove('dcf-d-none');
+        } else {
+            expiration_date_div.classList.add('dcf-d-none');
+        }
+    });
+]) %>
