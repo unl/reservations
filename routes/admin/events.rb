@@ -126,6 +126,8 @@ post '/admin/events/:event_id/signup_list/?' do
 								:event_id => event.id
 							)
 						end
+
+						user.send_attended_orientation_email
 					end
 				end
 			end

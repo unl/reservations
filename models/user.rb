@@ -328,6 +328,20 @@ class User < ActiveRecord::Base
     end
   end
 
+  def send_attended_orientation_email
+    if self.email && !self.email.empty?
+      @user = self
+      template_path = "#{ROOT}/views/innovationstudio/email_templates/attended_orientation_email.erb"
+      if SS_ID == 8
+        template_path = "#{ROOT}/views/engineering_garage/email_templates/attended_orientation_email.erb"
+      end
+      template = File.read(template_path)
+      body = ERB.new(template).result(binding)
+
+      Emailer.mail(self.email, "#{CONFIG['app']['title']} - Getting Started", body)
+    end
+  end
+
   def notify_user_of_broken_equipment(reservation)
     if self.email && !self.email.empty?
       @reservation = reservation
