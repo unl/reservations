@@ -101,6 +101,21 @@ def require_login(redirect_after_login=nil)
   end
 end
 
+def require_active(redirect_to=nil)
+  if !@user.nil? && @user.is_active && !@user.is_super_user
+    if SS_ID == 1
+      flash(:alert, 'You Must Be An Active User', 'That page requires you to be an active user. To activate your account please visit Innovation Studio.')
+    elsif SS_ID == 8
+      flash(:alert, 'You Must Be An Active User', 'That page requires you to be an active user. To activate your account please visit the Engineering Garage.')
+    end
+    if redirect_to.nil?
+      redirect '/'
+    else
+      redirect redirect_to
+    end
+  end
+end
+
 def drupal_link_lookup(key)
   # Leading and Trailing Slash IMPORTANT
   nodes = {

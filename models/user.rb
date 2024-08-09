@@ -82,6 +82,14 @@ class User < ActiveRecord::Base
     self.password_hash = @password
   end
 
+  def is_expired
+    self.get_expiration_date.nil? || self.get_expiration_date < Date.today
+  end
+
+  def is_active
+    !self.get_expiration_date.nil?
+  end
+
   def get_expiration_date
     expiration_date
   end
