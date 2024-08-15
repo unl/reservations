@@ -87,7 +87,7 @@ class User < ActiveRecord::Base
   end
 
   def is_active
-    !self.get_expiration_date.nil?
+    self.active
   end
 
   def get_expiration_date
@@ -107,6 +107,12 @@ class User < ActiveRecord::Base
     self.expiration_date = exp
     self.save
   end
+
+  def set_active(state)
+    self.active = state ? true : false
+    self.save
+  end
+
 
   def date_of_birth
     date_of_birth

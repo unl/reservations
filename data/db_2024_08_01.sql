@@ -3221,6 +3221,7 @@ CREATE TABLE `users` (
   `is_trainer` int(11) DEFAULT 0,
   `imagedata` longblob DEFAULT NULL,
   `imagemime` varchar(255) DEFAULT NULL,
+  `active` tinyint(1) DEFAULT 0,
   `expiration_date` datetime DEFAULT NULL,
   `general_email_status` tinyint(1) DEFAULT 1,
   `promotional_email_status` tinyint(1) DEFAULT 1,

@@ -273,7 +273,9 @@ post '/admin/users/:user_id/edit/?' do
         :university_status => params[:university_status]
     })
 
-    if !(params.checked?('activate')) || params[:expiration_date].nil? || params[:expiration_date].empty?
+    user.set_active(params.checked?('activate'));
+
+    if params[:expiration_date].nil? || params[:expiration_date].empty?
         user.set_expiration_date(nil)
     else
         user.set_expiration_date(calculate_time(params[:expiration_date], 0, 0, 'am'))

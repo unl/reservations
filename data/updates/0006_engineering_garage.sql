@@ -16,3 +16,6 @@ INSERT INTO `event_types` (`id`, `description`, `service_space_id`) VALUES
 
 INSERT INTO `event_types` (`id`, `description`, `service_space_id`) VALUES
 (14, 'General Workshop', 8);
+
+ALTER TABLE `users` ADD COLUMN `active` tinyint(1) DEFAULT 0;
+UPDATE `users` SET `active` = 1;

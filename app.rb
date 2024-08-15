@@ -102,7 +102,7 @@ def require_login(redirect_after_login=nil)
 end
 
 def require_active(redirect_to=nil)
-  if !@user.nil? && @user.is_active && !@user.is_super_user
+  if !@user.nil? && !@user.is_active && !@user.is_super_user?
     if SS_ID == 1
       flash(:alert, 'You Must Be An Active User', 'That page requires you to be an active user. To activate your account please visit Innovation Studio.')
     elsif SS_ID == 8
