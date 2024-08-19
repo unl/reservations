@@ -9,6 +9,7 @@ class Event < ActiveRecord::Base
 	alias_method :type, :event_type
 	alias_method :signups, :event_signups
 
+	# Serivce Space ID 1
     EVENT_TYPE_ID_NEW_MEMBER_ORIENTATION = 1
     EVENT_TYPE_ID_MACHINE_TRAINING = 2
     EVENT_TYPE_ID_ADV_SKILL_BASED_WORKSHOP = 3
@@ -19,17 +20,31 @@ class Event < ActiveRecord::Base
     EVENT_TYPE_ID_TOUR = 8
 	EVENT_TYPE_HRC_TRAINING = 11
 
+	# Serivce Space ID 8
+	EVENT_TYPE_ID_ENGINEERING_NEW_MEMBER_ORIENTATION = 12
+	EVENT_TYPE_ID_ENGINEERING_MACHINE_TRAINING = 13
+	EVENT_TYPE_ID_ENGINEERING_GENERAL_WORKSHOP = 14
+
 	def self.type_options
-        {
-            EVENT_TYPE_ID_NEW_MEMBER_ORIENTATION => 'New Member Orientation',
-            EVENT_TYPE_ID_MACHINE_TRAINING => 'Machine Training',
-			EVENT_TYPE_ID_ADV_SKILL_BASED_WORKSHOP => 'Advanced Skill-Based Workshop',
-			EVENT_TYPE_ID_CREATION_WORKSHOP => 'Creation Workshop',
-			EVENT_TYPE_ID_GENERAL_WORKSHOP => 'General Workshop',
-			EVENT_TYPE_ID_FREE_EVENT => 'Free Event',
-			EVENT_TYPE_ID_RSVP_ONLY_EVENT => 'RSVP Only Event',
-			EVENT_TYPE_HRC_TRAINING => 'HRC Training',
-        }
+		# These correspond with event_types table
+		if SS_ID == 1
+			{
+				EVENT_TYPE_ID_NEW_MEMBER_ORIENTATION => 'New Member Orientation',
+				EVENT_TYPE_ID_MACHINE_TRAINING => 'Machine Training',
+				EVENT_TYPE_ID_ADV_SKILL_BASED_WORKSHOP => 'Advanced Skill-Based Workshop',
+				EVENT_TYPE_ID_CREATION_WORKSHOP => 'Creation Workshop',
+				EVENT_TYPE_ID_GENERAL_WORKSHOP => 'General Workshop',
+				EVENT_TYPE_ID_FREE_EVENT => 'Free Event',
+				EVENT_TYPE_ID_RSVP_ONLY_EVENT => 'RSVP Only Event',
+				EVENT_TYPE_HRC_TRAINING => 'HRC Training',
+			}
+		elsif SS_ID == 8
+			{
+				EVENT_TYPE_ID_ENGINEERING_NEW_MEMBER_ORIENTATION => 'New Member Orientation',
+				EVENT_TYPE_ID_ENGINEERING_MACHINE_TRAINING => 'Machine Training',
+				EVENT_TYPE_ID_ENGINEERING_GENERAL_WORKSHOP => 'General Workshop',
+			}
+		end
     end
 
     EVENT_TYPES_NOT_ALLOWED_FOR_SIGNUP = []
@@ -144,6 +159,6 @@ class Event < ActiveRecord::Base
 	end
 
 	def machine_training_event_type?
-	    self.type.id == EVENT_TYPE_ID_MACHINE_TRAINING
+	    self.type.id == EVENT_TYPE_ID_MACHINE_TRAINING || self.type.id == EVENT_TYPE_ID_ENGINEERING_MACHINE_TRAINING
 	end
 end

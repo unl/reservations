@@ -85,17 +85,17 @@ post '/events/:event_id/sign_up_as_non_member/?' do
 		:email => params[:email]
 	)
 
-	body = <<EMAIL
-<p>Thank you, #{params[:name]} for signing up for #{event.title}. Don't forget that this event is</p>
+	@name = params[:name]
+	@event = event
 
-<p><strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
+	template_path = "#{ROOT}/views/innovationstudio/email_templates/event_signup_nonmember_email.erb"
+	if SS_ID == 8
+		template_path = "#{ROOT}/views/engineering_garage/email_templates/event_signup_nonmember_email.erb"
+	end
+	template = File.read(template_path)
+	body = ERB.new(template).result(binding)
 
-<p>We'll see you there!</p>
-
-<p>Nebraska Innovation Studio</p>
-EMAIL
-
-	Emailer.mail(params[:email], "Nebraska Innovation Studio - #{event.title}", body)
+	Emailer.mail(params[:email], "#{CONFIG['app']['title']} - #{event.title}", body)
 
 	# flash a message that this works
 	flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, #{event.title} is #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}.")
@@ -145,17 +145,18 @@ post '/events/:event_id/sign_up/?' do
 	)
 
 	if !event.free_event_type?
-		body = <<EMAIL
-<p>Thank you, #{@user.full_name} for signing up for #{event.title}. Don't forget that this event is</p>
+		@event = event
 
-<p><strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
-
-<p>We'll see you there!</p>
-
-<p>Nebraska Innovation Studio</p>
-EMAIL
-
-		Emailer.mail(@user.email, "Nebraska Innovation Studio - #{event.title}", body)
+		if @user.email && !@user.email.empty?
+			template_path = "#{ROOT}/views/innovationstudio/email_templates/event_signup_email.erb"
+			if SS_ID == 8
+				template_path = "#{ROOT}/views/engineering_garage/email_templates/event_signup_email.erb"
+			end
+			template = File.read(template_path)
+			body = ERB.new(template).result(binding)
+			
+			Emailer.mail(@user.email, "#{CONFIG['app']['title']} - #{event.title}", body)
+		end
 
 		# flash a message that this works
 		flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, #{event.title} is #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}.")

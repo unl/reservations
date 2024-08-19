@@ -28,7 +28,7 @@ class Emailer
           :bcc => bcc_group,
           :subject => subject,
           :html_body => body,
-          :from => 'innovationstudio@unl.edu',
+          :from => CONFIG['app']['email_from'],
           :via => self.method,
           :via_options => self.method_options,
           :attachments => attachments
@@ -40,7 +40,7 @@ class Emailer
         :bcc => bcc,
         :subject => subject,
         :html_body => body,
-        :from => 'innovationstudio@unl.edu',
+        :from => CONFIG['app']['email_from'],
         :via => self.method,
         :via_options => self.method_options,
         :attachments => attachments
@@ -69,18 +69,21 @@ class Emailer
 
   def self.method
     if ENV['RACK_ENV'] == 'development'
-      :sendmail
-#     :smtp
+      if CONFIG['email']['via'] == ":smtp"
+        :smtp
+      else
+        :sendmail
+      end
     else
       :sendmail
     end
   end
 
   def self.method_options
-    if ENV['RACK_ENV'] == 'development'
+    if ENV['RACK_ENV'] == 'development' && !CONFIG['email']['via_address'].empty?
       {
-        :address => '127.0.0.1',
-        :port => '1025'
+        :address => CONFIG['email']['via_address'],
+        :port => CONFIG['email']['via_port']
       }
     else
       {}

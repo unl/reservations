@@ -1,6 +1,8 @@
 require 'models/maker_request'
 
 get '/maker_request/?' do
+    not_found if SS_ID != 1
+
     @breadcrumbs << {:text => 'Create Maker Request'}
 
     erb :maker_request, :layout => :fixed, :locals => {
@@ -10,6 +12,8 @@ get '/maker_request/?' do
 end
 
 get '/maker_request/how_to' do
+    not_found if SS_ID != 1
+
     @breadcrumbs << {:text => 'How To'}
     require_login
 
@@ -17,6 +21,8 @@ get '/maker_request/how_to' do
 end
 
 get '/maker_request/:maker_request_id/view/?' do
+    not_found if SS_ID != 1
+
     @breadcrumbs << {:text => 'View Maker Request'}
 
     maker_request = Maker_Request.find(params[:maker_request_id])
@@ -29,6 +35,8 @@ get '/maker_request/:maker_request_id/view/?' do
 end
 
 get '/maker_request/:maker_request_uuid/edit/?' do
+    not_found if SS_ID != 1
+
     @breadcrumbs << {:text => 'Edit Maker Request'}
 
     maker_request = Maker_Request.find_by(uuid: params[:maker_request_uuid])
@@ -44,6 +52,8 @@ get '/maker_request/:maker_request_uuid/edit/?' do
 end
 
 get '/maker_request/:maker_request_uuid/manage/?' do
+    not_found if SS_ID != 1
+
     @breadcrumbs << {:text => 'Manage Maker Request'}
 
     maker_request = Maker_Request.find_by(uuid: params[:maker_request_uuid])
@@ -55,6 +65,8 @@ get '/maker_request/:maker_request_uuid/manage/?' do
 end
 
 get '/maker_request/:maker_request_uuid/open/?' do
+    not_found if SS_ID != 1
+
     maker_request = Maker_Request.find_by(uuid: params[:maker_request_uuid])
     not_found if maker_request.nil?
 
@@ -69,6 +81,8 @@ get '/maker_request/:maker_request_uuid/open/?' do
 end
 
 get '/maker_request/:maker_request_uuid/close/?' do
+    not_found if SS_ID != 1
+
     maker_request = Maker_Request.find_by(uuid: params[:maker_request_uuid])
     not_found if maker_request.nil?
 
@@ -83,6 +97,7 @@ get '/maker_request/:maker_request_uuid/close/?' do
 end
 
 get '/maker_request/:maker_request_uuid/delete/?' do
+    not_found if SS_ID != 1
 
     maker_request = Maker_Request.find_by(uuid: params[:maker_request_uuid])
     not_found if maker_request.nil?
@@ -99,6 +114,7 @@ get '/maker_request/:maker_request_uuid/delete/?' do
 end
 
 post '/maker_request/?' do
+    not_found if SS_ID != 1
 
     extras = {
         confirm_email: params[:confirm_email],
@@ -144,6 +160,8 @@ post '/maker_request/?' do
 end
 
 post '/maker_request/:maker_request_uuid/edit/?' do
+    not_found if SS_ID != 1
+
     maker_request = Maker_Request.find_by(uuid: params[:maker_request_uuid])
     not_found if maker_request.nil?
 
@@ -189,6 +207,8 @@ end
 
 
 get '/maker_request/list/?' do
+    not_found if SS_ID != 1
+
     @breadcrumbs << {:text => 'Maker Request List'}
     require_login
 
@@ -202,6 +222,8 @@ get '/maker_request/list/?' do
 end
 
 get '/maker_request/lookup/?' do
+    not_found if SS_ID != 1
+
     @breadcrumbs << {:text => 'Maker Request Lookup'}
 
     lookup_email = ''
@@ -219,6 +241,8 @@ get '/maker_request/lookup/?' do
 end
 
 post '/maker_request/lookup/?' do
+    not_found if SS_ID != 1
+
     maker_requests = []
     if params[:lookup_email].nil? || params[:lookup_email].strip.empty?
         flash :alert, 'Lookup Email', 'Please provide an email to lookup'

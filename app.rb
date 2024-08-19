@@ -5,7 +5,7 @@ require 'models/event'
 
 use Rack::Session::Cookie, :key => 'rack.session',
                            :path => '/',
-                           :domain => (ENV['RACK_ENV'] == 'development' ? nil : 'innovationstudio-manager.unl.edu'),
+                           :domain => CONFIG['app']['cookie_domain'],
                            :secret => 'averymanteroldfatherbesseyhamilton',
                            :old_secret => 'averymanteroldfatherbesseyhamilton',
                            :expire_after => 30*24*60*60
@@ -22,12 +22,14 @@ def flash(type, header, message)
   }
 end
 
-SS_ID = ServiceSpace.where(:name => 'Innovation Studio').first.id
+SS_ID = ServiceSpace.where(:id => CONFIG['app']['service_space_id']).first.id
 
 before do
     # site defaults
     @inline_body_script_content = ''
-    @title = 'Innovation Studio Manager'
+    @affiliation = 'Nebraska Innovation Campus'
+    @affiliation_link = 'https://innovate.unl.edu/'
+    CONFIG['app']['title'] = 'Innovation Studio Manager'
     @breadcrumbs = [
       {
         :href => 'https://www.unl.edu/',
@@ -40,9 +42,31 @@ before do
       },
       {
         :href => '/',
-        :text => 'Innovation Studio Manager'
+        :text => CONFIG['app']['title']
       }
     ]
+
+    if SS_ID == 8
+      @inline_body_script_content = ''
+      @affiliation = 'College of Engineering'
+      @affiliation_link = 'https://engineering.unl.edu/'
+      CONFIG['app']['title'] = 'Engineering Garage'
+      @breadcrumbs = [
+        {
+          :href => 'https://www.unl.edu/',
+          :text => 'Nebraska',
+          :title => 'University of Nebraska&ndash;Lincoln Home'
+        },
+        {
+          :href => 'https://engineering.unl.edu/',
+          :text => 'College of Engineering'
+        },
+        {
+          :href => '/',
+          :text => CONFIG['app']['title']
+        }
+      ]
+    end
 
     session[:init] = true
 
@@ -77,6 +101,21 @@ def require_login(redirect_after_login=nil)
   end
 end
 
+def require_active(redirect_to=nil)
+  if !@user.nil? && !@user.is_active && !@user.is_super_user?
+    if SS_ID == 1
+      flash(:alert, 'You Must Be An Active User', 'That page requires you to be an active user. To activate your account please visit Innovation Studio.')
+    elsif SS_ID == 8
+      flash(:alert, 'You Must Be An Active User', 'That page requires you to be an active user. To activate your account please visit the Engineering Garage.')
+    end
+    if redirect_to.nil?
+      redirect '/'
+    else
+      redirect redirect_to
+    end
+  end
+end
+
 def drupal_link_lookup(key)
   # Leading and Trailing Slash IMPORTANT
   nodes = {
@@ -103,7 +142,7 @@ get '/' do
 end
 
 get '/images/user/:user_id/?' do
-  user = User.find_by(:id => params[:user_id])
+  user = User.find_by(:id => params[:user_id], :service_space_id => SS_ID)
   if user.nil? || user.imagedata.nil?
     raise Sinatra::NotFound
   end

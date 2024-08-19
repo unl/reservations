@@ -56,17 +56,19 @@
                     </div>
                 </div>
 
-                <div id="not_hrc_feed_container" class="dcf-form-group">
-                    <div class="dcf-input-checkbox">
-                        <input type="checkbox" <%= 'checked="checked"' if event.hrc_feed %> id="hrc_feed" name="hrc_feed"><label class="dcf-label" for="hrc_feed">Show on HRC events page</label>
+                <% if SS_ID == 1 %>
+                    <div id="not_hrc_feed_container" class="dcf-form-group">
+                        <div class="dcf-input-checkbox">
+                            <input type="checkbox" <%= 'checked="checked"' if event.hrc_feed %> id="hrc_feed" name="hrc_feed"><label class="dcf-label" for="hrc_feed">Show on HRC events page</label>
+                        </div>
                     </div>
-                </div>
 
-                <div id="hrc_feed_container" class="dcf-form-group">
-                    <div class="dcf-input-checkbox">
-                        <input type="checkbox" <%= 'checked="checked"' if event.hrc_parking %> id="hrc_parking" name="hrc_parking"><label class="dcf-label" for="hrc_parking">HRC event has parking</label>
+                    <div id="hrc_feed_container" class="dcf-form-group">
+                        <div class="dcf-input-checkbox">
+                            <input type="checkbox" <%= 'checked="checked"' if event.hrc_parking %> id="hrc_parking" name="hrc_parking"><label class="dcf-label" for="hrc_parking">HRC event has parking</label>
+                        </div>
                     </div>
-                </div>
+                <% end %>
 
                 <div id="event_code_container" class="dcf-form-group">
                     <label for="event-code">Require Code to Signup <small id="event-code-required" class="dcf-required">Required</small></label>
@@ -267,6 +269,7 @@
                     <input type="file" name="imagedata" id="imagedata" title="Event Image">
                 </div>
             </div>
+            <% if SS_ID == 1 %>
             <div class="visual-island">
                 <div class="vi-header">
                     <label>Export</label>
@@ -283,6 +286,7 @@
                     </div>
                 </div>
             </div>
+            <% end %>
         </div>
     </div>
 
@@ -296,6 +300,7 @@
 <br>
 
 <% append_script_declaration("WDN.initializePlugin('datepickers');") %>
+<% if SS_ID == 1 %>
 <% append_script_declaration(%q[
     const type_select = document.getElementById('type');
     const event_code = document.getElementById('event-code');
@@ -327,44 +332,19 @@
     update_hrc_inputs();
     type_select.addEventListener('input', update_hrc_inputs);
 ])%>
+<% end %>
 <% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {
     $ = require('jquery');
 
     // sets AM/PM radio buttons and mods the time passed if necessary
-    function setAMPM(time) {
-        switch (time) {
-            case 13:
-                if ($('input[name="start_time_am_pm"]:checked').val() === 'pm') {
-                    $('#end-time-am-pm-pm').prop('checked', true);
-                    $('#end-time-am-pm-am').prop('checked', false);
-                } else {
-                    $('#end-time-am-pm-am').prop('checked', true);
-                    $('#end-time-am-pm-pm').prop('checked', false);
-                }
-                time = 1;
-                break;
-
-            case 12:
-                if ($('input[name="start_time_am_pm"]:checked').val() === 'am') {
-                    $('#end-time-am-pm-pm').prop('checked', true);
-                    $('#end-time-am-pm-am').prop('checked', false);
-                } else {
-                    $('#end-time-am-pm-am').prop('checked', true);
-                    $('#end-time-am-pm-pm').prop('checked', false);
-                }
-                break;
-
-            default:
-                if ($('input[name="start_time_am_pm"]:checked').val() === 'pm') {
-                    $('#end-time-am-pm-pm').prop('checked', true);
-                    $('#end-time-am-pm-am').prop('checked', false);
-                } else {
-                    $('#end-time-am-pm-am').prop('checked', true);
-                    $('#end-time-am-pm-pm').prop('checked', false);
-                }
-                break;
+    function setEndTimeAMPM(time) {
+        if (time < 12) {
+            $('#end-time-am-pm-am').prop('checked', true);
+            $('#end-time-am-pm-pm').prop('checked', false);
+        } else {
+            $('#end-time-am-pm-am').prop('checked', false);
+            $('#end-time-am-pm-pm').prop('checked', true);
         }
-        return time;
     }
 
 
@@ -399,33 +379,47 @@
     $('#start-time-hour').change(function (change) {
         start_time_hour = parseInt($('#start-time-hour').val());
         duration = parseInt($('#duration').val());
-        time = start_time_hour + ((duration - (duration % 60)) / 60);
-        time = setAMPM(time);
-        $('#end-time-hour').val(time);
+        duration_hour_delta = Math.floor(duration / 60) % 24;
+        new_end_hour = start_time_hour + duration_hour_delta;
+
+        setEndTimeAMPM(new_end_hour);
+        new_end_hour_in_12 = (new_end_hour % 12);
+        $('#end-time-hour').val(new_end_hour_in_12);
     }).change();
     
     $('#start-time-minute').change(function (change) {
         start_time_minute = parseInt($('#start-time-minute').val());
         start_time_hour = parseInt($('#start-time-hour').val());
         duration = parseInt($('#duration').val());
-        time = start_time_minute + (duration % 60);
-        hour_time = start_time_hour + ((duration - (duration % 60)) / 60);
-        hour_time = setAMPM(hour_time);
-        hour = hour_time + Math.floor(time/60);
-        if (time >= 60){
-            $('#end-time-hour').val(hour % 12);
-            time = setAMPM(time);
-            $('#end-time-minute').val(time);
+        duration_hour_delta = Math.floor(duration / 60) % 24;
+        duration_minute_delta = duration % 60;
+        new_end_hour = start_time_hour + duration_hour_delta;
+        new_end_minute = start_time_minute + duration_minute_delta;
+
+        if (new_end_minute > 60) {
+            new_end_hour = (new_end_hour + 1) % 12;
+            new_end_minute = new_end_minute % 60;
         }
-        else {
-            $('#end-time-hour').val(hour);
-        }
-        $('#end-time-minute').val(time);
+
+        setEndTimeAMPM(new_end_hour);
+        new_end_hour_in_12 = (new_end_hour % 12);
+        $('#end-time-hour').val(new_end_hour_in_12);
+        $('#end-time-minute').val(new_end_minute);
     }).change();
 
     $('#start-date').change(function (change) {
         start_date = $('#start-date').val();
-        $('#end-date').val(start_date); 
+        duration = parseInt($('#duration').val());
+        duration_day_delta = Math.floor(duration / 60 / 24);
+
+        new_start_date = new Date(start_date);
+        new_start_date.setDate(new_start_date.getDate() + duration_day_delta);
+
+        let day = ("0" + new_start_date.getDate()).slice(-2);
+        let month = ("0" + (new_start_date.getMonth() + 1)).slice(-2);
+        let formatted_date = month + '/' + day + '/' + new_start_date.getFullYear();
+
+        $('#end-date').val(formatted_date); 
     }).change();
 
 }]);]) %>

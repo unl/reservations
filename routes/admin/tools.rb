@@ -66,7 +66,7 @@ post '/admin/tools/?' do
 
 	reservations.each do |reservation|
 
-		user_to_email = User.where('id = ?', reservation.user_id)
+		user_to_email = User.where(:service_space_id => SS_ID).where('id = ?', reservation.user_id)
 
 		user_to_email.each do |user|
 			user.notify_user_of_broken_equipment(reservation)

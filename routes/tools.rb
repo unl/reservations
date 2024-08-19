@@ -41,21 +41,27 @@ get '/tools/trainings/?' do
 
 	WHERE_CLAUSE = 'start_time >= ?'
 
+	events_advanced = nil
+	events_creation = nil
+	events_general = nil
+
 	machine_training_id = EventType.find_by(:description => 'Machine Training', :service_space_id => SS_ID).id
 	events = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => machine_training_id).
-        where(WHERE_CLAUSE, Time.now).order(:start_time => :asc).all
+		where(WHERE_CLAUSE, Time.now).order(:start_time => :asc).all
 
-    workshop_id = EventType.find_by(:description => 'Advanced Skill-Based Workshop', :service_space_id => SS_ID).id
-    events_advanced = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => workshop_id).
-        where(WHERE_CLAUSE, Time.now).order(:start_time => :asc).all
+	if SS_ID == 1
+		workshop_id = EventType.find_by(:description => 'Advanced Skill-Based Workshop', :service_space_id => SS_ID).id
+		events_advanced = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => workshop_id).
+			where(WHERE_CLAUSE, Time.now).order(:start_time => :asc).all
 
-    workshop_id = EventType.find_by(:description => 'Creation Workshop', :service_space_id => SS_ID).id
-    events_creation = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => workshop_id).
-        where(WHERE_CLAUSE, Time.now).order(:start_time => :asc).all
+		workshop_id = EventType.find_by(:description => 'Creation Workshop', :service_space_id => SS_ID).id
+		events_creation = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => workshop_id).
+			where(WHERE_CLAUSE, Time.now).order(:start_time => :asc).all
 
-    workshop_id = EventType.find_by(:description => 'General Workshop', :service_space_id => SS_ID).id
-    events_general = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => workshop_id).
-        where(WHERE_CLAUSE, Time.now).order(:start_time => :asc).all
+		workshop_id = EventType.find_by(:description => 'General Workshop', :service_space_id => SS_ID).id
+		events_general = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => workshop_id).
+			where(WHERE_CLAUSE, Time.now).order(:start_time => :asc).all
+	end
 
 
 	erb :trainings, :layout => :fixed, :locals => {
@@ -105,17 +111,18 @@ post '/tools/trainings/sign_up/:event_id/?' do
 		:email => @user.email
 	)
 
-	body = <<EMAIL
-<p>Thank you, #{@user.full_name} for signing up for #{event.title}. Don't forget that this training is</p>
+	@event = event
 
-<p><strong>#{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}</strong>.</p>
-
-<p>We'll see you there!</p>
-
-<p>Nebraska Innovation Studio</p>
-EMAIL
-
-	Emailer.mail(@user.email, "Nebraska Innovation Studio - #{event.title}", body)
+	if @user.email && !@user.email.empty?
+		template_path = "#{ROOT}/views/innovationstudio/email_templates/training_signup_email.erb"
+		if SS_ID == 8
+			template_path = "#{ROOT}/views/engineering_garage/email_templates/training_signup_email.erb"
+		end
+		template = File.read(template_path)
+		body = ERB.new(template).result(binding)
+		
+		Emailer.mail(@user.email, "#{CONFIG['app']['title']} - #{event.title}", body)
+	end
 
 	# flash a message that this works
 	flash(:success, "You're signed up!", "Thanks for signing up! Don't forget, #{event.title} is #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}.")

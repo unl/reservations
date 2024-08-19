@@ -1,3 +1,5 @@
+require 'bundler/setup'
+
 require_relative '../utils/language'
 ENV['RACK_ENV'] ||= 'development'
 # load the config file
@@ -11,7 +13,7 @@ require 'models/user'
 require 'models/service_space'
 require 'models/expiration_reminder'
 
-SS_ID = ServiceSpace.where(:name => 'Innovation Studio').first.id
+SS_ID = ServiceSpace.where(:id => CONFIG['app']['service_space_id']).first.id
 reminder = ExpirationReminder.first
 
 

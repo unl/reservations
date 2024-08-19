@@ -1,0 +1,14 @@
+<h1 class="dcf-txt-h3">Upcoming Machine Trainings and Workshops</h1>
+
+<p>
+    Welcome to the <%= CONFIG['app']['title'] %>! 
+    Before using our equipment, it is necessary to complete training workshops on each
+    type of equipment. Here, you can sign up for upcoming trainings. Take a look at our upcoming offerings:
+</p>
+
+<div class="event-page dcf-mt-6">
+    <h4 id="trainings-table">Trainings</h4>
+    <%= erb :'innovationstudio/event_listing_table', locals: {:id => 4, :events => events, :events_advanced => 'trainings-table'} %>
+
+    <%= erb :'innovationstudio/workshop_listings', locals: {:events_advanced => events_advanced, :events_creation => events_creation, :events_general => events_general} %>
+</div>
