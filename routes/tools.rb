@@ -74,7 +74,6 @@ end
 
 post '/tools/trainings/sign_up/:event_id/?' do
 	require_login
-	require_active("/tools/trainings")
 
 	# check that is a valid event
 	machine_training_id = EventType.find_by(:description => 'Machine Training', :service_space_id => SS_ID).id
@@ -133,7 +132,6 @@ end
 get '/tools/:resource_id/reserve/?' do
 	@breadcrumbs << {:text => 'Tools', :href => '/tools/'} << {:text => 'Reserve'}
 	require_login
-	require_active("/tools")
 
 	# check that the user has authorization to reserve this tool, if tool requires auth
 	tool = Resource.find_by(:service_space_id => SS_ID, :id => params[:resource_id])
@@ -219,7 +217,6 @@ end
 get '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 	@breadcrumbs << {:text => 'Tools', :href => '/tools/'} << {:text => 'Edit Reservation'}
 	require_login
-	require_active("/tools")
 
 	# check that the user has authorization to reserve this tool, if tool requires auth
 	tool = Resource.find_by(:service_space_id => SS_ID, :id => params[:resource_id])
@@ -334,7 +331,6 @@ end
 
 post '/tools/:resource_id/reserve/?' do
 	require_login
-	require_active("/tools")
 
 	# check that the user has authorization to reserve this tool, if tool requires auth
 	tool = Resource.find_by(:service_space_id => SS_ID, :id => params[:resource_id])
@@ -441,7 +437,6 @@ end
 
 post '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 	require_login
-	require_active("/tools")
 
 	# check that the user has authorization to reserve this tool, if tool requires auth
 	tool = Resource.find_by(:service_space_id => SS_ID, :id => params[:resource_id])
@@ -541,7 +536,6 @@ end
 
 post '/tools/:resource_id/cancel/:reservation_id/?' do
 	require_login
-	require_active("/tools")
 
 	# check that the user requesting cancel is the same as the one on the reservation
 	reservation = Reservation.find(params[:reservation_id])

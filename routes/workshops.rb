@@ -39,7 +39,6 @@ end
 
 post '/workshops/sign_up/:event_id/?' do
 	require_login
-	require_active("/workshops")
 
 	workshop_id_advanced = nil
 	workshop_id_creation = nil

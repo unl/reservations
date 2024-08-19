@@ -104,7 +104,6 @@ end
 
 post '/events/:event_id/sign_up/?' do
 	require_login
-	require_active("/events/#{params[:event_id]}")
 
 	# check that is a valid event
 	event = Event.includes(:event_type).find_by(:service_space_id => SS_ID, :id => params[:event_id])
@@ -171,7 +170,6 @@ end
 
 post '/events/:event_id/remove_signup/?' do
 	require_login
-	require_active("/events/#{params[:event_id]}")
 
 	# get the event
 	event = Event.includes(:event_type).where(:id => params[:event_id]).first
@@ -194,7 +192,6 @@ end
 
 post '/events/:event_id/confirm_trainer/?' do
 	require_login
-	require_active("/events/#{params[:event_id]}")
 
 	# get the event
 	event = Event.includes(:event_type).where(:id => params[:event_id]).first
