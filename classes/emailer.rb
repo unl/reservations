@@ -80,7 +80,7 @@ class Emailer
   end
 
   def self.method_options
-    if ENV['RACK_ENV'] == 'development' && !CONFIG['email']['via_address'].empty?
+    if ENV['RACK_ENV'] == 'development' && CONFIG['email']['via_address'] && !CONFIG['email']['via_address'].empty?
       {
         :address => CONFIG['email']['via_address'],
         :port => CONFIG['email']['via_port']

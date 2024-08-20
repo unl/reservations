@@ -10,7 +10,7 @@ require 'utils/database'
 require 'sinatra'
 require 'app'
 
-if CONFIG['app']['cookie_domain'].empty?
+if CONFIG['app']['cookie_domain'].nil? || CONFIG['app']['cookie_domain'].empty?
   set :cookie_options, :domain => nil
 else
   set :cookie_options, :domain => CONFIG['app']['cookie_domain']
