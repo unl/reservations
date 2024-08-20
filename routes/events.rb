@@ -1,5 +1,6 @@
 require 'models/event'
 require 'models/event_signup'
+require 'erb'
 
 MESSAGE_EVENT_NOT_FOUND = 'message_event_not_found'
 MESSAGE_SIGNUP_NOT_ALLOWED = 'message_signup_not_allowed'

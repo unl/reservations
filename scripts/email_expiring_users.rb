@@ -27,13 +27,18 @@ days_before_sending_second_reminder = reminder.get_second_reminder
 
 
 
-users_expiring_first_reminder = User.where(:service_space_id => SS_ID).where('expiration_date >= ? AND expiration_date < ?', (Time.now + days_before_sending_first_reminder.days) - 1.days, Time.now + days_before_sending_first_reminder.days).all
+users_expiring_first_reminder = User.where(:service_space_id => SS_ID).where('expiration_date is not null').all
 users_expiring_second_reminder = User.where(:service_space_id => SS_ID).where('expiration_date >= ? AND expiration_date < ?', (Time.now + days_before_sending_second_reminder.days) - 1.days, Time.now + days_before_sending_second_reminder.days).all
 
+puts users_expiring_first_reminder.inspect
+puts users_expiring_second_reminder.inspect
+
 users_expiring_first_reminder.each do |user|
+	puts user.inspect
 	user.send_membership_expiring_email
 end
 
 users_expiring_second_reminder.each do |user|
+	puts user.inspect
 	user.send_membership_expiring_email
 end

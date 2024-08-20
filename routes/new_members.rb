@@ -3,6 +3,7 @@ require 'models/event_signup'
 require 'models/emergency_contact'
 require 'classes/emailer'
 require 'recaptcha'
+require 'erb'
 
 Recaptcha.configure do |config|
 	config.site_key = CONFIG['reCaptcha']['site_key']

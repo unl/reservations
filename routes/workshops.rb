@@ -4,6 +4,7 @@ require 'models/event'
 require 'models/event_type'
 require 'models/event_signup'
 require 'models/space_hour'
+require 'erb'
 
 get '/workshops/?' do
 	@breadcrumbs << {:text => 'Workshops'}

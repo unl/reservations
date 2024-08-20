@@ -7,6 +7,8 @@ require 'models/resource'
 require 'models/vehicle'
 require 'models/user_has_permission'
 require 'classes/emailer'
+require 'erb'
+
 
 class User < ActiveRecord::Base
   has_many :resource_authorizations, dependent: :destroy
