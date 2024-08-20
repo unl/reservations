@@ -48,14 +48,15 @@ A quick way to test emails without having to set up email stuff is to run a SMTP
 2. Run `cp ./config/config.json ./config/server.json` to copy config file and customize it to your environment
 3. Run `ln -s {path to WDN Templates} {path to project root}/public/wdn` to symlink WDN Templates to your project
 4. Run `/bin/bundler install` to install dependencies
-5. Install database schema by running `./data/db_2024_08_01.sql` and any updates greater than `0006`
-6. You will need to get a service running for unicorn using systemd
+   1. You might need to run `/bin/bundle config set --local path 'vendor/bundle'`
+6. Install database schema by running `./data/db_2024_08_01.sql` and any updates greater than `0006`
+7. You will need to get a service running for unicorn using systemd
     1. Run `cp ./startup.sh.sample ./startup.sh` and customize file for your domain and sock
     2. Run `cp ./unicorn.rb.sample ./unicorn.rb` and customize file for your domain and sock
     3. Run `mkdir -p ~/.config/systemd/user` to set up systemd user directory
     4. Run `cp ./unicorn.service.sample ~/.config/systemd/user/unicorn.service` and customize file for your domain and sock
-7. Run `systemctl --user start unicorn` to start the service
-8. Run `systemctl --user enable unicorn` to start the service on boot
+8. Run `systemctl --user start unicorn` to start the service
+9. Run `systemctl --user enable unicorn` to start the service on boot
 
 ## Deploying Updates on Production/Staging
 
