@@ -173,7 +173,7 @@ post '/admin/email/send/?' do
 
 	# remove invalid emails from list of users
 	users_to_send_to.delete_if do |user|
-		if !user.email.ascii_only?
+		if user.email.nil? || !user.email.ascii_only?
 			invalid_emails << (user.first_name + " " + user.last_name + " " + user.email)
 			true
 		end
