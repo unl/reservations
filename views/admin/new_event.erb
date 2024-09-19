@@ -403,6 +403,11 @@
             new_end_minute = new_end_minute % 60;
         }
 
+        // 60 is not an option so we go back to 0
+        if (new_end_minute === 60) {
+            new_end_minute = 0;
+        }
+
         setEndTimeAMPM(new_end_hour);
         new_end_hour_in_12 = (new_end_hour % 12);
         $('#end-time-hour').val(new_end_hour_in_12);
