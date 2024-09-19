@@ -337,8 +337,9 @@
     $ = require('jquery');
 
     // sets AM/PM radio buttons and mods the time passed if necessary
-    function setEndTimeAMPM(time) {
-        if (time < 12) {
+    function setEndTimeAMPM(new_hour) {
+        new_hour = new_hour % 24;
+        if (new_hour < 12) {
             $('#end-time-am-pm-am').prop('checked', true);
             $('#end-time-am-pm-pm').prop('checked', false);
         } else {
@@ -373,20 +374,14 @@
     }).change();
 
     $('#start-time-hour').change(function (change) {
-        start_time_hour = parseInt($('#start-time-hour').val());
-        if ($('#start-time-am-pm-pm').is(':checked')) {
-            start_time_hour += 12;
-        }
-        duration = parseInt($('#duration').val());
-        duration_hour_delta = Math.floor(duration / 60) % 24;
-        new_end_hour = start_time_hour + duration_hour_delta;
-
-        setEndTimeAMPM(new_end_hour);
-        new_end_hour_in_12 = (new_end_hour % 12);
-        $('#end-time-hour').val(new_end_hour_in_12);
+        update_time();
     }).change();
 
     $('#start-time-minute').change(function (change) {
+        update_time();
+    }).change();
+
+    function update_time() {
         start_time_minute = parseInt($('#start-time-minute').val());
         start_time_hour = parseInt($('#start-time-hour').val());
         if ($('#start-time-am-pm-pm').is(':checked')) {
@@ -398,21 +393,22 @@
         new_end_hour = start_time_hour + duration_hour_delta;
         new_end_minute = start_time_minute + duration_minute_delta;
 
-        if (new_end_minute > 60) {
-            new_end_hour = (new_end_hour + 1) % 12;
+        if (new_end_minute >= 60) {
+            new_end_hour = new_end_hour + 1;
             new_end_minute = new_end_minute % 60;
-        }
-
-        // 60 is not an option so we go back to 0
-        if (new_end_minute === 60) {
-            new_end_minute = 0;
         }
 
         setEndTimeAMPM(new_end_hour);
         new_end_hour_in_12 = (new_end_hour % 12);
+
+        // 0 is not a valid time but 12 is
+        if (new_end_hour_in_12 === 0) {
+            new_end_hour_in_12 = 12;
+        }
+
         $('#end-time-hour').val(new_end_hour_in_12);
         $('#end-time-minute').val(new_end_minute);
-    }).change();
+    }
 
     $('#start-date').change(function (change) {
         start_date = $('#start-date').val();
