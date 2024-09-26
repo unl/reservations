@@ -31,10 +31,10 @@
                     </div>
                 </td>
                 <td class="table-actions">
-                    <a href="/admin/tools/<%= tool.id %>/edit/" class="dcf-btn dcf-btn-primary dcf-mt-1">Edit</a>
-                    <form method="POST" action="/admin/tools/<%= tool.id %>/delete/" class="dcf-form delete-form delete-tool">
-                        <button class="dcf-btn dcf-btn-secondary dcf-mt-1" type="submit">Delete</button>
-                    </form>
+                    <div>
+                        <a href="/admin/tools/<%= tool.id %>/edit/" class="dcf-btn dcf-btn-primary">Edit</a>
+                        <input class="dcf-btn dcf-btn-secondary" type="submit" form="delete-form-<%= tool.id %>" value="Delete">
+                    </div>
                 </td>
             </tr>
         <% end %>
@@ -44,12 +44,12 @@
     <button class="dcf-btn dcf-btn-primary" type="submit">Update Tools INOP Statuses</button>   
 </form>
 
-<% append_script_declaration(%q[require(['jquery'], function($) {
-    $(document).ready(function() {
-        $('.delete-tool').submit(function (submit) {
-            if (!window.confirm('Are you sure you want to delete this tool?')) {
-                submit.preventDefault();
-            }
-        });
-    });
-});]) %>
+<% tools.each do |tool| %>
+    <form
+        method="POST"
+        id="delete-form-<%= tool.id %>"
+        action="/admin/tools/<%= tool.id %>/delete/"
+        class="dcf-form delete-form delete-tool dcf-d-none"
+        onSubmit="return confirm('Are you sure you want to delete <%= tool.name %>?') "
+    ></form>
+<% end %>
