@@ -17,6 +17,17 @@ USER_STATII = [
     'Community'
 ]
 
+if SS_ID === 8
+    USER_STATII = [
+        'None',
+        'NU Student',
+        'NU Faculty',
+        'NU Staff',
+        'NU Alumni',
+        'Non-NU Student (All Other Institutions)',
+    ]
+end
+
 EXPIRATION_DATE_SEARCH_OPERATIONS = [
     '<',
     '&le;',

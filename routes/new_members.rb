@@ -4,6 +4,8 @@ require 'models/emergency_contact'
 require 'classes/emailer'
 require 'recaptcha'
 require 'erb'
+require 'json'
+require 'net/http'
 
 Recaptcha.configure do |config|
 	config.site_key = CONFIG['reCaptcha']['site_key']
@@ -129,86 +131,138 @@ post '/new_members/sign_up/:event_id/?' do
 		session[:form_data] = params
 		redirect back
 	else
-
 		user_info = {"first_name" => params[:first_name],"last_name" => params[:last_name],"email" => params[:email],"university_status" => params[:university_status]}
 		user = User.new(user_info)
 
-		# Username parameters:
-		# First letter of first name
-		# First 5 letters of last name
-		# New usernames, append a number on the end starting at 2.
-		username_parameters = params[:first_name][0].downcase + params[:last_name][0...5].downcase
+		if SS_ID === 8
+			content = ''
 
-		# Create a new user name based on the username_parameters, if the name already exists, increment the name.
-		counter = 2
-		while true
-			if User.find_by(:username => "#{username_parameters + counter.to_s}", :service_space_id => SS_ID).nil?
-				user.username = "#{username_parameters + counter.to_s}"
-				break
-			end
-			counter = counter + 1
-		end
-
-		vehicle1 = Vehicle.new
-		license_plate1 = params[:license_plate1]
-		state1 = params[:state1]
-		make1 = params[:make1]
-		model1 = params[:model1]
-
-		vehicle2 = Vehicle.new
-		license_plate2 = params[:license_plate2]
-		state2 = params[:state2]
-		make2 = params[:make2]
-		model2 = params[:model2]
-
-		vehicle3 = Vehicle.new
-		license_plate3 = params[:license_plate3]
-		state3 = params[:state3]
-		make3 = params[:make3]
-		model3 = params[:model3]
-
-		vehicle1_flag = !license_plate1.blank? && !state1.blank? && !make1.blank? && !model1.blank?
-
-		if vehicle1_flag 
+			# Try to get user uid from directory api
 			begin
-				vehicle1.license_plate = license_plate1
-				vehicle1.state = state1
-				vehicle1.make = make1
-				vehicle1.model = model1
-			rescue => exception
-				flash(:error, 'Vehicle 1 Addition Failed', exception.message)
+				content = fetch_final_content("https://directory.unl.edu/api/v1/emailToUID?email=#{params[:email]}")
+			rescue => e
+				# Handle directory API failure gracefully (e.g., log error, show custom error message)
+				logger.error "Could not get user UID: #{ params[:email]}" # Logging the error
+				flash(:danger, "Error getting your user", "We could not get your user based on your email. If the issue persists, then please contact an administrator.")
 				session[:form_data] = params
 				redirect back
 			end
-		end
 
-		vehicle2_flag = !license_plate2.blank? && !state2.blank? && make2.blank? && !model2.blank?
-
-		if vehicle2_flag 
-			begin
-				vehicle2.license_plate = license_plate2
-				vehicle2.state = state2
-				vehicle2.make = make2
-				vehicle2.model = model2
-			rescue => exception
-				flash(:error, 'Vehicle 2 Addition Failed', exception.message)
+			# Check to make sure it is valid json
+			if valid_json?(content) === false
+				logger.error "Could not get user UID: #{ params[:email]}" # Logging the error
+				flash(:danger, "Error getting your user", "There was an error parsing your user data. If the issue persists, then please contact an administrator.")
 				session[:form_data] = params
 				redirect back
 			end
-		end
 
-		vehicle3_flag = !license_plate3.blank? && !state3.blank? && !make3.blank? && !model3.blank?
+			# Parse it
+			json_parse_content = JSON.parse(content)
 
-		if vehicle3_flag 
-			begin
-				vehicle3.license_plate = license_plate3
-				vehicle3.state = state3
-				vehicle3.make = make3
-				vehicle3.model = model3
-			rescue => exception
-				flash(:error, 'Vehicle 3 Addition Failed', exception.message)
+			# Check to make sure things went ok
+			if json_parse_content['status'] != 200
+				logger.error "Could not get user UID: #{ params[:email]}" # Logging the error
+				flash(:danger, "Error getting your user", "There was an error getting your user data. If the issue persists, then please contact an administrator.")
 				session[:form_data] = params
 				redirect back
+			end
+
+			# Check to make sure we have data and it is formatted right
+			if json_parse_content.key?('message') === false || json_parse_content['message'].key?('data') === false || json_parse_content['message']['data'].empty?
+				logger.error "Could not get user UID: #{ params[:email]}" # Logging the error
+				flash(:danger, "Error getting your user", "We could not parse your user based on your email. If the issue persists, then please contact an administrator.")
+				session[:form_data] = params
+				redirect back
+			end
+
+			# Get the username and double check we don't have duplicates
+			username = json_parse_content['message']['data'][0]
+			unless User.find_by(:username => username, :service_space_id => SS_ID).nil?
+				flash(:danger, "Error creating your user", "A user with that email or username is already exists. If you believe this to be an error, please contact an administrator.")
+				session[:form_data] = params
+				redirect back
+			end
+
+			# Set the username
+			user.username = username
+		else
+			# Username parameters:
+			# First letter of first name
+			# First 5 letters of last name
+			# New usernames, append a number on the end starting at 2.
+			username_parameters = params[:first_name][0].downcase + params[:last_name][0...5].downcase
+
+			# Create a new user name based on the username_parameters, if the name already exists, increment the name.
+			counter = 2
+			while true
+				if User.find_by(:username => "#{username_parameters + counter.to_s}", :service_space_id => SS_ID).nil?
+					user.username = "#{username_parameters + counter.to_s}"
+					break
+				end
+				counter = counter + 1
+			end
+
+			vehicle1 = Vehicle.new
+			license_plate1 = params[:license_plate1]
+			state1 = params[:state1]
+			make1 = params[:make1]
+			model1 = params[:model1]
+
+			vehicle2 = Vehicle.new
+			license_plate2 = params[:license_plate2]
+			state2 = params[:state2]
+			make2 = params[:make2]
+			model2 = params[:model2]
+
+			vehicle3 = Vehicle.new
+			license_plate3 = params[:license_plate3]
+			state3 = params[:state3]
+			make3 = params[:make3]
+			model3 = params[:model3]
+
+			vehicle1_flag = !license_plate1.blank? && !state1.blank? && !make1.blank? && !model1.blank?
+
+			if vehicle1_flag 
+				begin
+					vehicle1.license_plate = license_plate1
+					vehicle1.state = state1
+					vehicle1.make = make1
+					vehicle1.model = model1
+				rescue => exception
+					flash(:error, 'Vehicle 1 Addition Failed', exception.message)
+					session[:form_data] = params
+					redirect back
+				end
+			end
+
+			vehicle2_flag = !license_plate2.blank? && !state2.blank? && make2.blank? && !model2.blank?
+
+			if vehicle2_flag 
+				begin
+					vehicle2.license_plate = license_plate2
+					vehicle2.state = state2
+					vehicle2.make = make2
+					vehicle2.model = model2
+				rescue => exception
+					flash(:error, 'Vehicle 2 Addition Failed', exception.message)
+					session[:form_data] = params
+					redirect back
+				end
+			end
+
+			vehicle3_flag = !license_plate3.blank? && !state3.blank? && !make3.blank? && !model3.blank?
+
+			if vehicle3_flag 
+				begin
+					vehicle3.license_plate = license_plate3
+					vehicle3.state = state3
+					vehicle3.make = make3
+					vehicle3.model = model3
+				rescue => exception
+					flash(:error, 'Vehicle 3 Addition Failed', exception.message)
+					session[:form_data] = params
+					redirect back
+				end
 			end
 		end
 
@@ -267,17 +321,20 @@ post '/new_members/sign_up/:event_id/?' do
 				user.secondary_emergency_contact_id = emergency2.id
 			end
 			user.save
-			if vehicle1_flag
-				vehicle1.user_id = user.id
-				vehicle1.save
-			end
-			if vehicle2_flag
-				vehicle2.user_id = user.id
-				vehicle2.save
-			end
-			if vehicle3_flag
-				vehicle3.user_id = user.id
-				vehicle3.save
+
+			if SS_ID != 8
+				if vehicle1_flag
+					vehicle1.user_id = user.id
+					vehicle1.save
+				end
+				if vehicle2_flag
+					vehicle2.user_id = user.id
+					vehicle2.save
+				end
+				if vehicle3_flag
+					vehicle3.user_id = user.id
+					vehicle3.save
+				end
 			end
 		end
 
@@ -325,6 +382,40 @@ post '/new_members/sign_up/:event_id/?' do
 			redirect '/new_members/'
 		end
 	end
+end
+
+def fetch_final_content(uri)
+	url = URI.parse(uri)
+	
+	begin
+		response = Timeout::timeout(10) { Net::HTTP.get_response(url) } # Timeout after 10 seconds
+	
+		# Follow redirects (if any) until we reach the final destination
+		while response.is_a?(Net::HTTPRedirection)
+			url = URI.parse(response['location'])
+			response = Net::HTTP.get_response(url)
+		end
+
+		# Handle 404 or other HTTP error responses
+		case response
+		when Net::HTTPSuccess
+			response.body
+		when Net::HTTPNotFound
+			raise "Page not found (404)"
+		else
+			raise "HTTP error: #{response.code} #{response.message}"
+		end
+	rescue Timeout::Error
+		raise "Request timed out"
+	rescue => e
+		raise "Failed to fetch content: #{e.message}"
+	end
+end
+
+def valid_json?(string)
+	!!JSON.parse(string)
+rescue JSON::ParserError
+	false
 end
 
 
