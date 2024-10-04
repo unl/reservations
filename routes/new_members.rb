@@ -143,7 +143,7 @@ post '/new_members/sign_up/:event_id/?' do
 			rescue => e
 				# Handle directory API failure gracefully (e.g., log error, show custom error message)
 				logger.error "Could not get user UID: #{ params[:email]}" # Logging the error
-				flash(:danger, "Error getting your user", "We could not get your user based on your email. If the isse persists then please contact an administrator.")
+				flash(:danger, "Error getting your user", "We could not get your user based on your email. If the issue persists, then please contact an administrator.")
 				session[:form_data] = params
 				redirect back
 			end
@@ -151,7 +151,7 @@ post '/new_members/sign_up/:event_id/?' do
 			# Check to make sure it is valid json
 			if valid_json?(content) === false
 				logger.error "Could not get user UID: #{ params[:email]}" # Logging the error
-				flash(:danger, "Error getting your user", "There was an error parsing your user data. If the isse persists then please contact an administrator.")
+				flash(:danger, "Error getting your user", "There was an error parsing your user data. If the issue persists, then please contact an administrator.")
 				session[:form_data] = params
 				redirect back
 			end
@@ -162,7 +162,7 @@ post '/new_members/sign_up/:event_id/?' do
 			# Check to make sure things went ok
 			if json_parse_content['status'] != 200
 				logger.error "Could not get user UID: #{ params[:email]}" # Logging the error
-				flash(:danger, "Error getting your user", "There was an error getting your user data. If the isse persists then please contact an administrator.")
+				flash(:danger, "Error getting your user", "There was an error getting your user data. If the issue persists, then please contact an administrator.")
 				session[:form_data] = params
 				redirect back
 			end
@@ -170,7 +170,7 @@ post '/new_members/sign_up/:event_id/?' do
 			# Check to make sure we have data and it is formatted right
 			if json_parse_content.key?('message') === false || json_parse_content['message'].key?('data') === false || json_parse_content['message']['data'].empty?
 				logger.error "Could not get user UID: #{ params[:email]}" # Logging the error
-				flash(:danger, "Error getting your user", "We could not parse your user based on your email. If the isse persists then please contact an administrator.")
+				flash(:danger, "Error getting your user", "We could not parse your user based on your email. If the issue persists, then please contact an administrator.")
 				session[:form_data] = params
 				redirect back
 			end
@@ -178,7 +178,7 @@ post '/new_members/sign_up/:event_id/?' do
 			# Get the username and double check we don't have duplicates
 			username = json_parse_content['message']['data'][0]
 			unless User.find_by(:username => username, :service_space_id => SS_ID).nil?
-				flash(:danger, "Error creating your user", "A user with that email or username is already created. If you beleive this to be an error please contact an administrator.")
+				flash(:danger, "Error creating your user", "A user with that email or username is already exists. If you believe this to be an error, please contact an administrator.")
 				session[:form_data] = params
 				redirect back
 			end
