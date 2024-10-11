@@ -211,12 +211,13 @@ post '/new_members/sign_up/:event_id/?' do
 			json_parse_content = JSON.parse(content)
 
 			# Check to make sure we have data and it is formatted right
-			if json_parse_content.key?('unluncwid') === false || json_parse_content['unluncwid'].empty?
-				logger.error "Could not get user NUID: #{username}" # Logging the error
-				flash(:danger, "Error getting your NUID", "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator(2).#{json_parse_content['unluncwid']}#{json_parse_content['uid']}")
-				session[:form_data] = params
-				redirect back
-			end
+			
+			#if json_parse_content.key?('unluncwid') === false || json_parse_content['unluncwid'].empty?
+			#	logger.error "Could not get user NUID: #{username}" # Logging the error
+			#	flash(:danger, "Error getting your NUID", "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator(2).#{json_parse_content['unluncwid']}#{json_parse_content['uid']}")
+			#	session[:form_data] = params
+			#	redirect back
+			#end
 
 			# Get the username and double check we don't have duplicates
 			user_nuid = json_parse_content['unluncwid']
