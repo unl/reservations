@@ -5,7 +5,9 @@
             <li><a href="/tools/trainings/">Trainings</a></li>
             <li><a href="/workshops/">Workshops</a></li>
             <li><a href="/calendar/">Event Calendar</a></li>
-            <li><a href="/pricing/">Material Pricing</a></li>
+            <% if SS_ID == 8 %>
+                <li><a href="/pricing/">Material Pricing</a></li>
+            <% end %>
         </ul>
         </li>
         <li><a href="/tools/">Reserve Equipment</a></li>
