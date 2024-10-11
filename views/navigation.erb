@@ -5,7 +5,7 @@
             <li><a href="/tools/trainings/">Trainings</a></li>
             <li><a href="/workshops/">Workshops</a></li>
             <li><a href="/calendar/">Event Calendar</a></li>
-            <% if SS_ID == 8 %>
+            <% if SS_ID == 8 && @user.is_admin? %>
                 <li><a href="/pricing/">Material Pricing</a></li>
             <% end %>
         </ul>
