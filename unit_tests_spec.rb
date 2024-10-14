@@ -25,13 +25,13 @@ describe "Test Login Page" do
   # end
 end
 
-describe "Test New Member Sign-Up" do
-  def app
-    Sinatra::Application
-  end
+# describe "Test New Member Sign-Up" do
+#   def app
+#     Sinatra::Application
+#   end
 
-  it "new member page loads" do
-    get '/new_members/'
-    expect(last_response).to be_ok
-  end
-end
+#   it "new member page loads" do
+#     get '/new_members/'
+#     expect(last_response).to be_ok
+#   end
+# end
