@@ -13,12 +13,6 @@
     "rm -rf ./wdn/wdn",
     "nvm install 16"
   ],
-  "addons": {
-    "sonarcloud": {
-      "organization": "cseseniordesign",
-      "token": "$SONAR_TOKEN"
-    }
-  },
   "branches": {
     "only": [
       "travis-ci"
@@ -29,6 +23,5 @@
   "script": [
     "cd $TRAVIS_BUILD_DIR/",
     "rspec -I . unit_tests_spec.rb",
-    "sonar-scanner"
   ]
 }
