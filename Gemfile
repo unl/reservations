@@ -16,6 +16,7 @@ gem 'bigdecimal'
 gem 'recaptcha'
 gem 'rufus-scheduler'
 gem 'highlander'
+gem 'rubocop', require: 'false'
 
 group :development do
   gem 'shotgun'
