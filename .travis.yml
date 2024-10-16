@@ -1,9 +1,11 @@
 {
   "before_install": [
     "gem install bundler -v 2.4.22",
+    "gem install rubocop",
+    "gem install rspec",
     "bundle install",
     "sudo apt-get -y install unzip",
-    "sudo apt-get -y install ruby-rspec-core",
+    # "sudo apt-get -y install ruby-rspec-core",
     "touch config/server.json",
     # "sh config_setup.sh -u $DB_USER -p $DB_PASS -c $CAPTCHA_SITE_KEY -s $CAPTCHA_SECRET_KEY",
     "cd $TRAVIS_BUILD_DIR/public",
@@ -22,7 +24,7 @@
   "rvm": "2.6.10",
   "script": [
     "cd $TRAVIS_BUILD_DIR/",
-    "rubocop",
-    # TODO "rspec -I . unit_tests_spec.rb",
+    "rubocop -l",
+    "rspec -I . unit_tests_spec.rb",
   ]
 }
