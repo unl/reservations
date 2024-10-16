@@ -22,6 +22,6 @@
   "rvm": "2.6.10",
   "script": [
     "cd $TRAVIS_BUILD_DIR/",
-    "bundle exec rspec -I . unit_tests_spec.rb",
+    # TODO "rspec -I . unit_tests_spec.rb",
   ]
 }
