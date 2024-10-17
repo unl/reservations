@@ -22,7 +22,7 @@
   "rvm": "2.6.10",
   "script": [
     "cd $TRAVIS_BUILD_DIR/",
-    "git diff --name-only --cached | grep '\.rb$' | xargs rubocop -l",
+    "git diff --name-only --cached | grep '\\.rb$' | xargs rubocop -l",
     # "rspec -I . unit_tests_spec.rb",
   ]
 }
