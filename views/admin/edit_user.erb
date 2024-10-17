@@ -207,28 +207,23 @@
                 </table>
             </div>
         <% end %>
-    <% end %>
-    
-    <% if SS_ID != 8 %>
         <% if vehicles.count < 3 %>
             <a href="/vehicle/add/?user_id=<%= user.id %>">
                 <button type="submit" class="dcf-mt-1 dcf-btn dcf-btn-primary" style="margin-top:20px !important;">Add Vehicle</button>
             </a>
         <% end %>
+        <% append_script_declaration(%q[require(['jquery'], function($) {
+            $(document).ready(function() {
+                $('.delete-vehicle').submit(function (submit) {
+                    if (!window.confirm('Are you sure you want to delete this vehicle?')) {
+                        submit.preventDefault();
+                    }
+                });
+            });
+        });]) %>
     <% end %>
 
     <% append_script_declaration("WDN.initializePlugin('datepickers');") %>
-
-    <% append_script_declaration(%q[require(['jquery'], function($) {
-
-        $(document).ready(function() {
-            $('.delete-vehicle').submit(function (submit) {
-                if (!window.confirm('Are you sure you want to delete this vehicle?')) {
-                    submit.preventDefault();
-                }
-            });
-        });
-});]) %>
 
 <% append_script_declaration(%q[
     let activate_checkbox = document.getElementById('activate');
