@@ -288,7 +288,7 @@ post '/admin/events/create/?' do
 		redirect back
 	end 
 
-	if params[:timeless_event_checkbox] == "0"
+	if params[:timeless_event_checkbox] != "on"
 		if  params[:start_date].blank?
 			flash :error, 'Error', 'Please enter event start date'
 			redirect back
@@ -313,13 +313,13 @@ post '/admin/events/create/?' do
 	event.set_image_data(params)
 	event.set_data(params)
 
-	if event.end_time.in_time_zone < event.start_time.in_time_zone && params[:timeless_event_checkbox] == "off"
+	if event.end_time.in_time_zone < event.start_time.in_time_zone && params[:timeless_event_checkbox] != "on"
 		event.delete
 		flash :alert, "Start and end times create a negative duration.", "Sorry, the selected times cannot be used to create an event. Please try different day or time. Please double check your event information."
 		redirect back
 	end 
 
-	if params.has_key?('reserve_tool') && params['reserve_tool'] == 'on' && !params[:tools].nil? && params[:timeless_event_checkbox] == "off"
+	if params.has_key?('reserve_tool') && params['reserve_tool'] == 'on' && !params[:tools].nil? && params[:timeless_event_checkbox] != "on"
         # check for possible other reservations during this time period
         date = event.start_time.midnight.in_time_zone
         params[:tools].each do |tool_id|
