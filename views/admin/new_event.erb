@@ -171,77 +171,84 @@
                 </div>
                 <br>
 
-                <label for="start-date" >Start Date &amp; Time <small class="dcf-required">Required</small></label>
-                <div class="date-time-select">
-                    <div class="dcf-datepicker">
-                        <input id="start-date" value="<%= event.start_time.in_time_zone.strftime('%m/%d/%Y') if !event.start_time.nil? %>" name="start_date" title="Start Date" type="text" />
-                    </div>
-                    <div class="dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mt-4 dcf-mr-4">
-                    <span class="dcf-pr-2">@</span>
-                        <select class="dcf-flex-grow-1 dcf-input-select" id="start-time-hour" name="start_time_hour" title="Start Time Hour">
-                            <option value=""></option>
-                            <% (1..12).each do |i| %>
-                            <option <%= 'selected="selected"' if !event.start_time.nil? && event.start_time.in_time_zone.hour.to_i % 12 == i % 12 %> value="<%= i %>"><%= i %></option>
-                            <% end %>
-                        </select> :
+                <div class="dcf-input-checkbox dcf-mt-6">
+                        <input type="checkbox" <%= 'checked="checked"' if event.is_private %> id="timeless_event_checkbox" name="timeless_event_checkbox">
+                        <label for="timeless_event_checkbox">Timeless event</label>
+                </div>
 
-                        <select class="dcf-flex-grow-1 dcf-input-select" id="start-time-minute" name="start_time_minute" title="Start Time Minute">
-                            <option value=""></option>
-                            <% (0..11).each do |i| %>
-                            <option <%= 'selected="selected"' if !event.start_time.nil? && event.start_time.in_time_zone.min == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
-                            <% end %>
-                        </select>
+                <div id="date-picker-group">
+                    <label for="start-date" >Start Date &amp; Time <small class="dcf-required">Required</small></label>
+                    <div class="date-time-select">
+                        <div class="dcf-datepicker">
+                            <input id="start-date" value="<%= event.start_time.in_time_zone.strftime('%m/%d/%Y') if !event.start_time.nil? %>" name="start_date" title="Start Date" type="text" />
+                        </div>
+                        <div class="dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mt-4 dcf-mr-4">
+                        <span class="dcf-pr-2">@</span>
+                            <select class="dcf-flex-grow-1 dcf-input-select" id="start-time-hour" name="start_time_hour" title="Start Time Hour">
+                                <option value=""></option>
+                                <% (1..12).each do |i| %>
+                                <option <%= 'selected="selected"' if !event.start_time.nil? && event.start_time.in_time_zone.hour.to_i % 12 == i % 12 %> value="<%= i %>"><%= i %></option>
+                                <% end %>
+                            </select> :
 
-                        <div id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
-                            <div class="dcf-d-flex dcf-ai-center">
-                                <div class="dcf-input-radio">
-                                    <input <%= 'checked="checked"' if !event.start_time.nil? && event.start_time.in_time_zone.hour < 12 %> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm" class="dcf-flex-shrink-0">
-                                    <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-am">AM</label>
+                            <select class="dcf-flex-grow-1 dcf-input-select" id="start-time-minute" name="start_time_minute" title="Start Time Minute">
+                                <option value=""></option>
+                                <% (0..11).each do |i| %>
+                                <option <%= 'selected="selected"' if !event.start_time.nil? && event.start_time.in_time_zone.min == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
+                                <% end %>
+                            </select>
+
+                            <div id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
+                                <div class="dcf-d-flex dcf-ai-center">
+                                    <div class="dcf-input-radio">
+                                        <input <%= 'checked="checked"' if !event.start_time.nil? && event.start_time.in_time_zone.hour < 12 %> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm" class="dcf-flex-shrink-0">
+                                        <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-am">AM</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="dcf-d-flex dcf-ai-center">
-                                <div class="dcf-input-radio">
-                                    <input <%= 'checked="checked"' if event.start_time.nil? || event.start_time.in_time_zone.hour >= 12 %> id="start-time-am-pm-pm" title="PM" type="radio" value="pm" name="start_time_am_pm" class="dcf-flex-shrink-0">
-                                    <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-pm">PM</label>
+                                <div class="dcf-d-flex dcf-ai-center">
+                                    <div class="dcf-input-radio">
+                                        <input <%= 'checked="checked"' if event.start_time.nil? || event.start_time.in_time_zone.hour >= 12 %> id="start-time-am-pm-pm" title="PM" type="radio" value="pm" name="start_time_am_pm" class="dcf-flex-shrink-0">
+                                        <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-pm">PM</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <label for="end-date">End Date &amp; Time <small class="dcf-form-help">(optional)</small></label>
-                <div class="date-time-select">
-                    <div class="dcf-datepicker">
-                        <input id="end-date" value="<%= event.end_time.in_time_zone.strftime('%m/%d/%Y') if !event.end_time.nil? %>" name="end_date" title="End Date" type="text" />
-                    </div>
+                    <label for="end-date">End Date &amp; Time <small class="dcf-form-help">(optional)</small></label>
+                    <div class="date-time-select">
+                        <div class="dcf-datepicker">
+                            <input id="end-date" value="<%= event.end_time.in_time_zone.strftime('%m/%d/%Y') if !event.end_time.nil? %>" name="end_date" title="End Date" type="text" />
+                        </div>
 
-                     <div class="dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mt-4 dcf-mr-4">
-                        <span class="dcf-pr-2">@</span>
-                        <select class="dcf-flex-grow-1 dcf-input-select" id="end-time-hour" name="end_time_hour" title="End Time Hour">
-                            <option value=""></option>
-                            <% (1..12).each do |i| %>
-                            <option <%= 'selected="selected"' if !event.end_time.nil? && event.end_time.in_time_zone.hour.to_i % 12 == i % 12 %> value="<%= i %>"><%= i %></option>
-                            <% end %>
-                        </select> :
+                        <div class="dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mt-4 dcf-mr-4">
+                            <span class="dcf-pr-2">@</span>
+                            <select class="dcf-flex-grow-1 dcf-input-select" id="end-time-hour" name="end_time_hour" title="End Time Hour">
+                                <option value=""></option>
+                                <% (1..12).each do |i| %>
+                                <option <%= 'selected="selected"' if !event.end_time.nil? && event.end_time.in_time_zone.hour.to_i % 12 == i % 12 %> value="<%= i %>"><%= i %></option>
+                                <% end %>
+                            </select> :
 
-                        <select class="dcf-flex-grow-1 dcf-input-select" id="end-time-minute" name="end_time_minute" title="End Time Minute">
-                            <option value=""></option>
-                            <% (0..11).each do |i| %>
-                            <option <%= 'selected="selected"' if !event.end_time.nil? && event.end_time.in_time_zone.min == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
-                            <% end %>
-                        </select>
+                            <select class="dcf-flex-grow-1 dcf-input-select" id="end-time-minute" name="end_time_minute" title="End Time Minute">
+                                <option value=""></option>
+                                <% (0..11).each do |i| %>
+                                <option <%= 'selected="selected"' if !event.end_time.nil? && event.end_time.in_time_zone.min == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
+                                <% end %>
+                            </select>
 
-                        <div id="end-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
-                            <div class="dcf-d-flex dcf-ai-center">
-                                <div class="dcf-input-radio">
-                                    <input <%= 'checked="checked"' if !event.end_time.nil? && event.end_time.in_time_zone.hour < 12 %> id="end-time-am-pm-am" title="AM" type="radio" value="am" name="end_time_am_pm" class="dcf-flex-shrink-0">
-                                    <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-am">AM</label>
+                            <div id="end-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
+                                <div class="dcf-d-flex dcf-ai-center">
+                                    <div class="dcf-input-radio">
+                                        <input <%= 'checked="checked"' if !event.end_time.nil? && event.end_time.in_time_zone.hour < 12 %> id="end-time-am-pm-am" title="AM" type="radio" value="am" name="end_time_am_pm" class="dcf-flex-shrink-0">
+                                        <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-am">AM</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="dcf-d-flex dcf-ai-center">
-                                <div class="dcf-input-radio">
-                                    <input <%= 'checked="checked"' if event.end_time.nil? || event.end_time.in_time_zone.hour >= 12 %> id="end-time-am-pm-pm" title="PM" type="radio" value="pm" name="end_time_am_pm" class="dcf-flex-shrink-0">
-                                    <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-pm">PM</label>
+                                <div class="dcf-d-flex dcf-ai-center">
+                                    <div class="dcf-input-radio">
+                                        <input <%= 'checked="checked"' if event.end_time.nil? || event.end_time.in_time_zone.hour >= 12 %> id="end-time-am-pm-pm" title="PM" type="radio" value="pm" name="end_time_am_pm" class="dcf-flex-shrink-0">
+                                        <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-pm">PM</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -355,6 +362,15 @@
             $('#tools-for-reserving').hide();
         }
     });
+
+    $('#timeless_event_checkbox').click(function(click) {
+        if ($('#timeless_event_checkbox').is(':checked')) {
+            $('#date-picker-group').hide();
+        } else {
+            $('#date-picker-group').show();
+        }
+    });
+    
 
     $('#location').change(function (change) {
         if ($(this).val() == 'new') {
