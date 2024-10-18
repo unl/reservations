@@ -35,7 +35,7 @@ get '/admin/events/?' do
 		where_clause = 'start_time < ?', Time.now
 		order_clause = {:start_time => :desc}
 	else
-		where_clause = 'start_time >= ?', Time.now
+		where_clause = 'start_time >= ? OR start_time IS NULL', Time.now
 		order_clause = {:start_time => :asc}
 	end
 
