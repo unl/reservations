@@ -106,8 +106,10 @@ class Event < ActiveRecord::Base
 		self.title = params[:title]
 		self.description = params[:description]
 		self.admin_notes = params[:admin_notes]
-		self.start_time = calculate_time(params[:start_date], params[:start_time_hour], params[:start_time_minute], params[:start_time_am_pm])
-		self.end_time = calculate_time(params[:end_date], params[:end_time_hour], params[:end_time_minute], params[:end_time_am_pm])
+		if params[:timeless_event_checkbox] == "off"
+			self.start_time = calculate_time(params[:start_date], params[:start_time_hour], params[:start_time_minute], params[:start_time_am_pm])
+			self.end_time = calculate_time(params[:end_date], params[:end_time_hour], params[:end_time_minute], params[:end_time_am_pm])
+		end
 		self.event_type_id = params[:type]
 		self.trainer_id = params[:trainer]
 		self.location_id = params[:location]
