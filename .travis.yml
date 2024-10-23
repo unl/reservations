@@ -17,10 +17,10 @@
     "sudo apt-get install -y mariadb-server mariadb-client",
     "sudo service mysql start",
     "mysql -e 'CREATE DATABASE reservations;'",
-    "mysql -e 'CREATE USER \'$DB_USER\'@\'localhost\' IDENTIFIED BY \'$DB_PASS\';'"
-    "mysql -e 'GRANT ALL PRIVILEGES ON reservations.* TO \'$DB_USER\'@\'localhost\';'"
+    "mysql -e \"CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';\""
+    "mysql -e \"GRANT ALL PRIVILEGES ON reservations.* TO '$DB_USER'@'localhost';\""
     "mysql reservations < ./data/db_2024_08_01.sql",
-    "mysql -e 'USE reservations; INSERT INTO users (username, service_space_id) VALUES (\'ethan\', 8);'",
+    "mysql -e \"USE reservations; INSERT INTO users (username, service_space_id) VALUES ('ethan', 8);\"",
   ],
   "branches": {
     "only": [
