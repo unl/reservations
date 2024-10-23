@@ -109,6 +109,9 @@ class Event < ActiveRecord::Base
 		if params[:timeless_event_checkbox] != "on"
 			self.start_time = calculate_time(params[:start_date], params[:start_time_hour], params[:start_time_minute], params[:start_time_am_pm])
 			self.end_time = calculate_time(params[:end_date], params[:end_time_hour], params[:end_time_minute], params[:end_time_am_pm])
+		else
+			self.start_time = nil
+			self.end_time = nil
 		end
 		self.event_type_id = params[:type]
 		self.trainer_id = params[:trainer]
