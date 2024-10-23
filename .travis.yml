@@ -1,6 +1,6 @@
 {
   "before_install": [
-    "ssh eeckhardt2@ucommsrv2.unl.edu",
+    "ssh ucommsrv2.unl.edu",
     "$SSH_PASS",
     # "gem install bundler -v 2.4.22",
     # "bundle install",
