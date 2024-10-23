@@ -7,4 +7,4 @@ do
         s) secret=${OPTARG};;
     esac
 done
-echo "{\"database\":{\"adapter\":\"mysql2\",\"host\":\"cse.unl.edu\",\"username\":\"$username\",\"password\":\"$password\",\"database\":\"reservation\"},\"reCaptcha\":{\"site_key\":\"$site\",\"secret_key\":\"$secret\"}}" > config/server.json
+echo "{\"database\":{\"adapter\":\"mysql2\",\"host\":\"localhost\",\"username\":\"$username\",\"password\":\"$password\",\"database\":\"reservation\"},\"reCaptcha\":{\"site_key\":\"$site\",\"secret_key\":\"$secret\"}}" > config/server.json
