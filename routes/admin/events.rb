@@ -298,8 +298,12 @@ post '/admin/events/create/?' do
 			flash :error, 'Error', 'Please enter event end date'
 			redirect back
 		end
+	else
+		if params['reserve_tool'] == 'on'
+			flash :error, 'Error', 'Reservation not allowed for timeless event'
+			redirect back
+		end
 	end
-
 
 	if params[:location] == 'new'
 		# this is a new location, we must create it!
@@ -321,7 +325,7 @@ post '/admin/events/create/?' do
 		end 
 	
 
-		if params.has_key?('reserve_tool') && params['reserve_tool'] == 'on' && !params[:tools].nil? && params[:timeless_event_checkbox] != "on"
+		if params.has_key?('reserve_tool') && params['reserve_tool'] == 'on' && !params[:tools].nil?
 					# check for possible other reservations during this time period
 					date = event.start_time.midnight.in_time_zone
 					params[:tools].each do |tool_id|
@@ -515,7 +519,13 @@ post '/admin/events/:event_id/edit/?' do
 			flash :error, 'Error', 'Please enter event end date'
 			redirect back
 		end
+	else
+		if params['reserve_tool'] == 'on'
+			flash :error, 'Error', 'Reservation not allowed for timeless event'
+			redirect back
+		end
 	end
+
 	old_trainer = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_id)
 
     # remember original start/end times
@@ -616,8 +626,8 @@ post '/admin/events/:event_id/edit/?' do
 									:is_training => true,
 									:user_id => nil
 							)
-					end
 			end
+		end
 	end
 
 	delete_old_authorizations = EventAuthorization.where(event_id: event.id).all
