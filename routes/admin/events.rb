@@ -319,31 +319,32 @@ post '/admin/events/create/?' do
 			flash :alert, "Start and end times create a negative duration.", "Sorry, the selected times cannot be used to create an event. Please try different day or time. Please double check your event information."
 			redirect back
 		end 
-	end
+	
 
-	if params.has_key?('reserve_tool') && params['reserve_tool'] == 'on' && !params[:tools].nil? && params[:timeless_event_checkbox] != "on"
-        # check for possible other reservations during this time period
-        date = event.start_time.midnight.in_time_zone
-        params[:tools].each do |tool_id|
-            other_reservations = Reservation.where(:resource_id => tool_id).in_day(date).all
-            other_reservations.each do |reservation|
-                if event.start_time.in_time_zone < reservation.end_time.in_time_zone && reservation.start_time.in_time_zone < event.end_time.in_time_zone
-                    event.delete
-                    flash :alert, "A tool is being used.", "Sorry, a selected tool is reserved during that time period. Please try different day or time."
-                    redirect back
-                end
-            end
+		if params.has_key?('reserve_tool') && params['reserve_tool'] == 'on' && !params[:tools].nil? && params[:timeless_event_checkbox] != "on"
+					# check for possible other reservations during this time period
+					date = event.start_time.midnight.in_time_zone
+					params[:tools].each do |tool_id|
+							other_reservations = Reservation.where(:resource_id => tool_id).in_day(date).all
+							other_reservations.each do |reservation|
+									if event.start_time.in_time_zone < reservation.end_time.in_time_zone && reservation.start_time.in_time_zone < event.end_time.in_time_zone
+											event.delete
+											flash :alert, "A tool is being used.", "Sorry, a selected tool is reserved during that time period. Please try different day or time."
+											redirect back
+									end
+							end
 
-            # we need to create a reservation for the tool on the appropriate time
-            Reservation.create(
-                :resource_id => tool_id,
-                :event_id => event.id,
-                :start_time => event.start_time,
-                :end_time => event.end_time,
-                :is_training => true,
-                :user_id => nil
-            )
-        end
+							# we need to create a reservation for the tool on the appropriate time
+							Reservation.create(
+									:resource_id => tool_id,
+									:event_id => event.id,
+									:start_time => event.start_time,
+									:end_time => event.end_time,
+									:is_training => true,
+									:user_id => nil
+							)
+					end
+			end
 	end
 
 	if params.checked?('authorize_tools_checkbox') and !params[:specific_tools].nil?
@@ -461,19 +462,35 @@ get '/admin/events/:event_id/edit/?' do
 			tool.model.to_s.downcase
 		]
 	end
-	erb :'admin/new_event', :layout => :fixed, :locals => {
-		:event => event,
-		:types => EventType.where(:service_space_id => SS_ID).all,
-		:trainers => User.where(:is_trainer => 1, :service_space_id => SS_ID).all,
-		:locations => Location.where(:service_space_id => SS_ID).all,
-		:tools => tools,
-		:all_tools => all_tools,
-		:authorized_tools_ids => authorized_tools_ids,
-		:on_unl_events => on_unl_events,
-		:on_main_calendar => on_main_calendar,
-		:duration => ((event.end_time - event.start_time)/60.0).round,
-		:hrc_training_id => hrc_training_id
-	}
+	if event.start_time != nil
+		erb :'admin/new_event', :layout => :fixed, :locals => {
+			:event => event,
+			:types => EventType.where(:service_space_id => SS_ID).all,
+			:trainers => User.where(:is_trainer => 1, :service_space_id => SS_ID).all,
+			:locations => Location.where(:service_space_id => SS_ID).all,
+			:tools => tools,
+			:all_tools => all_tools,
+			:authorized_tools_ids => authorized_tools_ids,
+			:on_unl_events => on_unl_events,
+			:on_main_calendar => on_main_calendar,
+			:duration => ((event.end_time - event.start_time)/60.0).round,
+			:hrc_training_id => hrc_training_id
+		}
+	else
+		erb :'admin/new_event', :layout => :fixed, :locals => {
+			:event => event,
+			:types => EventType.where(:service_space_id => SS_ID).all,
+			:trainers => User.where(:is_trainer => 1, :service_space_id => SS_ID).all,
+			:locations => Location.where(:service_space_id => SS_ID).all,
+			:tools => tools,
+			:all_tools => all_tools,
+			:authorized_tools_ids => authorized_tools_ids,
+			:on_unl_events => on_unl_events,
+			:on_main_calendar => on_main_calendar,
+			:duration => 0,
+			:hrc_training_id => hrc_training_id
+		}
+	end
 end
 
 post '/admin/events/:event_id/edit/?' do
@@ -489,16 +506,16 @@ post '/admin/events/:event_id/edit/?' do
 		redirect back
 	end 
 
-	if  params[:start_date].blank?
-		flash :error, 'Error', 'Please enter event start date'
-		redirect back
+	if params[:timeless_event_checkbox] != "on"
+		if  params[:start_date].blank?
+			flash :error, 'Error', 'Please enter event start date'
+			redirect back
+		end
+		if  params[:end_date].blank?
+			flash :error, 'Error', 'Please enter event end date'
+			redirect back
+		end
 	end
-
-	if  params[:end_date].blank?
-		flash :error, 'Error', 'Please enter event end date'
-		redirect back
-	end
-
 	old_trainer = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_id)
 
     # remember original start/end times
@@ -520,86 +537,88 @@ post '/admin/events/:event_id/edit/?' do
 	end
 	event.set_data(params)
 
-	if event.end_time.in_time_zone < event.start_time.in_time_zone
-		event.update(start_time: original_event_start_time, end_time: original_event_end_time)
-		flash :alert, "Start and end times create a negative duration.", "Sorry, the selected times cannot be used to create an event. Please try different day or time. Please double check your event information."
-		redirect back
-	end 
+	if params[:timeless_event_checkbox] != "on"
+		if event.end_time.in_time_zone < event.start_time.in_time_zone
+			event.update(start_time: original_event_start_time, end_time: original_event_end_time)
+			flash :alert, "Start and end times create a negative duration.", "Sorry, the selected times cannot be used to create an event. Please try different day or time. Please double check your event information."
+			redirect back
+		end 
 
-	# check the tool reservation for this
-	checked = params.checked?('reserve_tool') && !params[:tools].nil?
+		# check the tool reservation for this
+		checked = params.checked?('reserve_tool') && !params[:tools].nil?
 
-    if (checked)
-        # check for possible other reservations during this time period
-        date = event.start_time.midnight.in_time_zone
-        params[:tools].each do |tool_id|
-            other_reservations = Reservation.where(:resource_id => tool_id).in_day(date).all
-            other_reservations.each do |reservation|
-                # ignore reservations for same the event
-                next if reservation.event_id == event.id
+			if (checked)
+					# check for possible other reservations during this time period
+					date = event.start_time.midnight.in_time_zone
+					params[:tools].each do |tool_id|
+							other_reservations = Reservation.where(:resource_id => tool_id).in_day(date).all
+							other_reservations.each do |reservation|
+									# ignore reservations for same the event
+									next if reservation.event_id == event.id
 
-                if event.start_time.in_time_zone < reservation.end_time.in_time_zone && reservation.start_time.in_time_zone < event.end_time.in_time_zone
-                    # reset event times since reservation failed
-                    event.update(start_time: original_event_start_time, end_time: original_event_end_time)
+									if event.start_time.in_time_zone < reservation.end_time.in_time_zone && reservation.start_time.in_time_zone < event.end_time.in_time_zone
+											# reset event times since reservation failed
+											event.update(start_time: original_event_start_time, end_time: original_event_end_time)
 
-                    # show error and display event form
-                    flash :alert, "A tool is being used.", "Sorry, a selected tool is reserved during that time period. Please try different day or time."
-                    redirect back
-                end
-            end
-        end
-    end
+											# show error and display event form
+											flash :alert, "A tool is being used.", "Sorry, a selected tool is reserved during that time period. Please try different day or time."
+											redirect back
+									end
+							end
+					end
+			end
 
-    if event.has_reservation && checked
-        # create or update selected tool reservations
-        params[:tools].each do |tool_id|
-            if event.has_tool_reservation(tool_id)
-                # update the reservation
-                event.reservation.update(
-                    :resource_id => params[tool_id],
-                    :event_id => event.id,
-                    :start_time => event.start_time,
-                    :end_time => event.end_time,
-                    :is_training => true,
-                    :user_id => nil
-                )
-            else
-                # create the reservation
-                Reservation.create(
-                    :resource_id => tool_id,
-                    :event_id => event.id,
-                    :start_time => event.start_time,
-                    :end_time => event.end_time,
-                    :is_training => true,
-                    :user_id => nil
-                )
-            end
-        end
+			if event.has_reservation && checked
+					# create or update selected tool reservations
+					params[:tools].each do |tool_id|
+							if event.has_tool_reservation(tool_id)
+									# update the reservation
+									event.reservation.update(
+											:resource_id => params[tool_id],
+											:event_id => event.id,
+											:start_time => event.start_time,
+											:end_time => event.end_time,
+											:is_training => true,
+											:user_id => nil
+									)
+							else
+									# create the reservation
+									Reservation.create(
+											:resource_id => tool_id,
+											:event_id => event.id,
+											:start_time => event.start_time,
+											:end_time => event.end_time,
+											:is_training => true,
+											:user_id => nil
+									)
+							end
+					end
 
-        # remove any old tool reservations
-        event.reservation.each do |r|
-            if !r.resource.nil? && !params[:tools].include?(r.resource.id)
-                r.delete
-            end
-        end
-    elsif event.has_reservation && !checked
-        # remove all event reservations
-        event.reservation.each do |r|
-            r.delete
-        end
-    elsif !event.has_reservation && checked
-        params[:tools].each do |tool_id|
-            # create the reservation
-            Reservation.create(
-                :resource_id => tool_id,
-                :event_id => event.id,
-                :start_time => event.start_time,
-                :end_time => event.end_time,
-                :is_training => true,
-                :user_id => nil
-            )
-        end
-    end
+					# remove any old tool reservations
+					event.reservation.each do |r|
+							if !r.resource.nil? && !params[:tools].include?(r.resource.id)
+									r.delete
+							end
+					end
+			elsif event.has_reservation && !checked
+					# remove all event reservations
+					event.reservation.each do |r|
+							r.delete
+					end
+			elsif !event.has_reservation && checked
+					params[:tools].each do |tool_id|
+							# create the reservation
+							Reservation.create(
+									:resource_id => tool_id,
+									:event_id => event.id,
+									:start_time => event.start_time,
+									:end_time => event.end_time,
+									:is_training => true,
+									:user_id => nil
+							)
+					end
+			end
+	end
 
 	delete_old_authorizations = EventAuthorization.where(event_id: event.id).all
     delete_old_authorizations.destroy_all

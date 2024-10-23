@@ -172,10 +172,10 @@
                 <br>
 
                 <div class="dcf-input-checkbox dcf-mt-6">
-                        <input type="checkbox" <%= 'checked="checked"' if event.is_private %> id="timeless_event_checkbox" name="timeless_event_checkbox">
+                        <input type="checkbox" <%= 'checked="checked"' if event.start_time == nil && event.title != nil %> id="timeless_event_checkbox" name="timeless_event_checkbox">
                         <label for="timeless_event_checkbox">Timeless event</label>
                 </div>
-
+                
                 <div id="date-picker-group">
                     <label for="start-date" >Start Date &amp; Time <small class="dcf-required">Required</small></label>
                     <div class="date-time-select">
@@ -363,13 +363,22 @@
         }
     });
 
-    $('#timeless_event_checkbox').click(function(click) {
-        if ($('#timeless_event_checkbox').is(':checked')) {
-            $('#date-picker-group').hide();
-        } else {
-            $('#date-picker-group').show();
+    $(document).ready(function () {
+        function toggleDatePicker() {
+            if ($('#timeless_event_checkbox').is(':checked')) {
+                $('#date-picker-group').hide();
+            } else {
+                $('#date-picker-group').show();
+            }
         }
+
+        toggleDatePicker();
+
+        $('#timeless_event_checkbox').change(function () {
+            toggleDatePicker();
+        });
     });
+
     
 
     $('#location').change(function (change) {
