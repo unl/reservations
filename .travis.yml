@@ -20,6 +20,7 @@ before_install:
   - cd $TRAVIS_BUILD_DIR
   - sudo mysql reservations < ./data/db_2024_08_01.sql
   - sudo mysql -e "USE reservations; INSERT INTO users (username, service_space_id) VALUES ('eeckhardt2', 8);"
+  - sudo mysql -e "USE reservations; SELECT * FROM users;"
 
 branches:
   only:
