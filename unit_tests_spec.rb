@@ -11,7 +11,7 @@ describe "Test Login Page" do
   end
 
   it "successful login with valid credentials" do
-    post '/login/?', params={:username => "ethan", :password => "Welcome123"}
+    post '/login/?', params={:username => "eeckhardt2", :password => "Welcome123"}
     follow_redirect!
     expect(last_response).to be_ok
     expect(last_response.body).to include('Welcome to Innovation Studio Manager.')
