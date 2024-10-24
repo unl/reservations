@@ -23,7 +23,7 @@ describe "Test Login Page" do
 #     expect(last_response).to be_ok
 #     expect(last_response.body).to include('Username/password combination is incorrect.')
 #   end
-# end
+end
 
 # describe "Test New Member Sign-Up" do
 #   def app
