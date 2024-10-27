@@ -26,7 +26,7 @@ get '/admin/events/?' do
 	page = params[:page]
 	page = page.to_i >= 1 ? page.to_i : 1
 	page_size = 10
-	tab = ['upcoming', 'past'].include?(params[:tab]) ? params[:tab] : 'upcoming'
+	tab = ['upcoming', 'past', 'timeless'].include?(params[:tab]) ? params[:tab] : 'upcoming'
 	preset_events = PresetEvents.where(:service_space_id => SS_ID).order(event_name: :asc).all.to_a
 	event_type = params[:event_type]
 
@@ -34,9 +34,11 @@ get '/admin/events/?' do
 	when 'past'
 		where_clause = 'start_time < ?', Time.now
 		order_clause = {:start_time => :desc}
-	else
-		where_clause = 'start_time >= ? OR start_time IS NULL', Time.now
+	when 'upcoming'
+		where_clause = 'start_time >= ?', Time.now
 		order_clause = {:start_time => :asc}
+	else
+		where_clause = 'start_time IS NULL', Time.now
 	end
 
 	iterator = Event.includes(:event_signups).where(:service_space_id => SS_ID).where(where_clause)
