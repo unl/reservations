@@ -114,6 +114,11 @@
                                     <button type="submit" class="dcf-mt-1 dcf-btn dcf-btn-primary">Delete</button>
                                     </form>
                                     <% end %>
+                                    <% if event.info_link %>
+                                    <form class="dcf-form inline-form">
+                                    <a href="<%= event.info_link %>" class="dcf-mt-1 dcf-btn dcf-btn-primary">Link</a>
+                                    </form>
+                                    <% end %>
                                     </td>
                                 </tr>
                                 <% end %>
@@ -176,6 +181,11 @@
                                 <% if has_permission?(Permission::MANAGE_EVENTS) %>
                                 <form class="dcf-form delete-event delete-form" action="/admin/events/<%=event.id%>/delete/" method="POST">
                                 <button type="submit" class="dcf-mt-1 dcf-btn dcf-btn-primary">Delete</button>
+                                </form>
+                                <% end %>
+                                <% if event.info_link %>
+                                <form class="dcf-form inline-form">
+                                <a href="<%= event.info_link %>" class="dcf-mt-1 dcf-btn dcf-btn-primary">Link</a>
                                 </form>
                                 <% end %>
                                 </td>
