@@ -38,6 +38,13 @@
 		<input type="checkbox" <%= 'checked="checked"' if tool.is_reservable || tool.id.nil? %> name='is_reservable' id="is-reservable">
 		<label for="is-reservable">Requires Reservation? <span class="dcf-txt-xs">(User must reserve before may use)</span></label>
 	</div>
+    
+    <% if SS_ID == 8 %>
+        <div class="dcf-form-group dcf-input-checkbox">
+            <input type="checkbox" <%= 'checked="checked"' if tool.is_24_hour || tool.id.nil? %> name='is_24_hour' id="is-24-hour">
+            <label for="is-24-hour">Available for 24-hour use? <span class="dcf-txt-xs">(Allows use of the tool outside of business hours)</span></label>
+        </div>
+    <% end %>
 
 	<div class="dcf-form-group">
         <label for="max-reservations-per-user">User Reservation Limit</label><br>
