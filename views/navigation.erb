@@ -8,7 +8,13 @@
             <li><a href="/pricing/">Material Pricing</a></li>
         </ul>
         </li>
-        <li><a href="/tools/">Reserve Equipment</a></li>
+        <li><a href="/tools/">Reserve Equipment</a>
+        <% if SS_ID == 8 %>
+            <ul>
+                <li><a href="/checkout/">Checkout</a></li>
+            </ul>
+        <% end %>
+        </li>
         <% if SS_ID == 1 %>
             <li><a href="/training-documents">Training Documents</a>
                 <ul>

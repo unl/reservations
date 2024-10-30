@@ -1,0 +1,87 @@
+<h1 class="dcf-txt-h3" id="Checkout">Warehouse Check In / Check Out</h1>
+
+<fieldset class="dcf-h-min-100vh">
+	<legend>User Details</legend>
+	<form class="dcf-form" id="find-nuid">
+		<div class="dcf-form-group">
+			<label for="form-nuid">NUID</label>
+			<div class="dcf-form-controls-inline dcf-w-max-sm">
+				<input id="form-nuid" tabindex="1" type="text" required/>
+				<button id="search-btn" tabindex="2" class="dcf-btn dcf-btn-inverse-primary">Search</button>
+			</div>
+		</div>
+	</form>
+
+	<div class="dcf-grid dcf-col-gap-vw">
+		<div class="dcf-col-50%">
+			<% if projects.count > 0 %>
+			<table class="dcf-table dcf-w-100% dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6" aria-describedby="project-list-table">
+				<caption>User Projects</caption>
+				<thead>
+					<tr>
+						<th scope="col">Location</th>
+						<th scope="col">Project Name</th>
+						<th scope="col">Last Accessed</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<% projects.each do |project| %>
+					<tr>
+						<td>
+							<%= project[:location] %>
+						</td>
+						<td>
+							<%= project[:name] %>
+						</td>
+						<td>
+							<%= project[:last_accessed] %>
+						</td>
+						<td class="table-actions">
+							<button id="checkout-<%= project[:id] %>" class="dcf-btn dcf-btn-primary">Check Out</button>
+						</td>
+					</tr>
+					<% end %>
+				</tbody>
+			</table>
+			<% else %>
+			<p>
+				You don't currently have any projects in storage.
+			</p>
+			<% end %>
+		</div>
+		<div class="dcf-col-50%">
+			<% if checked_out.count > 0 %>
+			<table class="dcf-table dcf-w-100% dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6" aria-describedby="project-list-table">
+				<caption>Checked Out Tools</caption>
+				<thead>
+					<tr>
+						<th scope="col">Tool Name</th>
+						<th scope="col">Checked Out</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<% checked_out.each do |tool| %>
+					<tr>
+						<td>
+							<%= tool[:name] %>
+						</td>
+						<td>
+							<%= tool[:checked_out_date] %>
+						</td>
+						<td class="table-actions">
+							<button id="checkin-<%= tool[:id] %>" class="dcf-btn dcf-btn-primary">Check In</button>
+						</td>
+					</tr>
+					<% end %>
+				</tbody>
+			</table>
+			<% else %>
+			<p>
+				You don't currently have any tools checked out.
+			</p>
+			<% end %>
+		</div>
+	</div>
+</fieldset>
