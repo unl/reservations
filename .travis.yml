@@ -24,7 +24,7 @@ before_install:
 
 branches:
   only:
-    - travis-ci
+    - development
 
 language: ruby
 rvm:
