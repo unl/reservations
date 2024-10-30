@@ -110,6 +110,15 @@ class User < ActiveRecord::Base
     self.save
   end
 
+  def get_liability_expiration_date
+    liability_expiration_date
+  end
+
+  def set_liability_expiration_date(exp)
+    self.liability_expiration_date = exp
+    self.save
+  end
+
   def set_active(state)
     self.active = state ? true : false
     self.save
