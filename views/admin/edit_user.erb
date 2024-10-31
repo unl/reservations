@@ -2,7 +2,7 @@
 
 <form class="dcf-form" id="edit-user" action="" method="POST" enctype="multipart/form-data">
     <div class="dcf-grid dcf-col-gap-vw">
-        <fieldset class="dcf-col-100% dcf-col-50%-start@sm"">
+        <fieldset class="dcf-col-100% dcf-col-50%-start@sm">
             <legend>User Details</legend>
 
             <div class="dcf-form-group">
@@ -207,11 +207,13 @@
                 </table>
             </div>
         <% end %>
+
         <% if vehicles.count < 3 %>
             <a href="/vehicle/add/?user_id=<%= user.id %>">
                 <button type="submit" class="dcf-mt-1 dcf-btn dcf-btn-primary" style="margin-top:20px !important;">Add Vehicle</button>
             </a>
         <% end %>
+
         <% append_script_declaration(%q[require(['jquery'], function($) {
             $(document).ready(function() {
                 $('.delete-vehicle').submit(function (submit) {
@@ -223,7 +225,7 @@
         });]) %>
     <% end %>
 
-    <% append_script_declaration("WDN.initializePlugin('datepickers');") %>
+<% append_script_declaration("WDN.initializePlugin('datepickers');") %>
 
 <% append_script_declaration(%q[
     let activate_checkbox = document.getElementById('activate');
