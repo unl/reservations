@@ -110,12 +110,12 @@ class User < ActiveRecord::Base
     self.save
   end
 
-  def get_liability_expiration_date
-    liability_expiration_date
+  def get_user_agreement_expiration_date
+    user_agreement_expiration_date
   end
 
-  def set_liability_expiration_date(exp)
-    self.liability_expiration_date = exp
+  def set_user_agreement_expiration_date(exp)
+    self.user_agreement_expiration_date = exp
     self.save
   end
 

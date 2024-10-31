@@ -187,7 +187,7 @@ post '/new_members/sign_up/:event_id/?' do
 			user.username = username
 
 			#set the Liability Waiver Expiration Date to today of next year
-			user.set_liability_expiration_date(Date.today.next_year)
+			user.set_user_agreement_expiration_date(Date.today.next_year)
 		else
 			# Username parameters:
 			# First letter of first name
