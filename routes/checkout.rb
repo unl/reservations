@@ -39,4 +39,31 @@ get '/checkout/?' do
   }
 end
 
+get '/checkout/new_project/user?' do
+	@breadcrumbs << {:text => 'New_Project'}
+	require_login
+
+	erb :'engineering_garage/new_project_user_confirmation', :layout => :fixed, :locals => {
+  }
+end
+
+post '/checkout/new_project/user?' do
+	@breadcrumbs << {:text => 'New_Project'}
+	require_login
+  redirect '/checkout/new_project/create?'
+end
+
+get '/checkout/new_project/create?' do
+	@breadcrumbs << {:text => 'New_Project'}
+	require_login
+
+	erb :'engineering_garage/new_project', :layout => :fixed, :locals => {
+  }
+end
+
+post '/checkout/new_project/create?' do
+	@breadcrumbs << {:text => 'New_Project'}
+	require_login
+  redirect '/checkout/?'
+end
 
