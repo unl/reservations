@@ -161,7 +161,7 @@ get '/tools/:resource_id/reserve/?' do
 
 	available_start_times = []
 	# calculate the available start times for reservation
-	if space_hour.nil?
+	if space_hour.nil? || tool.is_24_hour
 		start = 0
 		while start + (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15) <= 1440
 			available_start_times << start
@@ -183,8 +183,13 @@ get '/tools/:resource_id/reserve/?' do
 	reservations = Reservation.includes(:event).where(:resource_id => tool.id).in_day(date).all
     unavailable_start_times = []
     available_start_times.each do |available_start_time|
-        date_start = (date.midnight + 21600) # 06:00 am
-        date_end = (date.end_of_day - 1799)  # 11:30 pm
+				if tool.is_24_hour
+						date_start = (date.midnight) # 12:00 am
+						date_end = (date.end_of_day) # 11:59 pm
+				else
+						date_start = (date.midnight + 21600) # 06:00 am
+						date_end = (date.end_of_day - 1799)  # 11:30 pm
+				end
         reservations.each do |res|
             if res.start_time.in_time_zone <= date_start
                 start_time = date_start
@@ -253,7 +258,7 @@ get '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 
 	available_start_times = []
 	# calculate the available start times for reservation
-	if space_hour.nil?
+	if space_hour.nil? || tool.is_24_hour
 		start = 0
 		while start + (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15) <= 1440
 			available_start_times << start
@@ -274,9 +279,13 @@ get '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 	# filter out times when tool is reserved
 	reservations = Reservation.includes(:event).where(:resource_id => tool.id).in_day(date).all
     unavailable_start_times = []
-    available_start_times.each do |available_start_time|
-        date_start = (date.midnight + 21600) # 06:00 am
-        date_end = (date.end_of_day - 1799)  # 11:30 pm
+		if tool.is_24_hour
+				date_start = (date.midnight) # 12:00 am
+				date_end = (date.end_of_day) # 11:59 pm
+		else
+				date_start = (date.midnight + 21600) # 06:00 am
+				date_end = (date.end_of_day - 1799)  # 11:30 pm
+		end
         reservations.each do |res|
 
             # ignore current reseveration since really available
@@ -373,7 +382,7 @@ post '/tools/:resource_id/reserve/?' do
 			.order(:effective_date => :desc, :id => :desc).first
 	end
 
-	unless space_hour.nil?
+	unless space_hour.nil? || tool.is_24_hour
 		# figure out where the closed sections need to be
         # we can assume that all records in this space_hour are non-intertwined
         closed_start = 0
@@ -476,7 +485,7 @@ post '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 			.order(:effective_date => :desc, :id => :desc).first
 	end
 
-	unless space_hour.nil?
+	unless space_hour.nil? || tool.is_24_hour
 		# figure out where the closed sections need to be
         # we can assume that all records in this space_hour are non-intertwined
         closed_start = 0
