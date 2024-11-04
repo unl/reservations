@@ -219,6 +219,67 @@
                 </div>
             </div>
 
+            <% if SS_ID == 8 %>
+                <fieldset>
+                    <legend>User Agreement</legend>
+                    <p class=.dcf-form-help>By checking the box, you agree to the following statements</p>
+                        <div class="dcf-input-checkbox">
+                            <input type="checkbox" name="weapon-agreement" id="weapon-agreement" required>
+                            <label for="weapon-agreement">I understand that the production or customization of weapons, weapon accessories, weapon parts, ammunition, or tools of vandalism is strictly prohibited. I understand that any attempts to produce these items will be reported to the appropriate law enforcement agencies.<small class="dcf-required">Required</small></label>
+                        </div>
+                        <div class="dcf-input-checkbox">
+                            <input type="checkbox" name="cleaning-agreement" id="cleaning-agreement" required>
+                            <label for="cleaning-agreement">I agree that while the College of Engineering Garage provides a shared workspace, 
+                                I am responsible for cleaning up after myself. 
+                                I understand that cleaning supplies are available and can be requested if needed.<small class="dcf-required">Required</small></label>
+                        </div>
+                        <div class="dcf-input-checkbox">
+                            <input type="checkbox" name="priviledge-agreement" id="priviledge-agreement" required>
+                            <label for="priviledge-agreement">I agree that access to the College of Engineering Garage is a privilege and not a right. 
+                                I acknowledge that all policies are posted on the website, and it is my responsibility to learn and follow them. 
+                                I understand that violating policies, whether knowingly or unknowingly, will result in consequences based on the severity of the violation, 
+                                as determined by staff.<small class="dcf-required">Required</small></label>
+                        </div>
+                        <div class="dcf-input-checkbox">
+                            <input type="checkbox" name="question-agreement" id="question-agreement" required>
+                            <label for="question-agreement">I agree to ask questions when I’m not sure how to do something. 
+                                I realize that many accidents happen because people are too proud to ask questions about proper fixturing and job setup, 
+                                and I will help ensure safety by asking questions and seeking advice from staff and experienced users.<small class="dcf-required">Required</small></label>
+                        </div>
+                        <div class="dcf-input-checkbox">
+                            <input type="checkbox" name="active-cleaning-agreement" id="active-cleaning-agreement" required>
+                            <label for="active-cleaning-agreement">I agree to clean up as I go before I leave the shop. 
+                            I realize that “out of sight is out of- mind”, and that if I leave the shop I am likely to get distracted and forget to clean up. 
+                            I will help ensure safety by sweeping and vacuuming, and putting away tools I have taken out.<small class="dcf-required">Required</small></label>
+                        </div>
+                        <div class="dcf-input-checkbox">
+                            <input type="checkbox" name="ppe-agreement" id="ppe-agreement" required>
+                            <label for="ppe-agreement">I agree to wear proper protective gear at all times. 
+                            I realize that “I’m just grabbing a screwdriver” is not an excuse to go into the machine shop without safety glasses, closed toed shoes, hair tied up, and so on. 
+                            I understand that I may be asked to leave for the day, or my machine shop privileges may be permanently revoked, 
+                            if I fail to wear proper protective gear at all times.<small class="dcf-required">Required</small></label>
+                        </div> 
+                        <div class="dcf-input-checkbox">
+                            <input type="checkbox" name="certification-agreement" id="certification-agreement" required>
+                            <label for="certification-agreement">I agree I will not use any machines on which 
+                            I haven’t been certified to use. I understand the machines may seem simple and safe or 
+                            I may have relevant prior experience, but that proper certification is incredibly important. 
+                            I realize that by going through the established certification process, 
+                            I will learn how to operate the machines and contribute to my safety and the safety of the facility.<small class="dcf-required">Required</small></label>
+                        </div> 
+                        <div class="dcf-input-checkbox">
+                            <input type="checkbox" name="report-agreement" id="report-agreement" required>
+                            <label for="report-agreement">I agree to report any unsafe conditions I see to staff. 
+                            I realize that many accidents could be avoided if someone spoke up about potentially unsafe actions. 
+                            I will speak up, even if I am not sure if the situation is safe or unsafe, and even if more experienced users are involved.<small class="dcf-required">Required</small></label>
+                        </div>
+                        <div class="dcf-input-checkbox">
+                            <input type="checkbox" name="renewal-agreement" id="renewal-agreement" required>
+                            <label for="report-agreement">I understand that this User Agreement lasts ONE YEAR and will need to be renewed annually in order to continue to use the Engineering Garage.<small class="dcf-required">Required</small></label>
+                        </div>      
+                </fieldset>
+            <% end %>
+            
             <form action="/verify">
                 <div>
                     <%= recaptcha %>
