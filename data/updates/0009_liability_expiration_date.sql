@@ -1,1 +1,0 @@
-ALTER TABLE `users` ADD COLUMN `liability_expiration_date` datetime DEFAULT NULL;
