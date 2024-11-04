@@ -11,14 +11,14 @@ describe "Test Login Page" do
   end
 
   it "successful login with valid credentials" do
-    post '/login/?', params={:username => "eeckhardt2", :password => "Welcome123"}
+    post '/login/?', params = { :username => "eeckhardt2", :password => "Welcome123" }
     follow_redirect!
     expect(last_response).to be_ok
     expect(last_response.body).to include('Welcome to The Engineering Garage')
   end
 
   it "unsuccessful login with invalid credentials" do
-    post '/login/?', params={:username => "development23", :password => "Welcome123"}
+    post '/login/?', params = { :username => "development23", :password => "Welcome123" }
     follow_redirect!
     expect(last_response).to be_ok
     expect(last_response.body).to include('Username/password combination is incorrect.')
