@@ -279,6 +279,7 @@ get '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 	# filter out times when tool is reserved
 	reservations = Reservation.includes(:event).where(:resource_id => tool.id).in_day(date).all
     unavailable_start_times = []
+	available_start_times.each do |available_start_time|
 		if tool.is_24_hour
 				date_start = (date.midnight) # 12:00 am
 				date_end = (date.end_of_day) # 11:59 pm
