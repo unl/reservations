@@ -4,8 +4,6 @@ AllCops:
 Lint:
   Enabled: false
 
-Layout:
-  Enabled: true
 Layout/LineContinuationLeadingSpace:
   Enabled: true
 Layout/LineContinuationSpacing:
