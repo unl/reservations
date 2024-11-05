@@ -46,9 +46,9 @@ get '/admin/users/download/?' do
     # load up a CSV with the data
     users = User.where(:service_space_id => SS_ID)
     csv_string = CSV.generate do |csv|
-        csv << ["User ID", "Username", "Email", "First Name", "Last Name", "University Status", "Date Created", "Space Status", "Expiration Date"]
+        csv << ["User ID", "Username", "Email", "First Name", "Last Name", "NUID", "University Status", "Date Created", "Space Status", "Expiration Date"]
         users.each do |user|
-            csv << [user.id, user.username, user.email, user.first_name, user.last_name, user.university_status, (user.date_created.strftime('%Y-%m-%d') rescue ''), user.space_status, (user.expiration_date.strftime('%Y-%m-%d') rescue '')]
+            csv << [user.id, user.username, user.email, user.first_name, user.last_name, user.user_nuid, user.university_status, (user.date_created.strftime('%Y-%m-%d') rescue ''), user.space_status, (user.expiration_date.strftime('%Y-%m-%d') rescue '')]
         end
     end
 
@@ -61,9 +61,9 @@ get '/admin/users/active_users/download/?' do
     # load up a CSV with the data
     users = User.where(:service_space_id => SS_ID).where("expiration_date >= ?", Date.today)
     csv_string = CSV.generate do |csv|
-        csv << ["User ID", "Username", "Email", "First Name", "Last Name", "University Status", "Date Created", "Space Status", "Expiration Date"]
+        csv << ["User ID", "Username", "Email", "First Name", "Last Name", "NUID", "University Status", "Date Created", "Space Status", "Expiration Date"]
         users.each do |user|
-            csv << [user.id, user.username, user.email, user.first_name, user.last_name, user.university_status, (user.date_created.strftime('%Y-%m-%d') rescue ''), user.space_status, (user.expiration_date.strftime('%Y-%m-%d') rescue '')]
+            csv << [user.id, user.username, user.email, user.first_name, user.last_name, user.user_nuid, user.university_status, (user.date_created.strftime('%Y-%m-%d') rescue ''), user.space_status, (user.expiration_date.strftime('%Y-%m-%d') rescue '')]
         end
     end
 
@@ -101,6 +101,7 @@ get '/admin/users/?' do
     first_name = params[:first_name]
     last_name = params[:last_name]
     email = params[:email]
+    user_nuid = params[:user_nuid]
     studio_status = params[:studio_status]
     expiration_date = params[:expiration_date]
     expiration_date_operation = params[:expiration_date_operation]
@@ -124,6 +125,10 @@ get '/admin/users/?' do
 
     unless email.nil? || email.length == 0
         users = users.where("email LIKE ?", "%#{email}%")
+    end
+
+    unless (user_nuid.nil? || user_nuid.length == 0) && SS_ID == 8
+        users = users.where("user_nuid LIKE ?", "%#{user_nuid}%")
     end
 
     unless studio_status.nil? || studio_status.length == 0
@@ -172,6 +177,7 @@ get '/admin/users/?' do
         :first_name => first_name,
         :last_name => last_name,
         :email => email,
+        :user_nuid => user_nuid,
         :studio_status => studio_status,
         :expiration_date => expiration_date,
         :expiration_date_operation => expiration_date_operation,
@@ -280,6 +286,7 @@ post '/admin/users/:user_id/edit/?' do
         :first_name => params[:first_name],
         :last_name => params[:last_name],
         :email => params[:email],
+        :user_nuid => params[:user_nuid],
         :username => params[:username],
         :university_status => params[:university_status]
     })
@@ -445,6 +452,45 @@ post '/admin/users/create/?' do
     unless params[:password] == params[:password2]
         flash(:alert, 'Passwords do not match', 'Sorry, your passwords do not match.')
         redirect back
+    end
+    if params[:university_status] != 'Non-NU Student (All Other Institutions)'
+        # Try to get user nuid from directory api
+        begin
+            content = fetch_final_content("https://directory.unl.edu/people/#{params[:username]}?format=json")
+        rescue => e
+            # Handle directory API failure gracefully (e.g., log error, show custom error message)
+            logger.error "Could not get user NUID: #{params[:username]}" # Logging the error
+            flash(:danger, "Error getting your NUID", "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator.")
+            session[:form_data] = params
+            redirect back
+        end
+
+        # Check to make sure it is valid json
+        if valid_json?(content) === false
+            logger.error "Could not get user NUID: #{params[:username]}" # Logging the error
+            flash(:danger, "Error getting your NUID", "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator.")
+            session[:form_data] = params
+            redirect back
+        end
+
+        # Parse it
+        json_parse_content = JSON.parse(content)
+
+        # Check to make sure we have data and it is formatted right		
+        if json_parse_content.key?('unluncwid') === false || json_parse_content['unluncwid'].empty?
+            logger.error "Could not get user NUID: #{params[:username]}" # Logging the error
+            flash(:danger, "Error getting your NUID", "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator#{params[:university_status]}.")
+            session[:form_data] = params
+            redirect back
+        end
+
+        # Get the user nuid and double check we don't have duplicates
+        params[:user_nuid] = json_parse_content['unluncwid']
+        unless User.find_by(:user_nuid => params[:user_nuid], :service_space_id => SS_ID).nil?
+            flash(:danger, "Error retrieving your NUID", "A user with that NUID already exists. If you believe this to be an error, please contact an administrator.")
+            session[:form_data] = params
+            redirect back
+        end
     end
 
     params.delete('password2')
