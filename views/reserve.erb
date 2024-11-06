@@ -66,32 +66,41 @@ end %>
                         day_end = (day.end_of_day - 1799)  # 11:30 pm
                     end
 
-                        if res.end_time.in_time_zone > day_end
-                            end_time = day_end
-                            length = length - ((res.end_time.in_time_zone - day.end_of_day) / 60)
-                        else
-                            end_time = res.end_time.in_time_zone
-                        end
+                    if res.start_time.in_time_zone < day_start
+                        start_time = day_start
+                        length = length - ((day_start - res.start_time.in_time_zone) / 60)
+                    else
+                        start_time = res.start_time.in_time_zone
+                    end
 
-                        end_slot = [(((end_time - day.midnight) / 60 - 360) / 30).floor, 35].min
-                        if end_slot < 0
-                            next
-                        end
+                    if res.end_time.in_time_zone > day_end
+                        end_time = day_end
+                        length = length - ((res.end_time.in_time_zone - day.end_of_day) / 60)
+                    else
+                        end_time = res.end_time.in_time_zone
+                    end
 
-                        top = (((start_time - day.midnight) / 60 - 360) / 30) * 20
-                        height = length * 20 / 30
-                        %>
+                    top = (((start_time - day.midnight) / 60 - 360) / 30) * 20
 
-                        <div class="reservation <%= 'editing' if !reservation.nil? && reservation.id == res.id %>" 
-                            style="top: <%= top %>px; height: <%= height %>px;">
-                            <% if !res.event.nil? %>
-                                <%= res.event.title %>
-                            <% else %>
-                                <%= res.user_id == @user.id ? 'My Reservation' : 'busy' %>
-                            <% end %>
-                            <%= '(Editing)' if !reservation.nil? && reservation.id == res.id %>
-                        </div>
+                    # Shift div down to account for 12:00 pm to 6:00 am
+                    if tool.is_24_hour && SS_ID == 8
+                        top = top + 240
+                    end
+
+                    height = length * 20 / 30
+                    %>
+
+                    <div class="reservation <%= 'editing' if !reservation.nil? && reservation.id == res.id %>" 
+                        style="top: <%= top %>px; height: <%= height %>px;">
+                        <% if !res.event.nil? %>
+                            <%= res.event.title %>
+                        <% else %>
+                            <%= res.user_id == @user.id ? 'My Reservation' : 'busy' %>
+                        <% end %>
+                        <%= '(Editing)' if !reservation.nil? && reservation.id == res.id %>
+                    </div>
                     <% end %>
+
                     <% unless space_hour.nil? 
                         # figure out where the closed divs need to be
                         # we can assume that all records in this space_hour are non-intertwined
