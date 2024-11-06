@@ -161,7 +161,7 @@ get '/tools/:resource_id/reserve/?' do
 
 	available_start_times = []
 	# calculate the available start times for reservation
-	if space_hour.nil? || tool.is_24_hour
+	if space_hour.nil? || (tool.is_24_hour && SS_ID == 8)
 		start = 0
 		while start + (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15) <= 1440
 			available_start_times << start
@@ -183,7 +183,7 @@ get '/tools/:resource_id/reserve/?' do
 	reservations = Reservation.includes(:event).where(:resource_id => tool.id).in_day(date).all
     unavailable_start_times = []
     available_start_times.each do |available_start_time|
-				if tool.is_24_hour
+				if tool.is_24_hour && SS_ID == 8
 						date_start = (date.midnight) # 12:00 am
 						date_end = (date.end_of_day) # 11:59 pm
 				else
@@ -258,7 +258,7 @@ get '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 
 	available_start_times = []
 	# calculate the available start times for reservation
-	if space_hour.nil? || tool.is_24_hour
+	if space_hour.nil? || (tool.is_24_hour && SS_ID == 8)
 		start = 0
 		while start + (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15) <= 1440
 			available_start_times << start
@@ -280,7 +280,7 @@ get '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 	reservations = Reservation.includes(:event).where(:resource_id => tool.id).in_day(date).all
     unavailable_start_times = []
 	available_start_times.each do |available_start_time|
-		if tool.is_24_hour
+		if tool.is_24_hour && SS_ID == 8
 				date_start = (date.midnight) # 12:00 am
 				date_end = (date.end_of_day) # 11:59 pm
 		else
@@ -383,7 +383,7 @@ post '/tools/:resource_id/reserve/?' do
 			.order(:effective_date => :desc, :id => :desc).first
 	end
 
-	unless space_hour.nil? || tool.is_24_hour
+	unless space_hour.nil? || (tool.is_24_hour && SS_ID == 8)
 		# figure out where the closed sections need to be
         # we can assume that all records in this space_hour are non-intertwined
         closed_start = 0
@@ -486,7 +486,7 @@ post '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 			.order(:effective_date => :desc, :id => :desc).first
 	end
 
-	unless space_hour.nil? || tool.is_24_hour
+	unless space_hour.nil? || (tool.is_24_hour && SS_ID == 8)
 		# figure out where the closed sections need to be
         # we can assume that all records in this space_hour are non-intertwined
         closed_start = 0
