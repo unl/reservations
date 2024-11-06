@@ -10,36 +10,30 @@ class Project < ActiveRecord::Base
 	# alias_method :signups, :event_signups
 
 	def edit_link
-		"/admin/events/#{id}/edit/"
+		"/checkout/#{id}/edit/"
 	end
 
 	def set_data(params)
+		self.owner_user_id = params[:owner_user_id]
 		self.title = params[:title]
 		self.description = params[:description]
-		self.admin_notes = params[:admin_notes]
-		self.start_time = calculate_time(params[:start_date], params[:start_time_hour], params[:start_time_minute], params[:start_time_am_pm])
-		self.end_time = calculate_time(params[:end_date], params[:end_time_hour], params[:end_time_minute], params[:end_time_am_pm])
-		self.event_type_id = params[:type]
-		self.trainer_id = params[:trainer]
-		self.location_id = params[:location]
-		self.max_signups = params[:limit_signups] == 'on' ? params[:max_signups].to_i : nil
-		self.service_space_id = SS_ID
-		if params[:is_private].nil?
-			self.is_private = 0
-		else
-			self.is_private = params[:is_private]
-		end
-		if params[:hrc_feed].nil?
-			self.hrc_feed = 0
-		else
-			self.hrc_feed = 1
-		end
-		if params[:hrc_parking].nil?
-			self.hrc_parking = 0
-		else
-			self.hrc_parking = 1
-		end
-		self.event_code = params[:event_code]
+		self.bin_id = params[:bin_id]
+		self.last_checked_in = calculate_time(params[:last_checked_in_date], params[:last_checked_in_hour], params[:last_checked_in_minute], params[:last_checked_in_time_am_pm])
+		self.last_checked_out = calculate_time(params[:last_checked_out_date], params[:last_checked_out_hour], params[:last_checked_out_minute], params[:last_checked_out_time_am_pm])
+		self.created_on = calculate_time(params[:created_on_date], params[:created_on_hour], params[:created_on_minute], params[:created_on_time_am_pm])
+		self.updated_on = calculate_time(params[:updated_on_date], params[:updated_on_hour], params[:updated_on_minute], params[:updated_on_time_am_pm])
+		self.save
+	end
+
+	def set_last_checked_in(params)
+		self.last_checked_in = calculate_time(params[:last_checked_in_date], params[:last_checked_in_hour], params[:last_checked_in_minute], params[:last_checked_in_time_am_pm])
+		self.updated_on = calculate_time(params[:last_checked_in_date], params[:last_checked_in_hour], params[:last_checked_in_minute], params[:last_checked_in_time_am_pm])
+		self.save
+	end
+
+	def set_last_checked_out(params)
+		self.last_checked_out = calculate_time(params[:last_checked_out_date], params[:last_checked_out_hour], params[:last_checked_out_minute], params[:last_checked_out_time_am_pm])
+		self.updated_on = calculate_time(params[:last_checked_out_date], params[:last_checked_out_hour], params[:last_checked_out_minute], params[:last_checked_out_time_am_pm])
 		self.save
 	end
 end
