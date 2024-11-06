@@ -58,14 +58,13 @@ end %>
                     <%
                         length = res.length
 
+                    if tool.is_24_hour && SS_ID == 8
+                        day_start = (day.midnight) # 12:00 am
+                        day_end = (day.end_of_day) # 11:59 pm
+                    else 
                         day_start = (day.midnight + 21600) # 06:00 am
                         day_end = (day.end_of_day - 1799)  # 11:30 pm
-                        if res.start_time.in_time_zone < day_start
-                            start_time = day_start
-                            length = length - ((day_start - res.start_time.in_time_zone) / 60)
-                        else
-                            start_time = res.start_time.in_time_zone
-                        end
+                    end
 
                         if res.end_time.in_time_zone > day_end
                             end_time = day_end
