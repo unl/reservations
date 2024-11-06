@@ -27,7 +27,21 @@ end %>
         <div class="calendar-container individual-day">
             <div class="time-labels">
                 <div class="time-chart">
-                    <% (12..47).each do |j| %>
+                    <%
+                    if tool.is_24_hour && SS_ID == 8
+                        # Prevent midnight from appearing as "0 AM"
+                        first_hour = 1
+                    %>
+                        <div class="calendar-half-hour">
+                            <label>12 AM</label>
+                        </div>
+                    <%
+                    else 
+                        first_hour = 12
+                    end
+
+                    (first_hour..47).each do |j| 
+                    %>
                         <div class="calendar-half-hour">
                             <label><%= "#{(j / 2) % 12 + (j==24?12:0)} #{j>=24?'PM':'AM'}" if j % 2 == 0 %></label>
                         </div>
