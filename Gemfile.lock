@@ -162,6 +162,7 @@ DEPENDENCIES
   mysql2
   pony
   rack (= 2.2.3)
+  rack-test
   recaptcha
   rest-client
   rufus-scheduler
