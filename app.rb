@@ -98,6 +98,28 @@ def require_login(redirect_after_login=nil)
     else
       redirect "/login/?next_page=#{redirect_after_login}"
     end
+  elsif SS_ID == 8
+    require_renewal(redirect_after_login)
+  end
+end
+
+def require_renewal(redirect_from=nil)
+  if !@user.nil? 
+    renewal_needed = false
+
+    if @user.get_user_agreement_expiration_date.nil?
+      renewal_needed = true
+    elsif @user.get_user_agreement_expiration_date <= Date.today
+      renewal_needed = true
+    end
+
+    if renewal_needed
+      # Avoid a redirect loop when coming from the user_agreement view
+      if !redirect_from.eql? "engineering_garage/user_agreement"
+        flash(:alert, 'User Agreement Expired', 'To continue to use the Engineering Garage, please renew your User Agreement.')
+        redirect '/engineering_garage/user_agreement'
+      end
+    end
   end
 end
 
