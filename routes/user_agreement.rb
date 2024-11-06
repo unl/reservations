@@ -16,4 +16,3 @@ post '/engineering_garage/user_agreement/?' do
 	redirect '/home/'
 
 end
-

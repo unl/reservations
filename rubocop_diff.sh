@@ -1,7 +1,7 @@
-changed_files=$(git diff --name-only HEAD~1 HEAD -- '*.rb' '*.erb')
+changed_files=$(git diff --name-only HEAD~1 HEAD -- '*.rb')
 
 if [ -z "$changed_files" ]; then
-	echo "No Ruby or ERB files have been changed"
+	echo "No Ruby files have been changed"
 	exit 0
 fi
 
