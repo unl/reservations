@@ -127,8 +127,10 @@ get '/admin/users/?' do
         users = users.where("email LIKE ?", "%#{email}%")
     end
 
-    unless (user_nuid.nil? || user_nuid.length == 0) && SS_ID == 8
-        users = users.where("user_nuid LIKE ?", "%#{user_nuid}%")
+    unless user_nuid.nil? || user_nuid.length == 0
+        if SS_ID == 8
+            users = users.where("user_nuid LIKE ?", "%#{user_nuid}%")
+        end
     end
 
     unless studio_status.nil? || studio_status.length == 0
