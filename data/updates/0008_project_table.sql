@@ -1,9 +1,9 @@
 CREATE TABLE `projects` (
  `id` int(11) PRIMARY KEY AUTO_INCREMENT,
- `owner_user_id` int(11) NOT NULL,
+ `owner_user_id` int(11) DEFAULT NULL,
  `title` varchar(255) DEFAULT NULL,
  `description` text DEFAULT NULL,
-`bin_id` int(11) DEFAULT NULL,
+`bin_id` varchar(255) DEFAULT NULL,
  `last_checked_in` datetime DEFAULT NULL,
 `last_checked_out` datetime DEFAULT NULL,
 `created_on` datetime DEFAULT NULL,

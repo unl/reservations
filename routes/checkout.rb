@@ -49,6 +49,17 @@ end
 post "/checkout/new_project/user?" do
   @breadcrumbs << { :text => "New_Project" }
   require_login
+  user_by_nuid = User.where(:user_nuid => params[:nuid])
+  user_by_email = User.where(:email => params[:email])
+
+  raise "NUID: #{user_by_nuid.username}, EMAIL: #{user_by_email.username}"
+
+  if user_by_nuid != nil && user_by_email != nil
+    if user_by_nuid != user_by_email
+      flash :error, 'Error', 'User by NUID and User by email do not match'
+      redirect back
+    end
+  end
   redirect "/checkout/new_project/create?"
 end
 
