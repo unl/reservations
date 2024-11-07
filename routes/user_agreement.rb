@@ -4,7 +4,7 @@ require 'net/http'
 require 'models/user'
 
 get '/engineering_garage/user_agreement/?' do
-    require_login
+    require_login("engineering_garage/user_agreement")
     @breadcrumbs << {:text => 'User Agreement Renewal'}
 	
     erb :'/engineering_garage/user_agreement', :layout => :fixed
