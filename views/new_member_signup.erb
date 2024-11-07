@@ -1,6 +1,8 @@
 <h1 class="dcf-txt-h3">
     Sign Up For New Member Orientation
-	<span class="dcf-subhead"><%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %></span>
+    <% if event.start_time != nil %>
+	    <span class="dcf-subhead"><%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %></span>
+    <% end %>
 </h1>
 
 <form class="dcf-form" id="signup" action="" method="POST" enctype="multipart/form-data">

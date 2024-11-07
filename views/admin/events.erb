@@ -29,9 +29,12 @@
         <ol class="dcf-tabs-list dcf-list-bare dcf-mb-0" role="tablist">
             <li class="dcf-tabs-list-item dcf-mb-0" role="presentation"><a id="tab-upcoming" href="?tab=upcoming" class="dcf-tab dcf-d-block" role="tab" <%='tabindex="-1" aria-selected="true"' if tab == 'upcoming' %>>Upcoming</a></li>
             <li class="dcf-tabs-list-item dcf-mb-0" role="presentation"><a id="tab-past" href="?tab=past" class="dcf-tab dcf-d-block" role="tab" <%='tabindex="-1" aria-selected="true"' if tab == 'past' %>>Past</a></li>
+            <% if SS_ID == 8 %>
+                <li class="dcf-tabs-list-item dcf-mb-0" role="presentation"><a id="tab-timeless" href="?tab=timeless" class="dcf-tab dcf-d-block" role="tab" <%='tabindex="-1" aria-selected="true"' if tab == 'timeless' %>>Timeless</a></li>
+            <% end %>
         </ol>
-         <section id="status-<%= tab %>" role="tabpanel" tabindex="-1" class="dcf-tabs-panel" aria-labelledby="tab-<%= tab %>">
-            <div class="event-page" style="margin-top:-40px;">
+            <section id="status-<%= tab %>" role="tabpanel" tabindex="-1" class="dcf-tabs-panel" aria-labelledby="tab-<%= tab %>">
+                <div class="event-page" style="margin-top:-40px;">
                     <form class="dcf-form dcf-mb-6" id="find-controls">
                         <div style="float: left;">
                             <h4><%= tab.capitalize %> Event Items</h4>
@@ -57,66 +60,84 @@
                         </div>
                     </form>
                 <%# </div> %>
-                <table class="dcf-w-100% dcf-table dcf-table-bordered" aria-label="Event Listings">
-                    <thead>
-                        <tr>
-                            <th scope="col">Title</th>
-                            <th scope="col">Date/Location</th>
-                            <th scope="col">Signups</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <% events.each do |event| %>
-                        <% if !event.is_private || (event.is_private && has_permission?(Permission::MANAGE_EVENTS)) %>
-                        <tr>
-                            <td class="small-hidden">
-                                <% if has_permission?(Permission::MANAGE_EVENTS) %>
-                                <a href="/admin/events/<%= event.id %>/edit/"><%= event.title %></a>
-                                <% else %>
-                                <%= event.title %>
-                                <% end %>
-                            </td>
-                            <td>
-                                <ul class="dcf-list-bare">
-                                    <li>
-                                        <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
-                                        <%= event.location.name %>
-                                    </li>
-                                </ul>
-                            </td>
-                            <td>
-                                <a href="/admin/events/<%= event.id %>/signup_list/"><%= event.signups.count %> signed up</a>
-                                <% unless event.max_signups.nil? %>
-                                <br><%= event.max_signups %> total slots
-                                <% end %>
-                            </td>
-                            <td>
-                            <% unless event.admin_notes.nil? %>
-                            <button class="dcf-mt-1 dcf-btn dcf-btn-secondary dcf-btn-toggle-modal" data-toggles-modal="admin-notes-modal-<%= event.id %>" type="button">Notes</button>
-                            <div class="dcf-modal" id="admin-notes-modal-<%= event.id %>" hidden>
-                                <div class="dcf-modal-wrapper">
-                                    <div class="dcf-modal-header">
-                                        <h3>Admin Notes for <%= event.title %></h3>
-                                        <button class="dcf-btn-close-modal">Close</button>
+                <div style="margin-bottom: 20px;">
+                    <table class="dcf-w-100% dcf-table dcf-table-bordered" aria-label="Event Listings">
+                        <thead>
+                            <tr>
+                                <th scope="col">Title</th>
+                                <th scope="col">Date/Location</th>
+                                <th scope="col">Signups</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <% events.each do |event| %>
+                            <% if !event.is_private || (event.is_private && has_permission?(Permission::MANAGE_EVENTS)) %>
+                                <tr>
+                                    <td class="small-hidden">
+                                        <% if has_permission?(Permission::MANAGE_EVENTS) %>
+                                        <a href="/admin/events/<%= event.id %>/edit/"><%= event.title %></a>
+                                        <% else %>
+                                        <%= event.title %>
+                                        <% end %>
+                                    </td>
+                                    <% if event.start_time == nil%>
+                                        <td>
+                                            <ul class="dcf-list-bare">
+                                                <li>
+                                                    Timeless Event<br>
+                                                    <%= event.location.name %>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    <% else %>
+                                        <td>
+                                            <ul class="dcf-list-bare">
+                                            <li>
+                                                <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
+                                                <%= event.location.name %>
+                                            </li>
+                                            </ul>
+                                        </td>
+                                    <% end %>
+                                    <td>
+                                        <a href="/admin/events/<%= event.id %>/signup_list/"><%= event.signups.count %> signed up</a>
+                                        <% unless event.max_signups.nil? %>
+                                        <br><%= event.max_signups %> total slots
+                                        <% end %>
+                                    </td>
+                                    <td>
+                                    <% unless event.admin_notes.nil? %>
+                                    <button class="dcf-mt-1 dcf-btn dcf-btn-secondary dcf-btn-toggle-modal" data-toggles-modal="admin-notes-modal-<%= event.id %>" type="button">Notes</button>
+                                    <div class="dcf-modal" id="admin-notes-modal-<%= event.id %>" hidden>
+                                        <div class="dcf-modal-wrapper">
+                                            <div class="dcf-modal-header">
+                                                <h3>Admin Notes for <%= event.title %></h3>
+                                                <button class="dcf-btn-close-modal">Close</button>
+                                            </div>
+                                            <div class="dcf-modal-content">
+                                                <pre><%= event.admin_notes %></pre>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="dcf-modal-content">
-                                        <pre><%= event.admin_notes %></pre>
-                                    </div>
-                                </div>
-                            </div>
+                                    <% end %>
+                                    <% if has_permission?(Permission::MANAGE_EVENTS) %>
+                                    <form class="dcf-form delete-event delete-form" action="/admin/events/<%=event.id%>/delete/" method="POST">
+                                    <button type="submit" class="dcf-mt-1 dcf-btn dcf-btn-primary">Delete</button>
+                                    </form>
+                                    <% end %>
+                                    <% if event.info_link %>
+                                    <form class="dcf-form inline-form">
+                                    <a href="<%= event.info_link %>" class="dcf-mt-1 dcf-btn dcf-btn-primary">Link</a>
+                                    </form>
+                                    <% end %>
+                                    </td>
+                                </tr>
+                                <% end %>
                             <% end %>
-                            <% if has_permission?(Permission::MANAGE_EVENTS) %>
-                            <form class="dcf-form delete-event delete-form" action="/admin/events/<%=event.id%>/delete/" method="POST">
-                            <button type="submit" class="dcf-mt-1 dcf-btn dcf-btn-primary">Delete</button>
-                            </form>
-                            <% end %>
-                            </td>
-                        </tr>
-                        <% end %>
-                    <% end %>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </section>
             <% if total_pages > 1 %>
                 <% append_script_declaration("WDN.initializePlugin('pagination');") %>
