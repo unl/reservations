@@ -1,9 +1,4 @@
-require "models/resource"
-require "models/reservation"
-require "models/event"
-require "models/event_type"
-require "models/event_signup"
-require "models/space_hour"
+require 'models/project'
 require "date"
 require "erb"
 
@@ -49,29 +44,40 @@ end
 post "/checkout/new_project/user?" do
   @breadcrumbs << { :text => "New_Project" }
   require_login
-  user_by_nuid = User.where(:user_nuid => params[:nuid])
-  user_by_email = User.where(:email => params[:email])
-
-  raise "NUID: #{user_by_nuid.username}, EMAIL: #{user_by_email.username}"
-
+  user_by_nuid = User.find_by(user_nuid: params[:nuid])
+  user_by_email = User.find_by(email: params[:email])
+  user = nil
+  
   if user_by_nuid != nil && user_by_email != nil
     if user_by_nuid != user_by_email
       flash :error, 'Error', 'User by NUID and User by email do not match'
       redirect back
     end
+  elsif user_by_nuid == nil && user_by_email == nil
+    flash :error, 'Error', 'User not found'
+    redirect back
+  elsif user_by_nuid != nil
+    user = user_by_nuid
+  else
+    user = user_by_email
   end
+  session[:user_id] = user.id if user
   redirect "/checkout/new_project/create?"
 end
 
 get "/checkout/new_project/create?" do
   @breadcrumbs << { :text => "New_Project" }
   require_login
-
-  erb :'engineering_garage/new_project', :layout => :fixed, :locals => {}
+  user = User.find(session[:user_id]) if session[:user_id]
+  erb :'engineering_garage/new_project', :layout => :fixed, :locals => {
+    :user => user
+  }
 end
 
 post "/checkout/new_project/create?" do
   @breadcrumbs << { :text => "New_Project" }
   require_login
+  project = Project.new
+  project.set_data(params)
   redirect "/checkout/?"
 end
