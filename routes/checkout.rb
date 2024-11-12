@@ -78,6 +78,7 @@ post "/checkout/new_project/create?" do
   @breadcrumbs << { :text => "New_Project" }
   require_login
   project = Project.new
+  params[:user] = User.find(session[:user_id]) if session[:user_id]
   project.set_data(params)
   redirect "/checkout/?"
 end
