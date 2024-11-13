@@ -98,7 +98,7 @@ def require_login(redirect_after_login=nil)
     else
       redirect "/login/?next_page=#{redirect_after_login}"
     end
-  elsif SS_ID == 8
+  elsif SS_ID == 8 && !@user.is_super_user? && !@user.is_admin?
     require_renewal(redirect_after_login)
   end
 end
