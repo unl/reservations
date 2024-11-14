@@ -14,15 +14,13 @@ class Project < ActiveRecord::Base
 	end
 
 	def set_data(params)
-		self.owner_user_id = params[:owner_user_id]
+		self.owner_user_id = params[:user].id
 		self.title = params[:title]
 		self.description = params[:description]
 		self.bin_id = params[:bin_id]
 =begin
 		self.last_checked_in = calculate_time(params[:last_checked_in_date], params[:last_checked_in_hour], params[:last_checked_in_minute], params[:last_checked_in_time_am_pm])
 		self.last_checked_out = calculate_time(params[:last_checked_out_date], params[:last_checked_out_hour], params[:last_checked_out_minute], params[:last_checked_out_time_am_pm])
-		self.created_on = calculate_time(params[:created_on_date], params[:created_on_hour], params[:created_on_minute], params[:created_on_time_am_pm])
-		self.updated_on = calculate_time(params[:updated_on_date], params[:updated_on_hour], params[:updated_on_minute], params[:updated_on_time_am_pm])
 =end
 		self.save
 	end
