@@ -42,3 +42,6 @@ notifications:
     on_start:   always
     on_cancel:  never
     on_error:   never
+    template:
+      - "%{repository_slug} (%{commit}) : %{message}"
+      - "Build details: %{build_url}"
