@@ -1,18 +1,20 @@
 <h1 class="dcf-txt-h3" id="Checkout">Warehouse Check In / Check Out</h1>
 <form class="dcf-form dcf-w-25%" id="find-nuid">
-<div class="dcf-form-group">
-	<div class="dcf-form-controls-inline dcf-gap-2">
-		<label for="form-nuid">Scan NUID or Bin Barcode</label>
-		<input id="form-nuid" tabindex="1" type="text" required />
-		<button id="search-btn" tabindex="2" class="dcf-btn dcf-btn-primary">Search</button>
+	<label for="nuid-input">Scan NUID</label>
+	<div class="dcf-input-group">
+		<input id="nuid-input">
+		<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
 	</div>
-</div>
 </form>
+<form class="dcf-form">
 <fieldset class="dcf-h-min-100vh dcf-mt-4">
   <legend>User Details</legend>
   <div class="dcf-d-flex dcf-flex-col dcf-gap-2">
 		<div class="dcf-d-flex dcf-flex-row dcf-jc-between dcf-ai-baseline dcf-w-100% dcf-gap-2">
-			<h4>Ethan Eckhardt</h4>
+			<div class="dcf-d-inline-flex dcf-flex-row dcf-ai-baseline dcf-gap-4">
+				<h3>Ethan Eckhardt</h3>
+				<button class="dcf-btn dcf-btn-tertiary" type="button">Clear</button>
+			</div>
 			<div class="dcf-d-flex dcf-gap-2">
 				<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkout-modal-btn" type="button">Check Out Tool</button>
 					<div class="dcf-modal" id="checkout-modal-btn" hidden>
@@ -29,17 +31,28 @@
 				<a href="/checkout/new_project/user" class="dcf-btn dcf-btn-primary">Create New Project</a>
 			</div>
 		</div>
-    <div class="dcf-grid dcf-col-gap-vw">
-      <div class="dcf-col-50%">
+		<div>
+			<label for="barcode-input">Scan Barcode</label>
+			<div class="dcf-input-group dcf-w-25%">
+				<input id="barcode-input">
+				<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
+			</div>
+		</div>
+    <div class="dcf-tabs dcf-tabs-responsive">
+			<ul>
+				<li><a href="#user-projects-panel">User Projects</a></li>
+				<li><a href="#user-tools-panel">Tool Check In</a></li>
+  		</ul>
+      <div id="user-projects-panel">
         <% if defined?(projects) && projects.count > 0 %>
+					<h4>User Projects</h4>
           <table class="dcf-table dcf-w-100% dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6" aria-describedby="project-list-table">
-            <caption>User Projects</caption>
             <thead>
               <tr>
                 <th scope="col">Location</th>
                 <th scope="col">Project Name</th>
                 <th scope="col">Last Accessed</th>
-                <th scope="col"></th>
+                <th scope="col" class="dcf-txt-right">Project Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -48,8 +61,20 @@
                   <td><%= project[:location] %></td>
                   <td><%= project[:name] %></td>
                   <td><%= project[:last_accessed] %></td>
-                  <td class="table-actions">
+                  <td class="dcf-d-flex dcf-flex-row-rev dcf-flex-shrink-1 dcf-gap-2">
                     <button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkout-<%= project[:id] %>" type="button">Check Out</button>
+										<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="edit-<%= project[:id] %>" type="button">Edit</button>
+                    <div class="dcf-modal" id="edit-<%= project[:id] %>" hidden>
+                      <div class="dcf-modal-wrapper">
+                        <div class="dcf-modal-header">
+                          <h2>Edit <%= project[:name] %></h2>
+                          <button class="dcf-btn-close-modal">Close</button>
+                        </div>
+                        <div class="dcf-modal-content">
+                          <%= project[:description] %>
+                        </div>
+                      </div>
+                    </div>
                     <div class="dcf-modal" id="checkout-<%= project[:id] %>" hidden>
                       <div class="dcf-modal-wrapper">
                         <div class="dcf-modal-header">
@@ -70,10 +95,10 @@
           <p>No projects found.</p>
         <% end %>
       </div>
-      <div class="dcf-col-50%">
+      <div id="user-tools-panel">
+				<h4>Checked Out Tools</h4>
         <% if checked_out.count > 0 %>
           <table class="dcf-table dcf-w-100% dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6" aria-describedby="project-list-table">
-            <caption>Checked Out Tools</caption>
             <thead>
               <tr>
                 <th scope="col">Tool Name</th>
@@ -109,5 +134,11 @@
         <% end %>
       </div>
     </div>
+		<script>
+			window.addEventListener('inlineJSReady', function() {
+				WDN.initializePlugin('tabs');
+			}, false);
+		</script>
   </div>
 </fieldset>
+</form>
