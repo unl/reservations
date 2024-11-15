@@ -129,6 +129,7 @@ class User < ActiveRecord::Base
   end
 
   # Retrieves and returns the user's nuid
+  # Error messages are used as conditionals in different files
   def fetch_nuid()
     content = ''
 

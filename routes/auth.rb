@@ -174,7 +174,7 @@ post '/check_in_login/?' do
   if user.university_status != 'Non-NU Student (All Other Institutions)'
     if user.user_nuid == nil || (user.user_nuid > -20 && user.user_nuid < 0)
       nuid_return = user.fetch_nuid()
-      if nuid_return.is_a?(Integer)
+      if nuid_return != "Error getting your NUID" || nuid_return != "Error retrieving your NUID"
         user.set_nuid(nuid_return)
       else
         user.increment_nuid_retrival_failures()
@@ -227,7 +227,7 @@ post '/login/?' do
   if user.university_status != 'Non-NU Student (All Other Institutions)'
     if user.user_nuid == nil || (user.user_nuid > -20 && user.user_nuid < 0)
       nuid_return = user.fetch_nuid()
-      if nuid_return.is_a?(Integer)
+      if nuid_return != "Error getting your NUID" || nuid_return != "Error retrieving your NUID"
         user.set_nuid(nuid_return)
       else
         user.increment_nuid_retrival_failures()

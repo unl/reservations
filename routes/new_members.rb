@@ -194,8 +194,8 @@ post '/new_members/sign_up/:event_id/?' do
 			if params[:university_status] != 'Non-NU Student (All Other Institutions)'
 				nuid_return1, nuid_return2 = user.fetch_nuid()
 
-				# Checks if the NUID was successfully retrieved (A String is returned if not)
-				if nuid_return1.is_a?(String)
+				# Checks if the NUID was successfully retrieved
+				if nuid_return1 == "Error getting your NUID" || nuid_return1 == "Error retrieving your NUID"
 					if nuid_return1 == "Error getting your NUID"
 						logger.error "Could not get user NUID: #{username}" # Logging the error
 					end
