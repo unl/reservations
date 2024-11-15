@@ -170,8 +170,16 @@ post '/check_in_login/?' do
 
   # it is the user, hooray
   session[:user_id] = user.id
-  if @user.user_nuid == nil
-    raise "fuck"
+  # checks whether the NU user has a nuid or whether is has tried and failed less than 20 times before
+  if user.university_status != 'Non-NU Student (All Other Institutions)'
+    if user.user_nuid == nil || (user.user_nuid > -20 && user.user_nuid < 0)
+      nuid_return = user.fetch_nuid()
+      if nuid_return.is_a?(Integer)
+        user.set_nuid(nuid_return)
+      else
+        user.increment_nuid_retrival_failures()
+      end
+    end
   end
   redirect '/check_in/'
 end
@@ -226,6 +234,7 @@ post '/login/?' do
       end
     end
   end
+
   if !next_page.nil? && next_page.length > 0
     redirect "/#{next_page}/"
   else
