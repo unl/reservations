@@ -123,6 +123,44 @@ class User < ActiveRecord::Base
     self.save
   end
 
+  def set_nuid(nuid)
+    self.user_nuid = nuid
+    self.save
+  end
+
+  # Retrieves and returns the user's nuid
+  def fetch_nuid()
+    content = ''
+
+    # Try to get user uid from directory api
+    begin
+      content = fetch_final_content("https://directory.unl.edu/people/#{self.username}?format=json")
+    rescue => e
+      return "Error getting your NUID", "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."
+    end
+    # Check to make sure it is valid json
+    if valid_json?(content) === false
+      return "Error getting your NUID", "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."
+    end
+
+    # Parse it
+    json_parse_content = JSON.parse(content)
+
+    # Check to make sure we have data and it is formatted right		
+    if json_parse_content.key?('unluncwid') === false || json_parse_content['unluncwid'].empty?
+      return "Error getting your NUID", "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."
+    end
+
+    # Get the nuid and double check we don't have duplicates
+    user_nuid = json_parse_content['unluncwid']
+    unless User.find_by(:user_nuid => user_nuid, :service_space_id => SS_ID).nil?
+      return "Error retrieving your NUID", "A user with that NUID already exists. If you believe this to be an error, please contact an administrator."
+    end
+
+    # Returns the user nuid
+    return user_nuid
+  end
+
   def date_of_birth
     date_of_birth
   end
@@ -384,5 +422,14 @@ class User < ActiveRecord::Base
       Emailer.mail(self.email,
                    "#{CONFIG['app']['title']} - Reservation Canceled for #{@reservation.start_time.strftime('%m-%d-%Y')}", body)
     end
+  end
+
+  def increment_nuid_retrival_failures()
+    if self.user_nuid != nil
+      self.user_nuid -= 1
+    else
+      self.user_nuid = -1
+    end
+    self.save
   end
 end

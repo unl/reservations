@@ -192,48 +192,19 @@ post '/new_members/sign_up/:event_id/?' do
 			user.username = username
 			
 			if params[:university_status] != 'Non-NU Student (All Other Institutions)'
-				content = ''
 
-				# Try to get user uid from directory api
-				begin
-					content = fetch_final_content("https://directory.unl.edu/people/#{username}?format=json")
-				rescue => e
-					# Handle directory API failure gracefully (e.g., log error, show custom error message)
-					logger.error "Could not get user NUID: #{username}" # Logging the error
-					flash(:danger, "Error getting your NUID", "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator.")
+				nuid_return1, nuid_return2 = user.fetch_nuid()
+
+				# Checks if the NUID was successfully retrieved (A String is returned if not)
+				if nuid_return1.is_a?(String)
+					if nuid_return1 == "Error getting your NUID"
+						logger.error "Could not get user NUID: #{username}" # Logging the error
+					end
+					flash(:danger, nuid_return1, nuid_return2)
 					session[:form_data] = params
 					redirect back
 				end
-
-				# Check to make sure it is valid json
-				if valid_json?(content) === false
-					logger.error "Could not get user NUID: #{username}" # Logging the error
-					flash(:danger, "Error getting your NUID", "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator.")
-					session[:form_data] = params
-					redirect back
-				end
-
-				# Parse it
-				json_parse_content = JSON.parse(content)
-
-				# Check to make sure we have data and it is formatted right		
-				if json_parse_content.key?('unluncwid') === false || json_parse_content['unluncwid'].empty?
-					logger.error "Could not get user NUID: #{username}" # Logging the error
-					flash(:danger, "Error getting your NUID", "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator.")
-					session[:form_data] = params
-					redirect back
-				end
-
-				# Get the nuid and double check we don't have duplicates
-				user_nuid = json_parse_content['unluncwid']
-				unless User.find_by(:user_nuid => user_nuid, :service_space_id => SS_ID).nil?
-					flash(:danger, "Error retrieving your NUID", "A user with that NUID already exists. If you believe this to be an error, please contact an administrator.")
-					session[:form_data] = params
-					redirect back
-				end
-
-				# Set the user nuid
-				user.user_nuid = user_nuid
+				user.user_nuid = nuid_return1
 
 				#set the Liability Waiver Expiration Date to today of next year
 				user.set_user_agreement_expiration_date(Date.today.next_year)
