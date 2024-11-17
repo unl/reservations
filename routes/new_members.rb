@@ -192,18 +192,18 @@ post '/new_members/sign_up/:event_id/?' do
 			user.username = username
 			
 			if params[:university_status] != 'Non-NU Student (All Other Institutions)'
-				nuid_return1, nuid_return2 = user.fetch_nuid()
+				nuid_hash = user.fetch_nuid()
 
 				# Checks if the NUID was successfully retrieved
-				if nuid_return1 == "Error getting your NUID" || nuid_return1 == "Error retrieving your NUID"
-					if nuid_return1 == "Error getting your NUID"
-						logger.error "Could not get user NUID: #{username}" # Logging the error
+				if !nuid_hash[:status]
+					if nuid_hash[:error_header] == "Error getting your NUID"
+						logger.error "Could not get user NUID: #{user.username}" # Logging the error
 					end
-					flash(:danger, nuid_return1, nuid_return2)
+					flash(:danger, nuid_hash[:error_header], nuid_hash[:error_message])
 					session[:form_data] = params
 					redirect back
 				end
-				user.user_nuid = nuid_return1
+				user.user_nuid = nuid_hash[:nuid]
 
 				#set the Liability Waiver Expiration Date to today of next year
 				user.set_user_agreement_expiration_date(Date.today.next_year)

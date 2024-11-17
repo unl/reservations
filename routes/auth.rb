@@ -173,9 +173,9 @@ post '/check_in_login/?' do
   # checks whether the NU user has a nuid or whether is has tried and failed less than 20 times before
   if user.university_status != 'Non-NU Student (All Other Institutions)'
     if user.user_nuid == nil || (user.user_nuid > -20 && user.user_nuid < 0)
-      nuid_return = user.fetch_nuid()
-      if nuid_return != "Error getting your NUID" || nuid_return != "Error retrieving your NUID"
-        user.set_nuid(nuid_return)
+      nuid_hash = user.fetch_nuid()
+      if nuid_hash[:status]
+        user.set_nuid(nuid_hash[:nuid])
       else
         user.increment_nuid_retrival_failures()
       end
@@ -226,9 +226,9 @@ post '/login/?' do
   # checks whether the NU user has a nuid or whether is has tried and failed less than 20 times before
   if user.university_status != 'Non-NU Student (All Other Institutions)'
     if user.user_nuid == nil || (user.user_nuid > -20 && user.user_nuid < 0)
-      nuid_return = user.fetch_nuid()
-      if nuid_return != "Error getting your NUID" || nuid_return != "Error retrieving your NUID"
-        user.set_nuid(nuid_return)
+      nuid_hash = user.fetch_nuid()
+      if nuid_hash[:status]
+        user.set_nuid(nuid_hash[:nuid])
       else
         user.increment_nuid_retrival_failures()
       end

@@ -129,7 +129,7 @@ class User < ActiveRecord::Base
   end
 
   # Retrieves and returns the user's nuid
-  # Error messages are used as conditionals in different files
+  # Error headers are used as a conditional in different files
   def fetch_nuid()
     content = ''
 
@@ -137,11 +137,11 @@ class User < ActiveRecord::Base
     begin
       content = fetch_final_content("https://directory.unl.edu/people/#{self.username}?format=json")
     rescue => e
-      return "Error getting your NUID", "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."
+      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."}
     end
     # Check to make sure it is valid json
     if valid_json?(content) === false
-      return "Error getting your NUID", "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."
+      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."}
     end
 
     # Parse it
@@ -149,17 +149,17 @@ class User < ActiveRecord::Base
 
     # Check to make sure we have data and it is formatted right		
     if json_parse_content.key?('unluncwid') === false || json_parse_content['unluncwid'].empty?
-      return "Error getting your NUID", "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."
+      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."}
     end
 
     # Get the nuid and double check we don't have duplicates
-    user_nuid = json_parse_content['unluncwid']
+    user_nuid = json_parse_content['unluncwid'][0]
     unless User.find_by(:user_nuid => user_nuid, :service_space_id => SS_ID).nil?
-      return "Error retrieving your NUID", "A user with that NUID already exists. If you believe this to be an error, please contact an administrator."
+      return {:status => false, :nuid => nil, :error_header => "Error retrieving your NUID", :error_message => "A user with that NUID already exists. If you believe this to be an error, please contact an administrator."}
     end
 
     # Returns the user nuid
-    return user_nuid
+    return {:status => true, :nuid => user_nuid, :error_header => nil, :error_message => nil}
   end
 
   def date_of_birth
