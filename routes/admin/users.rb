@@ -461,7 +461,7 @@ post '/admin/users/create/?' do
     user.created_by_user_id = @user.id
     user.space_status = 'current'
     user.service_space_id = SS_ID
-    if params[:university_status] != 'Non-NU Student (All Other Institutions)'
+    if params[:university_status] != 'Non-NU Student (All Other Institutions)' && SS_ID == 8
         nuid_hash = user.fetch_nuid()
 
         # Checks if the NUID was successfully retrieved
