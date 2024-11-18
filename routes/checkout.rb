@@ -2,17 +2,27 @@ require "models/project"
 require "date"
 require "erb"
 
+get "/checkout" do
+  @breadcrumbs << { :text => "Checkout" }
+  require_login
+
+  erb :'engineering_garage/checkout', :layout => :fixed, locals: {}
+end
+
 get "/checkout/?" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
 
   nuid = params[:nuid]
 
-  # This should change to select the user and their projects from the db
-  # checkout_user = nuid
+  if nuid.nil? || nuid.strip.empty?
+    redirect "/checkout"
+  else
+    # Get the user by nuid or redirect with error message
+    # Preload the project list
+    # Preload the tool list
+  end
 
-  # user_projects = []
-  # user_checked_out = []
   user_projects = [
     { id: 1, location: "Garage A", name: "Project Alpha", last_accessed: (DateTime.now - 1).strftime("%m/%d/%Y %H:%M"), description: "Building a robot" },
     { id: 2, location: "Garage B", name: "Project Beta", last_accessed: (DateTime.now - 2).strftime("%m/%d/%Y %H:%M"), description: "Creating a drone" },
@@ -28,10 +38,11 @@ get "/checkout/?" do
     { id: 5, name: "Saw", checked_out_date: (DateTime.now - 5).strftime("%m/%d/%Y %H:%M") },
   ]
 
-  erb :'engineering_garage/checkout', :layout => :fixed, :locals => {
-                                        :projects => user_projects,
-                                        :checked_out => user_checked_out,
-                                      }
+  erb :"engineering_garage/checkout_user", :layout => :fixed, locals: {
+                                             :nuid => nuid,
+                                             :checked_out => user_checked_out,
+                                             :projects => user_projects,
+                                           }
 end
 
 get "/checkout/new_project/user?" do
