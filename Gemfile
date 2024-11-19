@@ -17,10 +17,14 @@ gem 'recaptcha'
 gem 'rufus-scheduler'
 gem 'highlander'
 
+
 group :development do
   gem 'shotgun'
   gem 'thin'
   gem 'guard'
   gem 'guard-less'
   gem 'therubyracer'
+  gem 'rack-test'
+  gem 'rubocop', require: false
+  gem 'rspec'
 end

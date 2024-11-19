@@ -1,4 +1,4 @@
-<h1 class="dcf-txt-h3">NIS Manager Administration</h1>
+<h1 class="dcf-txt-h3"><%= SS_ID == 1 ? 'NIS' : 'Garage' %> Manager Administration</h1>
 <h2 class="dcf-txt-h5">
     Hello, <%= @user.full_name %> (<%= @user.username %>)
     <% if @user.is_super_user? %> <span class="dcf-form-help">Super User</span><% end %>

@@ -8,84 +8,89 @@ require 'json'
 require 'net/http'
 
 Recaptcha.configure do |config|
-	config.site_key = CONFIG['reCaptcha']['site_key']
-	config.secret_key = CONFIG['reCaptcha']['secret_key']
+  config.site_key = CONFIG['reCaptcha']['site_key']
+  config.secret_key = CONFIG['reCaptcha']['secret_key']
 end
 
 include Recaptcha::Adapters::ControllerMethods
 include Recaptcha::Adapters::ViewMethods
 
-
 get '/new_members/?' do
-	@breadcrumbs << {:text => 'New Members'}
-	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
+  @breadcrumbs << { :text => 'New Members' }
+  new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation',
+                                                :service_space_id => SS_ID).id
 
-    erb :new_members, :layout => :fixed, :locals => {
-    	:events => Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => new_member_orientation_id, :is_private => 0).where('start_time >= ?', Time.now).order(:start_time => :asc).all
-    }
+  erb :new_members, :layout => :fixed, :locals => {
+    :events => Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => new_member_orientation_id, :is_private => 0).where('start_time >= ?', Time.now).order(:start_time => :asc).all
+  }
 end
 
 get '/hrc/?' do
-	not_found if SS_ID != 1
+  not_found if SS_ID != 1
 
-	@breadcrumbs << {:text => 'HRC Trainings'}
-	hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
+  @breadcrumbs << { :text => 'HRC Trainings' }
+  hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
 
-	hrc_events = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => hrc_training_id, :is_private => 0).where('start_time >= ?', Time.now).order(:start_time => :asc).all
-	hrc_feed_events = Event.includes(:event_signups).where(:service_space_id => SS_ID, :hrc_feed => 1, :is_private => 0).where('start_time >= ?', Time.now).order(:start_time => :asc).all
+  hrc_events = Event.includes(:event_signups).where(:service_space_id => SS_ID, :event_type_id => hrc_training_id, :is_private => 0).where(
+    'start_time >= ?', Time.now
+  ).order(:start_time => :asc).all
+  hrc_feed_events = Event.includes(:event_signups).where(:service_space_id => SS_ID, :hrc_feed => 1, :is_private => 0).where(
+    'start_time >= ?', Time.now
+  ).order(:start_time => :asc).all
 
-	combined_events = (hrc_events + hrc_feed_events).sort_by(&:start_time)
+  combined_events = (hrc_events + hrc_feed_events).sort_by(&:start_time)
 
-    erb :new_members_hrc, :layout => :fixed, :locals => {
-    	:events => combined_events,
-		:hrc_training_id => hrc_training_id
-    }
+  erb :new_members_hrc, :layout => :fixed, :locals => {
+    :events => combined_events,
+    :hrc_training_id => hrc_training_id
+  }
 end
 
 get '/new_members/sign_up/:event_id/?' do
-	# check if this is a new member signup orientation
-	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
-	hrc_training_id = nil
-	if SS_ID == 1
-		hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
-	end
+  # check if this is a new member signup orientation
+  new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation',
+                                                :service_space_id => SS_ID).id
+  hrc_training_id = nil
+  if SS_ID == 1
+    hrc_training_id = EventType.find_by(:description => 'HRC Training', :service_space_id => SS_ID).id
+  end
 
-	event = Event.includes(:event_signups).find_by(:service_space_id => SS_ID, :id => params[:event_id])
-	if event.nil? || (event.event_type_id != new_member_orientation_id && event.event_type_id != hrc_training_id)
-		# that event does not exist
-		flash(:danger, 'Not Found', 'That event does not exist')
-		redirect '/new_members/'
-	end
+  event = Event.includes(:event_signups).find_by(:service_space_id => SS_ID, :id => params[:event_id])
+  if event.nil? || (event.event_type_id != new_member_orientation_id && event.event_type_id != hrc_training_id)
+    # that event does not exist
+    flash(:danger, 'Not Found', 'That event does not exist')
+    redirect '/new_members/'
+  end
 
-	if event.event_type_id == hrc_training_id
-		@breadcrumbs << {:text => 'HRC Trainings', :href => '/hrc/'} << {text: 'Sign Up'}
-	else
-		@breadcrumbs << {:text => 'New Members', :href => '/new_members/'} << {text: 'Sign Up'}
-	end
+  if event.event_type_id == hrc_training_id
+    @breadcrumbs << { :text => 'HRC Trainings', :href => '/hrc/' } << { text: 'Sign Up' }
+  else
+    @breadcrumbs << { :text => 'New Members', :href => '/new_members/' } << { text: 'Sign Up' }
+  end
 
-	if !event.max_signups.nil? && event.signups.count >= event.max_signups
-		# that event is full
-		flash(:alert, 'This Orientation is Full', "Sorry, #{event.title} is full.")
-		if event.event_type_id == hrc_training_id
-			redirect '/hrc/'
-		else
-			redirect '/new_members/'
-		end
-	end
+  if !event.max_signups.nil? && event.signups.count >= event.max_signups
+    # that event is full
+    flash(:alert, 'This Orientation is Full', "Sorry, #{event.title} is full.")
+    if event.event_type_id == hrc_training_id
+      redirect '/hrc/'
+    else
+      redirect '/new_members/'
+    end
+  end
 
-	if event.event_type_id == hrc_training_id 
-		erb :new_member_signup_hrc, :layout => :fixed, :locals => {
-			:event => event,
-			:recaptcha => Recaptcha.recaptcha_tags,
-			:form_data => session.delete(:form_data)
-		}
-	else
-		erb :new_member_signup, :layout => :fixed, :locals => {
-			:event => event,
-			:recaptcha => Recaptcha.recaptcha_tags,
-			:form_data => session.delete(:form_data)
-		}
-	end
+  if event.event_type_id == hrc_training_id
+    erb :new_member_signup_hrc, :layout => :fixed, :locals => {
+      :event => event,
+      :recaptcha => Recaptcha.recaptcha_tags,
+      :form_data => session.delete(:form_data)
+    }
+  else
+    erb :new_member_signup, :layout => :fixed, :locals => {
+      :event => event,
+      :recaptcha => Recaptcha.recaptcha_tags,
+      :form_data => session.delete(:form_data)
+    }
+  end
 end
 
 post '/new_members/sign_up/:event_id/?' do
@@ -185,6 +190,24 @@ post '/new_members/sign_up/:event_id/?' do
 
 			# Set the username
 			user.username = username
+			
+			if params[:university_status] != 'Non-NU Student (All Other Institutions)'
+				nuid_hash = user.fetch_nuid()
+
+				# Checks if the NUID was successfully retrieved
+				if !nuid_hash[:status]
+					if nuid_hash[:error_header] == "Error getting your NUID"
+						logger.error "Could not get user NUID: #{user.username}" # Logging the error
+					end
+					flash(:danger, nuid_hash[:error_header], nuid_hash[:error_message])
+					session[:form_data] = params
+					redirect back
+				end
+				user.user_nuid = nuid_hash[:nuid]
+
+				#set the Liability Waiver Expiration Date to today of next year
+				user.set_user_agreement_expiration_date(Date.today.next_year)
+		end
 		else
 			# Username parameters:
 			# First letter of first name
@@ -387,130 +410,127 @@ post '/new_members/sign_up/:event_id/?' do
 end
 
 def fetch_final_content(uri)
-	url = URI.parse(uri)
-	
-	begin
-		response = Timeout::timeout(10) { Net::HTTP.get_response(url) } # Timeout after 10 seconds
-	
-		# Follow redirects (if any) until we reach the final destination
-		while response.is_a?(Net::HTTPRedirection)
-			url = URI.parse(response['location'])
-			response = Net::HTTP.get_response(url)
-		end
+  url = URI.parse(uri)
 
-		# Handle 404 or other HTTP error responses
-		case response
-		when Net::HTTPSuccess
-			response.body
-		when Net::HTTPNotFound
-			raise "Page not found (404)"
-		else
-			raise "HTTP error: #{response.code} #{response.message}"
-		end
-	rescue Timeout::Error
-		raise "Request timed out"
-	rescue => e
-		raise "Failed to fetch content: #{e.message}"
-	end
+  begin
+    response = Timeout::timeout(10) { Net::HTTP.get_response(url) } # Timeout after 10 seconds
+
+    # Follow redirects (if any) until we reach the final destination
+    while response.is_a?(Net::HTTPRedirection)
+      url = URI.parse(response['location'])
+      response = Net::HTTP.get_response(url)
+    end
+
+    # Handle 404 or other HTTP error responses
+    case response
+    when Net::HTTPSuccess
+      response.body
+    when Net::HTTPNotFound
+      raise "Page not found (404)"
+    else
+      raise "HTTP error: #{response.code} #{response.message}"
+    end
+  rescue Timeout::Error
+    raise "Request timed out"
+  rescue => e
+    raise "Failed to fetch content: #{e.message}"
+  end
 end
 
 def valid_json?(string)
-	!!JSON.parse(string)
+  !!JSON.parse(string)
 rescue JSON::ParserError
-	false
+  false
 end
-
 
 def check_form_data(form_data, key)
-	return form_data.is_a?(Hash) && form_data.key?(key)
+  return form_data.is_a?(Hash) && form_data.key?(key)
 end
-
 
 # Code copied from Recaptcha::Adapters::ControllerMethods to resolve issue of this method being private
 
 def verify_recaptcha(options = {})
-	options = {model: options} unless options.is_a? Hash
-	return true if CONFIG['email']['site_key'].nil? || CONFIG['reCaptcha']['site_key'].empty?
-	return true if Recaptcha.skip_env?(options[:env])
+  options = { model: options } unless options.is_a? Hash
+  return true if CONFIG['email']['site_key'].nil? || CONFIG['reCaptcha']['site_key'].empty?
+  return true if Recaptcha.skip_env?(options[:env])
 
-	model = options[:model]
-	attribute = options.fetch(:attribute, :base)
-	recaptcha_response = options[:response] || recaptcha_response_token(options[:action])
+  model = options[:model]
+  attribute = options.fetch(:attribute, :base)
+  recaptcha_response = options[:response] || recaptcha_response_token(options[:action])
 
-	begin
-	  verified = if Recaptcha.invalid_response?(recaptcha_response)
-		false
-	  else
-		unless options[:skip_remote_ip]
-		  remoteip = (request.respond_to?(:remote_ip) && request.remote_ip) || (env && env['REMOTE_ADDR'])
-		  options = options.merge(remote_ip: remoteip.to_s) if remoteip
-		end
+  begin
+    verified = if Recaptcha.invalid_response?(recaptcha_response)
+                 false
+               else
+                 unless options[:skip_remote_ip]
+                   remoteip = (request.respond_to?(:remote_ip) && request.remote_ip) || (env && env['REMOTE_ADDR'])
+                   options = options.merge(remote_ip: remoteip.to_s) if remoteip
+                 end
 
-		success, @_recaptcha_reply =
-		  Recaptcha.verify_via_api_call(recaptcha_response, options.merge(with_reply: true))
-		success
-	  end
+                 success, @_recaptcha_reply =
+                   Recaptcha.verify_via_api_call(recaptcha_response, options.merge(with_reply: true))
+                 success
+               end
 
-	  if verified
-		flash.delete(:recaptcha_error) if recaptcha_flash_supported? && !model
-		true
-	  else
-		recaptcha_error(
-		  model,
-		  attribute,
-		  options.fetch(:message) { Recaptcha::Helpers.to_error_message(:verification_failed) }
-		)
-		false
-	  end
-	rescue Timeout::Error
-	  if Recaptcha.configuration.handle_timeouts_gracefully
-		recaptcha_error(
-		  model,
-		  attribute,
-		  options.fetch(:message) { Recaptcha::Helpers.to_error_message(:recaptcha_unreachable) }
-		)
-		false
-	  else
-		raise RecaptchaError, 'Recaptcha unreachable.'
-	  end
-	rescue StandardError => e
-	  raise RecaptchaError, e.message, e.backtrace
-	end
+    if verified
+      flash.delete(:recaptcha_error) if recaptcha_flash_supported? && !model
+      true
+    else
+      recaptcha_error(
+        model,
+        attribute,
+        options.fetch(:message) { Recaptcha::Helpers.to_error_message(:verification_failed) }
+      )
+      false
+    end
+  rescue Timeout::Error
+    if Recaptcha.configuration.handle_timeouts_gracefully
+      recaptcha_error(
+        model,
+        attribute,
+        options.fetch(:message) { Recaptcha::Helpers.to_error_message(:recaptcha_unreachable) }
+      )
+      false
+    else
+      raise RecaptchaError, 'Recaptcha unreachable.'
+    end
+  rescue StandardError => e
+    raise RecaptchaError, e.message, e.backtrace
   end
+end
 
-  def verify_recaptcha!(options = {})
-	verify_recaptcha(options) || raise(VerifyError)
+def verify_recaptcha!(options = {})
+  verify_recaptcha(options) || raise(VerifyError)
+end
+
+def recaptcha_reply
+  @_recaptcha_reply if defined?(@_recaptcha_reply)
+end
+
+def recaptcha_error(model, attribute, message)
+  if model
+    model.errors.add(attribute, message)
+  elsif recaptcha_flash_supported?
+    flash[:recaptcha_error] = message
   end
+end
 
-  def recaptcha_reply
-	@_recaptcha_reply if defined?(@_recaptcha_reply)
+def recaptcha_flash_supported?
+  request.respond_to?(:format) && request.format == :html && respond_to?(:flash)
+end
+
+# Extracts response token from params. params['g-recaptcha-response-data'] for recaptcha_v3 or
+# params['g-recaptcha-response'] for recaptcha_tags and invisible_recaptcha_tags and should
+# either be a string or a hash with the action name(s) as keys. If it is a hash, then `action`
+# is used as the key.
+# @return [String] A response token if one was passed in the params; otherwise, `''`
+def recaptcha_response_token(action = nil)
+  response_param = params['g-recaptcha-response-data'] || params['g-recaptcha-response']
+  response_param = response_param[action] if action && response_param.respond_to?(:key?)
+
+  if response_param.is_a?(String)
+    response_param
+  else
+    ''
   end
-
-  def recaptcha_error(model, attribute, message)
-	if model
-	  model.errors.add(attribute, message)
-	elsif recaptcha_flash_supported?
-	  flash[:recaptcha_error] = message
-	end
-  end
-
-  def recaptcha_flash_supported?
-	request.respond_to?(:format) && request.format == :html && respond_to?(:flash)
-  end
-
-  # Extracts response token from params. params['g-recaptcha-response-data'] for recaptcha_v3 or
-  # params['g-recaptcha-response'] for recaptcha_tags and invisible_recaptcha_tags and should
-  # either be a string or a hash with the action name(s) as keys. If it is a hash, then `action`
-  # is used as the key.
-  # @return [String] A response token if one was passed in the params; otherwise, `''`
-  def recaptcha_response_token(action = nil)
-	response_param = params['g-recaptcha-response-data'] || params['g-recaptcha-response']
-	response_param = response_param[action] if action && response_param.respond_to?(:key?)
-
-	if response_param.is_a?(String)
-	  response_param
-	else
-	  ''
-	end
-  end
-
+end
