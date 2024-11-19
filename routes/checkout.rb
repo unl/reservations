@@ -12,7 +12,6 @@ end
 get "/checkout/?" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
-
   nuid = params[:nuid]
 
   if nuid.nil? || nuid.strip.empty?
@@ -45,14 +44,15 @@ get "/checkout/?" do
                                            }
 end
 
-get "/checkout/new_project/user?" do
+=begin
+get "/checkout/new_project/:nuid/user" do
   @breadcrumbs << { :text => "New_Project" }
   require_login
 
   erb :'engineering_garage/new_project_user_confirmation', :layout => :fixed, :locals => {}
 end
 
-post "/checkout/new_project/user?" do
+post "/checkout/new_project/:nuid/user" do
   @breadcrumbs << { :text => "New_Project" }
   require_login
   user_by_nuid = User.find_by(user_nuid: params[:nuid])
@@ -75,21 +75,70 @@ post "/checkout/new_project/user?" do
   session[:user_id] = user.id if user
   redirect "/checkout/new_project/create?"
 end
+=end
 
-get "/checkout/new_project/create?" do
+get "/checkout/new_project/:nuid/create" do
   @breadcrumbs << { :text => "New_Project" }
   require_login
-  user = User.find(session[:user_id]) if session[:user_id]
+  user = User.find_by(user_nuid: params[:nuid])
   erb :'engineering_garage/new_project', :layout => :fixed, :locals => {
                                            :user => user,
                                          }
 end
 
-post "/checkout/new_project/create?" do
+post "/checkout/new_project/:nuid/create" do
   @breadcrumbs << { :text => "New_Project" }
   require_login
+
+  if  params[:title].blank?
+		flash :error, 'Error', 'Please enter a title'
+		redirect back
+	end 
+
+  if  params[:bin_id].blank?
+		flash :error, 'Error', 'Please enter a bin code'
+		redirect back
+	end 
+
+  if Project.find_by(bin_id: params[:bin_id]) != nil
+    flash :error, 'Error', "A project with that Bin ID already exists. If you believe this to be an error, please contact an administrator."
+		redirect back
+  end
+
   project = Project.new
-  params[:user] = User.find(session[:user_id]) if session[:user_id]
+  params[:user] = User.find_by(user_nuid: params[:nuid])
+  project.set_data(params)
+  project.update_last_checked_in
+  redirect "/checkout/?"
+end
+
+get "/checkout/new_project/:project_id/edit" do
+  @breadcrumbs << { :text => "New_Project" }
+  require_login
+  project = Project.find_by(id: params[:project_id])
+  user = User.find_by(id: project.owner_user_id)
+  erb :'engineering_garage/new_project', :layout => :fixed, :locals => {
+                                           :user => user,
+                                           :title => params[:title],
+                                           :description => params[:description],
+                                           :bin_id => params[:bin_id],
+                                         }
+end
+
+post "/checkout/new_project/:project_id/edit" do
+  @breadcrumbs << { :text => "New_Project" }
+  require_login
+
+  if  params[:title].blank?
+		flash :error, 'Error', 'Please enter a title'
+		redirect back
+	end 
+
+  if  params[:bin_id].blank?
+		flash :error, 'Error', 'Please enter a bin code'
+		redirect back
+	end 
+
   project.set_data(params)
   redirect "/checkout/?"
 end
