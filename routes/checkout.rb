@@ -9,7 +9,7 @@ get "/checkout" do
   erb :'engineering_garage/checkout', :layout => :fixed, locals: {}
 end
 
-get "/checkout/?" do
+get "/checkout/user?" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
 
@@ -18,18 +18,24 @@ get "/checkout/?" do
   if nuid.nil? || nuid.strip.empty?
     redirect "/checkout"
   else
-    # Get the user by nuid or redirect with error message
+    checkout_user = User.find_by(user_nuid: nuid)
+    if checkout_user.nil?
+      flash :error, "Error", "User with that NUID not found"
+      redirect back
+    else
+      user_projects = Project.where(owner_user_id: checkout_user.id)
+    end
     # Preload the project list
     # Preload the tool list
   end
 
-  user_projects = [
-    { id: 1, location: "Garage A", name: "Project Alpha", last_accessed: (DateTime.now - 1).strftime("%m/%d/%Y %H:%M"), description: "Building a robot" },
-    { id: 2, location: "Garage B", name: "Project Beta", last_accessed: (DateTime.now - 2).strftime("%m/%d/%Y %H:%M"), description: "Creating a drone" },
-    { id: 3, location: "Garage C", name: "Project Gamma", last_accessed: (DateTime.now - 3).strftime("%m/%d/%Y %H:%M"), description: "Developing a new app" },
-    { id: 4, location: "Garage D", name: "Project Delta", last_accessed: (DateTime.now - 4).strftime("%m/%d/%Y %H:%M"), description: "Designing a new car model" },
-    { id: 5, location: "Garage E", name: "Project Epsilon", last_accessed: (DateTime.now - 5).strftime("%m/%d/%Y %H:%M"), description: "Constructing a bridge" },
-  ]
+  # user_projects = [
+  #   { id: 1, location: "Garage A", name: "Project Alpha", last_accessed: (DateTime.now - 1).strftime("%m/%d/%Y %H:%M"), description: "Building a robot" },
+  #   { id: 2, location: "Garage B", name: "Project Beta", last_accessed: (DateTime.now - 2).strftime("%m/%d/%Y %H:%M"), description: "Creating a drone" },
+  #   { id: 3, location: "Garage C", name: "Project Gamma", last_accessed: (DateTime.now - 3).strftime("%m/%d/%Y %H:%M"), description: "Developing a new app" },
+  #   { id: 4, location: "Garage D", name: "Project Delta", last_accessed: (DateTime.now - 4).strftime("%m/%d/%Y %H:%M"), description: "Designing a new car model" },
+  #   { id: 5, location: "Garage E", name: "Project Epsilon", last_accessed: (DateTime.now - 5).strftime("%m/%d/%Y %H:%M"), description: "Constructing a bridge" },
+  # ]
   user_checked_out = [
     { id: 1, name: "Hammer", checked_out_date: (DateTime.now - 1).strftime("%m/%d/%Y %H:%M") },
     { id: 2, name: "Screwdriver", checked_out_date: (DateTime.now - 2).strftime("%m/%d/%Y %H:%M") },
@@ -39,7 +45,7 @@ get "/checkout/?" do
   ]
 
   erb :"engineering_garage/checkout_user", :layout => :fixed, locals: {
-                                             :nuid => nuid,
+                                             :user => checkout_user,
                                              :checked_out => user_checked_out,
                                              :projects => user_projects,
                                            }

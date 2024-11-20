@@ -5,7 +5,7 @@
   <div class="dcf-d-flex dcf-flex-col dcf-gap-2">
 		<div class="dcf-d-flex dcf-flex-row dcf-jc-between dcf-ai-baseline dcf-w-100% dcf-gap-2">
 			<div class="dcf-d-inline-flex dcf-flex-row dcf-ai-baseline dcf-gap-4">
-				<h3><%= nuid %></h3>
+				<h3><%= user[:username] %></h3>
 				<a href="/checkout" class="dcf-btn dcf-btn-tertiary" type="button">Clear</a>
 			</div>
 			<div class="dcf-d-flex dcf-gap-2">
@@ -51,9 +51,9 @@
             <tbody>
               <% projects.each do |project| %>
                 <tr>
-                  <td><%= project[:location] %></td>
-                  <td><%= project[:name] %></td>
-                  <td><%= project[:last_accessed] %></td>
+                  <td><%= project[:bin_id] %></td>
+                  <td><%= project[:title] %></td>
+                  <td><%= project[:last_checked_out] %></td>
                   <td class="dcf-d-flex dcf-flex-row-rev dcf-flex-shrink-1 dcf-gap-2">
                     <button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkout-<%= project[:id] %>" type="button">Check Out</button>
 										<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="edit-<%= project[:id] %>" type="button">Edit</button>
