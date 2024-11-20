@@ -127,9 +127,9 @@ post '/admin/events/:event_id/signup_list/?' do
 								:user_email => user.email,
 								:event_id => event.id
 							)
+							user.send_attended_orientation_email
 						end
 
-						user.send_attended_orientation_email
 					end
 				end
 			end
