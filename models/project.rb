@@ -18,22 +18,16 @@ class Project < ActiveRecord::Base
 		self.title = params[:title]
 		self.description = params[:description]
 		self.bin_id = params[:bin_id]
-=begin
-		self.last_checked_in = calculate_time(params[:last_checked_in_date], params[:last_checked_in_hour], params[:last_checked_in_minute], params[:last_checked_in_time_am_pm])
-		self.last_checked_out = calculate_time(params[:last_checked_out_date], params[:last_checked_out_hour], params[:last_checked_out_minute], params[:last_checked_out_time_am_pm])
-=end
 		self.save
 	end
 
-	def set_last_checked_in(params)
-		self.last_checked_in = calculate_time(params[:last_checked_in_date], params[:last_checked_in_hour], params[:last_checked_in_minute], params[:last_checked_in_time_am_pm])
-		self.updated_on = calculate_time(params[:last_checked_in_date], params[:last_checked_in_hour], params[:last_checked_in_minute], params[:last_checked_in_time_am_pm])
+	def update_last_checked_in()
+		self.last_checked_in = Time.now
 		self.save
 	end
 
-	def set_last_checked_out(params)
-		self.last_checked_out = calculate_time(params[:last_checked_out_date], params[:last_checked_out_hour], params[:last_checked_out_minute], params[:last_checked_out_time_am_pm])
-		self.updated_on = calculate_time(params[:last_checked_out_date], params[:last_checked_out_hour], params[:last_checked_out_minute], params[:last_checked_out_time_am_pm])
+	def update_last_checked_out()
+		self.last_checked_out = Time.now
 		self.save
 	end
 end
