@@ -9,16 +9,15 @@ require 'models/user_has_permission'
 require 'classes/emailer'
 require 'erb'
 
-
 class User < ActiveRecord::Base
   has_many :resource_authorizations, dependent: :destroy
   has_many :event_signups, dependent: :destroy
   has_many :user_has_permissions, dependent: :destroy
   has_many :permissions, through: :user_has_permissions
   has_many :alert_signups, dependent: :destroy
-  
+
   def authorized_resource_ids
-    self.resource_authorizations.map {|res_auth| res_auth.resource_id}
+    self.resource_authorizations.map { |res_auth| res_auth.resource_id }
   end
 
   def meets_resource_reservation_limit?(resource_id)
@@ -35,10 +34,10 @@ class User < ActiveRecord::Base
     return true if resource.user_reservation_limit.nil?
 
     # check if user over reservation limit for resource and return boolean
-    Reservation.joins(:resource).includes(:event).
-        where(:resources => {:id => resource_id}).
-        where(:user_id => id).
-        where('end_time >= ?', Time.now).count < resource.user_reservation_limit.to_i
+    Reservation.joins(:resource).includes(:event)
+               .where(:resources => { :id => resource_id })
+               .where(:user_id => id)
+               .where('end_time >= ?', Time.now).count < resource.user_reservation_limit.to_i
   end
 
   def get_authorization(resource_id)
@@ -46,7 +45,7 @@ class User < ActiveRecord::Base
   end
 
   def signed_up_event_ids
-    self.event_signups.map {|event_signup| event_signup.event_id}
+    self.event_signups.map { |event_signup| event_signup.event_id }
   end
 
   def is_current?
@@ -110,11 +109,58 @@ class User < ActiveRecord::Base
     self.save
   end
 
+  def get_user_agreement_expiration_date
+    user_agreement_expiration_date
+  end
+
+  def set_user_agreement_expiration_date(exp)
+    self.user_agreement_expiration_date = exp
+    self.save
+  end
+
   def set_active(state)
     self.active = state ? true : false
     self.save
   end
 
+  def set_nuid(nuid)
+    self.user_nuid = nuid
+    self.save
+  end
+
+  # Retrieves and returns the user's nuid
+  # Error headers are used as a conditional in different files
+  def fetch_nuid()
+    content = ''
+
+    # Try to get user uid from directory api
+    begin
+      content = fetch_final_content("https://directory.unl.edu/people/#{self.username}?format=json")
+    rescue => e
+      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."}
+    end
+    # Check to make sure it is valid json
+    if valid_json?(content) === false
+      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."}
+    end
+
+    # Parse it
+    json_parse_content = JSON.parse(content)
+
+    # Check to make sure we have data and it is formatted right		
+    if json_parse_content.key?('unluncwid') === false || json_parse_content['unluncwid'].empty?
+      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."}
+    end
+
+    # Get the nuid and double check we don't have duplicates
+    user_nuid = json_parse_content['unluncwid'][0]
+    unless User.find_by(:user_nuid => user_nuid, :service_space_id => SS_ID).nil?
+      return {:status => false, :nuid => nil, :error_header => "Error retrieving your NUID", :error_message => "A user with that NUID already exists. If you believe this to be an error, please contact an administrator."}
+    end
+
+    # Returns the user nuid
+    return {:status => true, :nuid => user_nuid, :error_header => nil, :error_message => nil}
+  end
 
   def date_of_birth
     date_of_birth
@@ -295,7 +341,8 @@ class User < ActiveRecord::Base
         template = File.read(template_path)
         body = ERB.new(template).result(binding)
 
-        Emailer.mail(self.email, "#{CONFIG['app']['title']} - Vehicle Information Update", body, CONFIG['app']['email_from'])
+        Emailer.mail(self.email, "#{CONFIG['app']['title']} - Vehicle Information Update", body,
+                     CONFIG['app']['email_from'])
       end
     end
   end
@@ -318,8 +365,9 @@ class User < ActiveRecord::Base
       end
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
-      
-      Emailer.mail(self.email, "#{CONFIG['app']['title']} - Vehicle Information Update", body, CONFIG['app']['email_from'])
+
+      Emailer.mail(self.email, "#{CONFIG['app']['title']} - Vehicle Information Update", body,
+                   CONFIG['app']['email_from'])
     end
   end
 
@@ -336,7 +384,9 @@ class User < ActiveRecord::Base
       attachments = {}
       if SS_ID == 1
         attachments = {
-          "new-member-orientation-parking-map.pdf" => File.read(File.expand_path("../public/pdf/new-member-orientation-parking-map.pdf", File.dirname(__FILE__)))
+          "new-member-orientation-parking-map.pdf" => File.read(File.expand_path(
+                                                                  "../public/pdf/new-member-orientation-parking-map.pdf", File.dirname(__FILE__)
+                                                                ))
         }
       end
 
@@ -370,8 +420,17 @@ class User < ActiveRecord::Base
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
 
-      Emailer.mail(self.email, "#{CONFIG['app']['title']} - Reservation Canceled for #{@reservation.start_time.strftime('%m-%d-%Y')}", body)
+      Emailer.mail(self.email,
+                   "#{CONFIG['app']['title']} - Reservation Canceled for #{@reservation.start_time.strftime('%m-%d-%Y')}", body)
     end
   end
 
+  def increment_nuid_retrival_failures()
+    if self.user_nuid != nil
+      self.user_nuid = Integer(self.user_nuid)  -  1
+    else
+      self.user_nuid = -1
+    end
+    self.save
+  end
 end
