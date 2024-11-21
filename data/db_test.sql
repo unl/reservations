@@ -3275,8 +3275,20 @@ CREATE TABLE `vehicles` (
   `user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- Dumping data for table `vehicles`
+--
+
+--
+------------------------------------------------------
+--
+
+--
+-- Table structure for table `projects`
+--
+
 CREATE TABLE `projects` (
-  `id` int(11) PRIMARY KEY AUTO_INCREMENT,
+  `id` int(11),
   `owner_user_id` int(11) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `description` text DEFAULT NULL,
@@ -3285,11 +3297,10 @@ CREATE TABLE `projects` (
   `last_checked_out` datetime DEFAULT NULL,
   `created_on` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_on` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (owner_user_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Dumping data for table `vehicles`
+-- Dumping data for table `projects`
 --
 
 --
@@ -3413,6 +3424,12 @@ ALTER TABLE `preset_events_has_resources`
 -- Indexes for table `preset_events_has_resource_reservations`
 --
 ALTER TABLE `preset_events_has_resource_reservations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `projects`
+--
+ALTER TABLE `projects`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -3633,6 +3650,12 @@ ALTER TABLE `preset_events_has_resource_reservations`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
 
 --
+-- AUTO_INCREMENT for table `projects`
+--
+ALTER TABLE `projects`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `reservations`
 --
 ALTER TABLE `reservations`
@@ -3750,6 +3773,12 @@ ALTER TABLE `preset_events`
 ALTER TABLE `preset_events_has_resources`
   ADD CONSTRAINT `fk_preset_events_has_resources_preset_events1` FOREIGN KEY (`preset_events_id`) REFERENCES `preset_events` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_preset_events_has_resources_resources1` FOREIGN KEY (`resources_id`) REFERENCES `resources` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `projects`
+  ADD CONSTRAINT `fk_owner_user_id` FOREIGN KEY (`owner_user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
 
 --
 -- Constraints for table `users`
