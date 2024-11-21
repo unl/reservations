@@ -45,7 +45,7 @@ get "/checkout/user?" do
 
   erb :"engineering_garage/checkout_user", :layout => :fixed, locals: {
                                              :user => checkout_user,
-                                             :nuid => nuid,
+																						 :nuid => nuid,
                                              :checked_out => user_checked_out,
                                              :projects => user_projects,
                                            }

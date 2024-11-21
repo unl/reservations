@@ -1,4 +1,5 @@
 <h1 class="dcf-txt-h3" id="Checkout">Warehouse Check In / Check Out</h1>
+<a href="/checkout" class="dcf-btn dcf-btn-secondary" type="button">Return to Scan Page</a>
 <form class="dcf-form">
 <fieldset class="dcf-h-min-100vh dcf-mt-4">
   <legend>User Details</legend>
@@ -6,7 +7,6 @@
 		<div class="dcf-d-flex dcf-flex-row dcf-jc-between dcf-ai-baseline dcf-w-100% dcf-gap-2">
 			<div class="dcf-d-inline-flex dcf-flex-row dcf-ai-baseline dcf-gap-4">
 				<h3><%= user[:username] %></h3>
-				<a href="/checkout" class="dcf-btn dcf-btn-tertiary" type="button">Clear</a>
 			</div>
 			<div class="dcf-d-flex dcf-gap-2">
 				<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkout-modal-btn" type="button">Check Out Tool</button>
@@ -60,7 +60,7 @@
                     <div class="dcf-modal" id="edit-<%= project[:id] %>" hidden>
                       <div class="dcf-modal-wrapper">
                         <div class="dcf-modal-header">
-                          <h2>Edit <%= project[:name] %></h2>
+                          <h2>Edit <%= project[:title] %></h2>
                           <button class="dcf-btn-close-modal">Close</button>
                         </div>
                         <div class="dcf-modal-content">
@@ -71,11 +71,31 @@
                     <div class="dcf-modal" id="checkout-<%= project[:id] %>" hidden>
                       <div class="dcf-modal-wrapper">
                         <div class="dcf-modal-header">
-                          <h2>Check Out <%= project[:name] %></h2>
+                          <h2>Check Out Project</h2>
                           <button class="dcf-btn-close-modal">Close</button>
                         </div>
                         <div class="dcf-modal-content">
-                          <%= project[:description] %>
+													<div class="dcf-grid">
+														<div class="dcf-col-50%-start">
+															<p><strong>Name:</strong> <%= project[:title] %></p>
+															<p><strong>Location:</strong> <%= project[:bin_id] %></p>
+															<p><strong>Description:</strong> <%= project[:description] %></p>
+															<form class="dcf-form" action="" method="POST" enctype="multipart/form-data">
+																<div class="dcf-form-controls-inline dcf-gap-2">
+																	<button class="dcf-btn dcf-btn-primary" type="submit">Check Out</button>
+																	<button class="dcf-btn dcf-btn-secondary" type="button">Cancel</button>
+																</div>
+															</form>
+														</div>
+														<div class="dcf-col-50%-end">
+															<p><strong>Teammates:</strong></p>
+															<ul>
+																<li>Teammate 1</li>
+																<li>Teammate 2</li>
+																<li>Teammate 3</li>
+															</ul>
+														</div>
+													</div>
                         </div>
                       </div>
                     </div>
