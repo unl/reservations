@@ -146,7 +146,7 @@ post '/admin/email/send/?' do
 	end
 	if params.checked?('send_to_all_with_tool_authorization')
 		params[:tool_authorization].each do |id|
-			users = all_users.select { |user| user.authorized_resource_ids.include?(id) }
+			users = all_users.select { |user| user.authorized_resource_ids.include?(id.to_i) }
 			unless users.nil?
 				users.each do |user|
 					users_to_send_to << user
