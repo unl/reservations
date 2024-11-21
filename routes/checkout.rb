@@ -5,13 +5,13 @@ require "erb"
 get "/checkout" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
-
   erb :'engineering_garage/checkout', :layout => :fixed, locals: {}
 end
 
 get "/checkout/user?" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
+
   nuid = params[:nuid]
 
   if nuid.nil? || nuid.strip.empty?
@@ -45,20 +45,21 @@ get "/checkout/user?" do
 
   erb :"engineering_garage/checkout_user", :layout => :fixed, locals: {
                                              :user => checkout_user,
+                                             :nuid => nuid,
                                              :checked_out => user_checked_out,
                                              :projects => user_projects,
                                            }
 end
 
 =begin
-get "/checkout/new_project/:nuid/user" do
+get "/checkout/project/:nuid/user" do
   @breadcrumbs << { :text => "New_Project" }
   require_login
 
   erb :'engineering_garage/new_project_user_confirmation', :layout => :fixed, :locals => {}
 end
 
-post "/checkout/new_project/:nuid/user" do
+post "/checkout/project/:nuid/user" do
   @breadcrumbs << { :text => "New_Project" }
   require_login
   user_by_nuid = User.find_by(user_nuid: params[:nuid])
@@ -79,11 +80,11 @@ post "/checkout/new_project/:nuid/user" do
     user = user_by_email
   end
   session[:user_id] = user.id if user
-  redirect "/checkout/new_project/create?"
+  redirect "/checkout/project/create?"
 end
 =end
 
-get "/checkout/new_project/:nuid/create" do
+get "/checkout/project/:nuid/create" do
   @breadcrumbs << { :text => "New_Project" }
   require_login
   user = User.find_by(user_nuid: params[:nuid])
@@ -92,7 +93,7 @@ get "/checkout/new_project/:nuid/create" do
                                          }
 end
 
-post "/checkout/new_project/:nuid/create" do
+post "/checkout/project/:nuid/create" do
   @breadcrumbs << { :text => "New_Project" }
   require_login
 
@@ -115,25 +116,27 @@ post "/checkout/new_project/:nuid/create" do
   params[:user] = User.find_by(user_nuid: params[:nuid])
   project.set_data(params)
   project.update_last_checked_in
-  redirect "/checkout/?"
+  redirect "/checkout"
 end
 
-get "/checkout/new_project/:project_id/edit" do
+get "/checkout/project/:project_id/edit" do
   @breadcrumbs << { :text => "New_Project" }
   require_login
   project = Project.find_by(id: params[:project_id])
   user = User.find_by(id: project.owner_user_id)
-  erb :'engineering_garage/new_project', :layout => :fixed, :locals => {
+  erb :'engineering_garage/edit_project', :layout => :fixed, :locals => {
                                            :user => user,
-                                           :title => params[:title],
-                                           :description => params[:description],
-                                           :bin_id => params[:bin_id],
+                                           :title => project.title,
+                                           :description => project.description,
+                                           :bin_id => project.bin_id,
                                          }
 end
 
-post "/checkout/new_project/:project_id/edit" do
+post "/checkout/project/:project_id/edit" do
   @breadcrumbs << { :text => "New_Project" }
   require_login
+  project = Project.find_by(id: params[:project_id]) 
+  params[:user] = User.find_by(user_nuid: params[:nuid])
 
   if  params[:title].blank?
 		flash :error, 'Error', 'Please enter a title'
@@ -143,8 +146,21 @@ post "/checkout/new_project/:project_id/edit" do
   if  params[:bin_id].blank?
 		flash :error, 'Error', 'Please enter a bin code'
 		redirect back
+	end
+
+  if  params[:user].nil?
+		flash :error, 'Error', 'User with provided NUID not found'
+		redirect back
 	end 
 
+  project_by_bin = Project.find_by(bin_id: params[:bin_id])
+  if project_by_bin != nil
+    if project_by_bin.id != project.id
+      flash :error, 'Error', "A project with that Bin ID already exists. If you believe this to be an error, please contact an administrator."
+      redirect back
+    end
+  end
+
   project.set_data(params)
-  redirect "/checkout/?"
+  redirect "/checkout"
 end
