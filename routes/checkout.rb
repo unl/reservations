@@ -2,30 +2,30 @@ require "models/project"
 require "date"
 require "erb"
 
-get "/checkout" do
+get "/checkout/?" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
   erb :'engineering_garage/checkout', :layout => :fixed, locals: {}
 end
 
-get "/checkout/user?" do
+get "/checkout/user/?" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
 
   nuid = params[:nuid]
 
   if nuid.nil? || nuid.strip.empty?
-    redirect "/checkout"
+    redirect "/checkout/"
   else
     checkout_user = User.find_by(user_nuid: nuid)
     if checkout_user.nil?
-      flash :error, "Error", "User with that NUID not found"
-      redirect back
+      flash :danger, "Error", "User with that NUID not found"
+      redirect "/checkout/"
     else
+			# Preload the project list
       user_projects = Project.where(owner_user_id: checkout_user.id)
+			# Preload the tool list
     end
-    # Preload the project list
-    # Preload the tool list
   end
 
   # user_projects = [
