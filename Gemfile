@@ -16,8 +16,7 @@ gem 'bigdecimal'
 gem 'recaptcha'
 gem 'rufus-scheduler'
 gem 'highlander'
-gem 'rubocop', require: false
-gem 'rspec'
+
 
 group :development do
   gem 'shotgun'
@@ -25,4 +24,7 @@ group :development do
   gem 'guard'
   gem 'guard-less'
   gem 'therubyracer'
+  gem 'rack-test'
+  gem 'rubocop', require: false
+  gem 'rspec'
 end

@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD COLUMN `user_agreement_expiration_date` datetime DEFAULT NULL;

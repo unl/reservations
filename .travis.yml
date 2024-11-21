@@ -1,28 +1,42 @@
-{
-  "before_install": [
-    "gem install bundler -v 2.4.22",
-    "bundle install",
-    "sudo apt-get -y install unzip",
-    # "sudo apt-get -y install ruby-rspec-core",
-    "touch config/server.json",
-    "sh config_setup.sh -u $DB_USER -p $DB_PASS -c $CAPTCHA_SITE_KEY -s $CAPTCHA_SECRET_KEY",
-    "cd $TRAVIS_BUILD_DIR/public",
-    "curl -o ./wdn-compressed https://wdn.unl.edu/downloads/wdn.zip",
-    "unzip -o ./wdn-compressed -d wdn",
-    "mv ./wdn/wdn/templates_5.3/ ./wdn/",
-    "rm -rf ./wdn/wdn",
-    "nvm install 16"
-  ],
-  "branches": {
-    "only": [
-      "master"
-    ]
-  },
-  "language": "ruby",
-  "rvm": "2.6.10",
-  "script": [
-    "cd $TRAVIS_BUILD_DIR/",
-    "rubocop -c .rubocop.yml",
-    # "rspec -I . unit_tests_spec.rb",
-  ]
-}
+before_install:
+  - gem install bundler -v 2.4.22
+  - bundle install
+  - sudo apt-get -y install unzip
+  - touch config/server.json
+  - sh config_setup.sh -u $DB_USER -p $DB_PASS -c $CAPTCHA_SITE_KEY -s $CAPTCHA_SECRET_KEY
+  - cd $TRAVIS_BUILD_DIR/public
+  - curl -o ./wdn-compressed https://wdn.unl.edu/downloads/wdn.zip
+  - unzip -o ./wdn-compressed -d wdn
+  - mv ./wdn/wdn/templates_5.3/ ./wdn/
+  - rm -rf ./wdn/wdn
+  - nvm install 16
+  # Database Setup
+  - sudo apt-get install -y mariadb-server mariadb-client
+  - sudo service mysql start
+  - sudo mysql -e "CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';"
+  - sudo mysql -e 'CREATE DATABASE reservations;'
+  - sudo mysql -e "GRANT ALL PRIVILEGES ON reservations.* TO '$DB_USER'@'localhost';"
+  - cd $TRAVIS_BUILD_DIR
+  - sudo mysql reservations < ./data/db_test.sql
+
+branches:
+  only:
+    - development
+
+language: ruby
+rvm:
+  - 2.6.10
+
+script:
+  - cd $TRAVIS_BUILD_DIR/
+  - ./rubocop_diff.sh
+  - rspec -I . unit_tests_spec.rb
+
+after_success:
+  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh success $WEBHOOK_URL
+after_failure:
+  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh failure $WEBHOOK_URL

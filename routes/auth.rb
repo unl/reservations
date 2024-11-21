@@ -170,6 +170,17 @@ post '/check_in_login/?' do
 
   # it is the user, hooray
   session[:user_id] = user.id
+  # checks whether the NU user has a nuid or whether is has tried and failed less than 20 times before
+  if user.university_status != 'Non-NU Student (All Other Institutions)' && SS_ID == 8
+    if user.user_nuid == nil || (Integer(user.user_nuid) > -20 && Integer(user.user_nuid) < 0)
+      nuid_hash = user.fetch_nuid()
+      if nuid_hash[:status]
+        user.set_nuid(nuid_hash[:nuid])
+      else
+        user.increment_nuid_retrival_failures()
+      end
+    end
+  end
   redirect '/check_in/'
 end
 
@@ -211,6 +222,19 @@ post '/login/?' do
 
   # it is the user, hooray
   session[:user_id] = user.id
+
+  # checks whether the NU user has a nuid or whether is has tried and failed less than 20 times before
+  if user.university_status != 'Non-NU Student (All Other Institutions)' && SS_ID == 8
+    if user.user_nuid == nil || (Integer(user.user_nuid) > -20 && Integer(user.user_nuid) < 0)
+      nuid_hash = user.fetch_nuid()
+      if nuid_hash[:status]
+        user.set_nuid(nuid_hash[:nuid])
+      else
+        user.increment_nuid_retrival_failures()
+      end
+    end
+  end
+
   if !next_page.nil? && next_page.length > 0
     redirect "/#{next_page}/"
   else

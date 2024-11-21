@@ -24,6 +24,9 @@ class Event < ActiveRecord::Base
 	EVENT_TYPE_ID_ENGINEERING_NEW_MEMBER_ORIENTATION = 12
 	EVENT_TYPE_ID_ENGINEERING_MACHINE_TRAINING = 13
 	EVENT_TYPE_ID_ENGINEERING_GENERAL_WORKSHOP = 14
+	EVENT_TYPE_ID_ENGINEERING_WOODSHOP = 15
+	EVENT_TYPE_ID_ENGINEERING_METALSHOP = 16
+	EVENT_TYPE_ID_ENGINEERING_DIGITAL_FABRICATION = 17
 
 	def self.type_options
 		# These correspond with event_types table
@@ -43,6 +46,9 @@ class Event < ActiveRecord::Base
 				EVENT_TYPE_ID_ENGINEERING_NEW_MEMBER_ORIENTATION => 'New Member Orientation',
 				EVENT_TYPE_ID_ENGINEERING_MACHINE_TRAINING => 'Machine Training',
 				EVENT_TYPE_ID_ENGINEERING_GENERAL_WORKSHOP => 'General Workshop',
+				EVENT_TYPE_ID_ENGINEERING_WOODSHOP => 'Woodshop',
+				EVENT_TYPE_ID_ENGINEERING_METALSHOP => 'Metalshop',
+				EVENT_TYPE_ID_ENGINEERING_DIGITAL_FABRICATION => 'Digital Fabrication',
 			}
 		end
     end
@@ -106,8 +112,13 @@ class Event < ActiveRecord::Base
 		self.title = params[:title]
 		self.description = params[:description]
 		self.admin_notes = params[:admin_notes]
-		self.start_time = calculate_time(params[:start_date], params[:start_time_hour], params[:start_time_minute], params[:start_time_am_pm])
-		self.end_time = calculate_time(params[:end_date], params[:end_time_hour], params[:end_time_minute], params[:end_time_am_pm])
+		if params[:timeless_event_checkbox] != "on"
+			self.start_time = calculate_time(params[:start_date], params[:start_time_hour], params[:start_time_minute], params[:start_time_am_pm])
+			self.end_time = calculate_time(params[:end_date], params[:end_time_hour], params[:end_time_minute], params[:end_time_am_pm])
+		else
+			self.start_time = nil
+			self.end_time = nil
+		end
 		self.event_type_id = params[:type]
 		self.trainer_id = params[:trainer]
 		self.location_id = params[:location]

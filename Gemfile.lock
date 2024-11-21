@@ -184,6 +184,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-23
+  arm64-darwin-24
   x86_64-darwin-21
   x86_64-darwin-22
   x86_64-linux
@@ -199,6 +200,7 @@ DEPENDENCIES
   mysql2
   pony
   rack (= 2.2.3)
+  rack-test
   recaptcha
   rest-client
   rspec
