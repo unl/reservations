@@ -3284,26 +3284,6 @@ CREATE TABLE `vehicles` (
 --
 
 --
--- Table structure for table `projects`
---
-
-CREATE TABLE `projects` (
-  `id` int(11) NOT NULL,
-  `owner_user_id` int(11) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `description` text DEFAULT NULL,
-  `bin_id` varchar(255) DEFAULT NULL,
-  `last_checked_in` datetime DEFAULT NULL,
-  `last_checked_out` datetime DEFAULT NULL,
-  `created_on` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updated_on` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
---
--- Dumping data for table `projects`
---
-
---
 -- Indexes for dumped tables
 --
 
@@ -3424,12 +3404,6 @@ ALTER TABLE `preset_events_has_resources`
 -- Indexes for table `preset_events_has_resource_reservations`
 --
 ALTER TABLE `preset_events_has_resource_reservations`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `projects`
---
-ALTER TABLE `projects`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -3650,12 +3624,6 @@ ALTER TABLE `preset_events_has_resource_reservations`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
 
 --
--- AUTO_INCREMENT for table `projects`
---
-ALTER TABLE `projects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `reservations`
 --
 ALTER TABLE `reservations`
@@ -3777,12 +3745,6 @@ ALTER TABLE `preset_events_has_resources`
 --
 -- Constraints for table `users`
 --
-ALTER TABLE `projects`
-  ADD CONSTRAINT `fk_owner_user_id` FOREIGN KEY (`owner_user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-
---
--- Constraints for table `users`
---
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`primary_emergency_contact_id`) REFERENCES `emergency_contacts` (`id`),
   ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`secondary_emergency_contact_id`) REFERENCES `emergency_contacts` (`id`);
@@ -3793,6 +3755,19 @@ ALTER TABLE `users`
 ALTER TABLE `vehicles`
   ADD CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
+
+CREATE TABLE `projects` (
+  `id` int(11) PRIMARY KEY AUTO_INCREMENT,
+  `owner_user_id` int(11) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `bin_id` varchar(255) DEFAULT NULL,
+  `last_checked_in` datetime DEFAULT NULL,
+  `last_checked_out` datetime DEFAULT NULL,
+  `created_on` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_on` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (owner_user_id) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
