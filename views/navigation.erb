@@ -5,7 +5,9 @@
             <li><a href="/tools/trainings/">Trainings</a></li>
             <li><a href="/workshops/">Workshops</a></li>
             <li><a href="/calendar/">Event Calendar</a></li>
-            <li><a href="/pricing/">Material Pricing</a></li>
+            <% if SS_ID == 1 || @user.is_admin? %>
+                <li><a href="/pricing/">Material Pricing</a></li>
+            <% end %>
         </ul>
         </li>
         <li><a href="/tools/">Reserve Equipment</a></li>
