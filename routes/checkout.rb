@@ -11,12 +11,21 @@ end
 get "/checkout/user/?" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
-
   nuid = params[:nuid]
 
   if nuid.nil? || nuid.strip.empty?
     redirect "/checkout/"
   else
+    
+    #If the nuid length is 8, it was manually input and should be correct
+    #If not, it'll be nuid+issue code from a barcode scan
+    if nuid.length != 8 
+      #pre-pends with zeroes if the input is not 13 characters long 
+      nuid = nuid.rjust(13, "0")
+      #extracts the NUID portion from the scanned input
+      nuid = nuid[0, 8]
+    end
+
     checkout_user = User.find_by(user_nuid: nuid)
     if checkout_user.nil?
       flash :danger, "Error", "User with that NUID not found"
