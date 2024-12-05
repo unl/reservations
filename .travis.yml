@@ -22,7 +22,6 @@ before_install:
 branches:
   only:
     - development
-    - 155-check-in-page
 
 language: ruby
 rvm:
