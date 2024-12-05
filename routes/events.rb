@@ -164,7 +164,7 @@ post '/events/:event_id/sign_up/?' do
 			template = File.read(template_path)
 			body = ERB.new(template).result(binding)
 			
-			# Emailer.mail(@user.email, "#{CONFIG['app']['title']} - #{event.title}", body)
+			Emailer.mail(@user.email, "#{CONFIG['app']['title']} - #{event.title}", body)
 		end
 
 		# flash a message that this works
