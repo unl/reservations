@@ -53,7 +53,11 @@
                 <tr>
                   <td><%= project[:bin_id] %></td>
                   <td><%= project[:title] %></td>
-                  <td><%= project[:last_checked_out].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %></td>
+                  <td>
+										<%= if project[:last_checked_out] != nil>
+											<%= project[:last_checked_out].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
+										<%= end>
+									</td>
                   <td class="dcf-d-flex dcf-flex-row-rev dcf-flex-shrink-1 dcf-gap-2">
 									  <% if project[:last_checked_out] == nil || project[:last_checked_out] <= project[:last_checked_in] %>
 											<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkout-<%= project[:id] %>" type="button">Check Out</button>
