@@ -54,7 +54,7 @@
                   <td><%= project[:bin_id] %></td>
                   <td><%= project[:title] %></td>
                   <td>
-										<%= if project[:last_checked_out] != nil>
+										<% if project[:last_checked_out] != nil %>
 											<%= project[:last_checked_out].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
 										<% end %>
 									</td>
