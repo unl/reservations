@@ -56,7 +56,7 @@
                   <td>
 										<%= if project[:last_checked_out] != nil>
 											<%= project[:last_checked_out].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
-										<%= end>
+										<% end %>
 									</td>
                   <td class="dcf-d-flex dcf-flex-row-rev dcf-flex-shrink-1 dcf-gap-2">
 									  <% if project[:last_checked_out] == nil || project[:last_checked_out] <= project[:last_checked_in] %>
