@@ -53,7 +53,7 @@
                 <tr>
                   <td><%= project[:bin_id] %></td>
                   <td><%= project[:title] %></td>
-                  <td><%= project[:last_checked_out] %></td>
+                  <td><%= project[:last_checked_out].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %></td>
                   <td class="dcf-d-flex dcf-flex-row-rev dcf-flex-shrink-1 dcf-gap-2">
 									  <% if project[:last_checked_out] == nil || project[:last_checked_out] <= project[:last_checked_in] %>
 											<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkout-<%= project[:id] %>" type="button">Check Out</button>
@@ -64,7 +64,7 @@
 														<button class="dcf-btn-close-modal">Close</button>
 													</div>
 													<div class="dcf-modal-content">
-														<form class="dcf-form dcf-grid" action="?nuid=<%= nuid %>&bin_id=<%= project[:bin_id] %>" method="POST" enctype="application/x-www-form-urlencoded">
+														<form class="dcf-form dcf-grid" action="/checkout/project_checkout/?nuid=<%= nuid %>&bin_id=<%= project[:bin_id] %>" method="POST" enctype="application/x-www-form-urlencoded">
 															<div class="dcf-col-50%-start">
 																<p id="project_name"><strong>Name:</strong> <%= project[:title] %></p>
 																<p id="bin_id"><strong>Location:</strong> <%= project[:bin_id] %></p>
@@ -97,29 +97,27 @@
 														<button class="dcf-btn-close-modal">Close</button>
 													</div>
 													<div class="dcf-modal-content">
-														<div class="dcf-grid">
+														<form class="dcf-form dcf-grid" action="/checkout/project_checkin/?nuid=<%= nuid %>&bin_id=<%= project[:bin_id] %>" method="POST" enctype="application/x-www-form-urlencoded">
 															<div class="dcf-col-50%-start">
-																<form class="dcf-form" action="" method="POST" enctype="multipart/form-data">
-																	<p id="project_name"><strong>Name:</strong> <%= project[:title] %></p>
-																	<p id="bin_id"><strong>Location:</strong> <%= project[:bin_id] %></p>
-																	<p><strong>Description:</strong> <%= project[:description] %></p>
-																	<div class="dcf-form-controls-inline dcf-gap-2">
-																		<button class="dcf-btn dcf-btn-primary" type="submit">Check In</button>
-																		<button class="dcf-btn dcf-btn-secondary" type="button">Cancel</button>
-																	</div>
-																</form>
+																<p id="project_name"><strong>Name:</strong> <%= project[:title] %></p>
+																<p id="bin_id"><strong>Location:</strong> <%= project[:bin_id] %></p>
+																<p><strong>Description:</strong> <%= project[:description] %></p>
+																<div class="dcf-form-controls-inline dcf-gap-2">
+																	<button class="dcf-btn dcf-btn-primary" type="submit">Check In</button>
+																	<button class="dcf-btn dcf-btn-secondary" type="button">Cancel</button>
+																</div>
 															</div>
-															<div class="dcf-col-50%-end">
+															<div class="dcf-col-50%-end dcf-h-fixed-100% dcf-overflow-y-auto">
+																<fieldset>
 																<p><strong>Teammates:</strong></p>
 																<ul>
 																	<li>Teammate 1</li>
 																	<li>Teammate 2</li>
 																	<li>Teammate 3</li>
-																	<li>Teammate 4</li>
-																	<li>Teammate 5</li>
 																</ul>
+																</fieldset>
 															</div>
-														</div>
+														</form>
 													</div>
 												</div>
 											</div>

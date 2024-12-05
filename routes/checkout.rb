@@ -53,20 +53,41 @@ get "/checkout/user/?" do
                                            }
 end
 
-post "/checkout/user/?" do
+post "/checkout/project_checkout/?" do
 	nuid = params[:nuid]
 	bin_id = params[:bin_id]
 	if bin_id != nil && nuid != nil
 		project = Project.find_by(bin_id: bin_id)
 		if project != nil
 			project.update_last_checked_out
+			flash :success, 'Success', 'Project checked out'
+			redirect "/checkout/?"
 		else
 			flash :error, 'Error', 'Bin ID not found'
-			redirect "/checkout/?"
+			redirect "/checkout/"
 		end
 	else
 		flash :error, 'Error', 'Bin ID not found'
-		redirect "/checkout/?"
+		redirect "/checkout/"
+	end
+end
+
+post "/checkout/project_checkin/?" do
+	nuid = params[:nuid]
+	bin_id = params[:bin_id]
+	if bin_id != nil && nuid != nil
+		project = Project.find_by(bin_id: bin_id)
+		if project != nil
+			project.update_last_checked_in
+			flash :success, 'Success', 'Project checked in'
+			redirect "/checkout/?"
+		else
+			flash :error, 'Error', 'Bin ID not found'
+			redirect "/checkout/"
+		end
+	else
+		flash :error, 'Error', 'Bin ID not found'
+		redirect "/checkout/"
 	end
 end
 
