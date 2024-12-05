@@ -37,13 +37,6 @@ get "/checkout/user/?" do
     end
   end
 
-  # user_projects = [
-  #   { id: 1, location: "Garage A", name: "Project Alpha", last_accessed: (DateTime.now - 1).strftime("%m/%d/%Y %H:%M"), description: "Building a robot" },
-  #   { id: 2, location: "Garage B", name: "Project Beta", last_accessed: (DateTime.now - 2).strftime("%m/%d/%Y %H:%M"), description: "Creating a drone" },
-  #   { id: 3, location: "Garage C", name: "Project Gamma", last_accessed: (DateTime.now - 3).strftime("%m/%d/%Y %H:%M"), description: "Developing a new app" },
-  #   { id: 4, location: "Garage D", name: "Project Delta", last_accessed: (DateTime.now - 4).strftime("%m/%d/%Y %H:%M"), description: "Designing a new car model" },
-  #   { id: 5, location: "Garage E", name: "Project Epsilon", last_accessed: (DateTime.now - 5).strftime("%m/%d/%Y %H:%M"), description: "Constructing a bridge" },
-  # ]
   user_checked_out = [
     { id: 1, name: "Hammer", checked_out_date: (DateTime.now - 1).strftime("%m/%d/%Y %H:%M") },
     { id: 2, name: "Screwdriver", checked_out_date: (DateTime.now - 2).strftime("%m/%d/%Y %H:%M") },
@@ -58,6 +51,23 @@ get "/checkout/user/?" do
                                              :checked_out => user_checked_out,
                                              :projects => user_projects,
                                            }
+end
+
+post "/checkout/user/?" do
+	nuid = params[:nuid]
+	bin_id = params[:bin_id]
+	if bin_id != nil && nuid != nil
+		project = Project.find_by(bin_id: bin_id)
+		if project != nil
+			project.update_last_checked_out
+		else
+			flash :error, 'Error', 'Bin ID not found'
+			redirect "/checkout/?"
+		end
+	else
+		flash :error, 'Error', 'Bin ID not found'
+		redirect "/checkout/?"
+	end
 end
 
 =begin
