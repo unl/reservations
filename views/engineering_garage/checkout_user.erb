@@ -54,9 +54,21 @@
                   <td><%= project[:bin_id] %></td>
                   <td><%= project[:title] %></td>
                   <td>
+									<% if project[:last_checked_out] != nil && project[:last_checked_in] != nil %>
+										<% if project[:last_checked_out] >= project[:last_checked_in] %>
+											<%= project[:last_checked_out].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
+										<% else %>
+											<%= project[:last_checked_in].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
+										<% end %>
+									<% else %>
 										<% if project[:last_checked_out] != nil %>
 											<%= project[:last_checked_out].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
 										<% end %>
+										<% if project[:last_checked_in] != nil %>
+											<%= project[:last_checked_in].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
+										<% end %>
+									<% end %>
+
 									</td>
                   <td class="dcf-d-flex dcf-flex-row-rev dcf-flex-shrink-1 dcf-gap-2">
 									  <% if project[:last_checked_out] == nil || project[:last_checked_out] <= project[:last_checked_in] %>
