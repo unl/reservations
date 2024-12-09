@@ -1,4 +1,5 @@
 require "models/project"
+require "models/project_teammate"
 require "date"
 require "erb"
 
@@ -156,6 +157,12 @@ post "/checkout/project/:nuid/create" do
   params[:user] = User.find_by(user_nuid: params[:nuid])
   project.set_data(params)
   project.update_last_checked_in
+
+  teammates = ProjectTeammate.new
+  params[:project_id] = project.id
+  params[:teammate_id] = User.find_by(user_nuid: params[:nuid])
+  teammates.set_data(params)
+
   redirect "/checkout"
 end
 
@@ -164,11 +171,17 @@ get "/checkout/project/:project_id/edit" do
   require_login
   project = Project.find_by(id: params[:project_id])
   user = User.find_by(id: project.owner_user_id)
+  teammates = ProjectTeammate.where("project_id = ?", params[:project_id])
+  # TODO: Sort by full name
+  # teammates.sort_by()
+
   erb :'engineering_garage/edit_project', :layout => :fixed, :locals => {
                                            :user => user,
                                            :title => project.title,
                                            :description => project.description,
                                            :bin_id => project.bin_id,
+                                           :teammates => teammates,
+                                           :project_id => project.id,
                                          }
 end
 
@@ -203,4 +216,45 @@ post "/checkout/project/:project_id/edit" do
 
   project.set_data(params)
   redirect "/checkout"
+end
+
+get "/checkout/project/:project_id/edit/teammates" do
+  @breadcrumbs << { :text => "Teammates" }
+  require_login
+
+  project = Project.find_by(id: params[:project_id])
+  teammates = ProjectTeammate.where("project_id = ?", params[:project_id])
+  # TODO: Sort by full name
+  erb :'engineering_garage/edit_teammates', :layout => :fixed, :locals => {
+                                            :project_id => project.id,
+                                            :teammates => teammates
+                                          }
+end
+
+post "/checkout/project/:project_id/edit/teammates/" do
+  @breadcrumbs << { :text => "Teammates" }
+  require_login
+
+  nuid = params[:nuid]
+
+  if nuid.nil? || nuid.strip.empty?
+    flash :danger, "Error", "NUID empty."
+    redirect back
+  end
+
+  teammate_user = User.find_by(user_nuid: nuid)
+  if teammate_user.nil?
+    flash :danger, "Error", "User with that NUID not found."
+    redirect back
+  end
+
+  # TODO: Check if user is already a teammate
+
+  teammate = ProjectTeammate.new
+  params[:project_id] = project.id
+  params[:teammate_id] = teammate_user.id
+  teammate.set_data(params)
+
+  flash :success, "Teammate Added", "A new teammate has been added to the project."
+  redirect "/checkout/project/:project_id/edit/teammates"
 end

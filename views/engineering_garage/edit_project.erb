@@ -5,9 +5,9 @@
     <fieldset>
         <legend>Project Details</legend>
 
-        <div class="dcf-form-group">
-            <label for="nuid">NUID <small class="dcf-required">Required</small></label>
-            <input class="dcf-w-100%" type="text" id="nuid" name="nuid"  value ="<%= user.user_nuid %>"  />
+        <div class="dcf-form-group ">
+            <label for="nuid">NUID <span class="dcf-txt-xs">Read only</span></label>
+            <input class="dcf-w-100%" type="text" id="nuid" name="nuid" value ="<%= user.user_nuid %>"    readonly />
         </div>
 
         <div class="dcf-form-group">
@@ -25,6 +25,40 @@
             <input class="dcf-w-100%" type="text" id="bin_id" name="bin_id" value ="<%= bin_id %>" />
         </div>
         <button class="dcf-mt-3 dcf-btn dcf-btn-primary" type="submit">Update</button>
+    </fieldset>
+</form>
+<form id="edit-teammates-form" class="dcf-form dcf-col-100% dcf-col-50%-end@sm">
+    <fieldset>
+        <legend>Project Teammates</legend>
+
+        <div class="dcf-overflow-x-auto" tabindex="0">
+            <% if teammates.count > 0 %>
+            <table class="dcf-table dcf-table-striped dcf-w-100% dcf-table-responsive dcf-mb-6" aria-describedby="teammate-list-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Date Added</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% teammates.each do | teammate | %>
+                    <% user = User.find_by(id: teammate.teammate_id) %>
+                    <tr>
+                        <td><%= user.full_name %></td>
+                        <td><%= user.email %></td>
+                        <td><%= teammate.created_on.strftime('%m/%d/%Y') %></td>
+                    </tr>
+                <% end %>
+                </tbody>
+            </table>
+            <% else %>
+                <p>No teammates found.</p>
+            <% end %>
+        </div>
+        <div>
+            <a href="/checkout/project/<%= project_id %>/edit/teammates" class="dcf-mt-1 dcf-btn dcf-btn-primary">Edit Teammates</a>
+        </div>
     </fieldset>
 </form>
 </div>
