@@ -160,7 +160,7 @@ post "/checkout/project/:nuid/create" do
 
   teammates = ProjectTeammate.new
   params[:project_id] = project.id
-  params[:teammate_id] = User.find_by(user_nuid: params[:nuid])
+  params[:teammate_id] = User.find_by(user_nuid: params[:nuid]).id
   teammates.set_data(params)
 
   redirect "/checkout"
