@@ -247,8 +247,12 @@ post "/checkout/project/:project_id/edit/teammates/" do
     redirect back
   end
 
-  # TODO: Check if user is already a teammate
-  # Project.find_by()
+  # Check if user is already a teammate
+  existing_teammate = ProjectTeammate.find_by(teammate_id: teammate_user.id, project_id: params[:project_id])
+  unless existing_teammate.nil?
+    flash :danger, "Error", "User already listed as a teammate."
+    redirect back
+  end
 
   teammate = ProjectTeammate.new
   params[:teammate_id] = teammate_user.id
