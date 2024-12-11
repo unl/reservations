@@ -36,16 +36,17 @@
                 <p>No teammates found.</p>
             <% end %>
         </div>
-        <div>
-            <%# FIXME: Submitting NUID updates query but doesn't seem to run POST method %>
-            <form class="dcf-form dcf-w-25%" id="find-nuid" action="/checkout/project/<%= project_id %>/edit/teammates/" method="POST" enctype="application/x-www-form-urlencoded">
-                <label for="nuid-input">Add a Teammate by NUID</label>
-                <div class="dcf-input-group">
-                    <input id="nuid-input" name="nuid">
-                    <button class="dcf-btn dcf-btn-primary" type="submit">Add Teammate</button>
-                </div>
-            </form>
-        </div>
+        
     </fieldset>
 </form>
+</div>
+<div>
+        <%# FIXME: Submitting NUID updates query but doesn't seem to run POST method %>
+        <form class="dcf-form dcf-w-25%" id="find-nuid" action="/checkout/project/<%= project_id %>/edit/teammates/" method="POST" enctype="application/x-www-form-urlencoded">
+            <label for="nuid-input">Add a Teammate by NUID</label>
+            <div class="dcf-input-group">
+                <input id="nuid-input" name="nuid">
+                <button class="dcf-btn dcf-btn-primary" type="submit">Add Teammate</button>
+            </div>
+        </form>
 </div>

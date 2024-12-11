@@ -236,7 +236,6 @@ post "/checkout/project/:project_id/edit/teammates/" do
   require_login
 
   nuid = params[:nuid]
-
   if nuid.nil? || nuid.strip.empty?
     flash :danger, "Error", "NUID empty."
     redirect back
@@ -249,12 +248,13 @@ post "/checkout/project/:project_id/edit/teammates/" do
   end
 
   # TODO: Check if user is already a teammate
+  # Project.find_by()
 
   teammate = ProjectTeammate.new
-  params[:project_id] = project.id
   params[:teammate_id] = teammate_user.id
+  params[:user] = @user
   teammate.set_data(params)
 
-  flash :success, "Teammate Added", "A new teammate has been added to the project."
-  redirect "/checkout/project/:project_id/edit/teammates"
+  flash :success, "Teammate Added", "#{teammate_user.full_name} was added as a teammate."
+  redirect "/checkout/project/#{params[:project_id]}/edit/teammates"
 end
