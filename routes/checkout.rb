@@ -1,5 +1,6 @@
 require "models/project"
 require "models/project_teammate"
+require "models/project_log"
 require "date"
 require "erb"
 
@@ -59,7 +60,9 @@ post "/checkout/project_checkout/?" do
 	if bin_id != nil
 		project = Project.find_by(bin_id: bin_id)
 		if project != nil
+			## find a user
 			project.update_last_checked_out
+			ProjectLog.set_data(user: user, project: project, is_checking_in: false)
 			flash :success, 'Success', 'Project checked out'
 			redirect "/checkout/?"
 		else
@@ -77,7 +80,9 @@ post "/checkout/project_checkin/?" do
 	if bin_id != nil
 		project = Project.find_by(bin_id: bin_id)
 		if project != nil
+			## find a user
 			project.update_last_checked_in
+			ProjectLog.set_data(user: user, project: project, is_checking_in: true)
 			flash :success, 'Success', 'Project checked in'
 			redirect "/checkout/?"
 		else
