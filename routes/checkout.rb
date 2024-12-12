@@ -189,6 +189,7 @@ post "/checkout/project/:nuid/create" do
   teammates = ProjectTeammate.new
   params[:project_id] = project.id
   params[:teammate_id] = User.find_by(user_nuid: params[:nuid]).id
+  params[:user] = @user
   params[:is_owner] = 1
   teammates.set_data(params)
 
@@ -251,7 +252,7 @@ get "/checkout/project/:project_id/edit/teammates" do
 
   project = Project.find_by(id: params[:project_id])
   teammates = ProjectTeammate.where("project_id = ?", params[:project_id])
-  
+
   erb :'engineering_garage/edit_teammates', :layout => :fixed, :locals => {
                                             :project_id => project.id,
                                             :teammates => teammates
