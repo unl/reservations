@@ -31,4 +31,9 @@ class Project < ActiveRecord::Base
 		self.last_checked_out = Time.now
 		self.save
 	end
+
+	def delete()
+		self.destroy
+		self.save
+	end
 end
