@@ -189,6 +189,7 @@ post "/checkout/project/:nuid/create" do
   teammates = ProjectTeammate.new
   params[:project_id] = project.id
   params[:teammate_id] = User.find_by(user_nuid: params[:nuid]).id
+  params[:is_owner] = 1
   teammates.set_data(params)
 
   redirect "/checkout"
@@ -200,8 +201,6 @@ get "/checkout/project/:project_id/edit" do
   project = Project.find_by(id: params[:project_id])
   user = User.find_by(id: project.owner_user_id)
   teammates = ProjectTeammate.where("project_id = ?", params[:project_id])
-  # TODO: Sort by full name
-  # teammates.sort_by()
 
   erb :'engineering_garage/edit_project', :layout => :fixed, :locals => {
                                            :user => user,
@@ -252,7 +251,7 @@ get "/checkout/project/:project_id/edit/teammates" do
 
   project = Project.find_by(id: params[:project_id])
   teammates = ProjectTeammate.where("project_id = ?", params[:project_id])
-  # TODO: Sort by full name
+  
   erb :'engineering_garage/edit_teammates', :layout => :fixed, :locals => {
                                             :project_id => project.id,
                                             :teammates => teammates
@@ -285,8 +284,30 @@ post "/checkout/project/:project_id/edit/teammates/" do
   teammate = ProjectTeammate.new
   params[:teammate_id] = teammate_user.id
   params[:user] = @user
+  params[:is_owner] = 0
   teammate.set_data(params)
 
   flash :success, "Teammate Added", "#{teammate_user.full_name} was added as a teammate."
+  redirect "/checkout/project/#{params[:project_id]}/edit/teammates"
+end
+
+post "/checkout/project/:project_id/edit/teammates/:teammate_id/remove" do
+  @breadcrumbs << { :text => "Teammates" }
+  require_login
+
+  teammate_user = ProjectTeammate.find_by(id: params[:teammate_id])
+  if teammate_user.nil?
+    flash :danger, "Error", "Could not locate user."
+    redirect back
+  end
+
+  # Prevent project owner deletion
+  if teammate_user.is_owner
+    flash :danger, "Error", "Cannot remove project owner."
+    redirect back
+  end
+
+  teammate_user.delete
+  flash :success, "Teammate Removed", "User was removed as a teammate."
   redirect "/checkout/project/#{params[:project_id]}/edit/teammates"
 end

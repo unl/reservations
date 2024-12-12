@@ -4,6 +4,7 @@ CREATE TABLE `project_teammates` (
   `project_id` int(11) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
   `created_on` datetime DEFAULT CURRENT_TIMESTAMP,
+  `is_owner` tinyint(1) DEFAULT 0,
   FOREIGN KEY (teammate_id) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
   FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE

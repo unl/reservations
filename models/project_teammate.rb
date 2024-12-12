@@ -7,7 +7,8 @@ class ProjectTeammate < ActiveRecord::Base
     self.teammate_id = params[:teammate_id]
     self.project_id = params[:project_id]
     self.created_by = params[:user].id
-    self.created_on = Time.now  
+    self.created_on = Time.now
+    self.is_owner = params[:is_owner]
     self.save
   end
 

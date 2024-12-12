@@ -1,7 +1,6 @@
 <h1 class="dcf-txt-h3" id="Edit_Teammates">Edit Teammates</h1>
 
 <div class="dcf-grid dcf-col-gap-vw">
-<form id="edit-teammates-form" class="dcf-form dcf-col-100% dcf-col-50%-start@sm">
     <fieldset>
         <legend>Project Teammates</legend>
 
@@ -13,7 +12,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Date Added</th>
-                        <%# <th scope="col">Actions</th> %>
+                        <th scope="col">Teammate Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -23,11 +22,27 @@
                         <td><%= user.full_name %></td>
                         <td><%= user.email %></td>
                         <td><%= teammate.created_on.strftime('%m/%d/%Y') %></td>
-                        <%# <td class="table-actions"> %>
-                            <%# <form class="dcf-form delete-form delete-user" action="/admin/users/<%= user.id %><%#/delete/" method="POST"> %>
-                                <%# <button type="submit" class="dcf-mt-1 dcf-btn dcf-btn-primary">Delete</button> %>
-                            <%# </form> %>
-                        <%# </td> %>
+                        <td class="dcf-d-flex dcf-flex-row-rev dcf-flex-shrink-1 dcf-gap-2">
+                            <button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="remove-<%= teammate[:id] %>" type="button">Remove</button>
+                            <div class="dcf-modal" id="remove-<%= teammate[:id] %>" hidden>
+                                <div class="dcf-modal-wrapper">
+                                    <div class="dcf-modal-header">
+                                        <h2>Remove Teammate</h2>
+                                        <button class="dcf-btn-close-modal">Close</button>
+                                    </div>
+                                    <div class="dcf-modal-content">
+                                        <form class="dcf-form dcf-grid" action="/checkout/project/<%= project_id %>/edit/teammates/<%= teammate.id %>/remove" method="POST" enctype="application/x-www-form-urlencoded">
+                                            <div class="dcf-col-50%-start">
+                                                <div class="dcf-form-controls-inline dcf-gap-2">
+                                                    <button class="dcf-btn dcf-btn-primary" type="submit">Remove</button>
+                                                    <button class="dcf-btn dcf-btn-secondary" type="button">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                 <% end %>
                 </tbody>
@@ -38,10 +53,9 @@
         </div>
         
     </fieldset>
-</form>
 </div>
 <div>
-<form class="dcf-form dcf-w-25%" id="find-nuid" action="/checkout/project/<%= project_id %>/edit/teammates/" method="POST" enctype="application/x-www-form-urlencoded">
+<form class="dcf-form dcf-w-25%" id="find-nuid" action="/checkout/project/<%= project_id %>/edit/teammates/?" method="POST" enctype="application/x-www-form-urlencoded">
     <label for="nuid-input">Add a Teammate by NUID</label>
     <div class="dcf-input-group">
         <input id="nuid-input" name="nuid">
