@@ -57,12 +57,15 @@ end
 
 post "/checkout/project_checkout/?" do
 	bin_id = params[:bin_id]
-	if bin_id != nil
+	nuid = params[:nuid]
+
+	if bin_id != nil && nuid != nil
 		project = Project.find_by(bin_id: bin_id)
-		if project != nil
-			## find a user
+		user = User.find_by(user_nuid: nuid)
+		if project != nil && user != nil
 			project.update_last_checked_out
-			ProjectLog.set_data(user: user, project: project, is_checking_in: false)
+			project_log = ProjectLog.new
+			project_log.set_data(user: user, project: project, is_checking_in: false)
 			flash :success, 'Success', 'Project checked out'
 			redirect "/checkout/?"
 		else
@@ -77,12 +80,15 @@ end
 
 post "/checkout/project_checkin/?" do
 	bin_id = params[:bin_id]
-	if bin_id != nil
+	nuid = params[:nuid]
+
+	if bin_id != nil && nuid != nil
 		project = Project.find_by(bin_id: bin_id)
+		user = User.find_by(user_nuid: nuid)
 		if project != nil
-			## find a user
 			project.update_last_checked_in
-			ProjectLog.set_data(user: user, project: project, is_checking_in: true)
+			project_log = ProjectLog.new
+			project_log.set_data(user: user, project: project, is_checking_in: true)
 			flash :success, 'Success', 'Project checked in'
 			redirect "/checkout/?"
 		else
@@ -97,6 +103,7 @@ end
 
 post "/checkout/project_delete/?" do
 	bin_id = params[:bin_id]
+
 	if bin_id != nil
 		project = Project.find_by(bin_id: bin_id)
 		if project != nil
