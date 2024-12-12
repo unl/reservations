@@ -14,6 +14,9 @@ get "/checkout/user/?" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
   nuid = params[:nuid]
+	search_id = params[:search_id]
+
+	
 
   if nuid.nil? || nuid.strip.empty?
     redirect "/checkout/"
@@ -35,6 +38,9 @@ get "/checkout/user/?" do
     else
 			# Preload the project list
       user_projects = Project.where(owner_user_id: checkout_user.id)
+			if search_id && !search_id.strip.empty?
+        user_projects = user_projects.where(bin_id: search_id.strip)
+      end
 			# Preload the tool list
     end
   end

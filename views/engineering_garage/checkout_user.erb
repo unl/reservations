@@ -23,13 +23,6 @@
 				<a href="/checkout/project/<%= nuid %>/create" class="dcf-btn dcf-btn-primary">Create New Project</a>
 			</div>
 		</div>
-		<div hidden>
-			<label for="barcode-input">Scan Barcode</label>
-			<div class="dcf-input-group dcf-w-25%" >
-				<input id="barcode-input">
-				<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
-			</div>
-		</div>
     <div class="dcf-tabs dcf-tabs-responsive">
 			<ul>
 				<li><a href="#user-projects-panel">User Projects</a></li>
@@ -38,6 +31,14 @@
       <div id="user-projects-panel">
         <% if defined?(projects) && projects.count > 0 %>
 					<h4>User Projects</h4>
+					<form class="dcf-form dcf-w-25%" id="filter-input" action="/checkout/user/" method="GET" enctype="application/x-www-form-urlencoded">
+						<label for="filter-input">Filter Projects</label>
+						<div class="dcf-input-group">
+							<input type="hidden" name="nuid" value="<%= nuid %>">
+							<input id="project-input" name="search_id">
+							<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
+						</div>
+					</form>
           <table class="dcf-table dcf-w-100% dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6" aria-describedby="project-list-table">
             <thead>
               <tr>
