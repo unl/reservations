@@ -33,6 +33,8 @@
                                     <div class="dcf-modal-content">
                                         <form class="dcf-form dcf-grid" action="/checkout/project/<%= project_id %>/edit/teammates/<%= teammate.id %>/remove" method="POST" enctype="application/x-www-form-urlencoded">
                                             <div class="dcf-col-50%-start">
+                                                <p id="teammate_name"><strong>Name: </strong><%= user.full_name %></p>
+                                                <p id="teammate_nuid"><strong>NUID: </strong><%= user.user_nuid %></p>
                                                 <div class="dcf-form-controls-inline dcf-gap-2">
                                                     <button class="dcf-btn dcf-btn-primary" type="submit">Remove</button>
                                                     <button class="dcf-btn dcf-btn-secondary" type="button">Cancel</button>
