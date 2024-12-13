@@ -193,8 +193,12 @@ post "/checkout/project/:nuid/create" do
 		redirect back
   end
 
-  project = Project.new
   params[:user] = User.find_by(user_nuid: params[:nuid])
+  if Project.find_by(owner_user_id: params[:user].id, title: params[:title]) != nil
+    flash :error, 'Error', "A project by that user with the same title already exists. If you believe this to be an error, please contact an administrator."
+		redirect back
+  end
+  project = Project.new
   project.set_data(params)
   project.update_last_checked_in
 

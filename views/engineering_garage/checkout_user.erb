@@ -8,6 +8,7 @@
 				<h3><%= user[:username] %></h3>
 			</div>
 			<div class="dcf-d-flex dcf-gap-2">
+<%#
 				<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkout-modal-btn" type="button">Check Out Tool</button>
 					<div class="dcf-modal" id="checkout-modal-btn" hidden>
 						<div class="dcf-modal-wrapper">
@@ -20,13 +21,16 @@
 							</div>
 						</div>
 					</div>
+%>
 				<a href="/checkout/project/<%= nuid %>/create" class="dcf-btn dcf-btn-primary">Create New Project</a>
 			</div>
 		</div>
     <div class="dcf-tabs dcf-tabs-responsive">
 			<ul>
 				<li><a href="#user-projects-panel">User Projects</a></li>
+				<%#
 				<li><a href="#user-tools-panel">Tool Check In</a></li>
+				%>
   		</ul>
       <div id="user-projects-panel">
         <% if defined?(projects) && projects.count > 0 %>

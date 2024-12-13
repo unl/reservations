@@ -1,6 +1,8 @@
 <h1 class="dcf-txt-h3" id="Edit_Teammates">Edit Teammates</h1>
 <div class="dcf-grid-thirds dcf-col-gap-vw">
-<a href="/checkout/project/<%= project_id %>/edit" class="dcf-btn dcf-btn-secondary dcf-25% dcf-w-max-2xs" type="button">Return to Edit Project</a>
+<div>
+    <a href="/checkout/project/<%= project_id %>/edit" class="dcf-btn dcf-btn-secondary dcf-25% dcf-w-max-2xs" type="button">Return to Edit Project</a>
+</div>
 <div></div>
     <form class="dcf-form dcf-w-100%" id="find-nuid" action="/checkout/project/<%= project_id %>/edit/teammates/?" method="POST" enctype="application/x-www-form-urlencoded">
         <label for="nuid-input">Add a Teammate by NUID</label>
