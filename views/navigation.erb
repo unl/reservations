@@ -11,7 +11,7 @@
         </ul>
         </li>
         <li><a href="/tools/">Reserve Equipment</a>
-        <% if SS_ID == 8 %>
+        <% if SS_ID == 8 && @user.id == -1 %>
             <ul>
                 <li><a href="/checkout/">Checkout</a></li>
             </ul>

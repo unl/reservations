@@ -4,6 +4,12 @@ require "models/project_log"
 require "date"
 require "erb"
 
+before "/checkout*" do
+	unless @user.id == -1
+		raise Sinatra::NotFound
+	end
+end
+
 get "/checkout/?" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
