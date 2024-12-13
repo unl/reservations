@@ -12,4 +12,7 @@ class ProjectTeammate < ActiveRecord::Base
     self.save
   end
 
+  def find_username()
+    return User.find_by(id: self.teammate_id)
+  end
 end

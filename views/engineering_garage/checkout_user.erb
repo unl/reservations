@@ -119,11 +119,16 @@
 															<div class="dcf-col-50%-end dcf-h-fixed-100% dcf-overflow-y-auto">
 																<fieldset>
 																<p><strong>Teammates:</strong></p>
+																<% teammates = project.find_teammates %>
+																<% if teammates.present? %>
 																<ul>
-																	<li>Teammate 1</li>
-																	<li>Teammate 2</li>
-																	<li>Teammate 3</li>
+																	<% teammates.each do |teammate| %>
+																		<li><%= teammate.find_username.username %></li>
+																	<% end %>
 																</ul>
+																<% else %>
+																	<p>No teammates found.</p>
+																<% end %>
 																</fieldset>
 															</div>
 														</form>
@@ -152,12 +157,17 @@
 															<div class="dcf-col-50%-end dcf-h-fixed-100% dcf-overflow-y-auto">
 																<fieldset>
 																<p><strong>Teammates:</strong></p>
+																<% teammates = project.find_teammates %>
+																<% if teammates.present? %>
 																<ul>
-																	<li>Teammate 1</li>
-																	<li>Teammate 2</li>
-																	<li>Teammate 3</li>
+																	<% teammates.each do |teammate| %>
+																		<li><%= teammate.find_username.username %></li>
+																	<% end %>
 																</ul>
-																</fieldset>
+																<% else %>
+																	<p>No teammates found.</p>
+																<% end %>
+															</fieldset>
 															</div>
 														</form>
 													</div>
