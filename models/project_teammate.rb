@@ -15,4 +15,14 @@ class ProjectTeammate < ActiveRecord::Base
   def find_username()
     return User.find_by(id: self.teammate_id)
   end
+
+  def set_owner()
+    current_owner = ProjectTeammate.find_by(is_owner: 1)
+    if current_owner != nil
+      current_owner.is_owner = 0
+      current_owner.save
+    end
+    self.is_owner = 1
+    self.save
+  end
 end

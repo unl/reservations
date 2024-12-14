@@ -11,7 +11,6 @@ class Project < ActiveRecord::Base
 		self.title = params[:title]
 		self.description = params[:description]
 		self.bin_id = params[:bin_id]
-		self.last_checked_in = Time.now
 		self.save
 	end
 

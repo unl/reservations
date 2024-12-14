@@ -258,6 +258,14 @@ post "/checkout/project/:project_id/edit" do
     end
   end
 
+  if ProjectTeammate.find_by(project_id: project.id, teammate_id: params[:user].id) == nil
+    new_owner = ProjectTeammate.new
+    params[:teammate_id] = params[:user].id
+    params[:is_owner] = 0
+    new_owner.set_data(params)
+    new_owner.set_owner
+  end
+
   project.set_data(params)
   redirect "/checkout"
 end
