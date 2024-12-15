@@ -1,7 +1,6 @@
 require 'active_record'
 
 class Project < ActiveRecord::Base
-
 	def edit_link
 		"/checkout/#{id}/edit/"
 	end
