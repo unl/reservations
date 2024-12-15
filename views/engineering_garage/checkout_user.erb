@@ -123,7 +123,10 @@
 																<% if teammates.present? %>
 																<ul>
 																	<% teammates.each do |teammate| %>
-																		<li><%= teammate.find_username.username %></li>
+																		<li>
+																			<%= teammate.find_username.username %>
+																			<%= " (owner)" if teammate.is_owner %>
+																		</li>
 																	<% end %>
 																</ul>
 																<% else %>
@@ -161,7 +164,10 @@
 																<% if teammates.present? %>
 																<ul>
 																	<% teammates.each do |teammate| %>
-																		<li><%= teammate.find_username.username %></li>
+																		<li>
+																			<%= teammate.find_username.username %>
+																			<%= " (owner)" if teammate.is_owner %>
+																		</li>
 																	<% end %>
 																</ul>
 																<% else %>

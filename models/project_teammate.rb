@@ -17,7 +17,7 @@ class ProjectTeammate < ActiveRecord::Base
   end
 
   def set_owner()
-    current_owner = ProjectTeammate.find_by(is_owner: 1)
+    current_owner = ProjectTeammate.find_by(project_id: self.project_id, is_owner: 1)
     if current_owner != nil
       current_owner.is_owner = 0
       current_owner.save

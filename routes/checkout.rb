@@ -132,39 +132,6 @@ post "/checkout/project_delete/?" do
 	end
 end
 
-=begin
-get "/checkout/project/:nuid/user" do
-  @breadcrumbs << { :text => "New_Project" }
-  require_login
-
-  erb :'engineering_garage/new_project_user_confirmation', :layout => :fixed, :locals => {}
-end
-
-post "/checkout/project/:nuid/user" do
-  @breadcrumbs << { :text => "New_Project" }
-  require_login
-  user_by_nuid = User.find_by(user_nuid: params[:nuid])
-  user_by_email = User.find_by(email: params[:email])
-  user = nil
-
-  if user_by_nuid != nil && user_by_email != nil
-    if user_by_nuid != user_by_email
-      flash :error, "Error", "User by NUID and User by email do not match"
-      redirect back
-    end
-  elsif user_by_nuid == nil && user_by_email == nil
-    flash :error, "Error", "User not found"
-    redirect back
-  elsif user_by_nuid != nil
-    user = user_by_nuid
-  else
-    user = user_by_email
-  end
-  session[:user_id] = user.id if user
-  redirect "/checkout/project/create?"
-end
-=end
-
 get "/checkout/project/:nuid/create" do
   @breadcrumbs << { :text => "New_Project" }
   require_login
@@ -209,6 +176,7 @@ post "/checkout/project/:nuid/create" do
   params[:is_owner] = 1
   teammates.set_data(params)
 
+  flash :success, 'Success', 'Project created'
   redirect "/checkout"
 end
 
@@ -257,16 +225,18 @@ post "/checkout/project/:project_id/edit" do
       redirect back
     end
   end
-
-  if ProjectTeammate.find_by(project_id: project.id, teammate_id: params[:user].id) == nil
-    new_owner = ProjectTeammate.new
+  user_team_profile = ProjectTeammate.find_by(project_id: project.id, teammate_id: params[:user].id)
+  if user_team_profile == nil
+    user_team_profile = ProjectTeammate.new
     params[:teammate_id] = params[:user].id
     params[:is_owner] = 0
-    new_owner.set_data(params)
-    new_owner.set_owner
+    user_team_profile.set_data(params)
   end
+  user_team_profile.set_owner
 
   project.set_data(params)
+
+  flash :success, 'Success', 'Project updated'
   redirect "/checkout"
 end
 
