@@ -22,8 +22,6 @@ get "/checkout/user/?" do
   nuid = params[:nuid]
 	search_id = params[:search_id]
 
-	
-
   if nuid.nil? || nuid.strip.empty?
     redirect "/checkout/"
   else
@@ -43,14 +41,21 @@ get "/checkout/user/?" do
       redirect "/checkout/"
     else
 			# Preload the project list
-      user_projects = Project.where(owner_user_id: checkout_user.id)
-			if search_id && !search_id.strip.empty?
-        user_projects = user_projects.where(bin_id: search_id.strip)
+      projects = Project.where(owner_user_id: checkout_user.id)
+
+      team_project_ids = ProjectTeammate.where(teammate_id: checkout_user.id).pluck(:project_id)
+      team_projects = Project.where(id: team_project_ids)
+
+      projects = projects.or(team_projects)
+
+      if search_id && !search_id.strip.empty?
+        projects = projects.where(bin_id: search_id.strip)
       end
-			# Preload the tool list
     end
   end
-
+  
+  # Placeholder data
+  # This data does not interact with anything shown to the user currently
   user_checked_out = [
     { id: 1, name: "Hammer", checked_out_date: (DateTime.now - 1).strftime("%m/%d/%Y %H:%M") },
     { id: 2, name: "Screwdriver", checked_out_date: (DateTime.now - 2).strftime("%m/%d/%Y %H:%M") },
@@ -63,7 +68,7 @@ get "/checkout/user/?" do
                                              :user => checkout_user,
 																						 :nuid => nuid,
                                              :checked_out => user_checked_out,
-                                             :projects => user_projects,
+                                             :projects => projects
                                            }
 end
 
@@ -161,10 +166,6 @@ post "/checkout/project/:nuid/create" do
   end
 
   params[:user] = User.find_by(user_nuid: params[:nuid])
-  if Project.find_by(owner_user_id: params[:user].id, title: params[:title]) != nil
-    flash :error, 'Error', "A project by that user with the same title already exists. If you believe this to be an error, please contact an administrator."
-		redirect back
-  end
   project = Project.new
   project.set_data(params)
   project.update_last_checked_in
@@ -186,6 +187,7 @@ get "/checkout/project/:project_id/edit" do
   project = Project.find_by(id: params[:project_id])
   user = User.find_by(id: project.owner_user_id)
   teammates = ProjectTeammate.where("project_id = ?", params[:project_id])
+  params[:previous_nuid] = user.user_nuid
 
   erb :'engineering_garage/edit_project', :layout => :fixed, :locals => {
                                            :user => user,
@@ -200,7 +202,7 @@ end
 post "/checkout/project/:project_id/edit" do
   @breadcrumbs << { :text => "New_Project" }
   require_login
-  project = Project.find_by(id: params[:project_id]) 
+  project = Project.find_by(id: params[:project_id])
   params[:user] = User.find_by(user_nuid: params[:nuid])
 
   if  params[:title].blank?
@@ -225,14 +227,17 @@ post "/checkout/project/:project_id/edit" do
       redirect back
     end
   end
-  user_team_profile = ProjectTeammate.find_by(project_id: project.id, teammate_id: params[:user].id)
-  if user_team_profile == nil
-    user_team_profile = ProjectTeammate.new
-    params[:teammate_id] = params[:user].id
-    params[:is_owner] = 0
-    user_team_profile.set_data(params)
+
+  if project.owner_user_id != params[:user].id
+    user_team_profile = ProjectTeammate.find_by(project_id: project.id, teammate_id: params[:user].id)
+    if user_team_profile == nil
+      user_team_profile = ProjectTeammate.new
+      params[:teammate_id] = params[:user].id
+      params[:is_owner] = 0
+      user_team_profile.set_data(params)
+    end
+    user_team_profile.set_owner
   end
-  user_team_profile.set_owner
 
   project.set_data(params)
 
