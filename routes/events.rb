@@ -35,6 +35,7 @@ get '/events/:event_id/?' do
 
 	@breadcrumbs << {:text => event.title}
 	erb :event_details, :layout => :fixed, :locals => {
+		:recaptcha => Recaptcha.recaptcha_tags,
 		:event => event
 	}
 end
@@ -70,6 +71,12 @@ post '/events/:event_id/sign_up_as_non_member/?' do
 	end
 	if params[:name].nil? || params[:name].trim.empty? || params[:email].trim.empty?
 		flash(:danger, 'All Fields Required', 'Name and email are both required.')
+		redirect back
+	end
+
+	if !verify_recaptcha
+		flash(:alert, 'Google Recaptcha Verification Failed', 'Please try again.')
+		session[:form_data] = params
 		redirect back
 	end
 
