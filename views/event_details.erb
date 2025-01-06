@@ -35,12 +35,14 @@
 	    </h3>
 	</div>
 	<div>
-		<span class="date-wrapper eventicon-calendar-empty">
-	    	<time class="dtstart"><%= event.start_time.in_time_zone.strftime('%b %d, %Y') %></time>
-		</span>
-		<span class="time-wrapper eventicon-clock">
-	    	<%= event.start_time.in_time_zone.strftime('%l:%M %P') %>–<%= event.end_time.in_time_zone.strftime('%l:%M %P') %>
-	    </span>
+		<% if !(event.start_time.nil?) %>
+			<span class="date-wrapper eventicon-calendar-empty">
+				<time class="dtstart"><%= event.start_time.in_time_zone.strftime('%b %d, %Y') %></time>
+			</span>
+			<span class="time-wrapper eventicon-clock">
+				<%= event.start_time.in_time_zone.strftime('%l:%M %P') %>–<%= event.end_time.in_time_zone.strftime('%l:%M %P') %>
+			</span>
+		<% end %>
 		<div class="location eventicon-location">
 			<%= event.location.name %>
 		</div>
@@ -55,7 +57,7 @@
 	</div>
 </div>
 
-<% if event.end_time < Time.now %>
+<% if (!(event.end_time.nil?) && event.end_time < Time.now) %>
 	<p>This event has expired. Signups are no longer allowed.</p>
 <% else %>
 	<% # free events do not require signup but users can mark it on their homepage %>

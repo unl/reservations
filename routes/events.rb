@@ -42,7 +42,7 @@ end
 
 get '/events/:event_id/sign_up_as_non_member/?' do
 	event = Event.includes(:event_type).find_by(:id => params[:event_id])
-	if event.nil? || event.end_time < Time.now
+	if event.nil? || (!(event.end_time.nil?) && event.end_time < Time.now)
 		flash_message(MESSAGE_EVENT_NOT_FOUND)
 		redirect '/calendar/'
 	end
@@ -61,7 +61,7 @@ end
 
 post '/events/:event_id/sign_up_as_non_member/?' do
 	event = Event.includes(:event_type).find_by(:id => params[:event_id])
-	if event.nil? || event.end_time < Time.now
+	if event.nil? || (!(event.end_time.nil?) && event.end_time < Time.now)
 		flash_message(MESSAGE_EVENT_NOT_FOUND)
 		redirect '/calendar/'
 	end
@@ -126,7 +126,7 @@ post '/events/:event_id/sign_up/?' do
 	# check that is a valid event
 	event = Event.includes(:event_type).find_by(:service_space_id => SS_ID, :id => params[:event_id])
 
-	if event.nil? || event.end_time < Time.now
+	if event.nil? || (!(event.end_time.nil?) && event.end_time < Time.now)
 		# that event does not exist
 		flash_message(MESSAGE_EVENT_NOT_FOUND)
 		redirect '/calendar/'
