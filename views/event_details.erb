@@ -55,44 +55,48 @@
 	</div>
 </div>
 
-<% # free events do not require signup but users can mark it on their homepage %>
-<% if @user && event.signups.map(&:user_id).include?(@user.id) %>
-	<% # the user is already signed up %>
-	<% if event.free_event_type? %>
-		This event is noted on your homepage.<br>
-		<a href='/home/' class="dcf-btn dcf-btn-secondary">View Homepage</a>
-	<% else %>
-		You have signed up for this event.<br>
-		<a href='/home/' class="dcf-btn dcf-btn-secondary">View Homepage</a>
-	<% end %>
-<% elsif @user %>
-	<% # the user is logged in but not signed up %>
-	<% if !event.signup_allowed_for_type? %>
-        Please read details above on how to signup for this event.
-	<% elsif event.max_signups.nil? || event.signups.count < event.max_signups %>
-        <form class="dcf-form" action="/events/<%= event.id %>/sign_up/" method="POST">
-        <button type="submit" <% if event.event_code.present? %> onclick="promptCode('/events/<%= event.id %>/sign_up/', event);" data-toggles-modal="enter-code-modal" <% end %> class="dcf-btn dcf-btn-primary dcf-btn-toggle-modal">
-            <% if event.free_event_type? %>
-                Note event on my homepage
-            <% else %>
-                Sign up for this event
-            <% end %>
-        </a>
-        </form>
-	<% else %>
-	    All slots for this event are filled.
-	<% end %>
-<% elsif event.hrc_training? %>
-	<a href='/new_members/sign_up/<%= event.id %>/' class="dcf-btn dcf-btn-primary">Sign up for this event</a>
+<% if event.end_time < Time.now %>
+	<p>This event has expired. Signups are no longer allowed.</p>
 <% else %>
-	<% # a non user. May still sign up for the event UNLESS it is a tool training %>
-	<% if !event.machine_training_event_type? %>
-		<% if !event.signup_allowed_for_type? %>
-            Please read details above on how to signup for this event.
-        <% elsif event.max_signups.nil? || event.signups.count < event.max_signups %>
-		    <a <% if event.event_code.present? %> onclick="promptCode('/events/<%= event.id %>/sign_up_as_non_member/', event);" data-toggles-modal="enter-code-modal" <% end %> class="dcf-btn dcf-btn-primary dcf-btn-toggle-modal" href="/events/<%= event.id %>/sign_up_as_non_member/">Sign up for this event</a>
+	<% # free events do not require signup but users can mark it on their homepage %>
+	<% if @user && event.signups.map(&:user_id).include?(@user.id) %>
+		<% # the user is already signed up %>
+		<% if event.free_event_type? %>
+			This event is noted on your homepage.<br>
+			<a href='/home/' class="dcf-btn dcf-btn-secondary">View Homepage</a>
 		<% else %>
-		    All slots for this event are filled.
+			You have signed up for this event.<br>
+			<a href='/home/' class="dcf-btn dcf-btn-secondary">View Homepage</a>
+		<% end %>
+	<% elsif @user %>
+		<% # the user is logged in but not signed up %>
+		<% if !event.signup_allowed_for_type? %>
+			Please read details above on how to signup for this event.
+		<% elsif event.max_signups.nil? || event.signups.count < event.max_signups %>
+			<form class="dcf-form" action="/events/<%= event.id %>/sign_up/" method="POST">
+			<button type="submit" <% if event.event_code.present? %> onclick="promptCode('/events/<%= event.id %>/sign_up/', event);" data-toggles-modal="enter-code-modal" <% end %> class="dcf-btn dcf-btn-primary dcf-btn-toggle-modal">
+				<% if event.free_event_type? %>
+					Note event on my homepage
+				<% else %>
+					Sign up for this event
+				<% end %>
+			</a>
+			</form>
+		<% else %>
+			All slots for this event are filled.
+		<% end %>
+	<% elsif event.hrc_training? %>
+		<a href='/new_members/sign_up/<%= event.id %>/' class="dcf-btn dcf-btn-primary">Sign up for this event</a>
+	<% else %>
+		<% # a non user. May still sign up for the event UNLESS it is a tool training %>
+		<% if !event.machine_training_event_type? %>
+			<% if !event.signup_allowed_for_type? %>
+				Please read details above on how to signup for this event.
+			<% elsif event.max_signups.nil? || event.signups.count < event.max_signups %>
+				<a <% if event.event_code.present? %> onclick="promptCode('/events/<%= event.id %>/sign_up_as_non_member/', event);" data-toggles-modal="enter-code-modal" <% end %> class="dcf-btn dcf-btn-primary dcf-btn-toggle-modal" href="/events/<%= event.id %>/sign_up_as_non_member/">Sign up for this event</a>
+			<% else %>
+				All slots for this event are filled.
+			<% end %>
 		<% end %>
 	<% end %>
 <% end %>

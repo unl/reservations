@@ -56,7 +56,7 @@ get '/new_members/sign_up/:event_id/?' do
   end
 
   event = Event.includes(:event_signups).find_by(:service_space_id => SS_ID, :id => params[:event_id])
-  if event.nil? || (event.event_type_id != new_member_orientation_id && event.event_type_id != hrc_training_id)
+  if event.nil? || (event.event_type_id != new_member_orientation_id && event.event_type_id != hrc_training_id) || event.end_time < Time.now
     # that event does not exist
     flash(:danger, 'Not Found', 'That event does not exist')
     redirect '/new_members/'
@@ -102,7 +102,7 @@ post '/new_members/sign_up/:event_id/?' do
 	end
 
 	event = Event.includes(:event_signups).find_by(:service_space_id => SS_ID, :id => params[:event_id])
-	if event.nil? || (event.event_type_id != new_member_orientation_id && event.event_type_id != hrc_training_id)
+	if event.nil? || (event.event_type_id != new_member_orientation_id && event.event_type_id != hrc_training_id) || event.end_time < Time.now
 		# that event does not exist
 		flash(:danger, 'Not Found', 'That event does not exist')
 		if event.event_type_id == hrc_training_id
