@@ -1,9 +1,18 @@
 require 'models/event'
 require 'models/event_signup'
 require 'erb'
+require 'recaptcha'
 
 MESSAGE_EVENT_NOT_FOUND = 'message_event_not_found'
 MESSAGE_SIGNUP_NOT_ALLOWED = 'message_signup_not_allowed'
+
+Recaptcha.configure do |config|
+	config.site_key = CONFIG['reCaptcha']['site_key']
+	config.secret_key = CONFIG['reCaptcha']['secret_key']
+end
+
+include Recaptcha::Adapters::ControllerMethods
+include Recaptcha::Adapters::ViewMethods
 
 def flash_message(message)
     case message
@@ -26,13 +35,14 @@ get '/events/:event_id/?' do
 
 	@breadcrumbs << {:text => event.title}
 	erb :event_details, :layout => :fixed, :locals => {
+		:recaptcha => Recaptcha.recaptcha_tags,
 		:event => event
 	}
 end
 
 get '/events/:event_id/sign_up_as_non_member/?' do
 	event = Event.includes(:event_type).find_by(:id => params[:event_id])
-	if event.nil?
+	if event.nil? || (!(event.end_time.nil?) && event.end_time < Time.now)
 		flash_message(MESSAGE_EVENT_NOT_FOUND)
 		redirect '/calendar/'
 	end
@@ -44,13 +54,14 @@ get '/events/:event_id/sign_up_as_non_member/?' do
 	@breadcrumbs << {:text => event.title, :href => event.info_link}
 	@breadcrumbs << {:text => 'Sign up as Non-Member'}
 	erb :event_signup, :layout => :fixed, :locals => {
+		:recaptcha => Recaptcha.recaptcha_tags,
 		:event => event
 	}
 end
 
 post '/events/:event_id/sign_up_as_non_member/?' do
 	event = Event.includes(:event_type).find_by(:id => params[:event_id])
-	if event.nil?
+	if event.nil? || (!(event.end_time.nil?) && event.end_time < Time.now)
 		flash_message(MESSAGE_EVENT_NOT_FOUND)
 		redirect '/calendar/'
 	end
@@ -60,6 +71,12 @@ post '/events/:event_id/sign_up_as_non_member/?' do
 	end
 	if params[:name].nil? || params[:name].trim.empty? || params[:email].trim.empty?
 		flash(:danger, 'All Fields Required', 'Name and email are both required.')
+		redirect back
+	end
+
+	if !verify_recaptcha
+		flash(:alert, 'Google Recaptcha Verification Failed', 'Please try again.')
+		session[:form_data] = params
 		redirect back
 	end
 
@@ -109,7 +126,7 @@ post '/events/:event_id/sign_up/?' do
 	# check that is a valid event
 	event = Event.includes(:event_type).find_by(:service_space_id => SS_ID, :id => params[:event_id])
 
-	if event.nil?
+	if event.nil? || (!(event.end_time.nil?) && event.end_time < Time.now)
 		# that event does not exist
 		flash_message(MESSAGE_EVENT_NOT_FOUND)
 		redirect '/calendar/'
@@ -205,4 +222,92 @@ post '/events/:event_id/confirm_trainer/?' do
 
 	flash :success, header, message
 	redirect '/home/'
+end
+
+# Code copied from Recaptcha::Adapters::ControllerMethods to resolve issue of this method being private
+
+def verify_recaptcha(options = {})
+  options = { model: options } unless options.is_a? Hash
+  return true if CONFIG['email']['site_key'].nil? || CONFIG['reCaptcha']['site_key'].empty?
+  return true if Recaptcha.skip_env?(options[:env])
+
+  model = options[:model]
+  attribute = options.fetch(:attribute, :base)
+  recaptcha_response = options[:response] || recaptcha_response_token(options[:action])
+
+  begin
+    verified = if Recaptcha.invalid_response?(recaptcha_response)
+                 false
+               else
+                 unless options[:skip_remote_ip]
+                   remoteip = (request.respond_to?(:remote_ip) && request.remote_ip) || (env && env['REMOTE_ADDR'])
+                   options = options.merge(remote_ip: remoteip.to_s) if remoteip
+                 end
+
+                 success, @_recaptcha_reply =
+                   Recaptcha.verify_via_api_call(recaptcha_response, options.merge(with_reply: true))
+                 success
+               end
+
+    if verified
+      flash.delete(:recaptcha_error) if recaptcha_flash_supported? && !model
+      true
+    else
+      recaptcha_error(
+        model,
+        attribute,
+        options.fetch(:message) { Recaptcha::Helpers.to_error_message(:verification_failed) }
+      )
+      false
+    end
+  rescue Timeout::Error
+    if Recaptcha.configuration.handle_timeouts_gracefully
+      recaptcha_error(
+        model,
+        attribute,
+        options.fetch(:message) { Recaptcha::Helpers.to_error_message(:recaptcha_unreachable) }
+      )
+      false
+    else
+      raise RecaptchaError, 'Recaptcha unreachable.'
+    end
+  rescue StandardError => e
+    raise RecaptchaError, e.message, e.backtrace
+  end
+end
+
+def verify_recaptcha!(options = {})
+  verify_recaptcha(options) || raise(VerifyError)
+end
+
+def recaptcha_reply
+  @_recaptcha_reply if defined?(@_recaptcha_reply)
+end
+
+def recaptcha_error(model, attribute, message)
+  if model
+    model.errors.add(attribute, message)
+  elsif recaptcha_flash_supported?
+    flash[:recaptcha_error] = message
+  end
+end
+
+def recaptcha_flash_supported?
+  request.respond_to?(:format) && request.format == :html && respond_to?(:flash)
+end
+
+# Extracts response token from params. params['g-recaptcha-response-data'] for recaptcha_v3 or
+# params['g-recaptcha-response'] for recaptcha_tags and invisible_recaptcha_tags and should
+# either be a string or a hash with the action name(s) as keys. If it is a hash, then `action`
+# is used as the key.
+# @return [String] A response token if one was passed in the params; otherwise, `''`
+def recaptcha_response_token(action = nil)
+  response_param = params['g-recaptcha-response-data'] || params['g-recaptcha-response']
+  response_param = response_param[action] if action && response_param.respond_to?(:key?)
+
+  if response_param.is_a?(String)
+    response_param
+  else
+    ''
+  end
 end

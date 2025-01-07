@@ -17,7 +17,14 @@
                 <input type="email" id="email" name="email" />
              </div>
 
-            <button class="dcf-mt-6 dcf-btn dcf-btn-primary" type="submit">Sign Up</button>
+            <form action="/verify">
+                <div>
+                    <%= recaptcha %>
+                </div>
+                <div>
+                    <button class="dcf-mt-3 dcf-btn dcf-btn-primary" type="submit">Sign Up</button>
+                </div>
+            </form>
         </div>
     </div>
 </form>
