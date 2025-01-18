@@ -32,27 +32,10 @@
                     <td><%= user.full_name %></td>
                     <td><%= user.email %></td>
                     <td><%= teammate.created_on.strftime('%m/%d/%Y') %></td>
-                    <td class="dcf-d-flex dcf-flex-row-rev dcf-flex-shrink-1 dcf-gap-2">
-                        <button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="remove-<%= teammate[:id] %>" type="button">Remove</button>
-                        <div class="dcf-modal" id="remove-<%= teammate[:id] %>" hidden>
-                            <div class="dcf-modal-wrapper">
-                                <div class="dcf-modal-header">
-                                    <h2>Remove Teammate</h2>
-                                    <button class="dcf-btn-close-modal">Close</button>
-                                </div>
-                                <div class="dcf-modal-content">
-                                    <form class="dcf-form dcf-grid" action="/checkout/project/<%= project_id %>/edit/teammates/<%= teammate.id %>/remove" method="POST" enctype="application/x-www-form-urlencoded">
-                                        <div class="dcf-col-50%-start">
-                                            <p id="teammate_name"><strong>Name: </strong><%= user.full_name %></p>
-                                            <p id="teammate_nuid"><strong>NUID: </strong><%= user.user_nuid %></p>
-                                            <div class="dcf-form-controls-inline dcf-gap-2">
-                                                <button class="dcf-btn dcf-btn-primary" type="submit">Remove</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                    <td>
+                        <form class="dcf-form dcf-w-100%" action="/checkout/project/<%= project_id %>/edit/teammates/<%= teammate.id %>/remove" method="POST" enctype="application/x-www-form-urlencoded" onsubmit="return confirm('Remove <%= user.full_name %> as a teammate?');">
+                            <button class="dcf-btn dcf-btn-primary" type="submit">Remove</button>
+                        </form>
                     </td>
                 </tr>
             <% end %>
