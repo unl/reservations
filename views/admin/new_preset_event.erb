@@ -24,6 +24,22 @@
                     </select>
                 </div>
 
+                <% if SS_ID == 1 %>
+                    <div class="dcf-form-group">
+                        <label for="area">Shop Area <small class="dcf-required">Required</small></label>
+                        <select id="area" name="area" required>
+                            <option value="General" <%= 'selected="selected"' if !preset_event.area.nil? && preset_event.area == 'General' %>>General</option>
+                            <option value="Graphics Studio" <%= 'selected="selected"' if !preset_event.area.nil? && preset_event.area == 'Graphics Studio' %>>Graphics Studio</option>
+                            <option value="Metal Shop" <%= 'selected="selected"' if !preset_event.area.nil? && preset_event.area == 'Metal Shop' %>>Metal Shop</option>
+                            <option value="Rapid Prototyping" <%= 'selected="selected"' if !preset_event.area.nil? && preset_event.area == 'Rapid Prototyping' %>>Rapid Prototyping</option>
+                            <option value="Textiles" <%= 'selected="selected"' if !preset_event.area.nil? && preset_event.area == 'Textiles' %>>Textiles</option>
+                            <option value="Wood Shop" <%= 'selected="selected"' if !preset_event.area.nil? && preset_event.area == 'Wood Shop' %>>Wood Shop</option>
+                            <option value="Robotics" <%= 'selected="selected"' if !preset_event.area.nil? && preset_event.area == 'Robotics' %>>Robotics</option>
+                            <option value="Ceramics" <%= 'selected="selected"' if !preset_event.area.nil? && preset_event.area == 'Ceramics' %>>Ceramics</option>
+                        </select>
+                    </div>
+                <% end %>
+
                 <div class="dcf-form-group">
                     <label for="duration">Duration (in minutes) <small class="dcf-required">Required</small></label>
                     <input value="<%= preset_event.duration %>" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" type="number" id="duration" name="duration" aria-label="Duration"/>

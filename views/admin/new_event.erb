@@ -32,6 +32,22 @@
                     </select>
                 </div>
 
+                <% if SS_ID == 1 %>
+                    <div class="dcf-form-group">
+                        <label for="area">Shop Area</label>
+                        <select id="area" name="area">
+                            <option value="General" <%= 'selected="selected"' if !event.area.nil? && event.area == 'General' %>>General</option>
+                            <option value="Graphics Studio" <%= 'selected="selected"' if !event.area.nil? && event.area == 'Graphics Studio' %>>Graphics Studio</option>
+                            <option value="Metal Shop" <%= 'selected="selected"' if !event.area.nil? && event.area == 'Metal Shop' %>>Metal Shop</option>
+                            <option value="Rapid Prototyping" <%= 'selected="selected"' if !event.area.nil? && event.area == 'Rapid Prototyping' %>>Rapid Prototyping</option>
+                            <option value="Textiles" <%= 'selected="selected"' if !event.area.nil? && event.area == 'Textiles' %>>Textiles</option>
+                            <option value="Wood Shop" <%= 'selected="selected"' if !event.area.nil? && event.area == 'Wood Shop' %>>Wood Shop</option>
+                            <option value="Robotics" <%= 'selected="selected"' if !event.area.nil? && event.area == 'Robotics' %>>Robotics</option>
+                            <option value="Ceramics" <%= 'selected="selected"' if !event.area.nil? && event.area == 'Ceramics' %>>Ceramics</option>
+                        </select>
+                    </div>
+                <% end %>
+
                 <div class="dcf-form-group">
                     <label for="trainer">Trainer:</label>
                     <select id="trainer" name="trainer" class="use-select2">
