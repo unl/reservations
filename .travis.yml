@@ -21,7 +21,7 @@ before_install:
 
 branches:
   only:
-    - development
+    - dev
     - Release-3
 
 language: ruby
