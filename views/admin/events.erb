@@ -34,37 +34,59 @@
             <% end %>
         </ol>
             <section id="status-<%= tab %>" role="tabpanel" tabindex="-1" class="dcf-tabs-panel" aria-labelledby="tab-<%= tab %>">
-                <div class="event-page" style="margin-top:-40px;">
-                    <form class="dcf-form dcf-mb-6" id="find-controls">
-                        <div style="float: left;">
-                            <h4><%= tab.capitalize %> Event Items</h4>
-                        </div>
-                        <div class="dcf-grid dcf-col-gap-vw dcf-row-gap-6" style="float: right;margin-bottom:20px;">
-                            <div class="dcf-col-100% dcf-col-100%-end@md">
-                                <div style="float: right;">
-                                    <label for="event-type">Event Type:</label>
-                                    <div class="dropdown-container" style="display:flex;">
-                                        <select id="event-type" style="max-width:200px;min-width:50px;margin-top:10px;" tabindex="1" name="event_type" class="dcf-input-select">
-                                            <option value="">All</option>
-                                            <% Event.type_options.each do |cat_id, name| %>
-                                                <option <%= 'selected="selected"' if cat_id == event_type.to_i %> value="<%= cat_id %>"><%= name %></option>
-                                            <% end %>
-                                        </select>
-
-                                        <input type="hidden" name="tab" id="tab" value="<%= tab %>">
-                                            
-                                        <button id="search-btn" tabindex="1" class="dcf-btn dcf-btn-inverse-primary" style="margin-top:10px;margin-left:10px;">Search</button>
-                                    </div>
+                <div class="event-page">
+                    <h4><%= tab.capitalize %> Event Items</h4>
+                    <form class="dcf-form dcf-mt-6 dcf-mb-6" id="find-controls">
+                        <fieldset
+                            class="dcf-w-fit-content dcf-collapsible-fieldset"
+                            <%= 'hidden data-start-expanded="false"' if event_area.nil? && event_type.nil? %> 
+                        >
+                            <legend>Filters</legend>
+                            <% if SS_ID === 1 %>
+                                <div class="dcf-form-group dcf-w-100%">
+                                    <label for="event-area">Shop Area:</label>
+                                    <select id="event-area" name="event_area">
+                                        <option value="">All</option>
+                                        <option value="General" <%= 'selected="selected"' if !event_area.nil? && event_area == 'General' %>>General</option>
+                                        <option value="Graphics Studio" <%= 'selected="selected"' if !event_area.nil? && event_area == 'Graphics Studio' %>>Graphics Studio</option>
+                                        <option value="Metal Shop" <%= 'selected="selected"' if !event_area.nil? && event_area == 'Metal Shop' %>>Metal Shop</option>
+                                        <option value="Rapid Prototyping" <%= 'selected="selected"' if !event_area.nil? && event_area == 'Rapid Prototyping' %>>Rapid Prototyping</option>
+                                        <option value="Textiles" <%= 'selected="selected"' if !event_area.nil? && event_area == 'Textiles' %>>Textiles</option>
+                                        <option value="Wood Shop" <%= 'selected="selected"' if !event_area.nil? && event_area == 'Wood Shop' %>>Wood Shop</option>
+                                        <option value="Robotics" <%= 'selected="selected"' if !event_area.nil? && event_area == 'Robotics' %>>Robotics</option>
+                                        <option value="Ceramics" <%= 'selected="selected"' if !event_area.nil? && event_area == 'Ceramics' %>>Ceramics</option>
+                                    </select>
                                 </div>
+                            <% end %>
+                            <div class="dcf-form-group dcf-w-100%">
+                                <label for="event-type">Event Type:</label>
+                                <select id="event-type" name="event_type">
+                                    <option value="">All</option>
+                                    <% Event.type_options.each do |cat_id, name| %>
+                                        <option <%= 'selected="selected"' if cat_id == event_type.to_i %> value="<%= cat_id %>"><%= name %></option>
+                                    <% end %>
+                                </select>
                             </div>
-                        </div>
+                            <div>
+                                <input type="hidden" name="tab" id="tab" value="<%= tab %>">
+                                <button id="search-btn" class="dcf-btn dcf-btn-inverse-primary">Search</button>
+                            </div>
+                        </fieldset>
                     </form>
-                <%# </div> %>
+
+                    <script>
+                        window.addEventListener('inlineJSReady', function() {
+                            WDN.initializePlugin('collapsible-fieldsets');
+                        }, false);
+                    </script>
                 <div style="margin-bottom: 20px;">
                     <table class="dcf-w-100% dcf-table dcf-table-bordered" aria-label="Event Listings">
                         <thead>
                             <tr>
                                 <th scope="col">Title</th>
+                                <% if SS_ID == 1 %>
+                                    <th scope="col">Shop Area</th>
+                                <% end %>
                                 <th scope="col">Date/Location</th>
                                 <th scope="col">Signups</th>
                                 <th scope="col">Actions</th>
@@ -81,6 +103,11 @@
                                         <%= event.title %>
                                         <% end %>
                                     </td>
+                                    <% if SS_ID == 1 %>
+                                        <td>
+                                            <%= event.area.nil? ? 'General' : event.area %>
+                                        </td>
+                                    <% end %>
                                     <% if event.start_time == nil%>
                                         <td>
                                             <ul class="dcf-list-bare">

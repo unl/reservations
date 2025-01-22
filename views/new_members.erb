@@ -12,6 +12,9 @@ Here are the upcoming dates we are holding orientations:
         <thead class="small-hidden">
             <tr>
                 <th>Title</th>
+                <% if SS_ID == 1 %>
+                    <th>Shop Area</th>
+                <% end %>
                 <th>Date/Location</th>
                 <th>Actions</th>
             </tr>
@@ -22,6 +25,11 @@ Here are the upcoming dates we are holding orientations:
                 <td class="small-hidden">
                     <%= event.title %>
                 </td>
+                <% if SS_ID == 1 %>
+                    <td>
+                        <%= event.area.nil? ? 'General' : event.area %>
+                    </td>
+                <% end %>
                 <td>
                     <div class="small-block hidden calendar-event-title">
                         <%= event.title %>
