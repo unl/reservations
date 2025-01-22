@@ -84,6 +84,9 @@
                         <thead>
                             <tr>
                                 <th scope="col">Title</th>
+                                <% SS_ID == 1 %>
+                                    <th scope="col">Shop Area</th>
+                                <% end %>
                                 <th scope="col">Date/Location</th>
                                 <th scope="col">Signups</th>
                                 <th scope="col">Actions</th>
@@ -100,6 +103,11 @@
                                         <%= event.title %>
                                         <% end %>
                                     </td>
+                                    <% SS_ID == 1 %>
+                                        <td>
+                                            <%= event.area.nil? ? 'General' : event.area %>
+                                        </td>
+                                    <% end %>
                                     <% if event.start_time == nil%>
                                         <td>
                                             <ul class="dcf-list-bare">

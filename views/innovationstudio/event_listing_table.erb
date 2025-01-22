@@ -22,6 +22,7 @@
     <thead>
         <tr>
             <th scope="col">Title</th>
+            <th scope="col">Shop Area</th>
             <th scope="col">Date/Location</th>
             <th scope="col">Actions</th>
         </tr>
@@ -33,6 +34,9 @@
             <tr>
                 <td class="small-hidden">
                     <a href="<%= event.info_link %>"><%= event.title %></a>
+                </td>
+                <td>
+                    <%= event.area.nil? ? 'General' : event.area %>
                 </td>
                 <td>
                     <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>

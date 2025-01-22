@@ -18,6 +18,9 @@
             <thead>
                 <tr>
                     <th scope="col">Event Name</th>
+                    <% SS_ID == 1 %>
+                        <th scope="col">Event Shop Area</th>
+                    <% end %>
                     <th scope="col">Event Type</th>
                     <th scope="col">Actions</th>
                 </tr>
@@ -28,6 +31,11 @@
                     <td>
                         <%= preset.event_name %>
                     </td>
+                    <% SS_ID == 1 %>
+                        <td>
+                            <%= preset.area.nil? ? 'General' : preset.area %>
+                        </td>
+                    <% end %>
                     <td>
                         <%= event_types[preset.event_type_id] %>
                     </td>
