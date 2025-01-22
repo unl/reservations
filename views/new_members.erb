@@ -12,7 +12,7 @@ Here are the upcoming dates we are holding orientations:
         <thead class="small-hidden">
             <tr>
                 <th>Title</th>
-                <% SS_ID == 1 %>
+                <% if SS_ID == 1 %>
                     <th>Shop Area</th>
                 <% end %>
                 <th>Date/Location</th>
@@ -25,7 +25,7 @@ Here are the upcoming dates we are holding orientations:
                 <td class="small-hidden">
                     <%= event.title %>
                 </td>
-                <% SS_ID == 1 %>
+                <% if SS_ID == 1 %>
                     <td>
                         <%= event.area.nil? ? 'General' : event.area %>
                     </td>

@@ -84,7 +84,7 @@
                         <thead>
                             <tr>
                                 <th scope="col">Title</th>
-                                <% SS_ID == 1 %>
+                                <% if SS_ID == 1 %>
                                     <th scope="col">Shop Area</th>
                                 <% end %>
                                 <th scope="col">Date/Location</th>
@@ -103,7 +103,7 @@
                                         <%= event.title %>
                                         <% end %>
                                     </td>
-                                    <% SS_ID == 1 %>
+                                    <% if SS_ID == 1 %>
                                         <td>
                                             <%= event.area.nil? ? 'General' : event.area %>
                                         </td>
