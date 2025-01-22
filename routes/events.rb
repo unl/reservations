@@ -25,6 +25,45 @@ def flash_message(message)
     end
 end
 
+get '/events/:event_id.ics' do
+	not_found if SS_ID != 1
+
+	# this is an event details page
+	begin
+		event = Event.includes(:location, :event_type, :event_signups, :location).find(params[:event_id])
+	rescue ActiveRecord::RecordNotFound => e
+		not_found
+	end
+
+	not_found if event.start_time.nil?
+
+	ical_text = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//#{CONFIG['app']['URL']}//#{CONFIG['app']['URL']} Calendar 1.0//EN\n"
+
+	dtstart = event.start_time.utc.strftime('%Y%m%dT%H%M%SZ') # Convert to UTC
+	dtend   = event.end_time.utc.strftime('%Y%m%dT%H%M%SZ')   # Convert to UTC
+
+	ical_text += <<~EVENT
+		BEGIN:VEVENT
+		UID:#{event.id}@#{CONFIG['app']['URL']}
+		DTSTAMP:#{Time.now.utc.strftime('%Y%m%dT%H%M%SZ')}
+		DTSTART:#{dtstart}
+		DTEND:#{dtend}
+		SUMMARY:#{event.title} (#{event.type.description})
+	EVENT
+
+	# Add DESCRIPTION if it exists
+	ical_text += "DESCRIPTION:#{event.description}\n" if !event.description.empty?
+
+	ical_text += "END:VEVENT\n"
+	ical_text += "END:VCALENDAR"
+
+	snake_case_title = event.title.downcase.gsub(/[^a-z0-9]+/, '_').gsub(/^_|_$/, '')
+
+	content_type 'text/calendar; charset=UTF-8'
+	headers['Content-Disposition'] = "attachment; filename=\"#{snake_case_title}_#{event.id.to_s}.ics\""
+	ical_text
+end
+
 get '/events/:event_id/?' do
 	# this is an event details page
 	begin
