@@ -260,14 +260,31 @@ post '/events/:event_id/confirm_trainer/?' do
 	# get the event
 	event = Event.includes(:event_type).where(:id => params[:event_id]).first
 
-	event.trainer_confirmed = 1
-	event.save
-
-	header = 'Training Confirmed'
-	message = "Your training #{event.title} has been confirmed."
-
-	flash :success, header, message
-	redirect '/home/'
+	if event.trainer_id != @user.id && event.trainer_2_id != @user.id && event.trainer_3_id != @user.id
+		@breadcrumbs << {:text => 'Not Authorized'}
+		erb 'You are not authorized to preform that action', :layout => :fixed
+	else
+		if event.trainer_id == @user.id
+			event.trainer_confirmed = 1
+			event.save
+		end
+	
+		if event.trainer_2_id == @user.id
+			event.trainer_2_confirmed = 1
+			event.save
+		end
+	
+		if event.trainer_3_id == @user.id
+			event.trainer_3_confirmed = 1
+			event.save
+		end
+	
+		header = 'Training Confirmed'
+		message = "Your training #{event.title} has been confirmed."
+	
+		flash :success, header, message
+		redirect '/home/'
+	end
 end
 
 # Code copied from Recaptcha::Adapters::ControllerMethods to resolve issue of this method being private
