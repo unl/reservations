@@ -931,6 +931,7 @@ post '/admin/events/presets/:preset_id/edit/?' do
 	limit_signups = params[:limit_signups]
 	max_signups = params[:max_signups]
 	duration = params[:duration]
+	area = params[:area]
 
 	preset = PresetEvents.find_by(:id => params[:preset_id])
 
@@ -951,7 +952,7 @@ post '/admin/events/presets/:preset_id/edit/?' do
 		end
 
 		begin
-			preset.update(event_name: name, description: description, event_type_id: type, max_signups: max_signups, duration: duration)
+			preset.update(event_name: name, description: description, event_type_id: type, max_signups: max_signups, duration: duration, area: area)
 		
 			# check for removed tools
 			preset.get_resource_ids.each do |resource_id|
