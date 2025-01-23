@@ -1,5 +1,7 @@
 ALTER TABLE `events` ADD COLUMN `trainer_2_id` int(11) DEFAULT NULL AFTER `trainer_id`;
+ALTER TABLE `events` ADD COLUMN `trainer_2_confirmed` tinyint(4) DEFAULT 0 AFTER `trainer_confirmed`;
 ALTER TABLE `events` ADD COLUMN `trainer_3_id` int(11) DEFAULT NULL AFTER `trainer_2_id`;
+ALTER TABLE `events` ADD COLUMN `trainer_3_confirmed` tinyint(4) DEFAULT 0 AFTER `trainer_2_confirmed`;
 
 ALTER TABLE `events`
     ADD KEY `FK_trainer_2_id` (`trainer_2_id`);
