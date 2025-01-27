@@ -123,6 +123,7 @@ class Event < ActiveRecord::Base
 		self.trainer_id = params[:trainer]
 		self.location_id = params[:location]
 		self.max_signups = params[:limit_signups] == 'on' ? params[:max_signups].to_i : nil
+		self.area = !params[:area].nil? ? params[:area] : nil
 		self.service_space_id = SS_ID
 		if params[:is_private].nil?
 			self.is_private = 0
