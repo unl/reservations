@@ -29,6 +29,7 @@ get '/admin/events/?' do
 	tab = ['upcoming', 'past', 'timeless'].include?(params[:tab]) ? params[:tab] : 'upcoming'
 	preset_events = PresetEvents.where(:service_space_id => SS_ID).order(event_name: :asc).all.to_a
 	event_type = params[:event_type]
+	event_area = params[:event_area]
 
 	case tab
 	when 'past'
@@ -47,6 +48,13 @@ get '/admin/events/?' do
 	unless event_type.nil? || event_type.length == 0
 		iterator = iterator.where(:event_type_id => event_type)
 	end
+	unless event_area.nil? || event_area.length == 0
+		if event_area == 'General'
+			iterator = iterator.where(:area => ['General', nil]) # Nil is also General
+		else
+			iterator = iterator.where(:area => event_area)
+		end
+	end
 	
 	erb :'admin/events', :layout => :fixed, :locals => {
 		:events => iterator.order(order_clause).limit(page_size).offset((page-1)*page_size).all,
@@ -54,7 +62,8 @@ get '/admin/events/?' do
 		:page => page,
 		:tab => tab,
 		:preset_events => preset_events,
-		:event_type => event_type
+		:event_type => event_type,
+		:event_area => event_area
 	}
 end
 
@@ -265,6 +274,7 @@ get '/admin/events/create/?' do
 		event.title = preset.event_name
 		event.description = preset.description
 		event.event_type_id = preset.event_type_id
+		event.area = preset.area
 		event.max_signups = preset.max_signups
 		
 		erb :'admin/new_event', :layout => :fixed, :locals => {
@@ -821,6 +831,7 @@ post '/admin/events/presets/create/?' do
 	name = params[:name]
 	description = params[:description]
 	type = params[:type]
+	area = params[:area]
 	max_signups = params[:max_signups]
 	duration = params[:duration]
 
@@ -838,6 +849,7 @@ post '/admin/events/presets/create/?' do
 			preset.event_type_id = type
 			preset.max_signups = max_signups
 			preset.duration = duration
+			preset.area = area
 			preset.save
 
 	
@@ -919,6 +931,7 @@ post '/admin/events/presets/:preset_id/edit/?' do
 	limit_signups = params[:limit_signups]
 	max_signups = params[:max_signups]
 	duration = params[:duration]
+	area = params[:area]
 
 	preset = PresetEvents.find_by(:id => params[:preset_id])
 
@@ -939,7 +952,7 @@ post '/admin/events/presets/:preset_id/edit/?' do
 		end
 
 		begin
-			preset.update(event_name: name, description: description, event_type_id: type, max_signups: max_signups, duration: duration)
+			preset.update(event_name: name, description: description, event_type_id: type, max_signups: max_signups, duration: duration, area: area)
 		
 			# check for removed tools
 			preset.get_resource_ids.each do |resource_id|

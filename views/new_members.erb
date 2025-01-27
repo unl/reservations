@@ -1,52 +1,65 @@
 <h1 id="new-members-header" class="dcf-txt-h3">New Member Orientations</h1>
 
 <p>
-Welcome to the <%= CONFIG['app']['title'] %>! 
-New members who wish to use the space must attend an hour-long Member Orientation Training.
-Here are the upcoming dates we are holding orientations:
-</p>
+Welcome to the <%= CONFIG['app']['title'] %>!
+<% if SS_ID == 1%>
+    New members who wish to use the space must attend an hour-long Member Orientation Training.
+    Here are the upcoming dates we are holding orientations:
+    </p>
 
-<% if events.count > 0 %>
-<div class="event-page">
-    <table class="dcf-w-100% dcf-table dcf-table-bordered" aria-describedby="new-members-header">
-        <thead class="small-hidden">
-            <tr>
-                <th>Title</th>
-                <th>Date/Location</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        <% events.each do |event| %>
-            <tr>
-                <td class="small-hidden">
-                    <%= event.title %>
-                </td>
-                <td>
-                    <div class="small-block hidden calendar-event-title">
-                        <%= event.title %>
-                    </div>
-                    <ul>
-                        <li>
-                            <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
-                            <%= event.location.name %>
-                        </li>
-                    </ul>
-                </td>
-                <td>
-                    <% if event.max_signups.nil? || event.signups.count < event.max_signups %>
-                        <a class="dcf-btn dcf-btn-primary" href="/new_members/sign_up/<%= event.id %>/">Sign Up!</a>
-                    <% else %>
-                        <strong>FULL</strong>
+    <% if events.count > 0 %>
+    <div class="event-page">
+        <table class="dcf-w-100% dcf-table dcf-table-bordered" aria-describedby="new-members-header">
+            <thead class="small-hidden">
+                <tr>
+                    <th>Title</th>
+                    <% if SS_ID == 1 %>
+                        <th>Shop Area</th>
                     <% end %>
-                </td>
-            </tr>
-        <% end %>
-        </tbody>
-    </table>
-</div>
+                    <th>Date/Location</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            <% events.each do |event| %>
+                <tr>
+                    <td class="small-hidden">
+                        <%= event.title %>
+                    </td>
+                    <% if SS_ID == 1 %>
+                        <td>
+                            <%= event.area.nil? ? 'General' : event.area %>
+                        </td>
+                    <% end %>
+                    <td>
+                        <div class="small-block hidden calendar-event-title">
+                            <%= event.title %>
+                        </div>
+                        <ul>
+                            <li>
+                                <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
+                                <%= event.location.name %>
+                            </li>
+                        </ul>
+                    </td>
+                    <td>
+                        <% if event.max_signups.nil? || event.signups.count < event.max_signups %>
+                            <a class="dcf-btn dcf-btn-primary" href="/new_members/sign_up/<%= event.id %>/">Sign Up!</a>
+                        <% else %>
+                            <strong>FULL</strong>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+            </tbody>
+        </table>
+    </div>
+    <% else %>
+    <p>
+    There are no member orientations scheduled right now. Please check back again soon!
+    </p>
+    <% end %>
 <% else %>
-<p>
-There are no member orientations scheduled right now. Please check back again soon!
-</p>
+    For full details on completing Orientation please visit Canvas.
+    </p>
 <% end %>

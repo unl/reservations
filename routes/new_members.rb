@@ -411,12 +411,17 @@ end
 
 def fetch_final_content(uri)
   url = URI.parse(uri)
+  redirect_limit = 10
+  redirect_count = 0
 
   begin
     response = Timeout::timeout(10) { Net::HTTP.get_response(url) } # Timeout after 10 seconds
 
     # Follow redirects (if any) until we reach the final destination
     while response.is_a?(Net::HTTPRedirection)
+      redirect_count += 1
+      raise "Too many redirects (limit: #{redirect_limit})" if redirect_count > redirect_limit
+
       url = URI.parse(response['location'])
       response = Net::HTTP.get_response(url)
     end
