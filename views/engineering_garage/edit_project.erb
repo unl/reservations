@@ -57,9 +57,13 @@
                                 <td><%= user.email %></td>
                                 <td><%= teammate.created_on.strftime('%m/%d/%Y') %></td>
                                 <td>
+                                    <% if teammate.is_owner %>
+                                        <p>(owner)</p>
+                                    <% else %>
                                         <form class="dcf-form dcf-w-100%" action="/checkout/project/<%= project_id %>/edit/teammates/<%= teammate.id %>/remove" method="POST" enctype="application/x-www-form-urlencoded" onsubmit="return confirm('Remove <%= user.full_name %> as a teammate?');">
                                             <button class="dcf-btn dcf-btn-secondary" type="submit">Remove</button>
                                         </form>
+                                    <% end %>
                                 </td>
                             </tr>
                         <% end %>
