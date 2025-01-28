@@ -245,19 +245,6 @@ post "/checkout/project/:project_id/edit" do
   redirect "/checkout"
 end
 
-get "/checkout/project/:project_id/edit/teammates" do
-  @breadcrumbs << { :text => "Teammates" }
-  require_login
-
-  project = Project.find_by(id: params[:project_id])
-  teammates = ProjectTeammate.where("project_id = ?", params[:project_id])
-
-  erb :'engineering_garage/edit_teammates', :layout => :fixed, :locals => {
-                                            :project_id => project.id,
-                                            :teammates => teammates
-                                          }
-end
-
 post "/checkout/project/:project_id/edit/teammates/" do
   @breadcrumbs << { :text => "Teammates" }
   require_login
