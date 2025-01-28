@@ -107,7 +107,7 @@
 														</div>
 														<div class="dcf-modal-content">
 															<form class="dcf-form dcf-grid" action="/checkout/project_checkout/?nuid=<%= nuid %>&bin_id=<%= project[:bin_id] %>" method="POST" enctype="application/x-www-form-urlencoded">
-																<div class="dcf-col-50%-start">
+																<div class="dcf-col-100% dcf-col-50%@md">
 																	<p id="project_name"><strong>Name:</strong> <%= project[:title] %></p>
 																	<p id="bin_id"><strong>Location:</strong> <%= project[:bin_id] %></p>
 																	<p><strong>Description:</strong> <%= project[:description] %></p>
@@ -115,7 +115,7 @@
 																		<button class="dcf-btn dcf-btn-primary" type="submit">Check Out</button>
 																	</div>
 																</div>
-																<div class="dcf-col-50%-end dcf-overflow-y-auto" style = "max-height: 30rem;">
+																<div class="dcf-col-100% dcf-col-50%@md dcf-overflow-y-auto" style = "max-height: 30rem;">
 																	<fieldset>
 																	<legend><strong>Teammates:</strong></legend>
 																	<% teammates = project.find_teammates %>
@@ -147,7 +147,7 @@
 														</div>
 														<div class="dcf-modal-content">
 															<form class="dcf-form dcf-grid" action="/checkout/project_checkin/?nuid=<%= nuid %>&bin_id=<%= project[:bin_id] %>" method="POST" enctype="application/x-www-form-urlencoded">
-																<div class="dcf-col-50%-start">
+																<div class="dcf-col-100% dcf-col-50%@md">
 																	<p id="project_name"><strong>Name:</strong> <%= project[:title] %></p>
 																	<p id="bin_id"><strong>Location:</strong> <%= project[:bin_id] %></p>
 																	<p><strong>Description:</strong> <%= project[:description] %></p>
@@ -155,7 +155,7 @@
 																		<button class="dcf-btn dcf-btn-primary" type="submit">Check In</button>
 																	</div>
 																</div>
-																<div class="dcf-col-50%-end dcf-overflow-y-auto" style = "max-height: 30rem;">
+																<div class="dcf-col-100% dcf-col-50%@md dcf-overflow-y-auto" style = "max-height: 30rem;">
 																	<fieldset>
 																	<p><strong>Teammates:</strong></p>
 																	<% teammates = project.find_teammates %>
