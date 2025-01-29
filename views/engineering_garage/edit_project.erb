@@ -30,9 +30,9 @@
         <button class="dcf-mt-3 dcf-btn dcf-btn-primary" type="submit">Update</button>
     </fieldset>
 </form>
-    <div class="dcf-w-100% dcf-col-50%-end@sm">
-        <p class="dcf-bold">Project Teammates</p>
-        <form class="dcf-form dcf-w-100% dcf-col-50%-end@sm" id="find-nuid" action="/checkout/project/<%= project_id %>/edit/teammates/?" method="POST" enctype="application/x-www-form-urlencoded">
+    <fieldset class="dcf-form dcf-col-100% dcf-col-50%-end@sm unl-b-darker-gray dcf-rounded dcf-b-1 dcf-b-solid dcf-pt-4 dcf-pb-4 dcf-p dcf-pr-7 dcf-pl-7">
+        <legend>Project Teammates</legend>
+        <form class="dcf-form dcf-w-100% dcf-mb-1" id="find-nuid" action="/checkout/project/<%= project_id %>/edit/teammates/?" method="POST" enctype="application/x-www-form-urlencoded">
             <div class="dcf-input-group">
                 <input id="nuid-input" name="nuid" placeholder="Add a new teammate by NUID" type="text"/>
                 <button class="dcf-btn dcf-btn-primary" type="submit">Add Teammate</button>
@@ -73,6 +73,6 @@
                 <p>No teammates found.</p>
             <% end %>
         </div>
-    </div>
+    </fieldset>
 </div>
       
