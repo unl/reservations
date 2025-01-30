@@ -6,8 +6,9 @@
 </h1>
 
 <form class="dcf-form" id="signup" action="" method="POST" enctype="multipart/form-data">
-    <div class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
+    <div style="width: clamp(20ch, 100%, 80ch);">
         <fieldset>
+            <h2>New Member Information</h2>
             <div class="dcf-form-group">
                 <label for="first-name">First Name <small class="dcf-required">Required</small></label>
                 <input class="dcf-w-100%" type="text" id="first-name" name="first_name" value="<%= form_data[:first_name] if check_form_data(form_data, :first_name) %>" required/>
@@ -43,181 +44,215 @@
             </div>
 
             <% if SS_ID == 1 %>
+                <hr>
+                <h2>Vehicle Information</h2>
                 <div class="dcf-form-group">
                     <div id="unl-association">
-                    <label for="unl-association">Are you a UNL Student, Faculty, or Staff Member? <small class="dcf-required">Required</small></label>
-                        <div class="dcf-input-radio">
-                            <input type="radio" id="unl-asso-yes" name="unl-asso-option" value="yes" required>
-                            <label for="unl-asso-yes">Yes</label>
-                        </div>
-                        <div class="dcf-input-radio">
-                            <input type="radio" id="unl-asso-no" name="unl-asso-option" value="no" required>
-                            <label for="unl-asso-no">No</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="dcf-form-group">
-                    <div id="unl-permit" hidden='hidden'>
-                    <label for="unl-permit">Do you have a UNL Parking Permit?</label>
-                        <div class="dcf-input-radio">
-                            <input type="radio" id="unl-permit-yes" name="unl-permit-option" value="yes">
-                            <label for="unl-permit-yes">Yes</label>
-                        </div>
-                        <div class="dcf-input-radio">
-                            <input type="radio" id="unl-permit-no" name="unl-permit-option" value="no">
-                            <label for="unl-permit-no">No</label>
+                        <label for="unl-association" class="dcf-mb-2">Are you a UNL Student, Faculty, or Staff Member? <small class="dcf-required">Required</small></label>
+                        <div class="dcf-d-flex dcf-flex-row dcf-col-gap-vw">
+                            <div class="dcf-input-radio">
+                                <input type="radio" id="unl-asso-yes" name="unl-asso-option" value="yes" required>
+                                <label for="unl-asso-yes">Yes</label>
+                            </div>
+                            <div class="dcf-input-radio">
+                                <input type="radio" id="unl-asso-no" name="unl-asso-option" value="no" required>
+                                <label for="unl-asso-no">No</label>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="dcf-form-group">
-                    <div id="unl-perimeter" hidden='hidden'>
-                    <label for="unl-perimeter">Do you have a UNL Perimeter Parking?</label>
-                        <div class="dcf-input-radio">
-                            <input type="radio" id="unl-perim-yes" name="unl-perim-option" value="yes">
-                            <label for="unl-perim-yes">Yes</label>
-                        </div>
-                        <div class="dcf-input-radio">
-                            <input type="radio" id="unl-perim-no" name="unl-perim-option" value="no">
-                            <label for="unl-perim-no">No</label>
-                        </div>
-                    </div>
-                </div>   
-
-                <div class="dcf-form-group">
-                    <div id="unl-garage" hidden='hidden'>
-                    <label for="unl-garage">Do you have a UNL Garage or Lot Parking?</label>
-                        <div class="dcf-input-radio">
-                            <input type="radio" id="unl-garage-yes" name="unl-garage-option" value="yes">
-                            <label for="unl-garage-yes">Yes</label>
-                        </div>
-                        <div class="dcf-input-radio">
-                            <input type="radio" id="unl-garage-no" name="unl-garage-option" value="no">
-                            <label for="unl-garage-no">No</label>
+                    <div id="unl-permit" class="dcf-d-none">
+                        <label for="unl-permit" class="dcf-mb-2">Do you have a UNL Parking Permit?</label>
+                        <div class="dcf-d-flex dcf-flex-row dcf-col-gap-vw">
+                            <div class="dcf-input-radio">
+                                <input type="radio" id="unl-permit-yes" name="unl-permit-option" value="yes">
+                                <label for="unl-permit-yes">Yes</label>
+                            </div>
+                            <div class="dcf-input-radio">
+                                <input type="radio" id="unl-permit-no" name="unl-permit-option" value="no">
+                                <label for="unl-permit-no">No</label>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="dcf-input-checkbox" id="parking-checkbox" hidden='hidden'>
+                <div class="dcf-form-group">
+                    <div id="unl-perimeter" class="dcf-d-none">
+                        <label for="unl-perimeter" class="dcf-mb-2">Do you have a UNL Perimeter Parking?</label>
+                        <div class="dcf-d-flex dcf-flex-row dcf-col-gap-vw">
+                            <div class="dcf-input-radio">
+                                <input type="radio" id="unl-perim-yes" name="unl-perim-option" value="yes">
+                                <label for="unl-perim-yes">Yes</label>
+                            </div>
+                            <div class="dcf-input-radio">
+                                <input type="radio" id="unl-perim-no" name="unl-perim-option" value="no">
+                                <label for="unl-perim-no">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dcf-form-group">
+                    <div id="unl-garage" class="dcf-d-none">
+                        <label for="unl-garage" class="dcf-mb-2">Do you have a UNL Garage or Lot Parking?</label>
+                        <div class="dcf-d-flex dcf-flex-row dcf-col-gap-vw">
+                            <div class="dcf-input-radio">
+                                <input type="radio" id="unl-garage-yes" name="unl-garage-option" value="yes">
+                                <label for="unl-garage-yes">Yes</label>
+                            </div>
+                            <div class="dcf-input-radio">
+                                <input type="radio" id="unl-garage-no" name="unl-garage-option" value="no">
+                                <label for="unl-garage-no">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dcf-input-checkbox dcf-d-none" id="parking-checkbox">
                     <input type="checkbox" name="parking-fine" id="parking-fine">
                     <label for="parking-fine">I UNDERSTAND THAT I MUST EMAIL “UNLPTS@UNL.EDU" AND REQUEST “RECIPROCAL PARKING AT NIC”. FAILURE TO DO SO WILL RESULT IN UP TO A $64.00 TICKET EACH VISIT.</label>
                 </div>
 
-                <div class="dcf-form-group">
-                    <div id="vehicle-info">
-                    <h6>Vehicle #1</h6>
-                        <div class="dcf-form-group">
-                            <label for="license-plate1">Vehicle License Plate</label>
-                            <input type="text" id="license-plate1" name="license_plate1"/>
+                <div>
+                    <div id="vehicle-info" class="dcf-d-none">
+                        <p class="dcf-txt-h6 dcf-bold dcf-mb-2">Vehicle #1</p>
+                        <div class="dcf-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+                            <div class="dcf-form-group">
+                                <label for="license-plate1">Vehicle #1 License Plate</label>
+                                <input class="dcf-w-100%" type="text" id="license-plate1" name="license_plate1"/>
+                            </div>
+
+                            <div class="dcf-form-group">
+                                <label for="state1">Vehicle #1 State</label>
+                                <input class="dcf-w-100%" type="text" id="state1" name="state1"/>
+                            </div>
+
+                            <div class="dcf-form-group">
+                                <label for="make1">Vehicle #1 Make</label>
+                                <input class="dcf-w-100%" type="text" id="make1" name="make1"/>
+                            </div>
+
+                            <div class="dcf-form-group">
+                                <label for="model1">Vehicle #1 Model</label>
+                                <input class="dcf-w-100%" type="text" id="model1" name="model1"/>
+                            </div>
                         </div>
 
-                        <div class="dcf-form-group">
-                            <label for="state1">Vehicle State</label>
-                            <input type="text" id="state1" name="state1"/>
-                        </div>
+                        <fieldset class="dcf-collapsible-fieldset dcf-mb-4" data-start-expanded="false">
+                            <legend>Vehicle #2</legend>
+                            <div class="dcf-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+                                <div class="dcf-form-group">
+                                    <label for="license-plate2">Vehicle #2 License Plate</label>
+                                    <input class="dcf-w-100%" type="text" id="license-plate2" name="license_plate2"/>
+                                </div>
 
-                        <div class="dcf-form-group">
-                            <label for="make1">Vehicle Make</label>
-                            <input type="text" id="make1" name="make1"/>
-                        </div>
+                                <div class="dcf-form-group">
+                                    <label for="state2">Vehicle #2 State</label>
+                                    <input class="dcf-w-100%" type="text" id="state2" name="state2"/>
+                                </div>
 
-                        <div class="dcf-form-group">
-                            <label for="model1">Vehicle Model</label>
-                            <input type="text" id="model1" name="model1"/>
-                        </div>
-                    <h6>Vehicle #2</h6>
-                        <div class="dcf-form-group">
-                            <label for="license-plate2">Vehicle License Plate</label>
-                            <input type="text" id="license-plate2" name="license_plate2"/>
-                        </div>
+                                <div class="dcf-form-group">
+                                    <label for="make2">Vehicle #2 Make</label>
+                                    <input class="dcf-w-100%" type="text" id="make2" name="make2"/>
+                                </div>
 
-                        <div class="dcf-form-group">
-                            <label for="state2">Vehicle State</label>
-                            <input type="text" id="state2" name="state2"/>
-                        </div>
+                                <div class="dcf-form-group">
+                                    <label for="model2">Vehicle #2 Model</label>
+                                    <input class="dcf-w-100%" type="text" id="model2" name="model2"/>
+                                </div>
+                            </div>
+                        </fieldset>
 
-                        <div class="dcf-form-group">
-                            <label for="make2">Vehicle Make</label>
-                            <input type="text" id="make2" name="make2"/>
-                        </div>
+                        <fieldset class="dcf-collapsible-fieldset dcf-mb-4" data-start-expanded="false">
+                            <legend>Vehicle #3</legend>
+                            <div class="dcf-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+                                <div class="dcf-form-group">
+                                    <label for="license-plate3">Vehicle #3 License Plate</label>
+                                    <input class="dcf-w-100%" type="text" id="license-plate3" name="license_plate3"/>
+                                </div>
 
-                        <div class="dcf-form-group">
-                            <label for="model2">Vehicle Model</label>
-                            <input type="text" id="model2" name="model2"/>
-                        </div>
-                    <h6>Vehicle #3</h6>
-                        <div class="dcf-form-group">
-                            <label for="license-plate3">Vehicle License Plate</label>
-                            <input type="text" id="license-plate3" name="license_plate3"/>
-                        </div>
+                                <div class="dcf-form-group">
+                                    <label for="state3">Vehicle #3 State</label>
+                                    <input class="dcf-w-100%" type="text" id="state3" name="state3"/>
+                                </div>
 
-                        <div class="dcf-form-group">
-                            <label for="state3">Vehicle State</label>
-                            <input type="text" id="state3" name="state3"/>
-                        </div>
+                                <div class="dcf-form-group">
+                                    <label for="make3">Vehicle #3 Make</label>
+                                    <input class="dcf-w-100%" type="text" id="make3" name="make3"/>
+                                </div>
 
-                        <div class="dcf-form-group">
-                            <label for="make3">Vehicle Make</label>
-                            <input type="text" id="make3" name="make3"/>
-                        </div>
-
-                        <div class="dcf-form-group">
-                            <label for="model3">Vehicle Model</label>
-                            <input type="text" id="model3" name="model3"/>
-                        </div>
+                                <div class="dcf-form-group">
+                                    <label for="model3">Vehicle #3 Model</label>
+                                    <input class="dcf-w-100%" type="text" id="model3" name="model3"/>
+                                </div>
+                            </div>
+                        </fieldset>
                     </div>
                 </div>
 
-                <div class="dcf-input-checkbox">
+                <script>
+                    window.addEventListener('inlineJSReady', function() {
+                        WDN.initializePlugin('collapsible-fieldsets');
+                    }, false);
+                </script>
+
+                <div class="dcf-input-checkbox dcf-mb-4">
                     <input type="checkbox" name="vehicle-update" id="vehicle-update" required>
                     <label for="vehicle-update">I UNDERSTAND I MUST UPDATE VEHICLE INFORMATION AS CHANGES OCCUR. <small class="dcf-required">Required</small></label>
                 </div>
             <% end %>
 
-            <div class="dcf-form-group">
-                <h6>Primary Emergency Contact</h6>
-                <div class="dcf-form-group">
-                    <label for="name1">Name <small class="dcf-required">Required</small></label>
-                    <input type="text" id="name1" name="name1" value="<%= form_data[:name1] if check_form_data(form_data, :name1) %>" required/>
-                </div>
+            <hr>
+            <h2>Emergency Contacts</h2>
 
-                <div class="dcf-form-group">
-                    <label for="relationship1">Relationship <small class="dcf-required">Required</small></label>
-                    <input type="text" id="relationship1" name="relationship1" value="<%= form_data[:relationship1] if check_form_data(form_data, :relationship1) %>" required/>
-                </div>
+            <div>
+                <p class="dcf-txt-h6 dcf-bold dcf-mb-2">Primary Emergency Contact</p>
+                <div class="dcf-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+                    <div class="dcf-form-group">
+                        <label for="name1">Name <small class="dcf-required">Required</small></label>
+                        <input class="dcf-w-100%" type="text" id="name1" name="name1" value="<%= form_data[:name1] if check_form_data(form_data, :name1) %>" required/>
+                    </div>
+                    <div class="dcf-form-group">
+                        <label for="relationship1">Relationship <small class="dcf-required">Required</small></label>
+                        <input class="dcf-w-100%" type="text" id="relationship1" name="relationship1" value="<%= form_data[:relationship1] if check_form_data(form_data, :relationship1) %>" required/>
+                    </div>
 
-                <div class="dcf-form-group">
-                    <label for="primary-phone1">Primary Phone Number <small class="dcf-required">Required</small></label>
-                    <input type="text" id="primary_phone1" name="primary_phone1" value="<%= form_data[:primary_phone1] if check_form_data(form_data, :primary_phone1) %>" required/>
-                </div>
+                    <div class="dcf-form-group">
+                        <label for="primary_phone1">Primary Phone Number <small class="dcf-required">Required</small></label>
+                        <input class="dcf-w-100%" type="text" id="primary_phone1" name="primary_phone1" value="<%= form_data[:primary_phone1] if check_form_data(form_data, :primary_phone1) %>" required/>
+                    </div>
 
-                <div class="dcf-form-group">
-                    <label for="secondary_phone1">Secondary Phone Number</label>
-                    <input type="text" id="secondary_phone1" name="secondary_phone1" value="<%= form_data[:secondary_phone1] if check_form_data(form_data, :secondary_phone1) %>" />
+                    <div class="dcf-form-group">
+                        <label for="secondary_phone1">Secondary Phone Number</label>
+                        <input class="dcf-w-100%" type="text" id="secondary_phone1" name="secondary_phone1" value="<%= form_data[:secondary_phone1] if check_form_data(form_data, :secondary_phone1) %>" />
+                    </div>
                 </div>
             </div>
 
-            <div class="dcf-form-group">
-                <h6>Secondary Emergency Contact</h6>
-                <div class="dcf-form-group">
-                    <label for="name2">Name</label>
-                    <input type="text" id="name2" name="name2" value="<%= form_data[:name2] if check_form_data(form_data, :name2) %>" />
-                </div>
+            <div>
+                <p class="dcf-txt-h6 dcf-bold dcf-mb-2">Secondary Emergency Contact</p>
+                <div class="dcf-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+                    <div class="dcf-form-group">
+                        <label for="name2">Name</label>
+                        <input class="dcf-w-100%" type="text" id="name2" name="name2" value="<%= form_data[:name2] if check_form_data(form_data, :name2) %>" />
+                    </div>
 
-                <div class="dcf-form-group">
-                    <label for="relationship2">Relationship</label>
-                    <input type="text" id="relationship2" name="relationship2" value="<%= form_data[:relationship2] if check_form_data(form_data, :relationship2) %>" />
-                </div>
+                    <div class="dcf-form-group">
+                        <label for="relationship2">Relationship</label>
+                        <input class="dcf-w-100%" type="text" id="relationship2" name="relationship2" value="<%= form_data[:relationship2] if check_form_data(form_data, :relationship2) %>" />
+                    </div>
 
-                <div class="dcf-form-group">
-                    <label for="primary-phone2">Primary Phone Number</label>
-                    <input type="text" id="primary_phone2" name="primary_phone2" value="<%= form_data[:primary_phone2] if check_form_data(form_data, :primary_phone2) %>" />
-                </div>
+                    <div class="dcf-form-group">
+                        <label for="primary_phone2">Primary Phone Number</label>
+                        <input class="dcf-w-100%" type="text" id="primary_phone2" name="primary_phone2" value="<%= form_data[:primary_phone2] if check_form_data(form_data, :primary_phone2) %>" />
+                    </div>
 
-                <div class="dcf-form-group">
-                    <label for="secondary_phone2">Secondary Phone Number</label>
-                    <input type="text" id="secondary_phone2" name="secondary_phone2" value="<%= form_data[:secondary_phone2] if check_form_data(form_data, :secondary_phone2) %>" />
+                    <div class="dcf-form-group">
+                        <label for="secondary_phone2">Secondary Phone Number</label>
+                        <input class="dcf-w-100%" type="text" id="secondary_phone2" name="secondary_phone2" value="<%= form_data[:secondary_phone2] if check_form_data(form_data, :secondary_phone2) %>" />
+                    </div>
                 </div>
             </div>
 
@@ -231,57 +266,57 @@
                         </div>
                         <div class="dcf-input-checkbox">
                             <input type="checkbox" name="cleaning-agreement" id="cleaning-agreement" required>
-                            <label for="cleaning-agreement">I agree that while the College of Engineering Garage provides a shared workspace, 
-                                I am responsible for cleaning up after myself. 
+                            <label for="cleaning-agreement">I agree that while the College of Engineering Garage provides a shared workspace,
+                                I am responsible for cleaning up after myself.
                                 I understand that cleaning supplies are available and can be requested if needed.<small class="dcf-required">Required</small></label>
                         </div>
                         <div class="dcf-input-checkbox">
                             <input type="checkbox" name="priviledge-agreement" id="priviledge-agreement" required>
-                            <label for="priviledge-agreement">I agree that access to the College of Engineering Garage is a privilege and not a right. 
-                                I acknowledge that all policies are posted on the website, and it is my responsibility to learn and follow them. 
-                                I understand that violating policies, whether knowingly or unknowingly, will result in consequences based on the severity of the violation, 
+                            <label for="priviledge-agreement">I agree that access to the College of Engineering Garage is a privilege and not a right.
+                                I acknowledge that all policies are posted on the website, and it is my responsibility to learn and follow them.
+                                I understand that violating policies, whether knowingly or unknowingly, will result in consequences based on the severity of the violation,
                                 as determined by staff.<small class="dcf-required">Required</small></label>
                         </div>
                         <div class="dcf-input-checkbox">
                             <input type="checkbox" name="question-agreement" id="question-agreement" required>
-                            <label for="question-agreement">I agree to ask questions when I’m not sure how to do something. 
-                                I realize that many accidents happen because people are too proud to ask questions about proper fixturing and job setup, 
+                            <label for="question-agreement">I agree to ask questions when I’m not sure how to do something.
+                                I realize that many accidents happen because people are too proud to ask questions about proper fixturing and job setup,
                                 and I will help ensure safety by asking questions and seeking advice from staff and experienced users.<small class="dcf-required">Required</small></label>
                         </div>
                         <div class="dcf-input-checkbox">
                             <input type="checkbox" name="active-cleaning-agreement" id="active-cleaning-agreement" required>
-                            <label for="active-cleaning-agreement">I agree to clean up as I go before I leave the shop. 
-                            I realize that “out of sight is out of- mind”, and that if I leave the shop I am likely to get distracted and forget to clean up. 
+                            <label for="active-cleaning-agreement">I agree to clean up as I go before I leave the shop.
+                            I realize that “out of sight is out of- mind”, and that if I leave the shop I am likely to get distracted and forget to clean up.
                             I will help ensure safety by sweeping and vacuuming, and putting away tools I have taken out.<small class="dcf-required">Required</small></label>
                         </div>
                         <div class="dcf-input-checkbox">
                             <input type="checkbox" name="ppe-agreement" id="ppe-agreement" required>
-                            <label for="ppe-agreement">I agree to wear proper protective gear at all times. 
-                            I realize that “I’m just grabbing a screwdriver” is not an excuse to go into the machine shop without safety glasses, closed toed shoes, hair tied up, and so on. 
-                            I understand that I may be asked to leave for the day, or my machine shop privileges may be permanently revoked, 
+                            <label for="ppe-agreement">I agree to wear proper protective gear at all times.
+                            I realize that “I’m just grabbing a screwdriver” is not an excuse to go into the machine shop without safety glasses, closed toed shoes, hair tied up, and so on.
+                            I understand that I may be asked to leave for the day, or my machine shop privileges may be permanently revoked,
                             if I fail to wear proper protective gear at all times.<small class="dcf-required">Required</small></label>
-                        </div> 
+                        </div>
                         <div class="dcf-input-checkbox">
                             <input type="checkbox" name="certification-agreement" id="certification-agreement" required>
-                            <label for="certification-agreement">I agree I will not use any machines on which 
-                            I haven’t been certified to use. I understand the machines may seem simple and safe or 
-                            I may have relevant prior experience, but that proper certification is incredibly important. 
-                            I realize that by going through the established certification process, 
+                            <label for="certification-agreement">I agree I will not use any machines on which
+                            I haven’t been certified to use. I understand the machines may seem simple and safe or
+                            I may have relevant prior experience, but that proper certification is incredibly important.
+                            I realize that by going through the established certification process,
                             I will learn how to operate the machines and contribute to my safety and the safety of the facility.<small class="dcf-required">Required</small></label>
-                        </div> 
+                        </div>
                         <div class="dcf-input-checkbox">
                             <input type="checkbox" name="report-agreement" id="report-agreement" required>
-                            <label for="report-agreement">I agree to report any unsafe conditions I see to staff. 
-                            I realize that many accidents could be avoided if someone spoke up about potentially unsafe actions. 
+                            <label for="report-agreement">I agree to report any unsafe conditions I see to staff.
+                            I realize that many accidents could be avoided if someone spoke up about potentially unsafe actions.
                             I will speak up, even if I am not sure if the situation is safe or unsafe, and even if more experienced users are involved.<small class="dcf-required">Required</small></label>
                         </div>
                         <div class="dcf-input-checkbox">
                             <input type="checkbox" name="renewal-agreement" id="renewal-agreement" required>
                             <label for="renewal-agreement">I understand that this User Agreement lasts ONE YEAR and will need to be renewed annually in order to continue to use the Engineering Garage.<small class="dcf-required">Required</small></label>
-                        </div>      
+                        </div>
                 </fieldset>
             <% end %>
-            
+
             <form action="/verify">
                 <div>
                     <%= recaptcha %>
@@ -296,71 +331,5 @@
 
 <% append_script_declaration("WDN.initializePlugin('datepickers');") %>
 <% if SS_ID == 1 %>
-    <% append_script_declaration(%q[require(['jquery'], function($) {
-        $(document).ready(function() {
-            $('#unl-asso-yes').click(function (click) {
-                $('#unl-permit').removeAttr('hidden');
-            });
-            $('#unl-asso-no').click(function (click) {
-                $('#unl-permit').attr('hidden','hidden');
-                $('input[name=unl-permit-option]').prop('checked',false);
-                const perimeter = $('#unl-perimeter').attr('hidden');
-                if (typeof perimeter == 'undefined' || perimeter == false) {
-                    $('#unl-perimeter').attr('hidden','hidden');
-                    $('input[name=unl-perim-option]').prop('checked',false);
-                }
-                const garage = $('#unl-garage').attr('hidden');
-                if (typeof garage == 'undefined' || garage == false) {
-                    $('#unl-garage').attr('hidden','hidden');
-                    $('input[name=unl-garage-option]').prop('checked',false);
-                }
-                const parkingCheckbox = $('#parking-checkbox').attr('hidden');
-                if (typeof parkingCheckbox == 'undefined' || garage == false) {
-                    $('#parking-checkbox').attr('hidden','hidden');
-                    $('#parking-fine').removeAttr('required');
-                    $('input[name=parking-fine]').prop('checked',false);
-                }
-            });
-            $('#unl-permit-yes').click(function (click) {
-                $('#unl-perimeter').removeAttr('hidden');
-            });
-            $('#unl-permit-no').click(function (click) {
-                $('#unl-perimeter').attr('hidden','hidden');
-                $('input[name=unl-perim-option]').prop('checked',false);
-                const garage = $('#unl-garage').attr('hidden');
-                if (typeof garage == 'undefined' || garage == false) {
-                    $('#unl-garage').attr('hidden','hidden');
-                    $('input[name=unl-garage-option]').prop('checked',false);
-                }
-                const parkingCheckbox = $('#parking-checkbox').attr('hidden');
-                if (typeof parkingCheckbox == 'undefined' || garage == false) {
-                    $('#parking-checkbox').attr('hidden','hidden');
-                    $('#parking-fine').removeAttr('required');
-                    $('input[name=parking-fine]').prop('checked',false);
-                }
-            });
-            $('#unl-perim-no').click(function (click) {
-                $('#unl-garage').removeAttr('hidden'); 
-            });
-            $('#unl-perim-yes').click(function (click) {
-                $('#unl-garage').attr('hidden','hidden');
-                $('input[name=unl-garage-option]').prop('checked',false);
-                const parkingCheckbox = $('#parking-checkbox').attr('hidden');
-                if (typeof parkingCheckbox == 'undefined' || garage == false) {
-                    $('#parking-checkbox').attr('hidden','hidden');
-                    $('#parking-fine').removeAttr('required');
-                    $('input[name=parking-fine]').prop('checked',false);
-                }
-            });
-            $('#unl-garage-yes').click(function (click) {
-                $('#parking-checkbox').removeAttr('hidden');
-                $('#parking-fine').attr('required','required');
-            });
-            $('#unl-garage-no').click(function (click) {
-                $('#parking-checkbox').attr('hidden','hidden');
-                $('#parking-fine').removeAttr('required');
-                $('input[name=parking-fine]').prop('checked',false);
-            });
-        });
-    });]) %>
+    <% append_script_tag('/js/innovationstudio_new_member_vehicle.js?cb=' + CONFIG['app']['cb_version']) %>
 <% end %>
