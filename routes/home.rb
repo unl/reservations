@@ -19,7 +19,10 @@ get '/home/?' do
 		order(:start_time).all
 
 	trainer_events = Event.
-		where(:events => {:trainer_id => @user.id}).
+		where(
+			"trainer_id = :user_id OR trainer_2_id = :user_id OR trainer_3_id = :user_id",
+			user_id: @user.id
+		).
 		where('end_time >= ?', Time.now).
 		order(:start_time).all
 	user_alerts = AlertSignup.joins(:alert).where('user_id = ?', @user.id)

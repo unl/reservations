@@ -25,9 +25,23 @@ get '/admin/agenda/' do
 
 	trainers = {}
 	for event in events
-		trainer = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_id)
-		if !trainer.first.nil?
-			trainers[event.trainer_id] = trainer.first.full_name
+		if (!event.trainer_id.nil?)
+			trainer_1 = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_id)
+			if !trainer_1.first.nil?
+				trainers[event.trainer_id] = trainer_1.first
+			end
+		end
+		if (!event.trainer_2_id.nil?)
+			trainer_2 = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_2_id)
+			if !trainer_2.first.nil?
+				trainers[event.trainer_2_id] = trainer_2.first
+			end
+		end
+		if (!event.trainer_3_id.nil?)
+			trainer_3 = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_3_id)
+			if !trainer_3.first.nil?
+				trainers[event.trainer_3_id] = trainer_3.first
+			end
 		end
 	end
 
