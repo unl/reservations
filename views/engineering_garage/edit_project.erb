@@ -4,10 +4,9 @@
 </div>
 
 <div class="dcf-grid dcf-col-gap-vw">
-<form id="edit-project-form" action="" method="POST" enctype="multipart/form-data" class="dcf-form dcf-col-100% dcf-col-50%-start@sm">
-    <fieldset>
-        <legend>Project Details</legend>
-
+<fieldset class="dcf-form dcf-col-100% dcf-col-50%-start@sm unl-b-darker-gray dcf-rounded dcf-b-1 dcf-b-solid dcf-pt-4 dcf-pb-4 dcf-p dcf-pr-7 dcf-pl-7">
+    <legend>Project Details</legend>
+    <form id="edit-project-form" action="" method="POST" enctype="multipart/form-data">
         <div class="dcf-form-group ">
             <label for="nuid">Owner NUID <small class="dcf-required">Required</small></label>
             <input class="dcf-w-100%" type="text" id="nuid" name="nuid" value ="<%= user.user_nuid %>" />
@@ -27,9 +26,9 @@
             <label for="password">Bin ID <small class="dcf-required">Required</small></label>
             <input class="dcf-w-100%" type="text" id="bin_id" name="bin_id" value ="<%= bin_id %>" />
         </div>
-        <button class="dcf-mt-3 dcf-btn dcf-btn-primary" type="submit">Update</button>
-    </fieldset>
-</form>
+            <button class="dcf-mt-3 dcf-btn dcf-btn-primary" type="submit">Update</button>
+    </form>
+</fieldset>
     <fieldset class="dcf-form dcf-col-100% dcf-col-50%-end@sm unl-b-darker-gray dcf-rounded dcf-b-1 dcf-b-solid dcf-pt-4 dcf-pb-4 dcf-p dcf-pr-7 dcf-pl-7">
         <legend>Project Teammates</legend>
         <form class="dcf-form dcf-w-100% dcf-mb-1" id="find-nuid" action="/checkout/project/<%= project_id %>/edit/teammates/?" method="POST" enctype="application/x-www-form-urlencoded">
