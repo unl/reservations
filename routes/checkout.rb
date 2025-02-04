@@ -138,7 +138,7 @@ post "/checkout/project_delete/?" do
 end
 
 get "/checkout/project/:nuid/create" do
-  @breadcrumbs << { :text => "New_Project" }
+  @breadcrumbs << { :text => "New Project" }
   require_login
   user = User.find_by(user_nuid: params[:nuid])
   erb :'engineering_garage/new_project', :layout => :fixed, :locals => {
@@ -147,7 +147,7 @@ get "/checkout/project/:nuid/create" do
 end
 
 post "/checkout/project/:nuid/create" do
-  @breadcrumbs << { :text => "New_Project" }
+  @breadcrumbs << { :text => "New Project" }
   require_login
 
   if  params[:title].blank?
@@ -182,7 +182,7 @@ post "/checkout/project/:nuid/create" do
 end
 
 get "/checkout/project/:project_id/edit" do
-  @breadcrumbs << { :text => "New_Project" }
+  @breadcrumbs << { :text => "Edit Project" }
   require_login
   project = Project.find_by(id: params[:project_id])
   user = User.find_by(id: project.owner_user_id)
@@ -200,7 +200,7 @@ get "/checkout/project/:project_id/edit" do
 end
 
 post "/checkout/project/:project_id/edit" do
-  @breadcrumbs << { :text => "New_Project" }
+  @breadcrumbs << { :text => "Edit Project" }
   require_login
   project = Project.find_by(id: params[:project_id])
   params[:user] = User.find_by(user_nuid: params[:nuid])
@@ -243,6 +243,19 @@ post "/checkout/project/:project_id/edit" do
 
   flash :success, 'Success', 'Project updated'
   redirect "/checkout"
+end
+
+post "/checkout/project/:project_id/edit/delete/" do
+  project = Project.find_by(id: params[:project_id])
+
+  if project != nil
+    project.delete
+    flash :success, 'Success', 'Project deleted'
+    redirect "/checkout/?"
+  else
+    flash :error, 'Error', 'Project not found'
+    redirect "/checkout/"
+  end
 end
 
 post "/checkout/project/:project_id/edit/teammates/" do
