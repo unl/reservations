@@ -119,6 +119,13 @@ post '/events/:event_id/sign_up_as_non_member/?' do
 		redirect back
 	end
 
+	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
+	if 	!VALID_EMAIL_REGEX.match(params[:email])
+		flash(:danger, "Invalid Email", "Your email address was invalid")
+		session[:form_data] = params
+		redirect back
+	end
+
 	if !event.signup_allowed_for_type?
 	    flash_message(MESSAGE_SIGNUP_NOT_ALLOWED)
         redirect back
