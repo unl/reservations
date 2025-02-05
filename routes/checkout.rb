@@ -5,7 +5,7 @@ require "date"
 require "erb"
 
 before "/checkout*" do
-	unless @user.id == -1
+	unless has_permission?(Permission::MANAGE_CHECKOUT)
 		raise Sinatra::NotFound
 	end
 end
