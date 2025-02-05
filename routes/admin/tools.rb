@@ -1,6 +1,7 @@
 require 'models/resource'
 require 'models/permission'
 require 'models/reservation'
+require 'models/resource_authorization'
 
 NIS_TOOL_RESOURCE_CLASS_ID = 1
 
@@ -182,4 +183,33 @@ post '/admin/tools/:resource_id/delete/?' do
 
 	flash(:success, 'Tool Deleted', "Your tool #{tool.name} has been deleted. All reservations and permissions on this tool have also been removed.")
 	redirect '/admin/tools/'
+end
+
+get '/admin/tools/bulk_permissions_update/?' do
+	require_login
+	@breadcrumbs << {:text => 'Admin Tools Update'}
+
+	tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
+	tools.sort_by! do |tool|
+		[
+			tool.category_name.to_s.downcase,
+			tool.name.to_s.downcase,
+			tool.model.to_s.downcase
+		]
+	end
+
+	authorizable_tools = Resource.where(:service_space_id => SS_ID, :needs_authorization => true).order(:name => :asc).all.to_a
+	authorizable_tools.sort_by! do |tool|
+		[
+			tool.category_name.to_s.downcase,
+			tool.name.to_s.downcase,
+			tool.model.to_s.downcase
+		]
+	end
+
+
+	erb :'admin/bulk_permissions_update', :layout => :fixed, :locals => {
+		:authorizable_tools => authorizable_tools,
+		:tools => tools
+	}	
 end
