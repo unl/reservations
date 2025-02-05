@@ -1,6 +1,7 @@
 require 'models/resource'
 require 'models/permission'
 require 'models/reservation'
+require 'models/tool'
 
 NIS_TOOL_RESOURCE_CLASS_ID = 1
 
@@ -115,6 +116,25 @@ post '/admin/tools/create/?' do
 
 
 	flash(:success, 'Tool Created', "Your tool #{tool.name} has been created.")
+	redirect '/admin/tools/'
+end
+
+get '/admin/tools/create_checkable/?' do
+	require_login
+	@breadcrumbs << {:text => 'Admin Tools', :href => '/admin/tools/'} << {:text => 'Create Checkable Tool'}
+
+	erb :'admin/edit_checkable_tool', :layout => :fixed, :locals => {
+		:tool => Tool.new
+	}
+end
+
+post '/admin/tools/create_checkable/?' do
+	require_login
+
+	tool = Tool.new
+	tool.set_data(params)
+
+	flash(:success, 'Tool Created', "Your tool #{tool.tool_name} has been created.")
 	redirect '/admin/tools/'
 end
 
