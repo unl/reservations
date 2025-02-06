@@ -23,9 +23,28 @@ get '/admin/tools/?' do
 			tool.model.to_s.downcase
 		]
 	end
-	erb :'admin/tools', :layout => :fixed, :locals => {
-		:tools => tools
-	}	
+
+	checkable_tools = Tool.where(service_space_id: SS_ID)
+	# .where(:service_space_id => SS_ID)
+	# .order(:tool_name).all.to_a
+	# checkable_tools.sort_by! do |tool|
+	# 	[
+	# 		tool.category_name.to_s.downcase,
+	# 		tool.tool_name.to_s.downcase
+	# 		tool.model.to_s.downcase
+	# 	]
+	# end
+
+	if SS_ID == 8
+		erb :'admin/garage_tools', :layout => :fixed, :locals => {
+			:tools => tools,
+			:checkable_tools => checkable_tools
+		}	
+	else
+		erb :'admin/tools', :layout => :fixed, :locals => {
+			:tools => tools
+		}	
+	end
 end
 
 post '/admin/tools/?' do

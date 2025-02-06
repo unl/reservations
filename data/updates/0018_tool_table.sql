@@ -1,7 +1,7 @@
 CREATE TABLE `tools` (
 	`id` int(11) PRIMARY KEY AUTO_INCREMENT,
 	`tool_name` VARCHAR(255) NOT NULL,
-	`category_id` VARCHAR(255) DEFAULT NULL,
+	`category_id` int(11) DEFAULT NULL,
 	`description` VARCHAR(255) DEFAULT NULL,
 	`service_space_id` int(11) NOT NULL,
 	`model_number` VARCHAR(255) DEFAULT NULL,
