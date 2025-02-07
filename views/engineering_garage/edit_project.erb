@@ -31,7 +31,7 @@
                 <button class="dcf-mt-3 dcf-btn dcf-btn-secondary" type="submit" form="delete-project-form">Delete</button>
             </div>
         </form>
-        <form class="dcf-form dcf-w-100% dcf-mb-1" id="delete-project-form" action="/checkout/project/<%= project_id %>/edit/delete/" method="POST">
+        <form class="dcf-form dcf-w-100% dcf-mb-1" id="delete-project-form" action="/checkout/project/<%= project_id %>/edit/delete/" method="POST" onsubmit="return confirm('Delete project?');">
         </form>
     </fieldset>
 
