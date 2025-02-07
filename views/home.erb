@@ -139,19 +139,42 @@
                     <%= event.start_time.in_time_zone.strftime('%m/%d/%Y @ %l:%M %P') %><br>
                     <%= event.location.name %>
                 </td>
-                <% if event.trainer_confirmed == 1 %>
-                    <td class="table-actions">
-                        <div class="dcf-input-checkbox">
-                            <input disabled id="training-confirmed" title="Training Confirmed" type="checkbox" checked name="training_confirmed">
-                            <label for="training-confirmed">Training Confirmed</label>
-                        </div>
-                <% else %>
-                    <td class="table-actions">
-                        <form action="/events/<%= event.id %>/confirm_trainer/" method="POST" class="dcf-form">
-                            <button class="dcf-btn dcf-btn-primary" type="submit">Confirm Training</button>
-                        </form>
-                    </td>
-                <% end %>
+                <td class="table-actions">
+                    <% if event.trainer_id == @user.id %>
+                        <% if event.trainer_confirmed == 1 %>
+                            <div class="dcf-input-checkbox">
+                                <input disabled id="training-confirmed_<%= event.id %>" title="Training Confirmed" type="checkbox" checked name="training_confirmed">
+                                <label for="training-confirmed_<%= event.id %>">Training Confirmed</label>
+                            </div>
+                        <% else %>
+                            <form action="/events/<%= event.id %>/confirm_trainer/" method="POST" class="dcf-form">
+                                <button class="dcf-btn dcf-btn-primary" type="submit">Confirm Training</button>
+                            </form>
+                        <% end %>
+                    <% elsif event.trainer_2_id == @user.id %>
+                        <% if event.trainer_2_confirmed == 1 %>
+                            <div class="dcf-input-checkbox">
+                                <input disabled id="training-confirmed_<%= event.id %>" title="Training Confirmed" type="checkbox" checked name="training_confirmed">
+                                <label for="training-confirmed_<%= event.id %>">Training Confirmed (Trainer 2)</label>
+                            </div>
+                        <% else %>
+                            <form action="/events/<%= event.id %>/confirm_trainer/" method="POST" class="dcf-form">
+                                <button class="dcf-btn dcf-btn-primary" type="submit">Confirm Training (Trainer 2)</button>
+                            </form>
+                        <% end %>
+                    <% elsif event.trainer_3_id == @user.id %>
+                        <% if event.trainer_3_confirmed == 1 %>
+                            <div class="dcf-input-checkbox">
+                                <input disabled id="training-confirmed_<%= event.id %>" title="Training Confirmed" type="checkbox" checked name="training_confirmed">
+                                <label for="training-confirmed_<%= event.id %>">Training Confirmed (Trainer 3)</label>
+                            </div>
+                        <% else %>
+                            <form action="/events/<%= event.id %>/confirm_trainer/" method="POST" class="dcf-form">
+                                <button class="dcf-btn dcf-btn-primary" type="submit">Confirm Training (Trainer 3)</button>
+                            </form>
+                        <% end %>
+                    <% end %>
+                </td>
             </tr>
         <% end %>
         </tbody>

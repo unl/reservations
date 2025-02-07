@@ -121,6 +121,8 @@ class Event < ActiveRecord::Base
 		end
 		self.event_type_id = params[:type]
 		self.trainer_id = params[:trainer]
+		self.trainer_2_id = params[:trainer_2]
+		self.trainer_3_id = params[:trainer_3]
 		self.location_id = params[:location]
 		self.max_signups = params[:limit_signups] == 'on' ? params[:max_signups].to_i : nil
 		self.area = !params[:area].nil? ? params[:area] : nil
