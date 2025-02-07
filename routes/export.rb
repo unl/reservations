@@ -10,10 +10,11 @@ get '/export/?' do
 
     require_login
     user_events = Event.includes(:event_type).joins(:event_signups).
-	    where(:event_signups => {:user_id => @user.id}).
-	    where('end_time >= ?', Time.now)
-    trainer_events = Event.where(:events => {:trainer_id => @user.id}).
+        where(:event_signups => {:user_id => @user.id}).
         where('end_time >= ?', Time.now)
+    trainer_events = Event
+        .where('end_time >= ?', Time.now)
+        .where('trainer_id = ? OR trainer_2_id = ? OR trainer_3_id = ?', @user.id, @user.id, @user.id)
     csv_string = CSV.generate do |csv|
         csv << ["Subject", "Start Date", "Start Time", "End Date", "End Time", "All Day Event", "Description", "Location", "Private"]
         if !user_events.nil?

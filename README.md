@@ -80,6 +80,7 @@ A quick way to test emails without having to set up email stuff is to run a SMTP
 ## CRON
 
 ```text
+0 12 * * * ruby ././scripts/email_expiring_maker_requests.rb
 0 12 * * * ruby ././scripts/email_expiring_users.rb
 0 12 * * * ruby ././scripts/email_unconfirmed_trainers.rb
 0 22 * * * ruby ././scripts/email_expiring_users_vehicle_update.rb

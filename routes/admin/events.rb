@@ -415,9 +415,17 @@ post '/admin/events/create/?' do
 	end
 
 	# email the assigned trainer
-	trainer_to_email = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_id)
+	trainers_to_email = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_id)
+	trainers_2_to_email = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_2_id)
+	trainers_3_to_email = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_3_id)
 
-	trainer_to_email.each do |user|
+	trainers_to_email.each do |user|
+		user.notify_trainer_of_new_event(event)
+	end
+	trainers_2_to_email.each do |user|
+		user.notify_trainer_of_new_event(event)
+	end
+	trainers_3_to_email.each do |user|
 		user.notify_trainer_of_new_event(event)
 	end
 
@@ -539,6 +547,8 @@ post '/admin/events/:event_id/edit/?' do
 	end
 
 	old_trainer = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_id)
+	old_trainer_2 = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_2_id)
+	old_trainer_3 = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_3_id)
 
     # remember original start/end times
     original_event_start_time = event.start_time
@@ -732,6 +742,8 @@ post '/admin/events/:event_id/edit/?' do
 	end
 
 	trainer_to_email = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_id)
+	trainer_2_to_email = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_2_id)
+	trainer_3_to_email = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_3_id)
 
 	# if trainer has changed
 	if(old_trainer != trainer_to_email)
@@ -755,6 +767,50 @@ post '/admin/events/:event_id/edit/?' do
 		end
 	end
 
+	# if trainer has changed
+	if(old_trainer_2 != trainer_2_to_email)
+
+		# notify old trainer of their removal
+		old_trainer_2.each do |user|
+			user.notify_trainer_of_removal_from_event(event)
+		end
+
+		# notify new trainer of their addition
+		trainer_2_to_email.each do |user|
+			user.notify_trainer_of_new_event(event)
+		end
+
+		# remove previous trainer confirmation
+		event.trainer_2_confirmed = 0
+		event.save
+	else
+		trainer_2_to_email.each do |user|
+			user.notify_trainer_of_modified_event(event)
+		end
+	end
+
+	# if trainer has changed
+	if(old_trainer_3 != trainer_3_to_email)
+
+		# notify old trainer of their removal
+		old_trainer_3.each do |user|
+			user.notify_trainer_of_removal_from_event(event)
+		end
+
+		# notify new trainer of their addition
+		trainer_3_to_email.each do |user|
+			user.notify_trainer_of_new_event(event)
+		end
+
+		# remove previous trainer confirmation
+		event.trainer_3_confirmed = 0
+		event.save
+	else
+		trainer_3_to_email.each do |user|
+			user.notify_trainer_of_modified_event(event)
+		end
+	end
+
 	# notify that it worked
 	flash(:success, 'Event Updated', "Your #{event.type.description}: #{event.title} has been updated.")
 	redirect '/admin/events/'
@@ -769,8 +825,16 @@ post '/admin/events/:event_id/delete/?' do
 	end
 
 	trainer_to_email = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_id)
+	trainer_2_to_email = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_2_id)
+	trainer_3_to_email = User.where(:service_space_id => SS_ID).where('id = ?', event.trainer_3_id)
 
 	trainer_to_email.each do |user|
+		user.notify_trainer_of_deleted_event(event)
+	end
+	trainer_2_to_email.each do |user|
+		user.notify_trainer_of_deleted_event(event)
+	end
+	trainer_3_to_email.each do |user|
 		user.notify_trainer_of_deleted_event(event)
 	end
 	

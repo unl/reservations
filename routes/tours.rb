@@ -52,6 +52,13 @@ post '/tours/sign_up/:event_id/?' do
     redirect '/tours/'
 	end
 
+	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
+	if 	!VALID_EMAIL_REGEX.match(params[:email])
+		flash(:danger, "Invalid Email", "Your email address was invalid")
+		session[:form_data] = params
+		redirect back
+	end
+
 	EventSignup.create(
 		:event_id => params[:event_id],
 		:name => params[:name],

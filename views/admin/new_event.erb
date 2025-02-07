@@ -58,6 +58,38 @@
                     </select>
                 </div>
 
+                <% if SS_ID == 1 %>
+                    <fieldset
+                        class="dcf-collapsible-fieldset"
+                        hidden data-start-expanded="false" 
+                    >
+                        <legend>Additional Trainers:</legend>
+                        <div class="dcf-form-group">
+                            <label for="trainer_2">Trainer 2:</label>
+                            <select id="trainer_2" name="trainer_2" class="use-select2">
+                                <option value=""></option>
+                                <% trainers.each do |trainer| %>
+                                    <option <%= 'selected="selected"' if !event.trainer_2_id.nil? && event.trainer_2_id == trainer.id %> value="<%= trainer.id %>"><%= trainer.full_name %></option>
+                                <% end %>
+                            </select>
+                        </div>
+                        <div class="dcf-form-group">
+                            <label for="trainer_3">Trainer 3:</label>
+                            <select id="trainer_3" name="trainer_3" class="use-select2">
+                                <option value=""></option>
+                                <% trainers.each do |trainer| %>
+                                    <option <%= 'selected="selected"' if !event.trainer_3_id.nil? && event.trainer_3_id == trainer.id %> value="<%= trainer.id %>"><%= trainer.full_name %></option>
+                                <% end %>
+                            </select>
+                        </div>
+                    </fieldset>
+                    <script>
+                        window.addEventListener('inlineJSReady', function() {
+                            WDN.initializePlugin('collapsible-fieldsets');
+                        }, false);
+                    </script>
+                <% end %>
+
                 <div class="dcf-form-group">
                     <div class="dcf-input-checkbox dcf-d-inline">
                         <input type="checkbox" <%= 'checked="checked"' unless event.max_signups.nil? %> id="limit-signups" name="limit_signups"><label class="dcf-label" for="limit-signups">Limit signups for this event to: </label>
