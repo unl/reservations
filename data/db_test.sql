@@ -369,7 +369,7 @@ INSERT INTO `permissions` (`id`, `name`) VALUES
 (7, 'See Agenda'),
 (8, 'User Access'),
 (9, 'Events Admin Read-only'),
-(10, 'Sub-Super User')
+(10, 'Sub-Super User'),
 (11, 'Manage Checkout');
 
 -- --------------------------------------------------------
