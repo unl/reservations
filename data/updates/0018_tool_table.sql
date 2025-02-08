@@ -5,7 +5,7 @@ CREATE TABLE `tools` (
 	`description` VARCHAR(255) DEFAULT NULL,
 	`service_space_id` int(11) NOT NULL,
 	`model_number` VARCHAR(255) DEFAULT NULL,
-	`serial_number` VARCHAR(255) DEFAULT NULL,
+	`serial_number` VARCHAR(255) DEFAULT NULL UNIQUE,
 	`INOP` tinyint(1) DEFAULT 0,
 	`last_checked_in` datetime DEFAULT NULL,
 	`last_checked_out` datetime DEFAULT NULL,
