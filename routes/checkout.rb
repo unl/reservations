@@ -305,3 +305,12 @@ post "/checkout/project/:project_id/edit/teammates/:teammate_id/remove" do
   flash :success, "Teammate Removed", "User was removed from teammates."
   redirect back
 end
+
+get "/checkout/tool/:nuid/create" do
+  @breadcrumbs << { :text => "New Tool" }
+  require_login
+  user = User.find_by(user_nuid: params[:nuid])
+  erb :'engineering_garage/new_tool', :layout => :fixed, :locals => {
+                                           :user => user,
+                                         }
+end

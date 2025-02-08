@@ -1,6 +1,7 @@
 require 'models/resource'
 require 'models/permission'
 require 'models/reservation'
+require 'models/tool'
 
 NIS_TOOL_RESOURCE_CLASS_ID = 1
 
@@ -22,9 +23,28 @@ get '/admin/tools/?' do
 			tool.model.to_s.downcase
 		]
 	end
-	erb :'admin/tools', :layout => :fixed, :locals => {
-		:tools => tools
-	}	
+
+	checkable_tools = Tool.where(service_space_id: SS_ID)
+	# .where(:service_space_id => SS_ID)
+	# .order(:tool_name).all.to_a
+	# checkable_tools.sort_by! do |tool|
+	# 	[
+	# 		tool.category_name.to_s.downcase,
+	# 		tool.tool_name.to_s.downcase
+	# 		tool.model.to_s.downcase
+	# 	]
+	# end
+
+	if SS_ID == 8
+		erb :'admin/garage_tools', :layout => :fixed, :locals => {
+			:tools => tools,
+			:checkable_tools => checkable_tools
+		}	
+	else
+		erb :'admin/tools', :layout => :fixed, :locals => {
+			:tools => tools
+		}	
+	end
 end
 
 post '/admin/tools/?' do
@@ -115,6 +135,25 @@ post '/admin/tools/create/?' do
 
 
 	flash(:success, 'Tool Created', "Your tool #{tool.name} has been created.")
+	redirect '/admin/tools/'
+end
+
+get '/admin/tools/create_checkable/?' do
+	require_login
+	@breadcrumbs << {:text => 'Admin Tools', :href => '/admin/tools/'} << {:text => 'Create Checkable Tool'}
+
+	erb :'admin/edit_checkable_tool', :layout => :fixed, :locals => {
+		:tool => Tool.new
+	}
+end
+
+post '/admin/tools/create_checkable/?' do
+	require_login
+
+	tool = Tool.new
+	tool.set_data(params)
+
+	flash(:success, 'Tool Created', "Your tool #{tool.tool_name} has been created.")
 	redirect '/admin/tools/'
 end
 
