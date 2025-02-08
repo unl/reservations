@@ -1,0 +1,31 @@
+<h1 id="maker-list-header" class="dcf-txt-h3">Maker Request Archive List</h1>
+
+<table class="dcf-w-100% dcf-table dcf-table-bordered" aria-describedby="maker-list-header">
+    <thead>
+        <tr>
+            <th>Project Title</th>
+            <th>Category</th>
+            <th>Submitted</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% maker_requests.each do |maker_request| %>
+        <tr>
+            <td><%= maker_request.title %></td>
+            <td><%= Maker_Request.category_options[maker_request.category_id] %></td>
+            <td><%= maker_request.created.strftime('%b %e, %Y %l:%M %P') %></td>
+            <td>
+            <% if @user.is_super_user? %>
+                <a class="dcf-btn dcf-btn-primary dcf-mb-2" href="/maker_request/<%= maker_request.uuid %>/manage/" role="button">Manage</a>
+            <% else %>
+                <a class="dcf-btn dcf-btn-primary dcf-mb-2" href="/maker_request/<%= maker_request.id %>/view/" role="button">View</a>
+            <% end %>
+            </td>
+        </tr>
+    <% end %>
+    </tbody>
+</table>
+<% if maker_requests.empty? %>
+<p class="dcf-mt-4 dcf-bold">No Expired maker requests</p>
+<% end %>
