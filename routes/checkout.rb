@@ -5,7 +5,7 @@ require "date"
 require "erb"
 
 before "/checkout*" do
-	unless @user.id == -1
+	unless has_permission?(Permission::MANAGE_CHECKOUT)
 		raise Sinatra::NotFound
 	end
 end
@@ -138,7 +138,7 @@ post "/checkout/project_delete/?" do
 end
 
 get "/checkout/project/:nuid/create" do
-  @breadcrumbs << { :text => "New_Project" }
+  @breadcrumbs << { :text => "New Project" }
   require_login
   user = User.find_by(user_nuid: params[:nuid])
   erb :'engineering_garage/new_project', :layout => :fixed, :locals => {
@@ -147,7 +147,7 @@ get "/checkout/project/:nuid/create" do
 end
 
 post "/checkout/project/:nuid/create" do
-  @breadcrumbs << { :text => "New_Project" }
+  @breadcrumbs << { :text => "New Project" }
   require_login
 
   if  params[:title].blank?
@@ -182,7 +182,7 @@ post "/checkout/project/:nuid/create" do
 end
 
 get "/checkout/project/:project_id/edit" do
-  @breadcrumbs << { :text => "New_Project" }
+  @breadcrumbs << { :text => "Edit Project" }
   require_login
   project = Project.find_by(id: params[:project_id])
   user = User.find_by(id: project.owner_user_id)
@@ -200,7 +200,7 @@ get "/checkout/project/:project_id/edit" do
 end
 
 post "/checkout/project/:project_id/edit" do
-  @breadcrumbs << { :text => "New_Project" }
+  @breadcrumbs << { :text => "Edit Project" }
   require_login
   project = Project.find_by(id: params[:project_id])
   params[:user] = User.find_by(user_nuid: params[:nuid])
@@ -245,23 +245,20 @@ post "/checkout/project/:project_id/edit" do
   redirect "/checkout"
 end
 
-get "/checkout/project/:project_id/edit/teammates" do
-  @breadcrumbs << { :text => "Teammates" }
-  require_login
-
+post "/checkout/project/:project_id/edit/delete/" do
   project = Project.find_by(id: params[:project_id])
-  teammates = ProjectTeammate.where("project_id = ?", params[:project_id])
 
-  erb :'engineering_garage/edit_teammates', :layout => :fixed, :locals => {
-                                            :project_id => project.id,
-                                            :teammates => teammates
-                                          }
+  if project != nil
+    project.delete
+    flash :success, 'Success', 'Project deleted'
+    redirect "/checkout/?"
+  else
+    flash :error, 'Error', 'Project not found'
+    redirect "/checkout/"
+  end
 end
 
 post "/checkout/project/:project_id/edit/teammates/" do
-  @breadcrumbs << { :text => "Teammates" }
-  require_login
-
   nuid = params[:nuid]
   if nuid.nil? || nuid.strip.empty?
     flash :danger, "Error", "NUID empty."
@@ -288,13 +285,10 @@ post "/checkout/project/:project_id/edit/teammates/" do
   teammate.set_data(params)
 
   flash :success, "Teammate Added", "#{teammate_user.full_name} was added as a teammate."
-  redirect "/checkout/project/#{params[:project_id]}/edit/teammates"
+  redirect back
 end
 
 post "/checkout/project/:project_id/edit/teammates/:teammate_id/remove" do
-  @breadcrumbs << { :text => "Teammates" }
-  require_login
-
   teammate_user = ProjectTeammate.find_by(id: params[:teammate_id])
   if teammate_user.nil?
     flash :danger, "Error", "Could not locate user."
@@ -308,8 +302,8 @@ post "/checkout/project/:project_id/edit/teammates/:teammate_id/remove" do
   end
 
   teammate_user.delete
-  flash :success, "Teammate Removed", "User was removed as a teammate."
-  redirect "/checkout/project/#{params[:project_id]}/edit/teammates"
+  flash :success, "Teammate Removed", "User was removed from teammates."
+  redirect back
 end
 
 get "/checkout/tool/:nuid/create" do
