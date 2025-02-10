@@ -189,8 +189,8 @@ get '/admin/tools/bulk_permissions_update/?' do
 	require_login
 	@breadcrumbs << {:text => 'Admin Tools Update'}
 
-	tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
-	tools.sort_by! do |tool|
+	new_tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
+	new_tools.sort_by! do |tool|
 		[
 			tool.category_name.to_s.downcase,
 			tool.name.to_s.downcase,
@@ -198,8 +198,8 @@ get '/admin/tools/bulk_permissions_update/?' do
 		]
 	end
 
-	authorizable_tools = Resource.where(:service_space_id => SS_ID, :needs_authorization => true).order(:name => :asc).all.to_a
-	authorizable_tools.sort_by! do |tool|
+	tool_auth_copy = Resource.where(:service_space_id => SS_ID, :needs_authorization => true).order(:name => :asc).all.to_a
+	tool_auth_copy.sort_by! do |tool|
 		[
 			tool.category_name.to_s.downcase,
 			tool.name.to_s.downcase,
@@ -209,7 +209,7 @@ get '/admin/tools/bulk_permissions_update/?' do
 
 
 	erb :'admin/bulk_permissions_update', :layout => :fixed, :locals => {
-		:authorizable_tools => authorizable_tools,
-		:tools => tools
+		:new_tools => new_tools,
+		:tool_auth_copy => tool_auth_copy
 	}	
 end

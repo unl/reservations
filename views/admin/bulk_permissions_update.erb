@@ -2,29 +2,53 @@
 
 <form class="dcf-form" id="tool-bulk permission" action="" method="POST">
     
-    <button class="dcf-btn dcf-btn-primary" type="submit">Update Permissions</button>   
-</form>
+    <div class="dcf-grid dcf-col-gap-vw dcf-flex-wrap">
 
-
-<div class="dcf-grid dcf-col-gap-vw">
-        <div class="dcf-col-100% dcf-col-67%-start@sm" style="margin-top:15px">
-            <fieldset>
-                <legend>Choose Tool To Update</legend>
-                <table class="dcf-table dcf-table-bordered" aria-describedby="select-tool-for-update">
-                    <tbody style="display:block;max-height:600px;overflow-y:scroll;">
-                    <% authorizable_tools.each do |tool| %>
-                        <tr>
-                            <td>
-                                <div class="dcf-input-checkbox">
-                                    <input type="checkbox" name="authorizable_tool_<%= tool.id %>" id="tool-authorize-<%= tool.id %>">
-                                    <label for="tool-update-<%= tool.id %>"><%=tool.category_name %> - <%= tool.name %> - <%= tool.model %></label>
-                                </div>
-                            </td>
-                        </tr>
-                    <% end %>
-                    </tbody>
-                </table>
-            </fieldset>
+        <div class="dcf-col-50%">
+            <div class="dcf-col-100% dcf-col-67%-start@sm" style="margin-top:15px">
+                <fieldset>
+                    <legend>Choose The New Tool To Add/Update Authorizations</legend>
+                    <table class="dcf-table dcf-table-bordered" aria-describedby="select-tool-for-update">
+                        <tbody style="display:block;max-height:600px;overflow-y:scroll;">
+                        <% new_tools.each do |tool| %>
+                            <tr>
+                                <td>
+                                    <div class="dcf-input-checkbox">
+                                        <input type="checkbox" name="tool_<%= tool.id %>" id="tool-<%= tool.id %>">
+                                        <label for="tool-<%= tool.id %>"><%=tool.category_name %> - <%= tool.name %> - <%= tool.model %></label>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% end %>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
         </div>
+        
+        <div class="dcf-col-50%">
+            <div class="dcf-col-100% dcf-col-67%-start@sm" style="margin-top:15px">
+                <fieldset>
+                    <legend>Choose The Tool To Copy Authorizations Of</legend>
+                    <table class="dcf-table dcf-table-bordered" aria-describedby="select-tool-for-update">
+                        <tbody style="display:block;max-height:600px;overflow-y:scroll;">
+                        <% tool_auth_copy.each do |tool| %>
+                            <tr>
+                                <td>
+                                    <div class="dcf-input-checkbox">
+                                        <input type="checkbox" name="tool_auth_copy_<%= tool.id %>" id="tool_auth_copy-<%= tool.id %>">
+                                        <label for="tool_auth_copy-<%= tool.id %>"><%= tool.category_name %> - <%= tool.name %> - <%= tool.model %></label>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% end %>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
+        </div>    
     </div>
+    
+    <button class="dcf-btn dcf-btn-primary" type="submit">Update Authorizations</button>   
+</form>
 
