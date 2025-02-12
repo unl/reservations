@@ -213,3 +213,11 @@ get '/admin/tools/bulk_permissions_update/?' do
 		:tool_auth_copy => tool_auth_copy
 	}	
 end
+
+post '/admin/tools/bulk_permissions_update' do
+  require_login
+  @breadcrumbs << { text: 'Admin Tools Update' }
+
+  redirect '/admin/tools/bulk_permissions_update'
+end
+
