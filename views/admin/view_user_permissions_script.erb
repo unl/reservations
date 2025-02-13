@@ -1,0 +1,23 @@
+<% if has_permission?(Permission::VIEW_USER_PERMISSIONS_READ_ONLY) %>
+    <% append_script_declaration(%q[
+        const all_forms = document.querySelectorAll('form');
+        const all_submit_buttons = document.querySelectorAll('input[type="submit"], button[type="submit"]');
+        const all_inputs = document.querySelectorAll('input, textarea, select');
+
+        all_forms.forEach((single_form) => {
+            single_form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('You do not have access to save/update this form');
+                return false;
+            });
+        });
+
+        all_submit_buttons.forEach((single_button) => {
+            single_button.classList.add('dcf-d-none');
+        });
+
+        all_inputs.forEach((single_input) => {
+            single_input.setAttribute('disabled', 'disabled');
+        });
+    ]) %>
+<% end %>

@@ -55,7 +55,7 @@
     <% unless @user.nil? || !@user.is_admin? %>
         <li><a href="/admin/">Admin</a>
             <ul>
-                <% if has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER) %>
+                <% if has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::VIEW_USER_PERMISSIONS_READ_ONLY) || has_permission?(Permission::SUPER_USER) %>
                 <li><a href="/admin/users/">Users</a></li>
                 <% end %>
                 <% if has_permission?(Permission::MANAGE_EVENTS) || has_permission?(Permission::EVENTS_ADMIN_READ_ONLY) %>
