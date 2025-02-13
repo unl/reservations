@@ -1,9 +1,7 @@
 <h1 class="dcf-txt-h3" id="tool-list-header">All Tools That Require Authorization</h1>
 
-<form class="dcf-form" id="tool-bulk permission" action="" method="POST">
-    
+<form class="dcf-form" id="tool-bulk-permission" action="/admin/tools/bulk_permissions_update" method="POST">
     <div class="dcf-grid dcf-col-gap-vw dcf-flex-wrap">
-
         <div class="dcf-col-50%">
             <div class="dcf-col-100% dcf-col-67%-start@sm" style="margin-top:15px">
                 <fieldset>
@@ -14,8 +12,8 @@
                             <tr>
                                 <td>
                                     <div class="dcf-input-checkbox">
-                                        <input type="checkbox" name="tool_<%= tool.id %>" id="tool-<%= tool.id %>">
-                                        <label for="tool-<%= tool.id %>"><%=tool.category_name %> - <%= tool.name %> - <%= tool.model %></label>
+                                        <input type="checkbox" name="target_tool_ids[]" value="<%= tool.id %>" id="tool-<%= tool.id %>">
+                                        <label for="tool-<%= tool.id %>"><%= tool.category_name %> - <%= tool.name %> - <%= tool.model %></label>
                                     </div>
                                 </td>
                             </tr>
@@ -35,8 +33,8 @@
                         <% tool_auth_copy.each do |tool| %>
                             <tr>
                                 <td>
-                                    <div class="dcf-input-checkbox">
-                                        <input type="checkbox" name="tool_auth_copy_<%= tool.id %>" id="tool_auth_copy-<%= tool.id %>">
+                                    <div class="dcf-input-radio">
+                                        <input type="radio" name="source_tool_id" value="<%= tool.id %>" id="tool_auth_copy-<%= tool.id %>">
                                         <label for="tool_auth_copy-<%= tool.id %>"><%= tool.category_name %> - <%= tool.name %> - <%= tool.model %></label>
                                     </div>
                                 </td>
@@ -51,4 +49,3 @@
     
     <button class="dcf-btn dcf-btn-primary" type="submit">Update Authorizations</button>   
 </form>
-
