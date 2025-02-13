@@ -224,8 +224,8 @@ post '/admin/tools/bulk_permissions_update' do
   if source_tool_id && target_tool_ids
     authorized_user_ids = ResourceAuthorization.where(resource_id: source_tool_id).pluck(:user_id)
 
-		user_ids_string = authorized_user_ids.join(', ')
-		flash(:success, 'Authorizations Applied', "Authorized User IDs for Resource ID #{source_tool_id}: #{user_ids_string}")
+		target_tool_ids_string = target_tool_ids.join(', ')
+		flash(:success, 'Authorizations Applied', "Authorized User IDs from Resource ID #{source_tool_id} to #{target_tool_ids_string}")
 
     target_tool_ids.each do |target_tool_id|
       authorized_user_ids.each do |user_id|
@@ -239,5 +239,5 @@ post '/admin/tools/bulk_permissions_update' do
     end
   end
 
-  redirect '/admin/tools/bulk_permissions_update'
+  redirect '/admin/tools'
 end
