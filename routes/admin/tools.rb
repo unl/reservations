@@ -218,6 +218,26 @@ post '/admin/tools/bulk_permissions_update' do
   require_login
   @breadcrumbs << { text: 'Admin Tools Update' }
 
+  source_tool_id = params[:source_tool_id]
+  target_tool_ids = params[:target_tool_ids]
+
+  if source_tool_id && target_tool_ids
+    authorized_user_ids = ResourceAuthorization.where(resource_id: source_tool_id).pluck(:user_id)
+
+		user_ids_string = authorized_user_ids.join(', ')
+		flash(:success, 'Authorizations Applied', "Authorized User IDs for Resource ID #{source_tool_id}: #{user_ids_string}")
+
+    target_tool_ids.each do |target_tool_id|
+      authorized_user_ids.each do |user_id|
+        ResourceAuthorization.create!(
+          resource_id: target_tool_id,
+          user_id: user_id,
+          authorized_date: Time.now,
+          authorized_event: nil # Replace with the appropriate authorized event
+        )
+      end
+    end
+  end
+
   redirect '/admin/tools/bulk_permissions_update'
 end
-
