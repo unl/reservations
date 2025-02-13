@@ -1,6 +1,7 @@
 require "models/project"
 require "models/project_teammate"
 require "models/project_log"
+require "models/tool_log"
 require "date"
 require "erb"
 
@@ -53,22 +54,31 @@ get "/checkout/user/?" do
       end
     end
   end
-  
-  # Placeholder data
-  # This data does not interact with anything shown to the user currently
-  user_checked_out = [
-    { id: 1, name: "Hammer", checked_out_date: (DateTime.now - 1).strftime("%m/%d/%Y %H:%M") },
-    { id: 2, name: "Screwdriver", checked_out_date: (DateTime.now - 2).strftime("%m/%d/%Y %H:%M") },
-    { id: 3, name: "Wrench", checked_out_date: (DateTime.now - 3).strftime("%m/%d/%Y %H:%M") },
-    { id: 4, name: "Pliers", checked_out_date: (DateTime.now - 4).strftime("%m/%d/%Y %H:%M") },
-    { id: 5, name: "Saw", checked_out_date: (DateTime.now - 5).strftime("%m/%d/%Y %H:%M") },
-  ]
+
+	# select the checked in tools
+	available_tools = Tool.all.select { |tool| tool.last_checked_out.nil? || tool.last_checked_in > tool.last_checked_out}
+	
+	# select the logs from tool logs where the user is checkout_user and the is_checking_in is false and is the most recent log for each tool id
+  user_checked_out = ToolLog.where(checkout_user_id: checkout_user.id, is_checking_in: false)
+
+	if user_checked_out.nil?
+		user_checked_out = []
+	end
+
+  # user_checked_out = [
+  #   { tool_id: 1, tool_name: "Hammer", checked_date: (DateTime.now - 1).strftime("%m/%d/%Y %H:%M") },
+  #   { tool_id: 2, tool_name: "Screwdriver", checked_date: (DateTime.now - 2).strftime("%m/%d/%Y %H:%M") },
+  #   { tool_id: 3, tool_name: "Wrench", checked_date: (DateTime.now - 3).strftime("%m/%d/%Y %H:%M") },
+  #   { tool_id: 4, tool_name: "Pliers", checked_date: (DateTime.now - 4).strftime("%m/%d/%Y %H:%M") },
+  #   { tool_id: 5, tool_name: "Saw", checked_date: (DateTime.now - 5).strftime("%m/%d/%Y %H:%M") },
+  # ]
 
   erb :"engineering_garage/checkout_user", :layout => :fixed, locals: {
                                              :user => checkout_user,
 																						 :nuid => nuid,
                                              :checked_out => user_checked_out,
-                                             :projects => projects
+                                             :projects => projects,
+																						 :tools => available_tools,
                                            }
 end
 

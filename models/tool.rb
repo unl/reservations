@@ -10,9 +10,9 @@ class Tool < ActiveRecord::Base
 	def get_status
 		if self.INOP
 			return 'INOP'
-		elif self.last_checked_in > self.last_checked_out
+		elsif self.last_checked_out.nil?
 			return 'Available'
-		elif self.last_checked_in.nil?
+		elsif self.last_checked_in > self.last_checked_out
 			return 'Available'
 		else
 			return 'Checked Out'
