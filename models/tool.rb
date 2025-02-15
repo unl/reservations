@@ -19,6 +19,16 @@ class Tool < ActiveRecord::Base
 		end
 	end
 
+	def update_last_checked_in()
+		self.last_checked_in = Time.now
+		self.save
+	end
+
+	def update_last_checked_out()
+		self.last_checked_out = Time.now
+		self.save
+	end
+
 	def set_data(params)
 		self.tool_name = params[:name]
 		self.category_id = params[:category_id].to_i

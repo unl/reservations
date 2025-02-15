@@ -9,18 +9,6 @@
 					<h3><%= user[:username] %></h3>
 				</div>
 				<div class="dcf-d-flex dcf-gap-2">
-					<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkout-modal-btn" type="button">Check Out Tool</button>
-						<div class="dcf-modal" id="checkout-modal-btn" hidden>
-							<div class="dcf-modal-wrapper">
-								<div class="dcf-modal-header">
-									<h2>Check Out Tool</h2>
-									<button class="dcf-btn-close-modal">Close</button>
-								</div>
-								<div class="dcf-modal-content dcf-overflow-y-auto">
-									
-								</div>
-							</div>
-						</div>
 					<a href="/checkout/project/<%= nuid %>/create" class="dcf-btn dcf-btn-primary">Create New Project</a>
 				</div>
 			</div>
@@ -221,7 +209,7 @@
 									<% checked_out.each do |tool| %>
 									<tr>
 										<td><%= tool[:tool_name] %></td>
-										<td><%= tool[:checked_date] %></td>
+										<td><%= tool[:checked_date].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %></td>
 										<td class="table-actions">
 											<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkin-<%= tool[:tool_id] %>" type="button">Check In</button>
 											<div class="dcf-modal" id="checkin-<%= tool[:tool_id] %>" hidden>
@@ -274,8 +262,23 @@
 												<button class="dcf-btn-close-modal">Close</button>
 											</div>
 											<div class="dcf-modal-content">
-												Hello, I am a modal!
-												</div>
+												<form class="dcf-form dcf-grid" action="/checkout/tool_checkout/?nuid=<%= nuid %>&tool_id=<%= tool[:id] %>" method="POST" enctype="application/x-www-form-urlencoded">
+													<div class="dcf-col-100% dcf-col-50%@md">
+														<p id="tool_name"><strong>Name:</strong> <%= tool[:tool_name] %></p>
+														<p id="serial_number"><strong>Serial Number:</strong> <%= tool[:serial_number] %></p>
+														<p id="model_number"><strong>Model Number:</strong> <%= tool[:model_number] %></p>
+														<div class="dcf-form-controls-inline dcf-gap-2">
+															<button class="dcf-btn dcf-btn-primary" type="submit">Check Out</button>
+														</div>
+													</div>
+													<div class="dcf-col-100% dcf-col-50%@md dcf-overflow-y-auto" style = "max-height: 30rem;">
+														<fieldset>
+														<legend><strong>Description:</strong></legend>
+														<p><%= tool[:description] %></p>
+														</fieldset>
+													</div>
+												</form>
+											</div>
 										</div>
 									</div>
 								</td>

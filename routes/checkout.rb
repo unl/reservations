@@ -11,12 +11,14 @@ before "/checkout*" do
 	end
 end
 
+# Check out scan pages
 get "/checkout/?" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
   erb :'engineering_garage/checkout', :layout => :fixed, locals: {}
 end
 
+# Check out page
 get "/checkout/user/?" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
@@ -82,6 +84,7 @@ get "/checkout/user/?" do
                                            }
 end
 
+# Check Out Project 
 post "/checkout/project_checkout/?" do
 	bin_id = params[:bin_id]
 	nuid = params[:nuid]
@@ -105,6 +108,7 @@ post "/checkout/project_checkout/?" do
 	end
 end
 
+# Check In Project
 post "/checkout/project_checkin/?" do
 	bin_id = params[:bin_id]
 	nuid = params[:nuid]
@@ -128,6 +132,7 @@ post "/checkout/project_checkin/?" do
 	end
 end
 
+# Delete Project
 post "/checkout/project_delete/?" do
 	bin_id = params[:bin_id]
 
@@ -147,6 +152,7 @@ post "/checkout/project_delete/?" do
 	end
 end
 
+# Create Project Page
 get "/checkout/project/:nuid/create" do
   @breadcrumbs << { :text => "New Project" }
   require_login
@@ -156,6 +162,7 @@ get "/checkout/project/:nuid/create" do
                                          }
 end
 
+# Create Project
 post "/checkout/project/:nuid/create" do
   @breadcrumbs << { :text => "New Project" }
   require_login
@@ -191,6 +198,7 @@ post "/checkout/project/:nuid/create" do
   redirect "/checkout"
 end
 
+# Project Edit Page
 get "/checkout/project/:project_id/edit" do
   @breadcrumbs << { :text => "Edit Project" }
   require_login
@@ -209,6 +217,7 @@ get "/checkout/project/:project_id/edit" do
                                          }
 end
 
+# Edit Project
 post "/checkout/project/:project_id/edit" do
   @breadcrumbs << { :text => "Edit Project" }
   require_login
@@ -255,6 +264,7 @@ post "/checkout/project/:project_id/edit" do
   redirect "/checkout"
 end
 
+# Delete Project
 post "/checkout/project/:project_id/edit/delete/" do
   project = Project.find_by(id: params[:project_id])
 
@@ -268,6 +278,7 @@ post "/checkout/project/:project_id/edit/delete/" do
   end
 end
 
+# add teammate
 post "/checkout/project/:project_id/edit/teammates/" do
   nuid = params[:nuid]
   if nuid.nil? || nuid.strip.empty?
@@ -298,6 +309,7 @@ post "/checkout/project/:project_id/edit/teammates/" do
   redirect back
 end
 
+# Remove teammate
 post "/checkout/project/:project_id/edit/teammates/:teammate_id/remove" do
   teammate_user = ProjectTeammate.find_by(id: params[:teammate_id])
   if teammate_user.nil?
@@ -316,11 +328,54 @@ post "/checkout/project/:project_id/edit/teammates/:teammate_id/remove" do
   redirect back
 end
 
-get "/checkout/tool/:nuid/create" do
-  @breadcrumbs << { :text => "New Tool" }
-  require_login
-  user = User.find_by(user_nuid: params[:nuid])
-  erb :'engineering_garage/new_tool', :layout => :fixed, :locals => {
-                                           :user => user,
-                                         }
+# Tool Checkout
+post "/checkout/tool_checkout/?" do
+  nuid = params[:nuid]
+	tool_id = params[:tool_id]
+	if nuid.nil? || tool_id.nil?
+		flash :danger, "Error", "NUID or Tool ID not found"
+		redirect "/checkout/"
+	end
+
+	tool = Tool.find_by(id: tool_id)
+	user = User.find_by(user_nuid: nuid)
+	if tool.nil?
+		flash :danger, "Error", "Tool not found"
+		redirect "/checkout/"
+	elsif user.nil?
+		flash :danger, "Error", "User not found"
+		redirect "/checkout/"
+	end
+
+	tool.update_last_checked_out
+	tool_log = ToolLog.new
+	tool_log.set_data(user: user, tool: tool, is_checking_in: false)
+	flash :success, "Success", "Tool checked out"
+	redirect "/checkout/"
+end
+
+# Tool Checkin
+post "/checkout/tool_checkin/?" do
+	nuid = params[:nuid]
+	tool_id = params[:tool_id]
+	if nuid.nil? || tool_id.nil?
+		flash :danger, "Error", "NUID or Tool ID not found"
+		redirect "/checkout/"
+	end
+
+	tool = Tool.find_by(id: tool_id)
+	user = User.find_by(user_nuid: nuid)
+	if tool.nil?
+		flash :danger, "Error", "Tool not found"
+		redirect "/checkout/"
+	elsif user.nil?
+		flash :danger, "Error", "User not found"
+		redirect "/checkout/"
+	end
+
+	tool.update_last_checked_in
+	tool_log = ToolLog.new
+	tool_log.set_data(user: user, tool: tool, is_checking_in: true)
+	flash :success, "Success", "Tool checked in"
+	redirect "/checkout/"
 end
