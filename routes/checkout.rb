@@ -67,6 +67,8 @@ get "/checkout/user/?" do
 		user_checked_out = []
 	end
 
+	tools_checked_out = Tool.where(id: user_checked_out.pluck(:tool_id))
+
   # user_checked_out = [
   #   { tool_id: 1, tool_name: "Hammer", checked_date: (DateTime.now - 1).strftime("%m/%d/%Y %H:%M") },
   #   { tool_id: 2, tool_name: "Screwdriver", checked_date: (DateTime.now - 2).strftime("%m/%d/%Y %H:%M") },
@@ -78,7 +80,7 @@ get "/checkout/user/?" do
   erb :"engineering_garage/checkout_user", :layout => :fixed, locals: {
                                              :user => checkout_user,
 																						 :nuid => nuid,
-                                             :checked_out => user_checked_out,
+                                             :checked_out => tools_checked_out,
                                              :projects => projects,
 																						 :tools => available_tools,
                                            }
