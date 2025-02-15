@@ -68,6 +68,7 @@ get "/checkout/user/?" do
 	end
 
 	tools_checked_out = Tool.where(id: user_checked_out.pluck(:tool_id))
+	tools_checked_out = tools_checked_out.select { |tool| tool.last_checked_out > tool.last_checked_in }
 
   # user_checked_out = [
   #   { tool_id: 1, tool_name: "Hammer", checked_date: (DateTime.now - 1).strftime("%m/%d/%Y %H:%M") },
@@ -349,9 +350,15 @@ post "/checkout/tool_checkout/?" do
 		redirect "/checkout/"
 	end
 
+	previous_log = ToolLog.where(tool_id: tool.id, checkout_user_id: user.id, is_checking_in: false).order(checked_date: :desc).first
+	if previous_log.nil?
+		flash :danger, "Training", "This user has not checked out this tool before! Please give them a walkthrough."
+	end
+
 	tool.update_last_checked_out
 	tool_log = ToolLog.new
 	tool_log.set_data(user: user, tool: tool, is_checking_in: false)
+
 	flash :success, "Success", "Tool checked out"
 	redirect "/checkout/"
 end
@@ -379,5 +386,6 @@ post "/checkout/tool_checkin/?" do
 	tool_log = ToolLog.new
 	tool_log.set_data(user: user, tool: tool, is_checking_in: true)
 	flash :success, "Success", "Tool checked in"
+	
 	redirect "/checkout/"
 end
