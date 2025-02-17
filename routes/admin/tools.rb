@@ -69,7 +69,7 @@ post '/admin/tools/?' do
             tool_id = key.split('INOP_')[1].to_i
 			tool_record = Resource.find_by(:id => tool_id)
 
-			if !tool_record.INOP 
+			if  !tool_record.nil? && !tool_record.INOP
 				tool_record.INOP = true
 				tool_record.save
 			end
