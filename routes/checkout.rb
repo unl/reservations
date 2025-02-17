@@ -23,7 +23,8 @@ get "/checkout/user/?" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
   nuid = params[:nuid]
-	search_id = params[:search_id]
+	search_project_id = params[:search_project_id]
+	search_tool_id = params[:search_tool_id]
 
   if nuid.nil? || nuid.strip.empty?
     redirect "/checkout/"
@@ -51,8 +52,8 @@ get "/checkout/user/?" do
 
       projects = projects.or(team_projects)
 
-      if search_id && !search_id.strip.empty?
-        projects = projects.where(bin_id: search_id.strip)
+      if search_project_id && !search_project_id.strip.empty?
+        projects = projects.where(bin_id: search_project_id.strip)
       end
     end
   end
@@ -62,21 +63,17 @@ get "/checkout/user/?" do
 	
 	# select the logs from tool logs where the user is checkout_user and the is_checking_in is false and is the most recent log for each tool id
   user_checked_out = ToolLog.where(checkout_user_id: checkout_user.id, is_checking_in: false)
-
+	
 	if user_checked_out.nil?
 		user_checked_out = []
 	end
-
+	
 	tools_checked_out = Tool.where(id: user_checked_out.pluck(:tool_id))
 	tools_checked_out = tools_checked_out.select { |tool| tool.last_checked_out > tool.last_checked_in }
-
-  # user_checked_out = [
-  #   { tool_id: 1, tool_name: "Hammer", checked_date: (DateTime.now - 1).strftime("%m/%d/%Y %H:%M") },
-  #   { tool_id: 2, tool_name: "Screwdriver", checked_date: (DateTime.now - 2).strftime("%m/%d/%Y %H:%M") },
-  #   { tool_id: 3, tool_name: "Wrench", checked_date: (DateTime.now - 3).strftime("%m/%d/%Y %H:%M") },
-  #   { tool_id: 4, tool_name: "Pliers", checked_date: (DateTime.now - 4).strftime("%m/%d/%Y %H:%M") },
-  #   { tool_id: 5, tool_name: "Saw", checked_date: (DateTime.now - 5).strftime("%m/%d/%Y %H:%M") },
-  # ]
+	if search_tool_id && !search_tool_id.strip.empty?
+		available_tools = available_tools.select { |tool| tool.serial_number == search_tool_id }
+		tools_checked_out = tools_checked_out.select { |tool| tool.serial_number == search_tool_id }
+	end
 
   erb :"engineering_garage/checkout_user", :layout => :fixed, locals: {
                                              :user => checkout_user,
