@@ -19,6 +19,16 @@ class Tool < ActiveRecord::Base
 		end
 	end
 
+	def is_checked_out
+		if self.last_checked_out.nil?
+			return false
+		elsif self.last_checked_out > self.last_checked_in
+			return true
+		else
+			return false
+		end
+	end
+
 	def update_last_checked_in()
 		self.last_checked_in = Time.now
 		self.save
