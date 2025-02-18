@@ -15,6 +15,8 @@ get '/admin/tools/?' do
 	require_login
 	@breadcrumbs << {:text => 'Admin Tools'}
 
+	nuid = @user.user_nuid
+
 	tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
 	tools.sort_by! do |tool|
 		[
@@ -38,11 +40,12 @@ get '/admin/tools/?' do
 	if SS_ID == 8
 		erb :'admin/garage_tools', :layout => :fixed, :locals => {
 			:tools => tools,
-			:checkable_tools => checkable_tools
+			:checkable_tools => checkable_tools,
+			:nuid => nuid
 		}	
 	else
 		erb :'admin/tools', :layout => :fixed, :locals => {
-			:tools => tools
+			:tools => tools,
 		}	
 	end
 end
@@ -69,7 +72,7 @@ post '/admin/tools/?' do
             tool_id = key.split('INOP_')[1].to_i
 			tool_record = Resource.find_by(:id => tool_id)
 
-			if !tool_record.INOP 
+			if  !tool_record.nil? && !tool_record.INOP
 				tool_record.INOP = true
 				tool_record.save
 			end

@@ -56,7 +56,7 @@
 		</form>
   </div>
   <div id="checkable">
-	<form class="dcf-form" id="tool-INOP-status" action="" method="POST">
+	<form class="dcf-form" id="checkable-tool-INOP-status" action="" method="POST">
 	<table class="dcf-table dcf-table-bordered" aria-describedby="tool-list-header">
 			<thead>
 					<tr>
@@ -91,8 +91,13 @@
 							</td>
 							<td class="table-actions">
 									<div>
-											<a href="/admin/tools/<%= tool.id %>/edit_checkable/" class="dcf-btn dcf-btn-primary">Edit</a>
-											<input class="dcf-btn dcf-btn-secondary" type="submit" form="delete-checkable-form-<%= tool.id %>" value="Delete">
+										<a href="/admin/tools/<%= tool.id %>/edit_checkable/" class="dcf-btn dcf-btn-primary">Edit</a>
+										<input class="dcf-btn dcf-btn-secondary" type="submit" form="delete-checkable-form-<%= tool.id %>" value="Delete">
+										<% if tool.is_checked_out %>
+											<form class="dcf-form dcf-grid" action="/checkout/tool_checkin/?nuid=<%= nuid %>&tool_id=<%= tool[:id] %>" method="POST" enctype="application/x-www-form-urlencoded">
+												<input class="dcf-btn dcf-btn-secondary" type="submit" value="Force Check In" form="check-in-form-<%= tool.id %>">
+											</form>
+										<% end %>
 									</div>
 							</td>
 					</tr>
