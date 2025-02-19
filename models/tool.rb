@@ -2,6 +2,17 @@ require 'active_record'
 require 'models/resource'
 
 class Tool < ActiveRecord::Base
+
+	def get_tool_user 
+		if self.last_checked_out.nil?
+			return nil
+		elsif self.last_checked_in > self.last_checked_out
+			return nil
+		else
+			return ToolLog.where(tool_id: self.id).order(created_at: :desc).first.user
+		end
+	end
+
 	def get_category_name
 		categories = Resource.category_options
 		return categories.fetch(self.category_id, "Other")
