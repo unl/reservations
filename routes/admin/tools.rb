@@ -222,19 +222,22 @@ post '/admin/tools/bulk_permissions_update' do
   target_tool_ids = params[:target_tool_ids]
 
   if source_tool_id && target_tool_ids
-    authorized_user_ids = ResourceAuthorization.where(resource_id: source_tool_id).pluck(:user_id)
+		source_authorizations = ResourceAuthorization.where(resource_id: source_tool_id)
 
 		target_tool_ids_string = target_tool_ids.join(', ')
 		flash(:success, 'Authorizations Applied', "Authorized User IDs from Resource ID #{source_tool_id} to #{target_tool_ids_string}")
 
     target_tool_ids.each do |target_tool_id|
-      authorized_user_ids.each do |user_id|
-        ResourceAuthorization.create!(
-          resource_id: target_tool_id,
-          user_id: user_id,
-          authorized_date: Time.now,
-          authorized_event: nil # Replace with the appropriate authorized event
-        )
+      source_authorizations.each do |auth|
+				begin
+					ResourceAuthorization.create!(
+						resource_id: target_tool_id,
+						user_id: auth.user_id,
+						authorized_date: Time.now,
+						authorized_event: auth.authorized_event
+					)
+				rescue ActiveRecord::RecordNotUnique
+				end
       end
     end
   end
