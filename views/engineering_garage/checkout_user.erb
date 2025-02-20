@@ -1,7 +1,7 @@
 <h1 class="dcf-txt-h3" id="Checkout">Warehouse Check In / Check Out</h1>
 <a href="/checkout" class="dcf-btn dcf-btn-secondary" type="button">Return to Scan Page</a>
-<div class="dcf-form-group">
-	<fieldset class="dcf-h-min-100vh dcf-mt-4">
+<div class="dcf-grid dcf-col-gap-vw">
+  <fieldset class="dcf-form dcf-col-100% dcf-col-75%-start@sm unl-b-darker-gray dcf-rounded dcf-b-1 dcf-b-solid dcf-pt-4 dcf-pb-4 dcf-p dcf-pr-7 dcf-pl-7">
 		<legend>User Details</legend>
 		<div class="dcf-d-flex dcf-flex-col dcf-gap-2">
 			<div class="dcf-d-flex dcf-flex-row dcf-jc-between dcf-ai-baseline dcf-w-100% dcf-gap-2">
@@ -312,4 +312,32 @@
 			</script>
 		</div>
 	</fieldset>
+	</fieldset>
+    <fieldset class="dcf-form dcf-col-100% dcf-col-25%-end@sm unl-b-darker-gray dcf-rounded dcf-b-1 dcf-b-solid dcf-pt-4 dcf-pb-4 dcf-p dcf-pr-7 dcf-pl-7">
+			<legend>Tour and Training</legend>
+			<div class="dcf-overflow-x-auto dcf-p-1" tabindex="0">
+					<form class="dcf-form dcf-w-25% dcf-pb-4" id="filter-input" action="/checkout/user/" method="GET" enctype="application/x-www-form-urlencoded">
+            <% if events.count > 0 %>
+                <table class="dcf-table dcf-table-striped dcf-w-100%">
+                    <thead>
+                        <tr>
+                            <th scope="col">Event</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+										<tbody>
+										<% events.each do |event| %>
+											<tr>
+												<td><%= event[:title] %></td>
+												<td><button class="dcf-btn dcf-btn-primary" type="submit">Check</button></td>
+											<tr>
+										<% end %>
+										</tbody>
+                </table>
+            <% else %>
+                <p>No events found.</p>
+            <% end %>
+					</form>
+        </div>
+    </fieldset>
 </div>

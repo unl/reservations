@@ -75,12 +75,17 @@ get "/checkout/user/?" do
 		tools_checked_out = tools_checked_out.select { |tool| tool.serial_number == search_tool_id }
 	end
 
+  user_event_signups = EventSignup.where(user_id: checkout_user.id)
+
+  user_events =  Event.where(id: EventSignup.select(:event_id))
+
   erb :"engineering_garage/checkout_user", :layout => :fixed, locals: {
                                              :user => checkout_user,
 																						 :nuid => nuid,
                                              :checked_out => tools_checked_out,
                                              :projects => projects,
 																						 :tools => available_tools,
+                                             :events => user_events,
                                            }
 end
 
