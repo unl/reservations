@@ -395,7 +395,8 @@
     const trainer_input = document.getElementById('trainer');
     const trainer_required_elem = document.getElementById('trainer-required');
     const create_event_form = document.getElementById('create-event-form');
-    type_select.addEventListener('input', () => {
+
+    function require_training() {
         const selected_type = type_select.options[type_select.selectedIndex];
 
         // 2 is Machine Training
@@ -407,7 +408,10 @@
             trainer_input.removeAttribute('required');
             trainer_required_elem.classList.add('dcf-d-none');
         }
-    });
+    }
+
+    require_training();
+    type_select.addEventListener('input', require_training);
 ])%>
 <% end %>
 <% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {
