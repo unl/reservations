@@ -89,6 +89,58 @@ get "/checkout/user/?" do
                                            }
 end
 
+post '/checkout/events/:event_id/' do
+	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
+  tool_training_event_id = EventType.find_by(:description => 'Machine Training', :service_space_id => SS_ID).id
+	event = Event.find_by(:id => params[:event_id], :service_space_id => SS_ID)
+	tool_id = EventAuthorization.find_by(:event_id => params[:event_id]).resource_id
+  user = params[:user]
+
+	if event.nil?
+		# that event does not exist
+		flash(:danger, 'Not Found', 'That event does not exist')
+		redirect '/admin/events/'
+	end
+
+  signup_record = EventSignup.find_by(:event_id => event.id, :user_id => user.id)
+
+  unless signup_record == nil
+    if signup_record.attended == 0
+      signup_record.attended = 1
+      signup_record.save
+    end
+  end
+
+  if !user.nil?
+
+    if event.event_type_id == new_member_orientation_id
+      unless AttendedOrientation.exists?(user_id: user.id)
+        AttendedOrientation.create(
+          :user_id => user.id,
+          :name => user.full_name,
+          :date_attended => event.end_time,
+          :university_status => user.university_status,
+          :user_email => user.email,
+          :event_id => event.id
+        )
+        user.send_attended_orientation_email
+      end
+    elsif event.event_type_id == tool_training_event_id
+      unless user.authorized_resource_ids.include?(tool_id)
+        ResourceAuthorization.create(
+          :user_id => user.id,
+          :resource_id => tool_id,
+          :authorized_date => Time.now,
+          :authorized_event => signup_record.event_id
+        )
+      end
+    end
+  end
+
+	flash :success, 'Event\'s Signup List Updated', "#{event.title.rstrip}'s Signup List have been updated."
+	redirect '/admin/events/'
+end
+
 # Check Out Project 
 post "/checkout/project_checkout/?" do
 	bin_id = params[:bin_id]
