@@ -75,13 +75,71 @@ get "/checkout/user/?" do
 		tools_checked_out = tools_checked_out.select { |tool| tool.serial_number == search_tool_id }
 	end
 
+  user_event_signups = EventSignup.where(user_id: checkout_user.id, attended: 0)
+
+  user_events =  Event.where(id: user_event_signups.select(:event_id))
+
   erb :"engineering_garage/checkout_user", :layout => :fixed, locals: {
                                              :user => checkout_user,
 																						 :nuid => nuid,
                                              :checked_out => tools_checked_out,
                                              :projects => projects,
 																						 :tools => available_tools,
+                                             :events => user_events,
                                            }
+end
+
+post '/checkout/events/:event_id/:user_id/' do
+	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
+  tool_training_event_id = EventType.find_by(:description => 'Machine Training', :service_space_id => SS_ID).id
+	event = Event.find_by(:id => params[:event_id])
+	tool = EventAuthorization.find_by(:event_id => params[:event_id])
+  user = User.find_by(:id => params[:user_id])
+
+	if event.nil?
+		# that event does not exist
+		flash(:danger, 'Not Found', 'That event does not exist')
+		redirect '/admin/events/'
+	end
+
+  signup_record = EventSignup.find_by(:event_id => event.id, :user_id => user.id)
+
+  unless signup_record == nil
+    if signup_record.attended == 0
+      signup_record.attended = 1
+      signup_record.save
+    end
+  end
+
+  if !user.nil?
+    if event.event_type_id == new_member_orientation_id
+      unless AttendedOrientation.exists?(user_id: user.id)
+        AttendedOrientation.create(
+          :user_id => user.id,
+          :name => user.full_name,
+          :date_attended => event.end_time,
+          :university_status => user.university_status,
+          :user_email => user.email,
+          :event_id => event.id
+        )
+        user.send_attended_orientation_email
+      end
+    end
+
+    if !tool.nil?
+      unless user.authorized_resource_ids.include?(tool.resource_id)
+        ResourceAuthorization.create(
+          :user_id => user.id,
+          :resource_id => tool.resource_id,
+          :authorized_date => Time.now,
+          :authorized_event => signup_record.event_id
+        )
+      end
+    end
+  end
+
+	flash :success, 'Event attendence confirmed', "#{user.username}'s attendence confirmed for #{event.title}."
+	redirect '/checkout/'
 end
 
 # Check Out Project 
