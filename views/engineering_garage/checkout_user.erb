@@ -326,7 +326,7 @@
                     </thead>
 										<tbody>
 										<% events.each do |event| %>
-											<form class="dcf-form dcf-w-25% dcf-pb-4" id="filter-input" action="/checkout/events/<%= event[:id] %>/<%= user[:id] %>/" method="POST" enctype="application/x-www-form-urlencoded">
+											<form class="dcf-form dcf-w-25% dcf-pb-4" id="filter-input" action="/checkout/events/<%= event[:id] %>/<%= user[:id] %>/" method="POST" onsubmit="return confirm('Confirm <%= user[:username] %>\'s attendence for <%= event[:title] %>?');" enctype="application/x-www-form-urlencoded">
 											<tr>
 												<td><%= event[:title] %></td>
 												<td><button class="dcf-btn dcf-btn-primary" type="submit">Confirm</button></td>
