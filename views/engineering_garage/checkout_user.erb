@@ -316,7 +316,6 @@
     <fieldset class="dcf-form dcf-col-100% dcf-col-25%-end@sm unl-b-darker-gray dcf-rounded dcf-b-1 dcf-b-solid dcf-pt-4 dcf-pb-4 dcf-p dcf-pr-7 dcf-pl-7">
 			<legend>Tour and Training</legend>
 			<div class="dcf-overflow-x-auto dcf-p-1" tabindex="0">
-					<form class="dcf-form dcf-w-25% dcf-pb-4" id="filter-input" action="/checkout/user/" method="GET" enctype="application/x-www-form-urlencoded">
             <% if events.count > 0 %>
                 <table class="dcf-table dcf-table-striped dcf-w-100%">
                     <thead>
@@ -327,17 +326,18 @@
                     </thead>
 										<tbody>
 										<% events.each do |event| %>
+											<form class="dcf-form dcf-w-25% dcf-pb-4" id="filter-input" action="/checkout/events/<%= event[:id] %>/<%= user[:id] %>/" method="POST" enctype="application/x-www-form-urlencoded">
 											<tr>
 												<td><%= event[:title] %></td>
-												<td><button class="dcf-btn dcf-btn-primary" type="submit">Check</button></td>
+												<td><button class="dcf-btn dcf-btn-primary" type="submit">Confirm</button></td>
 											<tr>
+											</form>
 										<% end %>
 										</tbody>
                 </table>
             <% else %>
                 <p>No events found.</p>
             <% end %>
-					</form>
         </div>
     </fieldset>
 </div>

@@ -75,9 +75,9 @@ get "/checkout/user/?" do
 		tools_checked_out = tools_checked_out.select { |tool| tool.serial_number == search_tool_id }
 	end
 
-  user_event_signups = EventSignup.where(user_id: checkout_user.id)
+  user_event_signups = EventSignup.where(user_id: checkout_user.id, attended: 0)
 
-  user_events =  Event.where(id: EventSignup.select(:event_id))
+  user_events =  Event.where(id: user_event_signups.select(:event_id))
 
   erb :"engineering_garage/checkout_user", :layout => :fixed, locals: {
                                              :user => checkout_user,
@@ -89,12 +89,12 @@ get "/checkout/user/?" do
                                            }
 end
 
-post '/checkout/events/:event_id/' do
+post '/checkout/events/:event_id/:user_id/' do
 	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
   tool_training_event_id = EventType.find_by(:description => 'Machine Training', :service_space_id => SS_ID).id
-	event = Event.find_by(:id => params[:event_id], :service_space_id => SS_ID)
-	tool_id = EventAuthorization.find_by(:event_id => params[:event_id]).resource_id
-  user = params[:user]
+	event = Event.find_by(:id => params[:event_id])
+	tool = EventAuthorization.find_by(:event_id => params[:event_id])
+  user = User.find_by(:id => params[:user_id])
 
 	if event.nil?
 		# that event does not exist
@@ -112,7 +112,6 @@ post '/checkout/events/:event_id/' do
   end
 
   if !user.nil?
-
     if event.event_type_id == new_member_orientation_id
       unless AttendedOrientation.exists?(user_id: user.id)
         AttendedOrientation.create(
@@ -125,11 +124,13 @@ post '/checkout/events/:event_id/' do
         )
         user.send_attended_orientation_email
       end
-    elsif event.event_type_id == tool_training_event_id
-      unless user.authorized_resource_ids.include?(tool_id)
+    end
+
+    if !tool.nil?
+      unless user.authorized_resource_ids.include?(tool.resource_id)
         ResourceAuthorization.create(
           :user_id => user.id,
-          :resource_id => tool_id,
+          :resource_id => tool.resource_id,
           :authorized_date => Time.now,
           :authorized_event => signup_record.event_id
         )
@@ -137,8 +138,8 @@ post '/checkout/events/:event_id/' do
     end
   end
 
-	flash :success, 'Event\'s Signup List Updated', "#{event.title.rstrip}'s Signup List have been updated."
-	redirect '/admin/events/'
+	flash :success, 'Event attendence confirmed', "#{user.username}'s attendence confirmed for #{event.title}."
+	redirect '/checkout/'
 end
 
 # Check Out Project 
