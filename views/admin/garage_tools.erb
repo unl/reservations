@@ -1,0 +1,130 @@
+<h1 class="dcf-txt-h3" id="tool-list-header">All Tools</h1>
+<a class="dcf-btn dcf-btn-primary" href="/admin/tools/create/">Create Reservable Tool</a>
+<a class="dcf-btn dcf-btn-primary" href="/admin/tools/create_checkable/">Create Checkable Tool</a><br><br>
+
+<div class="dcf-tabs dcf-tabs-responsive">
+  <ul>
+    <li><a href="#reservable">Reservable</a></li>
+    <li><a href="#checkable">Checkable</a></li>
+  </ul>
+  <div id="reservable">
+		<form class="dcf-form" id="tool-INOP-status" action="" method="POST">
+		<table class="dcf-table dcf-table-bordered" aria-describedby="tool-list-header">
+				<thead>
+						<tr>
+								<th scope="col">Category</th>
+								<th scope="col">Tool</th>
+								<th scope="col">Model</th>
+								<th scope="col">INOP</th>
+								<th scope="col">Status</th>
+								<th scope="col">Actions</th>
+						</tr>
+				</thead>
+				<tbody>
+				<% tools.each do |tool| %>
+						<tr>
+								<td>
+										<%= tool.category_name %>
+								</td>
+								<td>
+										<%= tool.name %>
+								</td>
+								<td>
+										<%= tool.model %>
+								</td>
+								<td>
+										<div class="dcf-input-checkbox">
+												<input <%= 'checked="checked"' if tool.INOP %> id="INOP-checkbox_<%= tool.id %>" type="checkbox" name="INOP_<%= tool.id %>"  >
+												<label for="INOP-checkbox_<%= tool.id %>"></label>
+										</div>
+								</td>
+								<td>
+									<%= tool.get_status %>
+								</td>
+								<td class="table-actions">
+										<div>
+												<a href="/admin/tools/<%= tool.id %>/edit/" class="dcf-btn dcf-btn-primary">Edit</a>
+												<input class="dcf-btn dcf-btn-secondary" type="submit" form="delete-form-<%= tool.id %>" value="Delete">
+										</div>
+								</td>
+						</tr>
+				<% end %>
+				</tbody>
+			</table>
+			<br>
+			<button class="dcf-btn dcf-btn-primary" type="submit">Update Tools INOP Statuses</button>   
+		</form>
+  </div>
+  <div id="checkable">
+	<form class="dcf-form" id="checkable-tool-INOP-status" action="" method="POST">
+	<table class="dcf-table dcf-table-bordered" aria-describedby="tool-list-header">
+			<thead>
+					<tr>
+							<th scope="col">Category</th>
+							<th scope="col">Tool</th>
+							<th scope="col">Model</th>
+							<th scope="col">INOP</th>
+							<th scope="col">Status</th>
+							<th scope="col">Actions</th>
+					</tr>
+			</thead>
+			<tbody>
+			<% checkable_tools.each do |tool| %>
+					<tr>
+							<td>
+									<%= tool.get_category_name %>
+							</td>
+							<td>
+									<%= tool.tool_name %>
+							</td>
+							<td>
+									<%= tool.model_number %>
+							</td>
+							<td>
+									<div class="dcf-input-checkbox">
+											<input <%= 'checked="checked"' if tool.INOP %> id="INOP-checkbox_<%= tool.id %>" type="checkbox" name="INOP_<%= tool.id %>"  >
+											<label for="INOP-checkbox_<%= tool.id %>"></label>
+									</div>
+							</td>
+							<td>
+								<%= tool.get_status %>
+							</td>
+							<td class="table-actions">
+									<div>
+											<a href="/admin/tools/<%= tool.id %>/edit_checkable/" class="dcf-btn dcf-btn-primary">Edit</a>
+											<input class="dcf-btn dcf-btn-secondary" type="submit" form="delete-checkable-form-<%= tool.id %>" value="Delete">
+									</div>
+							</td>
+					</tr>
+			<% end %>
+			</tbody>
+		</table>
+		<br>
+		<button class="dcf-btn dcf-btn-primary" type="submit">Update Tools INOP Statuses</button>   
+	</form>
+</div>
+<script>
+  window.addEventListener('inlineJSReady', function() {
+    WDN.initializePlugin('tabs');
+  }, false);
+</script>
+
+<% tools.each do |tool| %>
+    <form
+        method="POST"
+        id="delete-form-<%= tool.id %>"
+        action="/admin/tools/<%= tool.id %>/delete/"
+        class="dcf-form delete-form delete-tool dcf-d-none"
+        onSubmit="return confirm('Are you sure you want to delete <%= tool.name %>?') "
+    ></form>
+<% end %>
+
+<% checkable_tools.each do |tool| %>
+	<form
+			method="POST"
+			id="delete-checkable-form-<%= tool.id %>"
+			action="/admin/tools/<%= tool.id %>/delete_checkable/"
+			class="dcf-form delete-form delete-tool dcf-d-none"
+			onSubmit="return confirm('Are you sure you want to delete <%= tool.tool_name %>?') "
+	></form>
+<% end %>

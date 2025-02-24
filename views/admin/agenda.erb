@@ -96,7 +96,7 @@ No events today. Perhaps you'd like to create one?<br>
             <% end %>
             <th>Date/Location</th>
             <th>Type</th>
-            <th>Trainer</th>
+            <th>Trainer(s)</th>
         </tr>
     </thead>
     <tbody>
@@ -118,10 +118,34 @@ No events today. Perhaps you'd like to create one?<br>
                 <%= event.type.name %>
             </td>
             <td>
-                <% if event.trainer_id.nil?%>
-                    No trainer assigned
+                <% if event.trainer_id.nil? && event.trainer_2_id.nil? && event.trainer_3_id.nil? %>
+                    No trainers assigned
+                <% elsif !event.trainer_id.nil? && event.trainer_2_id.nil? && event.trainer_3_id.nil? %>
+                    <%= trainers[event.trainer_id].full_name %>
                 <% else %>
-                    <%= trainers[event.trainer_id]%>
+                    <ol>
+                        <li>
+                            <% if event.trainer_id.nil?%>
+                                No trainer 1 assigned
+                            <% else %>
+                                <%= trainers[event.trainer_id].full_name %>
+                            <% end %>
+                        </li>
+                        <li>
+                            <% if event.trainer_2_id.nil?%>
+                                No trainer 2 assigned
+                            <% else %>
+                                <%= trainers[event.trainer_2_id].full_name %>
+                            <% end %>
+                        </li>
+                        <li>
+                            <% if event.trainer_3_id.nil?%>
+                                No trainer 3 assigned
+                            <% else %>
+                                <%= trainers[event.trainer_3_id].full_name %>
+                            <% end %>
+                        </li>
+                    </ol>
                 <% end %>
             </td>
         </tr>

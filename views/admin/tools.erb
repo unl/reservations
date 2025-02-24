@@ -1,5 +1,6 @@
 <h1 class="dcf-txt-h3" id="tool-list-header">All Tools</h1>
-<a class="dcf-btn dcf-btn-primary" href="/admin/tools/create/">Create Tool</a><br><br>
+<a class="dcf-btn dcf-btn-primary" href="/admin/tools/create/">Create Reservable Tool</a>
+<a class="dcf-btn dcf-btn-primary" href="/admin/tools/create_checkable/">Create Checkable Tool</a><br><br>
 
 <form class="dcf-form" id="tool-INOP-status" action="" method="POST">
     <table class="dcf-table dcf-table-bordered" aria-describedby="tool-list-header">
@@ -26,7 +27,7 @@
                 </td>
                 <td>
                     <div class="dcf-input-checkbox">
-                        <input <%= 'checked="checked"' if tool.INOP %> id="INOP-checkbox_<%= tool.id %>" type="checkbox" name="INOP_<%= tool.id %>"  >
+                        <input <%= 'checked="checked"' if tool.INOP %> id="INOP-checkbox_<%= tool.id %>" type="checkbox" name="CINOP_<%= tool.id %>"  >
                         <label for="INOP-checkbox_<%= tool.id %>"></label>
                     </div>
                 </td>

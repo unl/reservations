@@ -369,7 +369,8 @@ INSERT INTO `permissions` (`id`, `name`) VALUES
 (7, 'See Agenda'),
 (8, 'User Access'),
 (9, 'Events Admin Read-only'),
-(10, 'Sub-Super User');
+(10, 'Sub-Super User'),
+(11, 'Manage Checkout');
 
 -- --------------------------------------------------------
 
@@ -3236,7 +3237,7 @@ CREATE TABLE `users` (
 	`user_agreement_expiration_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
-INSERT INTO users(id, username, user_nuid, service_space_id, user_agreement_expiration_date) VALUES (-1, 'checkout', '11111111', 8, '2040-11-06 00:00:00');
+INSERT INTO users(id, username, user_nuid, service_space_id, user_agreement_expiration_date) VALUES (3, 'checkout', '11111111', 8, '2040-11-06 00:00:00');
 INSERT INTO users(id, username, user_nuid, service_space_id, user_agreement_expiration_date) VALUES (1, 'mhawk2', '12345678', 8, '2040-11-06 00:00:00');
 INSERT INTO users(id, username, user_nuid, service_space_id, user_agreement_expiration_date) VALUES (2, 'aketchum2', '87654321', 8, '2040-11-06 00:00:00');
 
@@ -3799,6 +3800,18 @@ CREATE TABLE `tool_logs` (
     `checked_date` datetime DEFAULT CURRENT_TIMESTAMP,
     `is_checking_in` boolean
 )ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 1, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 2, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 3, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 4, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 5, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 6, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 7, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 8, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 9, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 10, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 11, 8);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

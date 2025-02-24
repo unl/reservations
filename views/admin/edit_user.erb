@@ -119,6 +119,12 @@
         <div class="dcf-col-100% dcf-col-50%-end@sm"">
             <fieldset>
                 <legend>Manager Permissions</legend>
+                <% if SS_ID == 8 %>
+                    <div class="dcf-input-checkbox">
+                        <input <%= 'checked="checked"' if user.permissions.include?(mc_permisssion) %> type="checkbox" id="permission-<%= mc_permisssion.id %>" name="permission_<%= mc_permisssion.id %>">
+                        <label for="permission-<%= mc_permisssion.id %>"><%= mc_permisssion.name %> </label>
+                    </div>
+                <% end %>
                 <% permissions.each do |perm| %>
                     <div class="dcf-input-checkbox">
                         <input <%= 'checked="checked"' if user.permissions.include?(perm) %> type="checkbox" id="permission-<%= perm.id %>" name="permission_<%= perm.id %>">

@@ -1,26 +1,30 @@
 require "models/project"
 require "models/project_teammate"
 require "models/project_log"
+require "models/tool_log"
 require "date"
 require "erb"
 
 before "/checkout*" do
-	unless @user.id == -1
+	unless has_permission?(Permission::MANAGE_CHECKOUT)
 		raise Sinatra::NotFound
 	end
 end
 
+# Check out scan pages
 get "/checkout/?" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
   erb :'engineering_garage/checkout', :layout => :fixed, locals: {}
 end
 
+# Check out page
 get "/checkout/user/?" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
   nuid = params[:nuid]
-	search_id = params[:search_id]
+	search_project_id = params[:search_project_id]
+	search_tool_id = params[:search_tool_id]
 
   if nuid.nil? || nuid.strip.empty?
     redirect "/checkout/"
@@ -48,30 +52,97 @@ get "/checkout/user/?" do
 
       projects = projects.or(team_projects)
 
-      if search_id && !search_id.strip.empty?
-        projects = projects.where(bin_id: search_id.strip)
+      if search_project_id && !search_project_id.strip.empty?
+        projects = projects.where(bin_id: search_project_id.strip)
       end
     end
   end
-  
-  # Placeholder data
-  # This data does not interact with anything shown to the user currently
-  user_checked_out = [
-    { id: 1, name: "Hammer", checked_out_date: (DateTime.now - 1).strftime("%m/%d/%Y %H:%M") },
-    { id: 2, name: "Screwdriver", checked_out_date: (DateTime.now - 2).strftime("%m/%d/%Y %H:%M") },
-    { id: 3, name: "Wrench", checked_out_date: (DateTime.now - 3).strftime("%m/%d/%Y %H:%M") },
-    { id: 4, name: "Pliers", checked_out_date: (DateTime.now - 4).strftime("%m/%d/%Y %H:%M") },
-    { id: 5, name: "Saw", checked_out_date: (DateTime.now - 5).strftime("%m/%d/%Y %H:%M") },
-  ]
+
+	# select the checked in tools
+	available_tools = Tool.all.select { |tool| tool.last_checked_out.nil? || tool.last_checked_in > tool.last_checked_out}
+	
+	# select the logs from tool logs where the user is checkout_user and the is_checking_in is false and is the most recent log for each tool id
+  user_checked_out = ToolLog.where(checkout_user_id: checkout_user.id, is_checking_in: false)
+	
+	if user_checked_out.nil?
+		user_checked_out = []
+	end
+	
+	tools_checked_out = Tool.where(id: user_checked_out.pluck(:tool_id))
+	tools_checked_out = tools_checked_out.select { |tool| tool.last_checked_out > tool.last_checked_in }
+	if search_tool_id && !search_tool_id.strip.empty?
+		available_tools = available_tools.select { |tool| tool.serial_number == search_tool_id }
+		tools_checked_out = tools_checked_out.select { |tool| tool.serial_number == search_tool_id }
+	end
+
+  user_event_signups = EventSignup.where(user_id: checkout_user.id, attended: 0)
+
+  user_events =  Event.where(id: user_event_signups.select(:event_id))
 
   erb :"engineering_garage/checkout_user", :layout => :fixed, locals: {
                                              :user => checkout_user,
 																						 :nuid => nuid,
-                                             :checked_out => user_checked_out,
-                                             :projects => projects
+                                             :checked_out => tools_checked_out,
+                                             :projects => projects,
+																						 :tools => available_tools,
+                                             :events => user_events,
                                            }
 end
 
+post '/checkout/events/:event_id/:user_id/' do
+	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
+  tool_training_event_id = EventType.find_by(:description => 'Machine Training', :service_space_id => SS_ID).id
+	event = Event.find_by(:id => params[:event_id])
+	tool = EventAuthorization.find_by(:event_id => params[:event_id])
+  user = User.find_by(:id => params[:user_id])
+
+	if event.nil?
+		# that event does not exist
+		flash(:danger, 'Not Found', 'That event does not exist')
+		redirect '/admin/events/'
+	end
+
+  signup_record = EventSignup.find_by(:event_id => event.id, :user_id => user.id)
+
+  unless signup_record == nil
+    if signup_record.attended == 0
+      signup_record.attended = 1
+      signup_record.save
+    end
+  end
+
+  if !user.nil?
+    if event.event_type_id == new_member_orientation_id
+      unless AttendedOrientation.exists?(user_id: user.id)
+        AttendedOrientation.create(
+          :user_id => user.id,
+          :name => user.full_name,
+          :date_attended => event.end_time,
+          :university_status => user.university_status,
+          :user_email => user.email,
+          :event_id => event.id
+        )
+        user.send_attended_orientation_email
+      end
+    end
+
+    if !tool.nil?
+      unless user.authorized_resource_ids.include?(tool.resource_id)
+        ResourceAuthorization.create(
+          :user_id => user.id,
+          :resource_id => tool.resource_id,
+          :authorized_date => Time.now,
+          :authorized_event => signup_record.event_id
+        )
+      end
+    end
+  end
+
+	flash :success, 'Event attendence confirmed', "#{user.username}'s attendence confirmed for #{event.title}."
+	redirect '/checkout/'
+end
+
+# Check Out Project 
 post "/checkout/project_checkout/?" do
 	bin_id = params[:bin_id]
 	nuid = params[:nuid]
@@ -95,6 +166,7 @@ post "/checkout/project_checkout/?" do
 	end
 end
 
+# Check In Project
 post "/checkout/project_checkin/?" do
 	bin_id = params[:bin_id]
 	nuid = params[:nuid]
@@ -118,6 +190,7 @@ post "/checkout/project_checkin/?" do
 	end
 end
 
+# Delete Project
 post "/checkout/project_delete/?" do
 	bin_id = params[:bin_id]
 
@@ -137,8 +210,9 @@ post "/checkout/project_delete/?" do
 	end
 end
 
+# Create Project Page
 get "/checkout/project/:nuid/create" do
-  @breadcrumbs << { :text => "New_Project" }
+  @breadcrumbs << { :text => "New Project" }
   require_login
   user = User.find_by(user_nuid: params[:nuid])
   erb :'engineering_garage/new_project', :layout => :fixed, :locals => {
@@ -146,8 +220,9 @@ get "/checkout/project/:nuid/create" do
                                          }
 end
 
+# Create Project
 post "/checkout/project/:nuid/create" do
-  @breadcrumbs << { :text => "New_Project" }
+  @breadcrumbs << { :text => "New Project" }
   require_login
 
   if  params[:title].blank?
@@ -181,8 +256,9 @@ post "/checkout/project/:nuid/create" do
   redirect "/checkout"
 end
 
+# Project Edit Page
 get "/checkout/project/:project_id/edit" do
-  @breadcrumbs << { :text => "New_Project" }
+  @breadcrumbs << { :text => "Edit Project" }
   require_login
   project = Project.find_by(id: params[:project_id])
   user = User.find_by(id: project.owner_user_id)
@@ -199,8 +275,9 @@ get "/checkout/project/:project_id/edit" do
                                          }
 end
 
+# Edit Project
 post "/checkout/project/:project_id/edit" do
-  @breadcrumbs << { :text => "New_Project" }
+  @breadcrumbs << { :text => "Edit Project" }
   require_login
   project = Project.find_by(id: params[:project_id])
   params[:user] = User.find_by(user_nuid: params[:nuid])
@@ -245,23 +322,22 @@ post "/checkout/project/:project_id/edit" do
   redirect "/checkout"
 end
 
-get "/checkout/project/:project_id/edit/teammates" do
-  @breadcrumbs << { :text => "Teammates" }
-  require_login
-
+# Delete Project
+post "/checkout/project/:project_id/edit/delete/" do
   project = Project.find_by(id: params[:project_id])
-  teammates = ProjectTeammate.where("project_id = ?", params[:project_id])
 
-  erb :'engineering_garage/edit_teammates', :layout => :fixed, :locals => {
-                                            :project_id => project.id,
-                                            :teammates => teammates
-                                          }
+  if project != nil
+    project.delete
+    flash :success, 'Success', 'Project deleted'
+    redirect "/checkout/?"
+  else
+    flash :error, 'Error', 'Project not found'
+    redirect "/checkout/"
+  end
 end
 
+# add teammate
 post "/checkout/project/:project_id/edit/teammates/" do
-  @breadcrumbs << { :text => "Teammates" }
-  require_login
-
   nuid = params[:nuid]
   if nuid.nil? || nuid.strip.empty?
     flash :danger, "Error", "NUID empty."
@@ -288,13 +364,11 @@ post "/checkout/project/:project_id/edit/teammates/" do
   teammate.set_data(params)
 
   flash :success, "Teammate Added", "#{teammate_user.full_name} was added as a teammate."
-  redirect "/checkout/project/#{params[:project_id]}/edit/teammates"
+  redirect back
 end
 
+# Remove teammate
 post "/checkout/project/:project_id/edit/teammates/:teammate_id/remove" do
-  @breadcrumbs << { :text => "Teammates" }
-  require_login
-
   teammate_user = ProjectTeammate.find_by(id: params[:teammate_id])
   if teammate_user.nil?
     flash :danger, "Error", "Could not locate user."
@@ -308,6 +382,65 @@ post "/checkout/project/:project_id/edit/teammates/:teammate_id/remove" do
   end
 
   teammate_user.delete
-  flash :success, "Teammate Removed", "User was removed as a teammate."
-  redirect "/checkout/project/#{params[:project_id]}/edit/teammates"
+  flash :success, "Teammate Removed", "User was removed from teammates."
+  redirect back
+end
+
+# Tool Checkout
+post "/checkout/tool_checkout/?" do
+  nuid = params[:nuid]
+	tool_id = params[:tool_id]
+	if nuid.nil? || tool_id.nil?
+		flash :danger, "Error", "NUID or Tool ID not found"
+		redirect "/checkout/"
+	end
+
+	tool = Tool.find_by(id: tool_id)
+	user = User.find_by(user_nuid: nuid)
+	if tool.nil?
+		flash :danger, "Error", "Tool not found"
+		redirect "/checkout/"
+	elsif user.nil?
+		flash :danger, "Error", "User not found"
+		redirect "/checkout/"
+	end
+
+	previous_log = ToolLog.where(tool_id: tool.id, checkout_user_id: user.id, is_checking_in: false).order(checked_date: :desc).first
+	if previous_log.nil?
+		flash :danger, "Training", "This user has not checked out this tool before! Please give them a walkthrough."
+	end
+
+	tool.update_last_checked_out
+	tool_log = ToolLog.new
+	tool_log.set_data(user: user, tool: tool, is_checking_in: false)
+
+	flash :success, "Success", "Tool checked out"
+	redirect "/checkout/"
+end
+
+# Tool Checkin
+post "/checkout/tool_checkin/?" do
+	nuid = params[:nuid]
+	tool_id = params[:tool_id]
+	if nuid.nil? || tool_id.nil?
+		flash :danger, "Error", "NUID or Tool ID not found"
+		redirect "/checkout/"
+	end
+
+	tool = Tool.find_by(id: tool_id)
+	user = User.find_by(user_nuid: nuid)
+	if tool.nil?
+		flash :danger, "Error", "Tool not found"
+		redirect "/checkout/"
+	elsif user.nil?
+		flash :danger, "Error", "User not found"
+		redirect "/checkout/"
+	end
+
+	tool.update_last_checked_in
+	tool_log = ToolLog.new
+	tool_log.set_data(user: user, tool: tool, is_checking_in: true)
+	flash :success, "Success", "Tool checked in"
+	
+	redirect "/checkout/"
 end

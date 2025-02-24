@@ -11,7 +11,7 @@
         </ul>
         </li>
         <li><a href="/tools/">Reserve Equipment</a>
-        <% if SS_ID == 8 && @user.id == -1 %>
+        <% if SS_ID == 8 && has_permission?(Permission::MANAGE_CHECKOUT)  %>
             <ul>
                 <li><a href="/checkout/">Checkout</a></li>
             </ul>
@@ -81,6 +81,9 @@
                     <% if SS_ID == 1 %>
                         <li><a href="https://innovationstudio.unl.edu<%= drupal_link_lookup(:sop_training_doc) %>" target="_blank">Edit SOP</a></li>
                     <% end %>
+                <% end %>
+                <% if SS_ID == 1 %>
+                    <li><a href="/admin/maker_request_archive/">Maker Request Archive</a></li>
                 <% end %>
                 <% if has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER) %>
                 <li><a href="/admin/view_check_in/">Check In Log</a></li>
