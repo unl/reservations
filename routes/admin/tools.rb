@@ -69,7 +69,7 @@ post '/admin/tools/?' do
             tool_id = key.split('INOP_')[1].to_i
 			tool_record = Resource.find_by(:id => tool_id)
 
-			if !tool_record.INOP 
+			if  !tool_record.nil? && !tool_record.INOP
 				tool_record.INOP = true
 				tool_record.save
 			end
@@ -207,6 +207,35 @@ post '/admin/tools/:resource_id/edit/?' do
 	redirect '/admin/tools/'
 end
 
+get '/admin/tools/:resource_id/edit_checkable/?' do
+	require_login
+	@breadcrumbs << {:text => 'Admin Tools', :href => '/admin/tools/'} << {:text => 'Edit Tool'}
+
+	# check that this is a valid tool
+	tool = Tool.find_by(:id => params[:resource_id], :service_space_id => SS_ID)
+	if tool.nil?
+		flash(:alert, 'Not Found', 'That tool does not exist.')
+		redirect '/admin/tools/'
+	end
+
+	erb :'admin/edit_checkable_tool', :layout => :fixed, :locals => {
+		:tool => tool
+	}
+end
+
+post '/admin/tools/:resource_id/edit_checkable/?' do
+	tool = Tool.find_by(:id => params[:resource_id], :service_space_id => SS_ID)
+	if tool.nil?
+		flash(:alert, 'Not Found', 'That tool does not exist.')
+		redirect '/admin/tools/'
+	end
+
+	tool.set_data(params)
+
+	flash(:success, 'Tool Updated', "Your tool #{tool.tool_name} has been updated.")
+	redirect '/admin/tools/'
+end
+
 post '/admin/tools/:resource_id/delete/?' do
 	require_login
 
@@ -220,5 +249,21 @@ post '/admin/tools/:resource_id/delete/?' do
 	tool.destroy
 
 	flash(:success, 'Tool Deleted', "Your tool #{tool.name} has been deleted. All reservations and permissions on this tool have also been removed.")
+	redirect '/admin/tools/'
+end
+
+post '/admin/tools/:resource_id/delete_checkable/?' do
+	require_login
+
+	# check that this is a valid tool
+	tool = Tool.find_by(:id => params[:resource_id], :service_space_id => SS_ID)
+	if tool.nil?
+		flash(:alert, 'Not Found', 'That tool does not exist.')
+		redirect '/admin/tools/'
+	end
+
+	tool.destroy
+
+	flash(:success, 'Tool Deleted', "Your tool #{tool.tool_name} has been deleted. All reservations and permissions on this tool have also been removed.")
 	redirect '/admin/tools/'
 end
