@@ -53,10 +53,10 @@ get '/training-documents/sop/?' do
 		# Handle CMS failure gracefully (e.g., log error, show custom error message)
 		logger.error "Error fetching content: #{e.message}" # Logging the error
 
-		content = 'Error getting the SOP traning documents'
+		content = 'Error getting the SOP training documents'
 	end
 
-	erb :sop_training_document, :layout => :fixed, :locals => {
+	erb :sop_training_document, :layout => :fixed_drupal_styles, :locals => {
 		:content => content
 	}
 end
