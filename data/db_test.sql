@@ -3813,6 +3813,24 @@ INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUE
 INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 10, 8);
 INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 11, 8);
 
+CREATE TABLE `tools` (
+	`id` int(11) PRIMARY KEY AUTO_INCREMENT,
+	`tool_name` VARCHAR(255) NOT NULL,
+	`category_id` int(11) DEFAULT NULL,
+	`description` VARCHAR(255) DEFAULT NULL,
+	`service_space_id` int(11) NOT NULL,
+	`model_number` VARCHAR(255) DEFAULT NULL,
+	`serial_number` VARCHAR(255) DEFAULT NULL UNIQUE,
+	`INOP` tinyint(1) DEFAULT 0,
+	`last_checked_in` datetime DEFAULT CURRENT_TIMESTAMP,
+	`last_checked_out` datetime DEFAULT NULL,
+	`created_on` datetime DEFAULT CURRENT_TIMESTAMP,
+	`updated_on` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+INSERT INTO `permissions` (`id`, `name`) VALUES
+(11, 'Manage Checkout'); 
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
