@@ -49,7 +49,7 @@
                 <% end %>
 
                 <div class="dcf-form-group">
-                    <label for="trainer">Trainer:</label>
+                    <label for="trainer">Trainer <small id="trainer-required" class="dcf-d-none dcf-required">Required</small></label>
                     <select id="trainer" name="trainer" class="use-select2">
                     <option value=""></option>
                     <% trainers.each do |trainer| %>
@@ -360,6 +360,8 @@
 <% if SS_ID == 1 %>
 <% append_script_declaration(%q[
     const type_select = document.getElementById('type');
+
+    // HRC Event Stuff
     const event_code = document.getElementById('event-code');
     const event_code_required = document.getElementById('event-code-required');
     const hrc_feed_container = document.getElementById('hrc_feed_container');
@@ -388,6 +390,28 @@
 
     update_hrc_inputs();
     type_select.addEventListener('input', update_hrc_inputs);
+
+    // Trainer Required Stuff
+    const trainer_input = document.getElementById('trainer');
+    const trainer_required_elem = document.getElementById('trainer-required');
+    const create_event_form = document.getElementById('create-event-form');
+
+    function require_training() {
+        const selected_type = type_select.options[type_select.selectedIndex];
+
+        // 2 is Machine Training
+        // 11 is HRC Training
+        if (selected_type.value === '2' || selected_type.value === '11') {
+            trainer_input.setAttribute('required', 'required');
+            trainer_required_elem.classList.remove('dcf-d-none');
+        } else {
+            trainer_input.removeAttribute('required');
+            trainer_required_elem.classList.add('dcf-d-none');
+        }
+    }
+
+    require_training();
+    type_select.addEventListener('input', require_training);
 ])%>
 <% end %>
 <% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {

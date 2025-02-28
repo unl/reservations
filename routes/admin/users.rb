@@ -37,12 +37,14 @@ EXPIRATION_DATE_SEARCH_OPERATIONS = [
 ]
 
 before '/admin/users*' do
-    unless has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER)
+    unless has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::VIEW_USER_PERMISSIONS_READ_ONLY) || has_permission?(Permission::SUPER_USER)
         raise Sinatra::NotFound
     end
 end
 
 get '/admin/users/download/?' do
+    not_found unless has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER)
+
     # load up a CSV with the data
     users = User.where(:service_space_id => SS_ID)
     csv_string = CSV.generate do |csv|
@@ -58,6 +60,8 @@ get '/admin/users/download/?' do
 end
 
 get '/admin/users/active_users/download/?' do
+    not_found unless has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER)
+
     # load up a CSV with the data
     users = User.where(:service_space_id => SS_ID).where("expiration_date >= ?", Date.today)
     csv_string = CSV.generate do |csv|
@@ -73,7 +77,9 @@ get '/admin/users/active_users/download/?' do
 end
 
 get '/admin/users/vehicle/download/?' do
-# load up a CSV with the data
+    not_found unless has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER)
+
+    # load up a CSV with the data
     todays_date = Date.today.strftime("%Y-%m-%d")
     users = User.where(:service_space_id => SS_ID)
     vehicles = Vehicle.joins("INNER JOIN users ON users.id = vehicles.user_id AND users.expiration_date IS NOT NULL AND STR_TO_DATE(users.expiration_date, '%Y-%m-%d') >= #{ todays_date}").all
@@ -190,6 +196,8 @@ get '/admin/users/?' do
 end
 
 get '/admin/users/create/?' do
+    not_found unless has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER)
+
     @breadcrumbs << {:text => 'Admin Users', :href => '/admin/users/'} << {:text => 'Create User'}
     erb :'admin/new_user', :layout => :fixed, :locals => {
         :user => User.new
@@ -197,6 +205,8 @@ get '/admin/users/create/?' do
 end
 
 post '/admin/users/:user_id/renew/?' do
+    not_found unless has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER)
+
     if params[:user_id].to_i == @user.id
         user = @user
     else
@@ -266,6 +276,8 @@ get '/admin/users/:user_id/edit/?' do
 end
 
 post '/admin/users/:user_id/edit/?' do
+    not_found unless has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER)
+
     if params[:user_id].to_i == @user.id
         user = @user
     else
@@ -421,6 +433,8 @@ post '/admin/users/:user_id/edit/?' do
 end
 
 post '/admin/users/:user_id/delete/?' do
+    not_found unless has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER)
+
     if params[:user_id].to_i == @user.id
         user = @user
     else
@@ -439,6 +453,8 @@ post '/admin/users/:user_id/delete/?' do
 end
 
 post '/admin/users/create/?' do
+    not_found unless has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER)
+
     # check that username is not taken
     unless User.find_by(:username => params[:username], :service_space_id => SS_ID).nil?
         flash(:alert, 'Username Taken', 'Sorry, another user has already taken that username.')
@@ -520,11 +536,15 @@ get '/admin/users/:user_id/manage/?' do
 end
 
 get '/admin/users/modify_expirations/?' do
+    not_found unless has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER)
+
     @breadcrumbs << {:text => 'Admin Users', :href => '/admin/users/'} << {:text => 'Modify Expirations'}
     erb :'admin/modify_expirations', :layout => :fixed
 end
 
 post '/admin/users/modify_expirations/?' do
+    not_found unless has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER)
+
     days_to_add = params[:days_to_add]
 
     if !(days_to_add =~ /^-?\d+$/)
@@ -545,6 +565,8 @@ post '/admin/users/modify_expirations/?' do
 end
 
 post '/admin/users/:user_id/manage/?' do
+    not_found unless has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER)
+
     # check that the admin user has permission to manage this user
     if params[:user_id].to_i == @user.id
         user = @user

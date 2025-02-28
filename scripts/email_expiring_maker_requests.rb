@@ -43,7 +43,7 @@ if maker_requests_expiring_tomorrow.count > 0
 
     # Send email to all super users
     super_users.each do |user|
-        if !user.email.empty?
+        if user.email && !user.email.empty?
             Emailer.mail(user.email, "Expiring Maker Requests", body, '', nil)
         end
     end
