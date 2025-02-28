@@ -51,6 +51,29 @@
     <a href="/tools/" class="dcf-btn dcf-btn-primary">Reserve Equipment</a>
 </p>
 
+<% if SS_ID == 8 %>
+    <h4 id="my-tools">My Tools</h2>
+    <% if user_tools.any? %>
+        <table class="dcf-w-25% dcf-table dcf-table-bordered dcf-mb-4" aria-describedby="my-reservations">
+            <thead>
+                <tr>
+                    <th>Tool Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% user_tools.each do |tool| %>
+                    <tr>
+                        <td><%= tool.tool_name %></td>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+    <% else %>
+        <p>You currently have no checked-out tools.</p>
+    <% end %>
+<% end %>
+
+
 <h4 id="my-events">My Events</h4>
 <% if events.empty? %>
 <p>You have not signed up for any upcoming events. Why not <a href="/calendar/">check out the calendar</a> to find some?</p>
