@@ -1,6 +1,7 @@
 require 'models/resource'
 require 'models/permission'
 require 'models/reservation'
+require 'models/resource_authorization'
 require 'models/tool'
 
 NIS_TOOL_RESOURCE_CLASS_ID = 1
@@ -255,6 +256,65 @@ post '/admin/tools/:resource_id/delete/?' do
 	redirect '/admin/tools/'
 end
 
+get '/admin/tools/bulk_permissions_update/?' do
+	require_login
+	@breadcrumbs << {:text => 'Admin Tools Update'}
+
+	new_tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
+	new_tools.sort_by! do |tool|
+		[
+			tool.category_name.to_s.downcase,
+			tool.name.to_s.downcase,
+			tool.model.to_s.downcase
+		]
+	end
+
+	tool_auth_copy = Resource.where(:service_space_id => SS_ID, :needs_authorization => true).order(:name => :asc).all.to_a
+	tool_auth_copy.sort_by! do |tool|
+		[
+			tool.category_name.to_s.downcase,
+			tool.name.to_s.downcase,
+			tool.model.to_s.downcase
+		]
+	end
+
+
+	erb :'admin/bulk_permissions_update', :layout => :fixed, :locals => {
+		:new_tools => new_tools,
+		:tool_auth_copy => tool_auth_copy
+	}	
+end
+
+post '/admin/tools/bulk_permissions_update' do
+  require_login
+  @breadcrumbs << { text: 'Admin Tools Update' }
+
+  source_tool_id = params[:source_tool_id]
+  target_tool_ids = params[:target_tool_ids]
+
+  if source_tool_id && target_tool_ids
+		source_authorizations = ResourceAuthorization.where(resource_id: source_tool_id)
+
+		target_tool_ids_string = target_tool_ids.join(', ')
+		flash(:success, 'Authorizations Applied', "Authorized User IDs from Resource ID #{source_tool_id} to #{target_tool_ids_string}")
+
+    target_tool_ids.each do |target_tool_id|
+      source_authorizations.each do |auth|
+				begin
+					ResourceAuthorization.create!(
+						resource_id: target_tool_id,
+						user_id: auth.user_id,
+						authorized_date: Time.now,
+						authorized_event: auth.authorized_event
+					)
+				rescue ActiveRecord::RecordNotUnique
+				end
+      end
+    end
+  end
+
+  redirect '/admin/tools'
+  
 post '/admin/tools/:resource_id/delete_checkable/?' do
 	require_login
 
