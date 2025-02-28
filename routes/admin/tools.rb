@@ -314,6 +314,7 @@ post '/admin/tools/bulk_permissions_update' do
   end
 
   redirect '/admin/tools'
+end
   
 post '/admin/tools/:resource_id/delete_checkable/?' do
 	require_login
