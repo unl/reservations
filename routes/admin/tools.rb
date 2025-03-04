@@ -146,6 +146,10 @@ get '/admin/tools/create_checkable/?' do
 	require_login
 	@breadcrumbs << {:text => 'Admin Tools', :href => '/admin/tools/'} << {:text => 'Create Checkable Tool'}
 
+	unless SS_ID == 8
+		raise Sinatra::NotFound
+	end
+
 	erb :'admin/edit_checkable_tool', :layout => :fixed, :locals => {
 		:tool => Tool.new
 	}
