@@ -28,15 +28,6 @@ get '/admin/tools/?' do
 	end
 
 	checkable_tools = Tool.where(service_space_id: SS_ID)
-	# .where(:service_space_id => SS_ID)
-	# .order(:tool_name).all.to_a
-	# checkable_tools.sort_by! do |tool|
-	# 	[
-	# 		tool.category_name.to_s.downcase,
-	# 		tool.tool_name.to_s.downcase
-	# 		tool.model.to_s.downcase
-	# 	]
-	# end
 
 	if SS_ID == 8
 		erb :'admin/garage_tools', :layout => :fixed, :locals => {
@@ -238,37 +229,6 @@ post '/admin/tools/:resource_id/edit_checkable/?' do
 
 	flash(:success, 'Tool Updated', "Your tool #{tool.tool_name} has been updated.")
 	redirect '/admin/tools/'
-end
-
-get '/admin/tools/:resource_id/lockout/?' do
-	require_login
-	@breadcrumbs << {:text => 'Admin Tools', :href => '/admin/tools/'} << {:text => 'Lockout Tool'}
-
-	tool = Resource.find_by(:id => params[:resource_id], :service_space_id => SS_ID)
-	if tool.nil?
-		flash(:alert, 'Not Found', 'That tool does not exist.')
-		redirect '/admin/tools/'
-	end
-
-	erb :'admin/lockout_resource', :layout => :fixed, :locals => {
-		:tool => tool
-	}
-end
-
-get '/admin/tools/:resource_id/lockout_checkable/?' do
-	require_login
-	@breadcrumbs << {:text => 'Admin Tools', :href => '/admin/tools/'} << {:text => 'Lockout Tool'}
-
-	tool = Tool.find_by(:id => params[:resource_id], :service_space_id => SS_ID)
-
-	if tool.nil?
-		flash(:alert, 'Not Found', 'That tool does not exist.')
-		redirect '/admin/tools/'
-	end
-
-	erb :'admin/lockout_tool', :layout => :fixed, :locals => {
-		:tool => tool
-	}
 end
 
 post '/admin/tools/:resource_id/delete/?' do
