@@ -8,14 +8,12 @@
     <li><a href="#checkable">Checkable</a></li>
   </ul>
   <div id="reservable">
-		<form class="dcf-form" id="tool-INOP-status" action="" method="POST">
 		<table class="dcf-table dcf-table-bordered" aria-describedby="tool-list-header">
 				<thead>
 						<tr>
 								<th scope="col">Category</th>
 								<th scope="col">Tool</th>
 								<th scope="col">Model</th>
-								<th scope="col">INOP</th>
 								<th scope="col">Status</th>
 								<th scope="col">Actions</th>
 						</tr>
@@ -33,17 +31,12 @@
 										<%= tool.model %>
 								</td>
 								<td>
-										<div class="dcf-input-checkbox">
-												<input <%= 'checked="checked"' if tool.INOP %> id="INOP-checkbox_<%= tool.id %>" type="checkbox" name="INOP_<%= tool.id %>"  >
-												<label for="INOP-checkbox_<%= tool.id %>"></label>
-										</div>
-								</td>
-								<td>
 									<%= tool.get_status %>
 								</td>
 								<td class="table-actions">
 										<div>
 												<a href="/admin/tools/<%= tool.id %>/edit/" class="dcf-btn dcf-btn-primary">Edit</a>
+												<a href="/admin/tools/<%= tool.id %>/lockout/" class="dcf-btn dcf-btn-primary">Lockout</a>
 												<input class="dcf-btn dcf-btn-secondary" type="submit" form="delete-form-<%= tool.id %>" value="Delete">
 										</div>
 								</td>
@@ -52,8 +45,6 @@
 				</tbody>
 			</table>
 			<br>
-			<button class="dcf-btn dcf-btn-primary" type="submit">Update Tools INOP Statuses</button>   
-		</form>
   </div>
   <div id="checkable">
 	<form class="dcf-form" id="checkable-tool-INOP-status" action="" method="POST">
@@ -63,7 +54,6 @@
 							<th scope="col">Category</th>
 							<th scope="col">Tool</th>
 							<th scope="col">Model</th>
-							<th scope="col">INOP</th>
 							<th scope="col">Status</th>
 							<th scope="col">Actions</th>
 					</tr>
@@ -81,17 +71,12 @@
 									<%= tool.model_number %>
 							</td>
 							<td>
-									<div class="dcf-input-checkbox">
-											<input <%= 'checked="checked"' if tool.INOP %> id="INOP-checkbox_<%= tool.id %>" type="checkbox" name="INOP_<%= tool.id %>"  >
-											<label for="INOP-checkbox_<%= tool.id %>"></label>
-									</div>
-							</td>
-							<td>
 								<%= tool.get_status %>
 							</td>
 							<td class="table-actions">
 									<div>
 										<a href="/admin/tools/<%= tool.id %>/edit_checkable/" class="dcf-btn dcf-btn-primary">Edit</a>
+										<a href="/admin/tools/<%= tool.id %>/lockout_checkable/" class="dcf-btn dcf-btn-primary">Lockout</a>
 										<input class="dcf-btn dcf-btn-secondary" type="submit" form="delete-checkable-form-<%= tool.id %>" value="Delete">
 										<% if tool.is_checked_out %>
 											<input class="dcf-btn dcf-btn-secondary" type="submit" value="Force Check In" form="tool-force-checkin-<%= tool[:id] %>"/>

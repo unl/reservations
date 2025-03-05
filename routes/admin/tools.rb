@@ -240,6 +240,37 @@ post '/admin/tools/:resource_id/edit_checkable/?' do
 	redirect '/admin/tools/'
 end
 
+get '/admin/tools/:resource_id/lockout/?' do
+	require_login
+	@breadcrumbs << {:text => 'Admin Tools', :href => '/admin/tools/'} << {:text => 'Lockout Tool'}
+
+	tool = Resource.find_by(:id => params[:resource_id], :service_space_id => SS_ID)
+	if tool.nil?
+		flash(:alert, 'Not Found', 'That tool does not exist.')
+		redirect '/admin/tools/'
+	end
+
+	erb :'admin/lockout_resource', :layout => :fixed, :locals => {
+		:tool => tool
+	}
+end
+
+get '/admin/tools/:resource_id/lockout_checkable/?' do
+	require_login
+	@breadcrumbs << {:text => 'Admin Tools', :href => '/admin/tools/'} << {:text => 'Lockout Tool'}
+
+	tool = Tool.find_by(:id => params[:resource_id], :service_space_id => SS_ID)
+
+	if tool.nil?
+		flash(:alert, 'Not Found', 'That tool does not exist.')
+		redirect '/admin/tools/'
+	end
+
+	erb :'admin/lockout_tool', :layout => :fixed, :locals => {
+		:tool => tool
+	}
+end
+
 post '/admin/tools/:resource_id/delete/?' do
 	require_login
 
@@ -314,6 +345,7 @@ post '/admin/tools/bulk_permissions_update' do
   end
 
   redirect '/admin/tools'
+end
   
 post '/admin/tools/:resource_id/delete_checkable/?' do
 	require_login
