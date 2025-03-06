@@ -123,6 +123,7 @@ def require_renewal(redirect_from=nil)
   end
 end
 
+# TODO: Repurpose to check for orientation attendance #285
 def require_active(redirect_to=nil)
   if !@user.nil? && !@user.is_active && !@user.is_super_user?
     if SS_ID == 1
