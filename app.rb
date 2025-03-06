@@ -176,6 +176,7 @@ error do
 end
 
 get '/' do
+  check_sso
   @breadcrumbs << {:text => 'Home'}
   redirect '/login/'
 end
