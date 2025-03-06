@@ -106,6 +106,18 @@ def require_login(redirect_after_login=nil)
   if SS_ID == 8
     if session['cas'].nil? || session['cas']['user'].nil?
       halt 401
+    else
+      # Check if the user exists in the app's db
+      @user = User.find_by(:username => session['cas']['user'])
+      if @user.nil?
+        # TODO: Handle unknown user #178
+      else
+        session[:user_id] = @user.id
+
+        if !@user.is_super_user? && !@user.is_admin?
+          require_renewal(redirect_after_login)
+        end
+      end
     end
   else
     if @user.nil?
