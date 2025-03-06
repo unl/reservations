@@ -2,6 +2,8 @@ require 'sinatra'
 require 'models/user'
 require 'models/service_space'
 require 'models/event'
+require 'rack-cas'
+require 'rack/cas'
 
 use Rack::Session::Cookie, :key => 'rack.session',
                            :path => '/',
@@ -9,6 +11,8 @@ use Rack::Session::Cookie, :key => 'rack.session',
                            :secret => 'averymanteroldfatherbesseyhamilton',
                            :old_secret => 'averymanteroldfatherbesseyhamilton',
                            :expire_after => 30*24*60*60
+
+use Rack::CAS, server_url: 'https://shib.unl.edu/idp/profile/cas'
 
 Time.zone = "America/Chicago"
 
@@ -90,16 +94,28 @@ def has_permission?(permission)
     !@user.nil? && @user.has_permission?(permission)
 end
 
+def check_sso
+  if !session['cas'].nil? && !session['cas']['user'].nil?
+    @user = User.find_by(:username => session['cas']['user'])
+  else
+    @user = nil
+  end
+end
+
 def require_login(redirect_after_login=nil)
-  if @user.nil?
-    flash(:alert, 'You Must Login', 'That page requires you to be logged in. If you don\'t have an account, please sign up for <a href="/new_members/">New&nbsp;Member&nbsp;Orientation</a>.')
-    if redirect_after_login.nil?
-      redirect '/login/'
-    else
-      redirect "/login/?next_page=#{redirect_after_login}"
+  if SS_ID == 8
+    if session['cas'].nil? || session['cas']['user'].nil?
+      halt 401
     end
-  elsif SS_ID == 8 && !@user.is_super_user? && !@user.is_admin?
-    require_renewal(redirect_after_login)
+  else
+    if @user.nil?
+      flash(:alert, 'You Must Login', 'That page requires you to be logged in. If you don\'t have an account, please sign up for <a href="/new_members/">New&nbsp;Member&nbsp;Orientation</a>.')
+      if redirect_after_login.nil?
+        redirect '/login/'
+      else
+        redirect "/login/?next_page=#{redirect_after_login}"
+      end
+    end
   end
 end
 
