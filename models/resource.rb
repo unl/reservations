@@ -45,14 +45,6 @@ class Resource < ActiveRecord::Base
 		end
     end
 
-		def get_status
-			if self.INOP == true
-				return 'INOP'
-			else
-				return 'Active'
-			end
-		end
-
     def self.valid_category_id?(category_id)
         self.category_options.key?(category_id.to_i)
     end

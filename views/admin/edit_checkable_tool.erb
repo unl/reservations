@@ -1,17 +1,17 @@
 <h1 class="dcf-txt-h3"><%= tool.id.nil? ? 'Create Checkable Tool' : "Edit #{tool.tool_name}" %></h1>
 
-<form class="dcf-form" action="" method="POST">
+<form class="dcf-form" style="width: clamp(20ch, 100%, 80ch);" action="" method="POST">
 	<div class="dcf-form-group">
 			<label for="name">Name</label>
-			<input type="text" name="name" id="name" value='<%= tool.tool_name %>'/>
+			<input class="dcf-w-100%" type="text" name="name" id="name" value='<%= tool.tool_name %>'/>
 	</div>
 	<div class="dcf-form-group">
 	    <label for="model">Model</label>
-	    <input type="text" name="model_number" id="model" value='<%= tool.model_number if tool.id %>'/>
+	    <input class="dcf-w-100%" type="text" name="model_number" id="model" value='<%= tool.model_number if tool.id %>'/>
     </div>
 	<div class="dcf-form-group">
 	    <label for="serial">Serial</label>
-	    <input type="text" name="serial_number" id="serial" value='<%= tool.serial_number if tool.id %>'/>
+	    <input class="dcf-w-100%" type="text" name="serial_number" id="serial" value='<%= tool.serial_number if tool.id %>'/>
     </div>
     <div class="dcf-form-group">
         <label for="category-id">Category</label>
