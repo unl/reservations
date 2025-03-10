@@ -10,3 +10,6 @@ CREATE TABLE `lockouts` (
 	FOREIGN KEY (resource_id) REFERENCES resources(id) ON DELETE CASCADE,
 	FOREIGN KEY (initiated_by_user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+INSERT INTO `permissions` (`id`, `name`) VALUES
+(12, 'Edit Lockout'); 

@@ -1,7 +1,91 @@
 <h1>Lockout <%= tool.name %></h1>
 
-<form>
+<form class="dcf-form" action="/lockout/<%= tool.id %>/create/" method="post">
+	<input type="hidden" name="resource_id" value="<%= tool.id %>"/>
+	<input type="hidden" name="user_id" value="<%= @user.id %>"/>
 	<label for="description">Description</label>
-	<textarea name="description" placeholder="Description"></textarea>
-	<button class="dcf-button dcf-button-primary" type="submit">Create Lockout</button>
+	<textarea required id="description" name="description" placeholder="Description"></textarea>
+	<br/>
+	<% if has_permission?(Permission::MANAGE_LOCKOUT)%>
+		<fieldset>
+			<legend>Anticipated Duration</legend>
+			<div class="dcf-form-controls-inline dcf-gap-6">
+				<div class="dcf-datepicker">
+					<label for="start_date">Start Date</label>
+					<input id="start_date" type="text" name="start_date"></input>
+				</div>
+				<div>
+					<label for="start_time">Start Time</label>
+					<select id="start_time" name="start_time">
+						<option value="00:00">12:00 AM</option>
+						<option value="01:00">1:00 AM</option>
+						<option value="02:00">2:00 AM</option>
+						<option value="03:00">3:00 AM</option>
+						<option value="04:00">4:00 AM</option>
+						<option value="05:00">5:00 AM</option>
+						<option value="06:00">6:00 AM</option>
+						<option value="07:00">7:00 AM</option>
+						<option value="08:00">8:00 AM</option>
+						<option value="09:00">9:00 AM</option>
+						<option value="10:00">10:00 AM</option>
+						<option value="11:00">11:00 AM</option>
+						<option value="12:00">12:00 PM</option>
+						<option value="13:00">1:00 PM</option>
+						<option value="14:00">2:00 PM</option>
+						<option value="15:00">3:00 PM</option>
+						<option value="16:00">4:00 PM</option>
+						<option value="17:00">5:00 PM</option>
+						<option value="18:00">6:00 PM</option>
+						<option value="19:00">7:00 PM</option>
+						<option value="20:00">8:00 PM</option>
+						<option value="21:00">9:00 PM</option>
+						<option value="22:00">10:00 PM</option>
+						<option value="23:00">11:00 PM</option>
+					</select>
+				</div>
+			</div>
+			<div class="dcf-form-controls-inline dcf-gap-6">
+				<div class="dcf-datepicker">
+					<label for="end_date">End Date</label>
+					<input id="end_date" type="text" name="end_date"></input>
+				</div>
+				<div>
+					<label for="end_time">End Time</label>
+					<select id="end_time" name="end_time">
+						<option value="00:00">12:00 AM</option>
+						<option value="01:00">1:00 AM</option>
+						<option value="02:00">2:00 AM</option>
+						<option value="03:00">3:00 AM</option>
+						<option value="04:00">4:00 AM</option>
+						<option value="05:00">5:00 AM</option>
+						<option value="06:00">6:00 AM</option>
+						<option value="07:00">7:00 AM</option>
+						<option value="08:00">8:00 AM</option>
+						<option value="09:00">9:00 AM</option>
+						<option value="10:00">10:00 AM</option>
+						<option value="11:00">11:00 AM</option>
+						<option value="12:00">12:00 PM</option>
+						<option value="13:00">1:00 PM</option>
+						<option value="14:00">2:00 PM</option>
+						<option value="15:00">3:00 PM</option>
+						<option value="16:00">4:00 PM</option>
+						<option value="17:00">5:00 PM</option>
+						<option value="18:00">6:00 PM</option>
+						<option value="19:00">7:00 PM</option>
+						<option value="20:00">8:00 PM</option>
+						<option value="21:00">9:00 PM</option>
+						<option value="22:00">10:00 PM</option>
+						<option value="23:00">11:00 PM</option>
+				</select>
+				</div>
+			</div>
+		</fieldset>
+		<br/>
+	<% end %>
+	<button class="dcf-btn dcf-btn-primary" type="submit">Create Lockout</button>
 </form>
+<script>
+	window.addEventListener('inlineJSReady', function() {
+		WDN.initializePlugin('datepickers');
+	}, false);
+</script>
