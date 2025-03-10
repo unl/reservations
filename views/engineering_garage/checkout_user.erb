@@ -186,12 +186,12 @@
 				</div>
 				<div id="user-tools-panel">
 					<form class="dcf-form dcf-w-25% dcf-pb-4" id="filter-input" action="/checkout/user/" method="GET" enctype="application/x-www-form-urlencoded">
-						<label for="filter-input">Scan Tool</label>
-						<div style = "width: 14em" class="dcf-input-group">
-							<input type="hidden" name="nuid" value="<%= nuid %>">
-							<input id="team-input" name="search_tool_id">
-							<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
-						</div>
+					<label for="search_tool_id">Scan Tool</label>
+					<div class="dcf-input-group">
+						<input type="hidden" name="nuid" value="<%= nuid %>">
+						<input id="search_tool_id" name="search_tool_id">
+						<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
+					</div>
 					</form>
 					<div class="dcf-d-flex dcf-w-100% dcf-flex-row dcf-gap-4">
 						<div class="dcf-flex-grow-1">
