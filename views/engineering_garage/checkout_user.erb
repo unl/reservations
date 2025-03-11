@@ -82,8 +82,8 @@
 												</div>
 											</div>
 											<% if project[:last_checked_out] == nil || project[:last_checked_out] <= project[:last_checked_in] %>
-												<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkout-<%= project[:id] %>" type="button">Check Out</button>
-												<div class="dcf-modal" id="checkout-<%= project[:id] %>" hidden>
+												<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkout-project-<%= project[:id] %>" type="button">Check Out</button>
+												<div class="dcf-modal" id="checkout-project-<%= project[:id] %>" hidden>
 													<div class="dcf-modal-wrapper">
 														<div class="dcf-modal-header">
 															<h2>Check Out Project</h2>
@@ -211,8 +211,8 @@
 										<td><%= tool[:tool_name] %></td>
 										<td><%= tool[:last_checked_out].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %></td>
 										<td class="table-actions">
-											<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkin-<%= tool[:tool_id] %>" type="button">Check In</button>
-											<div class="dcf-modal" id="checkin-<%= tool[:tool_id] %>" hidden>
+											<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkin-tool-<%= tool[:tool_id] %>" type="button">Check In</button>
+											<div class="dcf-modal" id="checkin-tool-<%= tool[:tool_id] %>" hidden>
 												<div class="dcf-modal-wrapper">
 													<div class="dcf-modal-header">
 													<h2>Check In Tool</h2>
@@ -269,8 +269,8 @@
 								<%= tool[:last_checked_in].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
 								</td>
 								<td class="dcf-d-flex dcf-flex-row-rev dcf-flex-shrink-1 dcf-gap-2">
-								<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkout-<%= tool[:id] %>" type="button">Check Out</button>
-									<div class="dcf-modal" id="checkout-<%= tool[:id] %>" hidden>
+								<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkout-tool-<%= tool[:id] %>" type="button">Check Out</button>
+									<div class="dcf-modal" id="checkout-tool-<%= tool[:id] %>" hidden>
 										<div class="dcf-modal-wrapper">
 											<div class="dcf-modal-header">
 											<h2>Check Out Tool</h2>
