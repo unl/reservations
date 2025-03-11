@@ -1,7 +1,7 @@
 <h1 class="dcf-txt-h3" id="Checkout">Warehouse Check In / Check Out</h1>
 <a href="/checkout" class="dcf-btn dcf-btn-secondary dcf-mb-4" type="button">Return to Scan Page</a>
 <div class="dcf-grid dcf-col-gap-vw">
-  <fieldset class="dcf-form dcf-col-100% dcf-col-75%-start@md unl-b-darker-gray dcf-rounded dcf-b-1 dcf-b-solid dcf-pt-4 dcf-pb-4 dcf-p dcf-pr-7 dcf-pl-7">
+  <fieldset class="dcf-form dcf-col-100% dcf-col-75%-start@lg unl-b-darker-gray dcf-rounded dcf-b-1 dcf-b-solid dcf-pt-4 dcf-pb-4 dcf-p dcf-pr-7 dcf-pl-7">
 		<legend>User Details</legend>
 		<div class="dcf-d-flex dcf-flex-col dcf-gap-2">
 			<div class="dcf-d-flex dcf-flex-row dcf-jc-between dcf-ai-baseline dcf-w-100% dcf-gap-2">
@@ -211,8 +211,8 @@
 										<td><%= tool[:tool_name] %></td>
 										<td><%= tool[:last_checked_out].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %></td>
 										<td class="table-actions">
-											<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkin-tool-<%= tool[:tool_id] %>" type="button">Check In</button>
-											<div class="dcf-modal" id="checkin-tool-<%= tool[:tool_id] %>" hidden>
+											<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkin-tool-<%= tool[:id] %>" type="button">Check In</button>
+											<div class="dcf-modal" id="checkin-tool-<%= tool[:id] %>" hidden>
 												<div class="dcf-modal-wrapper">
 													<div class="dcf-modal-header">
 													<h2>Check In Tool</h2>
@@ -221,9 +221,9 @@
 													<div class="dcf-modal-content">
 													<form class="dcf-form dcf-grid" action="/checkout/tool_checkin/?nuid=<%= nuid %>&tool_id=<%= tool[:id] %>" method="POST" enctype="application/x-www-form-urlencoded">
 													<div class="dcf-col-100% dcf-col-50%@md">
-														<p id="tool_name"><strong>Name:</strong> <%= tool[:tool_name] %></p>
-														<p id="serial_number"><strong>Serial Number:</strong> <%= tool[:serial_number] %></p>
-														<p id="model_number"><strong>Model Number:</strong> <%= tool[:model_number] %></p>
+														<p id="tool_name_<%= tool[:id]%>"><strong>Name:</strong> <%= tool[:tool_name] %></p>
+														<p id="serial_number_<%= tool[:id]%>"><strong>Serial Number:</strong> <%= tool[:serial_number] %></p>
+														<p id="model_number_<%= tool[:id]%>"><strong>Model Number:</strong> <%= tool[:model_number] %></p>
 														<div class="dcf-form-controls-inline dcf-gap-2">
 															<button class="dcf-btn dcf-btn-primary" type="submit">Check In</button>
 														</div>
@@ -279,9 +279,9 @@
 											<div class="dcf-modal-content">
 												<form class="dcf-form dcf-grid" action="/checkout/tool_checkout/?nuid=<%= nuid %>&tool_id=<%= tool[:id] %>" method="POST" enctype="application/x-www-form-urlencoded">
 													<div class="dcf-col-100% dcf-col-50%@md">
-														<p id="tool_name"><strong>Name:</strong> <%= tool[:tool_name] %></p>
-														<p id="serial_number"><strong>Serial Number:</strong> <%= tool[:serial_number] %></p>
-														<p id="model_number"><strong>Model Number:</strong> <%= tool[:model_number] %></p>
+														<p id="tool_name_<%= tool[:id]%>"><strong>Name:</strong> <%= tool[:tool_name] %></p>
+														<p id="serial_number_<%= tool[:id]%>"><strong>Serial Number:</strong> <%= tool[:serial_number] %></p>
+														<p id="model_number_<%= tool[:id]%>"><strong>Model Number:</strong> <%= tool[:model_number] %></p>
 														<div class="dcf-form-controls-inline dcf-gap-2">
 															<button class="dcf-btn dcf-btn-primary" type="submit">Check Out</button>
 														</div>
@@ -313,7 +313,7 @@
 		</div>
 	</fieldset>
 	</fieldset>
-    <fieldset class="dcf-form dcf-col-100% dcf-col-25%-end@md dcf-overflow-auto unl-b-darker-gray dcf-rounded dcf-b-1 dcf-b-solid dcf-pt-4 dcf-pb-4 dcf-p dcf-pr-7 dcf-pl-7">
+    <fieldset class="dcf-form dcf-col-100% dcf-col-25%-end@lg dcf-overflow-auto unl-b-darker-gray dcf-rounded dcf-b-1 dcf-b-solid dcf-pt-4 dcf-pb-4 dcf-p dcf-pr-7 dcf-pl-7">
 			<legend>Tour and Training</legend>
 			<div class="dcf-overflow-x-auto dcf-p-1" tabindex="0">
             <% if events.count > 0 %>
