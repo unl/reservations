@@ -293,5 +293,9 @@ end
 
 get '/logout/?' do
   session.clear
-  redirect '/'
+  if (SS_ID == 8)
+    redirect 'https://shib.unl.edu/idp/profile/cas/logout'
+  else 
+    redirect '/'
+  end
 end
