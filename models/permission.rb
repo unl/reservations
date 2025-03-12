@@ -12,4 +12,5 @@ class Permission < ActiveRecord::Base
 	EVENTS_ADMIN_READ_ONLY = 9
 	SUB_SUPER_USER = 10
 	MANAGE_CHECKOUT = 11
+	MANAGE_LOCKOUT = 12
 end
