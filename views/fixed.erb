@@ -168,7 +168,7 @@
     window.addEventListener('inlineJSReady', function() {
         let serviceURL = '<%= request.base_url %>/home/';
         let loginURL = 'https://shib.unl.edu/idp/profile/cas/login?service=' + encodeURIComponent(serviceURL);
-        let logoutURL = '<%= request.base_url %>/logout'
+        let logoutURL = encodeURI('<%= request.base_url %>/logout/')
 
         console.log("Login URL:", loginURL);
         console.log("Logout URL:", logoutURL);
