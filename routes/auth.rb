@@ -200,6 +200,10 @@ end
 
 get '/login/?' do
   # TODO: Redirect for SSO #284
+  if SS_ID == 8
+    redirect '/home/'
+  end
+
   @breadcrumbs << {:text => 'Login'}
   unless @user.nil?
     redirect '/home/'
@@ -294,7 +298,7 @@ end
 get '/logout/?' do
   session.clear
   if (SS_ID == 8)
-    redirect 'https://shib.unl.edu/idp/profile/cas/logout'
+    redirect "https://shib.unl.edu/idp/profile/cas/logout?url=#{request.base_url}/logout"
   else 
     redirect '/'
   end
