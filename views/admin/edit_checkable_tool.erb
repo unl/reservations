@@ -10,8 +10,9 @@
 	    <input class="dcf-w-100%" type="text" name="model_number" id="model" value='<%= tool.model_number if tool.id %>'/>
     </div>
 	<div class="dcf-form-group">
-	    <label for="serial">Serial</label>
-	    <input class="dcf-w-100%" type="text" name="serial_number" id="serial" value='<%= tool.serial_number if tool.id %>'/>
+        <label for="serial">Serial</label>
+        <input class="dcf-w-100%" type="text" name="serial_number" id="serial" 
+            value='<%= tool.serial_number if tool.id %>' required />
     </div>
     <div class="dcf-form-group">
         <label for="category-id">Category</label>

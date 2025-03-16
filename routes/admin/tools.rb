@@ -149,6 +149,11 @@ end
 post '/admin/tools/create_checkable/?' do
 	require_login
 
+	if !Tool.find_by(:serial_number => params[:serial_number]).nil?
+		flash :error, 'Error', 'Another tool already has that serial number'
+		redirect back
+	end
+
 	tool = Tool.new
 	tool.set_data(params)
 
