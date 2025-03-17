@@ -369,7 +369,8 @@ INSERT INTO `permissions` (`id`, `name`) VALUES
 (7, 'See Agenda'),
 (8, 'User Access'),
 (9, 'Events Admin Read-only'),
-(10, 'Sub-Super User');
+(10, 'Sub-Super User'),
+(11, 'Manage Checkout');
 
 -- --------------------------------------------------------
 
@@ -3236,7 +3237,7 @@ CREATE TABLE `users` (
 	`user_agreement_expiration_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
-INSERT INTO users(id, username, user_nuid, service_space_id, user_agreement_expiration_date) VALUES (-1, 'checkout', '11111111', 8, '2040-11-06 00:00:00');
+INSERT INTO users(id, username, user_nuid, service_space_id, user_agreement_expiration_date) VALUES (3, 'checkout', '11111111', 8, '2040-11-06 00:00:00');
 INSERT INTO users(id, username, user_nuid, service_space_id, user_agreement_expiration_date) VALUES (1, 'mhawk2', '12345678', 8, '2040-11-06 00:00:00');
 INSERT INTO users(id, username, user_nuid, service_space_id, user_agreement_expiration_date) VALUES (2, 'aketchum2', '87654321', 8, '2040-11-06 00:00:00');
 
@@ -3799,6 +3800,51 @@ CREATE TABLE `tool_logs` (
     `checked_date` datetime DEFAULT CURRENT_TIMESTAMP,
     `is_checking_in` boolean
 )ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 1, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 2, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 3, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 4, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 5, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 6, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 7, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 8, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 9, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 10, 8);
+INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 11, 8);
+
+ALTER TABLE `events` ADD COLUMN `area` VARCHAR(50) DEFAULT NULL;
+ALTER TABLE `preset_events` ADD COLUMN `area` VARCHAR(50) DEFAULT NULL;
+
+ALTER TABLE `events` ADD COLUMN `trainer_2_id` int(11) DEFAULT NULL AFTER `trainer_id`;
+ALTER TABLE `events` ADD COLUMN `trainer_2_confirmed` tinyint(4) DEFAULT 0 AFTER `trainer_confirmed`;
+ALTER TABLE `events` ADD COLUMN `trainer_3_id` int(11) DEFAULT NULL AFTER `trainer_2_id`;
+ALTER TABLE `events` ADD COLUMN `trainer_3_confirmed` tinyint(4) DEFAULT 0 AFTER `trainer_2_confirmed`;
+
+ALTER TABLE `events`
+    ADD KEY `FK_trainer_2_id` (`trainer_2_id`);
+ALTER TABLE `events`
+    ADD KEY `FK_trainer_3_id` (`trainer_3_id`);
+
+ALTER TABLE `events`
+    ADD CONSTRAINT `FK_trainer_2_id` FOREIGN KEY (`trainer_2_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `events`
+    ADD CONSTRAINT `FK_trainer_3_id` FOREIGN KEY (`trainer_3_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+CREATE TABLE `tools` (
+	`id` int(11) PRIMARY KEY AUTO_INCREMENT,
+	`tool_name` VARCHAR(255) NOT NULL,
+	`category_id` int(11) DEFAULT NULL,
+	`description` VARCHAR(255) DEFAULT NULL,
+	`service_space_id` int(11) NOT NULL,
+	`model_number` VARCHAR(255) DEFAULT NULL,
+	`serial_number` VARCHAR(255) DEFAULT NULL UNIQUE,
+	`INOP` tinyint(1) DEFAULT 0,
+	`last_checked_in` datetime DEFAULT CURRENT_TIMESTAMP,
+	`last_checked_out` datetime DEFAULT NULL,
+	`created_on` datetime DEFAULT CURRENT_TIMESTAMP,
+	`updated_on` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
