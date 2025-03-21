@@ -50,16 +50,22 @@ get '/lockout/:resource_id/create/?' do
 		start += 30
 	end
 
+	lockouts = Lockout.where(:resource_id => tool.id).order('started_on DESC')
+	scheduled_lockouts = lockouts.select do |lockout|
+		lockout.started_on > Time.now
+	end.sort_by { |lockout| lockout.started_on }.reverse
+
 	erb :'lockout_resource', :layout => :fixed, :locals => {
 		:tool => tool,
 		:available_start_times => available_start_times,
+		:scheduled_lockouts => scheduled_lockouts
 	}
 end
 
 post '/lockout/:resource_id/create/?' do
 	require_login
 	tool = Resource.find_by(:id => params[:resource_id], :service_space_id => SS_ID)
-	if tool.nil?
+	if tool.nil? || tool.service_space_id != 8
 		flash(:alert, 'Not Found', 'That tool does not exist.')
 		redirect '/admin/tools/'
 	end
@@ -85,11 +91,16 @@ post '/lockout/:resource_id/create/?' do
 		end_hour += 12 if end_hour == 0
 		end_minutes = params[:end_minutes].to_i % 60
 
-		end_time = calculate_time(params[:end_date], start_hour, start_minutes, start_am_pm)
+		end_time = calculate_time(params[:end_date], end_hour, end_minutes, end_am_pm)
 	end
 
 	if tool.is_locked_out? && (start_time.nil? || end_time.nil?)
 		flash(:alert, 'Invalid Time', 'You must specify a valid start and end time to schedule a lockout.')
+		redirect back
+	end
+
+	if !start_time.nil? && !end_time.nil? && start_time >= end_time
+		flash(:alert, 'Invalid Time', 'The start time must be before the end time.')
 		redirect back
 	end
 
@@ -111,19 +122,72 @@ get '/lockout/:resource_id/edit/?' do
 	}
 end
 
-post '/lockout/:resource_id/release/?' do
+get '/lockout/:resource_id/view/?' do
+	require_login
+	@breadcrumbs << {:text => 'Lockout', :href => '/lockout/'} << {:text => 'View LOTO Details'}
+	unless has_permission?(Permission::MANAGE_LOCKOUT)
+		redirect back
+	end
+
+	tool = Resource.find_by(:id => params[:resource_id], :service_space_id => SS_ID)
+	if tool.nil?
+		flash(:alert, 'Not Found', 'That tool does not exist.')
+		redirect back
+	end
+
+	lockouts = Lockout.where(:resource_id => tool.id).order('started_on DESC')
+
+	active_lockouts = lockouts.select do |lockout|
+		lockout.started_on <= Time.now && (lockout.released_on.nil? || lockout.released_on >= Time.now)
+	end
+	scheduled_lockouts = lockouts.select do |lockout|
+		lockout.started_on > Time.now
+	end.sort_by { |lockout| lockout.started_on }.reverse
+
+	lockout_history = lockouts.select do |lockout|
+		lockout.started_on < Time.now && !lockout.released_on.nil? && lockout.released_on < Time.now
+	end.sort_by { |lockout| lockout.released_on }.reverse
+
+	erb :'view_resource_lockout', :layout => :fixed, :locals => {
+		:tool => tool,
+		:active_lockouts => active_lockouts,
+		:scheduled_lockouts => scheduled_lockouts,
+		:lockout_history => lockout_history,
+	}
+end
+
+post '/lockout/:resource_id/release_all/?' do
 	require_login
 	tool = Resource.find_by(:id => params[:resource_id], :service_space_id => SS_ID)
 	if tool.nil?
 		flash(:alert, 'Not Found', 'That tool does not exist.')
 		redirect '/admin/tools/'
 	end
-	lockout = Lockout.where(:resource_id => tool.id).order('started_on DESC').first
-	if lockout.nil?
+	lockouts = Lockout.where(:resource_id => tool.id).order('started_on DESC')
+	if lockouts.nil?
 		flash(:alert, 'Not Found', 'That tool is not locked out.')
 		redirect '/admin/tools/'
 	end
-	lockout.release()
+
+	lockouts.each do |lockout|
+		if lockout.started_on <= Time.now && (lockout.released_on.nil? || lockout.released_on >= Time.now)
+			lockout.release()
+		end
+	end
 	flash(:success, 'Lockout Released', 'The lockout has been released.')
 	redirect back
+end
+
+post '/lockout/:resource_id/release/:lockout_id/' do
+	require_login
+
+	lockout = Lockout.find_by(:id => params[:lockout_id])
+	if lockout.nil?
+		flash(:alert, 'Not Found', 'That lockout does not exist.')
+		redirect '/lockout/' + params[:resource_id] + '/view/'
+	end
+
+	lockout.release()
+	flash(:success, 'Lockout Released', 'The lockout has been released.')
+	redirect '/lockout/' + params[:resource_id] + '/view/'
 end

@@ -1,6 +1,10 @@
 require 'active_record'
 
 class Lockout < ActiveRecord::Base
+	def initiated_by
+		User.find(self.initiated_by_user_id)
+	end
+
 	def set_data(params)
 		resource = Resource.find(params[:resource_id])
 		user = User.find(params[:user_id])

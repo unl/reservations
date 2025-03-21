@@ -13,37 +13,70 @@
 	<textarea required id="description" name="description" placeholder="Description"></textarea>
 	<br/>
 	<% if has_permission?(Permission::MANAGE_LOCKOUT)%>
-		<fieldset>
+		<div class="dcf-d-flex dcf-flex-row dcf-gap-6">
+			<fieldset>
 			<legend>Anticipated Duration</legend>
 			<div class="dcf-form-controls-inline dcf-gap-6">
-				<div class="dcf-datepicker">
-					<label for="start_date">Start Date</label>
-					<input id="start_date" type="text" name="start_date"></input>
-				</div>
-				<div>
+			<div class="dcf-datepicker">
+						<label for="start_date">Start Date</label>
+						<input id="start_date" type="text" name="start_date"></input>
+					</div>
+					<div>
 					<label for="start_minutes">Start Time</label>
-					<select id="start_minutes" name="start_minutes">
-						<% available_start_times.each do |minutes| %>
-							<option value="<%= minutes %>"><%= Time.from_minutes(minutes).strftime("%l:%M %p") %></option>
-						<% end %>
-					</select>
+						<select id="start_minutes" name="start_minutes">
+							<% available_start_times.each do |minutes| %>
+								<option value="<%= minutes %>"><%= Time.from_minutes(minutes).strftime("%l:%M %p") %></option>
+							<% end %>
+						</select>
+						</div>
 				</div>
-			</div>
-			<div class="dcf-form-controls-inline dcf-gap-6">
-				<div class="dcf-datepicker">
-					<label for="end_date">End Date</label>
-					<input id="end_date" type="text" name="end_date"></input>
+				<div class="dcf-form-controls-inline dcf-gap-6">
+					<div class="dcf-datepicker">
+						<label for="end_date">End Date</label>
+						<input id="end_date" type="text" name="end_date"></input>
+					</div>
+					<div>
+						<label for="end_minutes">End Time</label>
+						<select id="end_minutes" name="end_minutes">
+							<% available_start_times.each do |minutes| %>
+								<option value="<%= minutes %>"><%= Time.from_minutes(minutes).strftime("%l:%M %p") %></option>
+							<% end %>
+						</select>
+					</div>
 				</div>
-				<div>
-					<label for="end_minutes">End Time</label>
-					<select id="end_minutes" name="end_minutes">
-						<% available_start_times.each do |minutes| %>
-							<option value="<%= minutes %>"><%= Time.from_minutes(minutes).strftime("%l:%M %p") %></option>
-						<% end %>
-					</select>
-				</div>
-			</div>
-		</fieldset>
+			</fieldset>
+			<fieldset>
+				<legend>Scheduled Lockouts</legend>
+				<table class="dcf-table dcf-table-striped dcf-table-responsive">
+				<thead>
+				<tr>
+					<th scope="col">Starts On</th>
+					<th scope="col">Releases On</th>
+					<th scope="col">Description</th>
+				</tr>
+					</thead>
+					<tbody>
+					<% scheduled_lockouts.each do |lockout| %>
+						<tr>
+							<td>
+							<%= lockout.started_on.in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
+							</td>
+							<td>
+								<% if lockout.released_on.nil? %>
+									<p>Manual</p>
+								<% else %>
+									<%= lockout.released_on.in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %> 
+								<% end %>
+							</td>
+							<td>
+								<%= lockout.description %>
+							</td>
+						</tr>
+					<% end %>
+					</tbody>
+				</table>
+			</fieldset>
+		</div>
 		<br/>
 	<% end %>
 	<button class="dcf-btn dcf-btn-primary" type="submit">Create Lockout</button>

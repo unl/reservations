@@ -44,6 +44,9 @@
                 <%= tool.model %>
             </td>
             <td class="table-actions">
+								<% if has_permission?(Permission::MANAGE_LOCKOUT) %>
+									<a href="/lockout/<%= tool.id %>/view/" class="dcf-btn dcf-btn-secondary">View Lockouts</a>
+								<% end %>
 								<% if tool.is_locked_out? && !has_permission?(Permission::MANAGE_LOCKOUT)%>
 									<button class="dcf-btn dcf-btn-primary" disabled>Locked Out</button>
 								<% elsif tool.is_locked_out? && has_permission?(Permission::MANAGE_LOCKOUT)%>
