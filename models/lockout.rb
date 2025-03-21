@@ -10,12 +10,16 @@ class Lockout < ActiveRecord::Base
 			self.initiated_by_user_id = user.id
 			self.description = params[:description]
 
-			if params[:start_date] && params[:start_time]
-				self.started_on = DateTime.parse("#{params[:start_date]} #{params[:start_time]}")
+			# Defaults to now
+			if params[:start_time]
+				self.started_on = params[:start_time]
 			end
-			if params[:end_date] && params[:end_time]
-				self.released_on = DateTime.parse("#{params[:end_date]} #{params[:end_time]}")
+
+			# Defaults to nil (no end time)
+			if params[:end_time]
+				self.released_on = params[:end_time]
 			end
+
 			self.save
 		end
 	end

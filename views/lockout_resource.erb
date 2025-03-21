@@ -15,32 +15,11 @@
 					<input id="start_date" type="text" name="start_date"></input>
 				</div>
 				<div>
-					<label for="start_time">Start Time</label>
-					<select id="start_time" name="start_time">
-						<option value="00:00">12:00 AM</option>
-						<option value="01:00">1:00 AM</option>
-						<option value="02:00">2:00 AM</option>
-						<option value="03:00">3:00 AM</option>
-						<option value="04:00">4:00 AM</option>
-						<option value="05:00">5:00 AM</option>
-						<option value="06:00">6:00 AM</option>
-						<option value="07:00">7:00 AM</option>
-						<option value="08:00">8:00 AM</option>
-						<option value="09:00">9:00 AM</option>
-						<option value="10:00">10:00 AM</option>
-						<option value="11:00">11:00 AM</option>
-						<option value="12:00">12:00 PM</option>
-						<option value="13:00">1:00 PM</option>
-						<option value="14:00">2:00 PM</option>
-						<option value="15:00">3:00 PM</option>
-						<option value="16:00">4:00 PM</option>
-						<option value="17:00">5:00 PM</option>
-						<option value="18:00">6:00 PM</option>
-						<option value="19:00">7:00 PM</option>
-						<option value="20:00">8:00 PM</option>
-						<option value="21:00">9:00 PM</option>
-						<option value="22:00">10:00 PM</option>
-						<option value="23:00">11:00 PM</option>
+					<label for="start_minutes">Start Time</label>
+					<select id="start_minutes" name="start_minutes">
+						<% available_start_times.each do |minutes| %>
+							<option value="<%= minutes %>"><%= Time.from_minutes(minutes).strftime("%l:%M %p") %></option>
+						<% end %>
 					</select>
 				</div>
 			</div>
@@ -50,33 +29,12 @@
 					<input id="end_date" type="text" name="end_date"></input>
 				</div>
 				<div>
-					<label for="end_time">End Time</label>
-					<select id="end_time" name="end_time">
-						<option value="00:00">12:00 AM</option>
-						<option value="01:00">1:00 AM</option>
-						<option value="02:00">2:00 AM</option>
-						<option value="03:00">3:00 AM</option>
-						<option value="04:00">4:00 AM</option>
-						<option value="05:00">5:00 AM</option>
-						<option value="06:00">6:00 AM</option>
-						<option value="07:00">7:00 AM</option>
-						<option value="08:00">8:00 AM</option>
-						<option value="09:00">9:00 AM</option>
-						<option value="10:00">10:00 AM</option>
-						<option value="11:00">11:00 AM</option>
-						<option value="12:00">12:00 PM</option>
-						<option value="13:00">1:00 PM</option>
-						<option value="14:00">2:00 PM</option>
-						<option value="15:00">3:00 PM</option>
-						<option value="16:00">4:00 PM</option>
-						<option value="17:00">5:00 PM</option>
-						<option value="18:00">6:00 PM</option>
-						<option value="19:00">7:00 PM</option>
-						<option value="20:00">8:00 PM</option>
-						<option value="21:00">9:00 PM</option>
-						<option value="22:00">10:00 PM</option>
-						<option value="23:00">11:00 PM</option>
-				</select>
+					<label for="end_minutes">End Time</label>
+					<select id="end_minutes" name="end_minutes">
+						<% available_start_times.each do |minutes| %>
+							<option value="<%= minutes %>"><%= Time.from_minutes(minutes).strftime("%l:%M %p") %></option>
+						<% end %>
+					</select>
 				</div>
 			</div>
 		</fieldset>
