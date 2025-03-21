@@ -29,7 +29,7 @@ class Lockout < ActiveRecord::Base
 		self.save
 	end
 
-	def release(params)
+	def release()
 		self.released_on = Time.now
 		self.save
 	end

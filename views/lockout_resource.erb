@@ -1,5 +1,11 @@
 <h1>Lockout <%= tool.name %></h1>
 
+<% if tool.is_locked_out? %>
+	<p>
+		WARNING: This tool is currently locked out. Only create another lockout if you are scheduling a future lockout. Anticipated duration is required.
+	</p>
+<% end %>
+
 <form class="dcf-form" action="/lockout/<%= tool.id %>/create/" method="post">
 	<input type="hidden" name="resource_id" value="<%= tool.id %>"/>
 	<input type="hidden" name="user_id" value="<%= @user.id %>"/>

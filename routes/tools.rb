@@ -21,6 +21,11 @@ get '/tools/?' do
 	end
 
 	tools.reject! {|tool| tool.needs_authorization && !@user.authorized_resource_ids.include?(tool.id)}
+
+	if SS_ID == 8
+		tools.reject! {|tool| tool.is_locked_out?}
+	end
+	
 	tools.sort_by! do |tool|
 		[
 			tool.category_name.to_s.downcase,
@@ -138,6 +143,11 @@ get '/tools/:resource_id/reserve/?' do
 	tool = Resource.find_by(:service_space_id => SS_ID, :id => params[:resource_id])
 	if tool.nil?
 		flash(:alert, 'Not Found', 'That tool does not exist.')
+		redirect '/tools/'
+	end
+
+	if tool.is_locked_out?
+		flash(:alert, 'Locked Out', 'Sorry, this tool is currently locked out for maintenance.')
 		redirect '/tools/'
 	end
 

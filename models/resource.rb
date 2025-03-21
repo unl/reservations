@@ -47,8 +47,8 @@ class Resource < ActiveRecord::Base
     end
 
 		def get_status
-			if self.INOP == true
-				return 'INOP'
+			if self.is_locked_out?
+				return 'Locked Out'
 			else
 				return 'Active'
 			end
@@ -57,7 +57,6 @@ class Resource < ActiveRecord::Base
 		def is_locked_out?
 			lockouts = Lockout.where(:resource_id => self.id)
 			lockouts.each do |lockout|
-				flash(:success, 'Lockout', lockout.started_on.to_s + lockout.released_on.to_s)
 				if lockout.started_on <= Time.now && (lockout.released_on.nil? || lockout.released_on >= Time.now)
 					return true
 				end
