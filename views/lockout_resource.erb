@@ -47,6 +47,7 @@
 			</fieldset>
 			<fieldset>
 				<legend>Scheduled Lockouts</legend>
+				<% if scheduled_lockouts.length > 0 %>
 				<table class="dcf-table dcf-table-striped dcf-table-responsive">
 				<thead>
 				<tr>
@@ -75,6 +76,9 @@
 					<% end %>
 					</tbody>
 				</table>
+				<% else %>
+					<p>No upcoming lockouts for this tool.</p>
+				<% end %>
 			</fieldset>
 		</div>
 		<br/>

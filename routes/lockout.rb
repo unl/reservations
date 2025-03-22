@@ -113,13 +113,94 @@ post '/lockout/:resource_id/create/?' do
 	redirect '/lockout/'
 end
 
-get '/lockout/:resource_id/edit/?' do
+get '/lockout/:resource_id/edit/:lockout_id/?' do
 	require_login
 	@breadcrumbs << {:text => 'Lockout', :href => '/lockout/'} << {:text => 'Edit Lockout'}
+	unless has_permission?(Permission::MANAGE_LOCKOUT)
+		redirect back
+	end
 
-	erb :'lockout_resource', :layout => :fixed, :locals => {
-		:tool => tool
+	tool = Resource.find_by(:id => params[:resource_id], :service_space_id => SS_ID)
+	if tool.nil?
+		flash(:alert, 'Not Found', 'That tool does not exist.')
+		redirect back
+	end
+
+	lockout = Lockout.find_by(:id => params[:lockout_id])
+	if lockout.nil?
+		flash(:alert, 'Not Found', 'That lockout does not exist.')
+		redirect back
+	end
+
+	# 24 hour availability in 30 min increments
+	available_start_times = []
+	start = 0
+	while start + 30 <= 1440
+		available_start_times << start
+		start += 30
+	end
+
+	lockouts = Lockout.where(:resource_id => tool.id).order('started_on DESC')
+	scheduled_lockouts = lockouts.select do |lockout|
+		lockout.started_on > Time.now && lockout.id != params[:lockout_id].to_i
+	end.sort_by { |lockout| lockout.started_on }.reverse
+
+	erb :'edit_lockout', :layout => :fixed, :locals => {
+		:tool => tool,
+		:lockout => lockout,
+		:available_start_times => available_start_times,
+		:scheduled_lockouts => scheduled_lockouts
 	}
+end
+
+post '/lockout/:resource_id/edit/:lockout_id/?' do
+	require_login
+	tool = Resource.find_by(:id => params[:resource_id], :service_space_id => SS_ID)
+	if tool.nil? || tool.service_space_id != 8
+		flash(:alert, 'Not Found', 'That tool does not exist.')
+		redirect back
+	end
+	lockout = Lockout.find_by(:id => params[:lockout_id])
+	if lockout.nil?
+		flash(:alert, 'Not Found', 'That lockout does not exist.')
+		redirect back
+	end
+	unless params[:start_date].to_s.strip.empty?
+		start_hour = (params[:start_minutes].to_i / 60).floor
+		start_am_pm = start_hour >= 12 ? 'pm' : 'am'
+		start_hour = start_hour % 12
+		start_hour += 12 if start_hour == 0
+		start_minutes = params[:start_minutes].to_i % 60
+
+		start_time = calculate_time(params[:start_date], start_hour, start_minutes, start_am_pm)
+	end
+	unless params[:end_date].to_s.strip.empty?
+		end_hour = (params[:end_minutes].to_i / 60).floor
+		end_am_pm = end_hour >= 12 ? 'pm' : 'am'
+		end_hour = end_hour % 12
+		end_hour += 12 if end_hour == 0
+		end_minutes = params[:end_minutes].to_i % 60
+
+		end_time = calculate_time(params[:end_date], end_hour, end_minutes, end_am_pm)
+	end
+	if !start_time.nil? && !end_time.nil? && start_time >= end_time
+		flash(:alert, 'Invalid Time', 'The start time must be before the end time.')
+		redirect back
+	end
+
+	# if they removed the start time, use the original start time
+	if start_time.nil?
+		params[:start_time] = lockout.started_on
+	else
+		params[:start_time] = start_time
+	end
+
+	# if they removed the end time, set the end time to nil
+	params[:end_time] = end_time
+
+	lockout.set_data(params)
+	flash(:success, 'Lockout Updated', 'The lockout has been updated.')
+	redirect '/lockout/' + params[:resource_id] + '/view/'
 end
 
 get '/lockout/:resource_id/view/?' do
@@ -189,5 +270,22 @@ post '/lockout/:resource_id/release/:lockout_id/' do
 
 	lockout.release()
 	flash(:success, 'Lockout Released', 'The lockout has been released.')
+	redirect '/lockout/' + params[:resource_id] + '/view/'
+end
+
+post '/lockout/:resource_id/delete/:lockout_id/' do
+	require_login
+	unless has_permission?(Permission::MANAGE_LOCKOUT)
+		redirect back
+	end
+
+	lockout = Lockout.find_by(:id => params[:lockout_id])
+	if lockout.nil?
+		flash(:alert, 'Not Found', 'That lockout does not exist.')
+		redirect '/lockout/' + params[:resource_id] + '/view/'
+	end
+
+	lockout.destroy
+	flash(:success, 'Lockout Deleted', 'The lockout has been deleted.')
 	redirect '/lockout/' + params[:resource_id] + '/view/'
 end

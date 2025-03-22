@@ -44,11 +44,8 @@
 											<% end %>
 									</td>
 									<td class="table-actions">
-											<form class="dcf-form" action="/lockout/<%= tool.id %>/release/<%= lockout.id %>/" method="post">
-												<input type="hidden" name="resource_id" value="<%= tool.id %>"/>
-												<input type="hidden" name="lockout_id" value="<%= lockout.id %>"/>
-												<button class="dcf-btn dcf-btn-primary">Release</button>
-											</form>
+											<a class="dcf-btn dcf-btn-secondary" href="/lockout/<%= tool.id %>/edit/<%= lockout.id %>">Edit</a>
+											<input class="dcf-btn dcf-btn-primary" type="submit" form="release-lockout-form-<%= lockout.id %>" value="Release">
 									</td>
 							</tr>
 					<% end %>
@@ -91,7 +88,8 @@
 										<% end %>
 								</td>
 								<td class="table-actions">
-										<button class="dcf-btn dcf-btn-primary">Release</button>
+									<a class="dcf-btn dcf-btn-secondary" href="/lockout/<%= tool.id %>/edit/<%= lockout.id %>">Edit</a>
+									<input class="dcf-btn dcf-btn-primary" type="submit" form="delete-lockout-form-<%= lockout.id %>" value="Delete">
 								</td>
 						</tr>
 				<% end %>
@@ -145,3 +143,17 @@
     WDN.initializePlugin('tabs');
   }, false);
 </script>
+
+<% active_lockouts.each do |lockout| %>
+	<form id="release-lockout-form-<%= lockout.id %>" class="dcf-form" action="/lockout/<%= tool.id %>/release/<%= lockout.id %>/" method="post">
+		<input type="hidden" name="resource_id" value="<%= tool.id %>"/>
+		<input type="hidden" name="lockout_id" value="<%= lockout.id %>"/>
+	</form>
+<% end %>
+
+<% scheduled_lockouts.each do |lockout| %>
+	<form id="delete-lockout-form-<%= lockout.id %>" class="dcf-form" action="/lockout/<%= tool.id %>/delete/<%= lockout.id %>/" method="post">
+		<input type="hidden" name="resource_id" value="<%= tool.id %>"/>
+		<input type="hidden" name="lockout_id" value="<%= lockout.id %>"/>
+	</form>
+<% end %>

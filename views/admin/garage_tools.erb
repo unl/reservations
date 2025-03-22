@@ -36,7 +36,9 @@
 								<td class="table-actions">
 										<div>
 												<a href="/admin/tools/<%= tool.id %>/edit/" class="dcf-btn dcf-btn-primary">Edit</a>
-												<a href="/lockout/<%= tool.id %>/view" class="dcf-btn dcf-btn-secondary">View Lockouts</a>
+												<% if has_permission?(Permission::MANAGE_LOCKOUT) %>
+													<a href="/lockout/<%= tool.id %>/view" class="dcf-btn dcf-btn-secondary">View Lockouts</a>
+												<% end %>
 												<input class="dcf-btn dcf-btn-secondary" type="submit" form="delete-form-<%= tool.id %>" value="Delete">
 										</div>
 								</td>
