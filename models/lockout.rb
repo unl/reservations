@@ -22,15 +22,12 @@ class Lockout < ActiveRecord::Base
 			# Defaults to nil (no end time)
 			if params[:end_time]
 				self.released_on = params[:end_time]
+			else
+				self.released_on = nil
 			end
 
 			self.save
 		end
-	end
-
-	def update(params)
-		self.description = params[:description]
-		self.save
 	end
 
 	def release()

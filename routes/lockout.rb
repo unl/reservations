@@ -165,6 +165,7 @@ post '/lockout/:resource_id/edit/:lockout_id/?' do
 		flash(:alert, 'Not Found', 'That lockout does not exist.')
 		redirect back
 	end
+
 	unless params[:start_date].to_s.strip.empty?
 		start_hour = (params[:start_minutes].to_i / 60).floor
 		start_am_pm = start_hour >= 12 ? 'pm' : 'am'
@@ -189,13 +190,7 @@ post '/lockout/:resource_id/edit/:lockout_id/?' do
 	end
 
 	# if they removed the start time, use the original start time
-	if start_time.nil?
-		params[:start_time] = lockout.started_on
-	else
-		params[:start_time] = start_time
-	end
-
-	# if they removed the end time, set the end time to nil
+	params[:start_time] = start_time.nil? ? lockout.started_on : start_time
 	params[:end_time] = end_time
 
 	lockout.set_data(params)

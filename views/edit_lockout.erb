@@ -25,7 +25,7 @@
                         <label for="start_minutes">Start Time</label>
                         <select id="start_minutes" name="start_minutes">
                             <% available_start_times.each do |minutes| %>
-                                <option value="<%= minutes %>" <%= (minutes == lockout.started_on.hour * 60 + lockout.started_on.min) ? 'selected' : '' %>>
+                                <option value="<%= minutes %>" <%= (minutes == lockout.started_on.in_time_zone.hour * 60 + lockout.started_on.in_time_zone.min) ? 'selected' : '' %>>
                                     <%= Time.from_minutes(minutes).strftime("%l:%M %p") %>
                                 </option>
                             <% end %>
