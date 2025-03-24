@@ -10,7 +10,7 @@ require 'models/lockout'
 get '/status_page/?' do
 	@breadcrumbs << {:text => 'Status Page'}
 
-    lockout_count = Lockout.select(:resource_id).distinct.count
+    lockout_count = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).select(:resource_id).distinct.count
 
     #Will change this later
     inop_tools = Tool.where(:INOP => 1).all.to_a
