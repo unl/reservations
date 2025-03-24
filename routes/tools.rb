@@ -23,7 +23,7 @@ get '/tools/?' do
 	tools.reject! {|tool| tool.needs_authorization && !@user.authorized_resource_ids.include?(tool.id)}
 
 	if SS_ID == 8
-		tools.reject! {|tool| tool.is_locked_out?}
+		tools.reject! {|tool| tool.is_manually_locked_out?}
 	end
 	
 	tools.sort_by! do |tool|
@@ -190,6 +190,7 @@ get '/tools/:resource_id/reserve/?' do
 	end
 
 	# filter out times when tool is reserved
+	# TODO PLS FIX
 	reservations = Reservation.includes(:event).where(:resource_id => tool.id).in_day(date).all
     unavailable_start_times = []
     available_start_times.each do |available_start_time|

@@ -12,7 +12,7 @@
     <label for="description">Description</label>
     <textarea required id="description" name="description" placeholder="Description"><%= lockout.description %></textarea>
     <br/>
-    <% if has_permission?(Permission::MANAGE_LOCKOUT) %>
+    <% if has_permission?(Permission::MANAGE_LOCKOUT) && !fromHistory %>
         <div class="dcf-d-flex dcf-flex-row dcf-gap-6">
             <fieldset>
                 <legend>Anticipated Duration</legend>

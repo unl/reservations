@@ -64,6 +64,16 @@ class Resource < ActiveRecord::Base
 			return false
 		end
 
+		def is_manually_locked_out?
+			lockouts = Lockout.where(:resource_id => self.id)
+			lockouts.each do |lockout|
+				if lockout.started_on <= Time.now && lockout.released_on.nil? 
+					return true
+				end
+			end
+			return false
+		end
+
     def self.valid_category_id?(category_id)
         self.category_options.key?(category_id.to_i)
     end

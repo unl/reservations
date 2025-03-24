@@ -108,6 +108,7 @@
 								<th scope="col">Description</th>
 								<th scope="col">Started On</th>
 								<th scope="col">Released On</th>
+								<th scope="col">Actions</th>
 						</tr>
 				</thead>
 				<tbody>
@@ -128,6 +129,9 @@
 										<% else %>
 											<%= lockout.released_on.in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
 										<% end %>
+								</td>
+								<td>
+									<a class="dcf-btn dcf-btn-secondary" href="/lockout/<%= tool.id %>/edit/<%= lockout.id %>?fromHistory=true">Edit</a>
 								</td>
 						</tr>
 				<% end %>

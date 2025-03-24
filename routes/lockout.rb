@@ -145,11 +145,17 @@ get '/lockout/:resource_id/edit/:lockout_id/?' do
 		lockout.started_on > Time.now && lockout.id != params[:lockout_id].to_i
 	end.sort_by { |lockout| lockout.started_on }.reverse
 
+	fromHistory = false
+	if params[:fromHistory]
+		fromHistory = true
+	end
+
 	erb :'edit_lockout', :layout => :fixed, :locals => {
 		:tool => tool,
 		:lockout => lockout,
 		:available_start_times => available_start_times,
-		:scheduled_lockouts => scheduled_lockouts
+		:scheduled_lockouts => scheduled_lockouts,
+		:fromHistory => fromHistory
 	}
 end
 
