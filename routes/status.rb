@@ -11,12 +11,10 @@ get '/status_page/?' do
 	@breadcrumbs << {:text => 'Status Page'}
 
     lockout_count = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).select(:resource_id).distinct.count
+    lockouts = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).includes(:resource).all
 
-    #Will change this later
-    inop_tools = Tool.where(:INOP => 1).all.to_a
-	
 	erb :'/engineering_garage/status_page', :layout => :fixed, :locals => {
-        :inop_tools => inop_tools,
-        :lockout_count => lockout_count
+        :lockout_count => lockout_count,
+        :lockouts => lockouts
     }
 end
