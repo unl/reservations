@@ -114,7 +114,9 @@ def require_login(redirect_after_login=nil)
       else
         session[:user_id] = @user.id
 
+        # Check for orienation attendance and user agreement renewal
         if !@user.is_super_user? && !@user.is_admin?
+          require_orientation
           require_renewal(redirect_after_login)
         end
       end
@@ -151,19 +153,10 @@ def require_renewal(redirect_from=nil)
   end
 end
 
-# TODO: Repurpose to check for orientation attendance #285
-def require_active(redirect_to=nil)
-  if !@user.nil? && !@user.is_active && !@user.is_super_user?
-    if SS_ID == 1
-      flash(:alert, 'You Must Be An Active User', 'That page requires you to be an active user. To activate your account please visit Innovation Studio.')
-    elsif SS_ID == 8
-      flash(:alert, 'You Must Be An Active User', 'That page requires you to be an active user. To activate your account please visit the Engineering Garage.')
-    end
-    if redirect_to.nil?
-      redirect '/'
-    else
-      redirect redirect_to
-    end
+def require_orientation
+  unless AttendedOrientation.exists?(user_id: @user.id)
+    flash(:alert, 'You Must Attend Orientation', 'That page requires you to attend orientation. Please sign up for orientation.')
+    redirect '/new_members/'
   end
 end
 
