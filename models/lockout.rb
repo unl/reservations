@@ -1,6 +1,8 @@
 require 'active_record'
 
 class Lockout < ActiveRecord::Base
+	belongs_to :resource
+
 	def set_data(params)
 		resource = Resource.find(params[:resource_id])
 		user = User.find(params[:user_id])
