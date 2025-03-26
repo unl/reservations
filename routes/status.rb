@@ -13,10 +13,12 @@ get '/status_page/?' do
     lockout_count = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).select(:resource_id).distinct.count
     lockouts = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).includes(:resource).all
     upcoming_lockouts = Lockout.where('started_on BETWEEN ? AND ?', Time.now, Time.now + 7.days).includes(:resource)
+    reservations = Reservation.select(:id, :start_time, :end_time).where.not(start_time: nil, end_time: nil)
 
 	erb :'/engineering_garage/status_page', :layout => :fixed, :locals => {
         :lockout_count => lockout_count,
         :lockouts => lockouts,
-        :upcoming_lockouts => upcoming_lockouts
+        :upcoming_lockouts => upcoming_lockouts,
+        :reservations => reservations
     }
 end
