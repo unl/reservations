@@ -5,6 +5,19 @@ class Lockout < ActiveRecord::Base
 		User.find(self.initiated_by_user_id)
 	end
 
+	scope :in_day, ->(time) {
+		today = time.in_time_zone.midnight
+		tomorrow = (time.in_time_zone.midnight + 1.day + 1.hour).in_time_zone.midnight
+		where('(started_on >= ? AND started_on < ?) OR (released_on >= ? AND released_on < ?)', today.getutc, tomorrow.getutc, today.getutc, tomorrow.getutc)
+	}
+
+	def length
+		if released_on.nil? || started_on.nil?
+			return 0
+		end
+		((released_on - started_on) / 60).to_i
+	end
+
 	def set_data(params)
 		resource = Resource.find(params[:resource_id])
 		user = User.find(params[:user_id])

@@ -190,7 +190,6 @@ get '/tools/:resource_id/reserve/?' do
 	end
 
 	# filter out times when tool is reserved
-	# TODO PLS FIX
 	reservations = Reservation.includes(:event).where(:resource_id => tool.id).in_day(date).all
     unavailable_start_times = []
     available_start_times.each do |available_start_time|
@@ -221,9 +220,45 @@ get '/tools/:resource_id/reserve/?' do
     end
     available_start_times = available_start_times - unavailable_start_times
 
+		# filter out times when a tool is scheduled for lockout
+		if SS_ID == 8
+			lockouts = Lockout.where(:resource_id => tool.id).in_day(date).all
+			unavailable_start_times = []
+			available_start_times.each do |available_start_time|
+				if tool.is_24_hour && SS_ID == 8
+						date_start = (date.midnight) # 12:00 am
+						date_end = (date.end_of_day) # 11:59 pm
+				else
+						date_start = (date.midnight + 21600) # 06:00 am
+						date_end = (date.end_of_day - 1799)  # 11:30 pm
+				end
+				lockouts.each do |lockout|
+					if lockout.started_on.in_time_zone <= date_start
+							start_time = date_start
+					else
+							start_time = lockout.started_on.in_time_zone
+					end
+
+					if lockout.released_on.in_time_zone >= date_end
+							end_time = date_end
+					else
+							end_time = lockout.released_on.in_time_zone
+					end
+					if available_start_time >= start_time.minutes_after_midnight && available_start_time < end_time.minutes_after_midnight
+						unavailable_start_times << available_start_time
+						break
+					end
+				end
+			end
+			available_start_times = available_start_times - unavailable_start_times
+		else
+			lockouts = []
+		end
+
 	erb :reserve, :layout => :fixed, :locals => {
 		:tool => tool,
 		:reservations => reservations,
+		:lockouts => lockouts,
 		:available_start_times => available_start_times,
 		:space_hour => space_hour,
 		:day => date,
