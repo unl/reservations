@@ -44,6 +44,7 @@ get '/lockout/:resource_id/create/?' do
 
 	# 24 hour availability in 30 min increments
 	available_start_times = []
+	available_start_times << -1
 	start = 0
 	while start + 30 <= 1440
 		available_start_times << start
@@ -75,6 +76,9 @@ post '/lockout/:resource_id/create/?' do
 	end
 
 	unless params[:start_date].to_s.strip.empty?
+		if params[:start_minutes] == "empty"
+			params[:start_minutes] = 0
+		end
 		start_hour = (params[:start_minutes].to_i / 60).floor
 		start_am_pm = start_hour >= 12 ? 'pm' : 'am'
 		start_hour = start_hour % 12
@@ -85,6 +89,9 @@ post '/lockout/:resource_id/create/?' do
 	end
 
 	unless params[:end_date].to_s.strip.empty?
+		if params[:end_minutes] == "empty"
+			params[:end_minutes] = 0
+		end
 		end_hour = (params[:end_minutes].to_i / 60).floor
 		end_am_pm = end_hour >= 12 ? 'pm' : 'am'
 		end_hour = end_hour % 12
@@ -134,6 +141,7 @@ get '/lockout/:resource_id/edit/:lockout_id/?' do
 
 	# 24 hour availability in 30 min increments
 	available_start_times = []
+	available_start_times << -1
 	start = 0
 	while start + 30 <= 1440
 		available_start_times << start
@@ -172,7 +180,7 @@ post '/lockout/:resource_id/edit/:lockout_id/?' do
 		redirect back
 	end
 
-	unless params[:start_date].to_s.strip.empty?
+	unless params[:start_date].to_s.strip.empty? || params[:start_minutes] == "empty"
 		start_hour = (params[:start_minutes].to_i / 60).floor
 		start_am_pm = start_hour >= 12 ? 'pm' : 'am'
 		start_hour = start_hour % 12
@@ -182,6 +190,9 @@ post '/lockout/:resource_id/edit/:lockout_id/?' do
 		start_time = calculate_time(params[:start_date], start_hour, start_minutes, start_am_pm)
 	end
 	unless params[:end_date].to_s.strip.empty?
+		if params[:end_minutes] == "empty"
+			params[:end_minutes] = 0
+		end
 		end_hour = (params[:end_minutes].to_i / 60).floor
 		end_am_pm = end_hour >= 12 ? 'pm' : 'am'
 		end_hour = end_hour % 12

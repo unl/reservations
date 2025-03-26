@@ -25,7 +25,11 @@
 					<label for="start_minutes">Start Time</label>
 						<select id="start_minutes" name="start_minutes">
 							<% available_start_times.each do |minutes| %>
-								<option value="<%= minutes %>"><%= Time.from_minutes(minutes).strftime("%l:%M %p") %></option>
+								<% if minutes == -1 %>
+									<option value="empty"> </option>
+								<% else %>
+									<option value="<%= minutes %>"><%= Time.from_minutes(minutes).strftime("%l:%M %p") %></option>
+								<% end %>
 							<% end %>
 						</select>
 						</div>
@@ -39,7 +43,11 @@
 						<label for="end_minutes">End Time</label>
 						<select id="end_minutes" name="end_minutes">
 							<% available_start_times.each do |minutes| %>
-								<option value="<%= minutes %>"><%= Time.from_minutes(minutes).strftime("%l:%M %p") %></option>
+								<% if minutes == -1 %>
+									<option value="empty"> </option>
+								<% else %>
+									<option value="<%= minutes %>"><%= Time.from_minutes(minutes).strftime("%l:%M %p") %></option>
+								<% end %>
 							<% end %>
 						</select>
 					</div>

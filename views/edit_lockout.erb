@@ -25,9 +25,13 @@
                         <label for="start_minutes">Start Time</label>
                         <select id="start_minutes" name="start_minutes">
                             <% available_start_times.each do |minutes| %>
-                                <option value="<%= minutes %>" <%= (minutes == lockout.started_on.in_time_zone.hour * 60 + lockout.started_on.in_time_zone.min) ? 'selected' : '' %>>
+																<% if minutes == -1 %>
+																	<option value="empty"><%= lockout.started_on.in_time_zone.strftime("%l:%M %p") %></option>
+																<% else %>
+                                	<option value="<%= minutes %>" <%= (minutes == lockout.started_on.in_time_zone.hour * 60 + lockout.started_on.in_time_zone.min) ? 'selected' : '' %>>
                                     <%= Time.from_minutes(minutes).strftime("%l:%M %p") %>
-                                </option>
+                                	</option>
+																<% end %>
                             <% end %>
                         </select>
                     </div>
@@ -41,9 +45,13 @@
                         <label for="end_minutes">End Time</label>
                         <select id="end_minutes" name="end_minutes">
                             <% available_start_times.each do |minutes| %>
-                                <option value="<%= minutes %>" <%= (lockout.released_on && minutes == lockout.released_on.in_time_zone.hour * 60 + lockout.released_on.min) ? 'selected' : '' %>>
-                                    <%= Time.from_minutes(minutes).strftime("%l:%M %p") %>
-                                </option>
+																<% if minutes == -1 %>
+																	<option value="empty"> </option>
+																<% else %>
+                                	<option value="<%= minutes %>" <%= (lockout.released_on && minutes == lockout.released_on.in_time_zone.hour * 60 + lockout.released_on.min) ? 'selected' : '' %>>
+                                    	<%= Time.from_minutes(minutes).strftime("%l:%M %p") %>
+                                	</option>
+																<% end %>
                             <% end %>
                         </select>
                     </div>

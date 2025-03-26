@@ -30,6 +30,8 @@ class Lockout < ActiveRecord::Base
 			# Defaults to now
 			if params[:start_time]
 				self.started_on = params[:start_time]
+			else
+				self.started_on = Time.now
 			end
 
 			# Defaults to nil (no end time)
