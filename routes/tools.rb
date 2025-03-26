@@ -146,7 +146,7 @@ get '/tools/:resource_id/reserve/?' do
 		redirect '/tools/'
 	end
 
-	if tool.is_locked_out?
+	if tool.is_manually_locked_out?
 		flash(:alert, 'Locked Out', 'Sorry, this tool is currently locked out for maintenance.')
 		redirect '/tools/'
 	end
