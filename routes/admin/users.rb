@@ -293,7 +293,6 @@ post '/admin/users/:user_id/edit/?' do
         :username => params[:username],
         :university_status => params[:university_status]
     })
-    # TODO: Check for orientation attendance #285
     user.set_active(params.checked?('activate'));
 
     if params[:expiration_date].nil? || params[:expiration_date].empty?

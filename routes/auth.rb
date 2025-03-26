@@ -246,6 +246,41 @@ post '/login/?' do
   end
 end
 
+get '/admin/login/?' do
+  @breadcrumbs << {:text => 'SSO Bypass Login'}
+
+  erb :'/admin/login', :layout => :fixed, :locals => {
+    :next_page => params[:next_page]
+  }
+end
+
+post '/admin/login/?' do
+  # Clear out current admin's session
+  if !@user.nil?
+    session.clear
+  end 
+
+  user = User.where(:username => params[:username], :service_space_id => SS_ID).first
+  next_page = params[:next_page]
+  # check user existence and password correctness
+  if user.nil? || user.password != params[:password]
+    flash(:danger, 'Incorrect Password', 'Username/password combination is incorrect.')
+    if !next_page.nil? && next_page.length > 0
+      redirect "/login/?next_page=#{next_page}"
+    end
+    redirect '/admin/login/'
+  end
+
+  # it is the user, hooray
+  session[:user_id] = user.id
+
+  if !next_page.nil? && next_page.length > 0
+    redirect "/#{next_page}/"
+  else
+    redirect '/home/'
+  end
+end
+
 get '/forgot_password/' do
   erb :forgot_password, :layout => :fixed
 end

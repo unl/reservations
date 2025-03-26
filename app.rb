@@ -105,7 +105,10 @@ end
 def require_login(redirect_after_login=nil)
   if SS_ID == 8
     if session['cas'].nil? || session['cas']['user'].nil?
-      halt 401
+      # Allow admins to bypass SSO
+      unless !@user.nil? && @user.is_admin?
+        halt 401
+      end
     else
       # Check if the user exists in the app's db
       @user = User.find_by(:username => session['cas']['user'])
