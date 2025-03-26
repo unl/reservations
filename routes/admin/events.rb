@@ -96,7 +96,6 @@ post '/admin/events/:event_id/signup_list/?' do
 	if event.event_type_id == new_member_orientation_id
 		# removes users from attended orientation master list if they are unchecked
 		event.signups.each do |signup|
-		# TODO: Check for orientation attendance #285
 			unless params.has_key?("attendance_#{signup.id}") && params["attendance_#{signup.id}"] == 'on'
 				user_id = signup.user_id
 				if signup.attended == 1
@@ -157,7 +156,6 @@ post '/admin/events/:event_id/signup_list/?' do
 			unless signup_record == nil
 				user = User.find_by(:id => signup_record.user_id, :service_space_id => SS_ID)
 				if !user.nil? && signup_record.attended == 1 && event.event_type_id == new_member_orientation_id
-					# TODO: Check for orientation attendance #285
 					orientation_attendance = AttendedOrientation.find_by(:user_id => user.id)
 					if !orientation_attendance.nil?
 						orientation_attendance.destroy

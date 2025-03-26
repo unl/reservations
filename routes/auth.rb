@@ -199,7 +199,6 @@ post '/forgot_password_check_in/' do
 end
 
 get '/login/?' do
-  # TODO: Redirect for SSO #284
   if SS_ID == 8
     redirect '/home/'
   end
