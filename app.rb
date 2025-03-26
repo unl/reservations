@@ -110,7 +110,9 @@ def require_login(redirect_after_login=nil)
       # Check if the user exists in the app's db
       @user = User.find_by(:username => session['cas']['user'])
       if @user.nil?
-        # TODO: Handle unknown user #178
+        # Direct nonexistent users to the new member sign up
+        flash(:alert, 'You Must Have an Account', 'To use the Engineering Garage, please sign up for New Member Orientation.')
+        redirect '/engineering_garage/new_users/'
       else
         session[:user_id] = @user.id
 
@@ -155,7 +157,7 @@ end
 
 def require_orientation
   unless AttendedOrientation.exists?(user_id: @user.id)
-    flash(:alert, 'You Must Attend Orientation', 'That page requires you to attend orientation. Please sign up for orientation.')
+    flash(:alert, 'You Must Attend Orientation', 'To use the Engineering Garage, please sign up for a tour.')
     redirect '/new_members/'
   end
 end
