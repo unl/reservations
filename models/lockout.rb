@@ -1,18 +1,23 @@
 require 'active_record'
+require 'models/permission'
 
 class Lockout < ActiveRecord::Base
+	
 	# Returns all the users affected by a lockout
 	def affected_users
-		affected_users = User.joins(:permissions).where(permissions: { name: 'MANAGE_CHECKOUT' }).pluck(:id)
-		affected_users = 
+		# All users with the MANAGE_LOCKOUT permission
+		affected_users = UserHasPermission.where(permission_id: Permission::MANAGE_LOCKOUT).pluck(:user_id)
+
 		resource = Resource.find(self.resource_id)
+
 		if self.released_on.nil?
+			# Get all reservations from now until midnight
 			reservations = Reservation.where('resource_id = ? AND start_time >= ? AND start_time < ?', resource.id, self.started_on, Time.now.in_time_zone.midnight)
-		else
-			reservations = Reservation.where('resource_id = ? AND start_time >= ? AND start_time < ?', resource.id, self.started_on, self.released_on)
-		end
-		if self.released_on.nil?
+			# Get all reservations from midnight until the end of the next day
 			reservations = reservations + Reservation.where('resource_id = ? AND start_time >= ? AND start_time < ?', resource.id, Time.now.in_time_zone.midnight, (Time.now.in_time_zone.midnight + 1.day))
+		else
+			# Get all reservations from now until the end of the lockout
+			reservations = Reservation.where('resource_id = ? AND start_time >= ? AND start_time < ?', resource.id, self.started_on, self.released_on)
 		end
 		# Get all the users for each reservation
 		reservations.each do |reservation|
@@ -67,7 +72,6 @@ class Lockout < ActiveRecord::Base
 
 			self.save
 		end
-		puts "Affected users: #{self.affected_users}"
 	end
 
 	def release(params)
