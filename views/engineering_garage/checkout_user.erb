@@ -1,50 +1,34 @@
 <h1 class="dcf-txt-h3" id="Checkout">Warehouse Check In / Check Out</h1>
-<a href="/checkout" class="dcf-btn dcf-btn-secondary" type="button">Return to Scan Page</a>
-<div class="dcf-form-group">
-	<fieldset class="dcf-h-min-100vh dcf-mt-4">
+<a href="/checkout" class="dcf-btn dcf-btn-secondary dcf-mb-4" type="button">Return to Scan Page</a>
+<div class="dcf-grid dcf-col-gap-vw">
+  <fieldset class="dcf-form dcf-col-100% dcf-col-75%-start@lg unl-b-darker-gray dcf-rounded dcf-b-1 dcf-b-solid dcf-pt-4 dcf-pb-4 dcf-p dcf-pr-7 dcf-pl-7">
 		<legend>User Details</legend>
 		<div class="dcf-d-flex dcf-flex-col dcf-gap-2">
 			<div class="dcf-d-flex dcf-flex-row dcf-jc-between dcf-ai-baseline dcf-w-100% dcf-gap-2">
 				<div class="dcf-d-inline-flex dcf-flex-row dcf-ai-baseline dcf-gap-4">
-					<h3><%= user[:username] %></h3>
+					<h2><%= user[:username] %></h2>
 				</div>
 				<div class="dcf-d-flex dcf-gap-2">
-	<%#
-					<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkout-modal-btn" type="button">Check Out Tool</button>
-						<div class="dcf-modal" id="checkout-modal-btn" hidden>
-							<div class="dcf-modal-wrapper">
-								<div class="dcf-modal-header">
-									<h2>Check Out Tool</h2>
-									<button class="dcf-btn-close-modal">Close</button>
-								</div>
-								<div class="dcf-modal-content">
-									Hey, I am a modal!
-								</div>
-							</div>
-						</div>
-	%>
 					<a href="/checkout/project/<%= nuid %>/create" class="dcf-btn dcf-btn-primary">Create New Project</a>
 				</div>
 			</div>
 			<div class="dcf-tabs dcf-tabs-responsive">
 				<ul>
 					<li><a href="#user-projects-panel">User Projects</a></li>
-					<%#
-					<li><a href="#user-tools-panel">Tool Check In</a></li>
-					%>
+					<li><a href="#user-tools-panel">Tools</a></li>
 				</ul>
 				<div id="user-projects-panel">
 					<% if defined?(projects) && projects.count > 0 %>
-						<h4>User Projects</h4>
-						<form class="dcf-form dcf-w-25%" id="filter-input" action="/checkout/user/" method="GET" enctype="application/x-www-form-urlencoded">
+						<h3>User Projects</h3>
+						<form class="dcf-form" style = "width: 14em" id="filter-input" action="/checkout/user/" method="GET" enctype="application/x-www-form-urlencoded">
 							<label for="filter-input">Filter Projects</label>
 							<div class="dcf-input-group">
 								<input type="hidden" name="nuid" value="<%= nuid %>">
-								<input id="project-input" name="search_id">
+								<input id="project-input" name="search_project_id">
 								<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
 							</div>
 						</form>
-						<table class="dcf-table dcf-w-100% dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6" aria-describedby="project-list-table">
+						<table class="dcf-table dcf-w-100% dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6">
 							<thead>
 								<tr>
 									<th scope="col">Location</th>
@@ -80,7 +64,7 @@
 											<div class="dcf-modal" id="delete-<%= project[:id] %>" hidden>
 												<div class="dcf-modal-wrapper">
 													<div class="dcf-modal-header">
-														<h2>Delete Project</h2>
+														<h4>Delete Project</h4>
 														<button class="dcf-btn-close-modal">Close</button>
 													</div>
 													<div class="dcf-modal-content">
@@ -98,11 +82,11 @@
 												</div>
 											</div>
 											<% if project[:last_checked_out] == nil || project[:last_checked_out] <= project[:last_checked_in] %>
-												<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkout-<%= project[:id] %>" type="button">Check Out</button>
-												<div class="dcf-modal" id="checkout-<%= project[:id] %>" hidden>
+												<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkout-project-<%= project[:id] %>" type="button">Check Out</button>
+												<div class="dcf-modal" id="checkout-project-<%= project[:id] %>" hidden>
 													<div class="dcf-modal-wrapper">
 														<div class="dcf-modal-header">
-															<h2>Check Out Project</h2>
+															<h4>Check Out Project</h4>
 															<button class="dcf-btn-close-modal">Close</button>
 														</div>
 														<div class="dcf-modal-content">
@@ -142,7 +126,7 @@
 												<div class="dcf-modal" id="check_in-<%= project[:id] %>" hidden>
 													<div class="dcf-modal-wrapper">
 														<div class="dcf-modal-header">
-															<h2>Check In Project</h2>
+															<h4>Check In Project</h4>
 															<button class="dcf-btn-close-modal">Close</button>
 														</div>
 														<div class="dcf-modal-content">
@@ -179,18 +163,6 @@
 												</div>
 											<% end %>
 											<a href="/checkout/project/<%= project[:id] %>/edit" class="dcf-btn dcf-btn-primary">Edit</a>
-											<div class="dcf-modal" id="edit-<%= project[:id] %>" hidden>
-												<div class="dcf-modal-wrapper">
-													<div class="dcf-modal-header">
-														<h2>Edit <%= project[:title] %></h2>
-														<button class="dcf-btn-close-modal">Close</button>
-													</div>
-													<div class="dcf-modal-content">
-														<%= project[:description] %>
-													</div>
-												</div>
-											</div>
-											
 										</td>
 									</tr>
 								<% end %>
@@ -201,44 +173,126 @@
 					<% end %>
 				</div>
 				<div id="user-tools-panel">
-					<h4>Checked Out Tools</h4>
-					<% if checked_out.count > 0 %>
-						<table class="dcf-table dcf-w-100% dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6" aria-describedby="project-list-table">
-							<thead>
-								<tr>
-									<th scope="col">Tool Name</th>
-									<th scope="col">Checked Out</th>
-									<th scope="col"></th>
-								</tr>
-							</thead>
-							<tbody>
-								<% checked_out.each do |tool| %>
+					<form class="dcf-form dcf-pb-4" style = "width: 14em" id="tool-input" action="/checkout/user/" method="GET" enctype="application/x-www-form-urlencoded">
+					<label for="search_tool_id">Scan Tool</label>
+					<div class="dcf-input-group">
+						<input type="hidden" name="nuid" value="<%= nuid %>">
+						<input id="search_tool_id" name="search_tool_id">
+						<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
+					</div>
+					</form>
+					<div class="dcf-w-100% dcf-gap-4">
+						<div>
+							<h3>Checked Out Tools</h3>
+							<% if checked_out.count > 0 %>
+								<table class="dcf-table dcf-w-100% dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6">
+								<thead>
 									<tr>
-										<td><%= tool[:name] %></td>
-										<td><%= tool[:checked_out_date] %></td>
+										<th scope="col">Tool Name</th>
+										<th scope="col">Checked Out</th>
+										<th scope="col">Tool Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									<% checked_out.each do |tool| %>
+									<tr>
+										<td><%= tool[:tool_name] %></td>
+										<td><%= tool[:last_checked_out].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %></td>
 										<td class="table-actions">
-											<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkin-<%= tool[:id] %>" type="button">Check In</button>
-											<div class="dcf-modal" id="checkin-<%= tool[:id] %>" hidden>
+											<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkin-tool-<%= tool[:id] %>" type="button">Check In</button>
+											<div class="dcf-modal" id="checkin-tool-<%= tool[:id] %>" hidden>
 												<div class="dcf-modal-wrapper">
 													<div class="dcf-modal-header">
-														<h2>Check In Tool</h2>
+													<h4>Check In Tool</h4>
 														<button class="dcf-btn-close-modal">Close</button>
 													</div>
 													<div class="dcf-modal-content">
-														Hello, I am a modal!
+													<form class="dcf-form dcf-grid" action="/checkout/tool_checkin/?nuid=<%= nuid %>&tool_id=<%= tool[:id] %>" method="POST" enctype="application/x-www-form-urlencoded">
+													<div class="dcf-col-100% dcf-col-50%@md">
+														<p id="tool_name_<%= tool[:id]%>"><strong>Name:</strong> <%= tool[:tool_name] %></p>
+														<p id="serial_number_<%= tool[:id]%>"><strong>Serial Number:</strong> <%= tool[:serial_number] %></p>
+														<p id="model_number_<%= tool[:id]%>"><strong>Model Number:</strong> <%= tool[:model_number] %></p>
+														<div class="dcf-form-controls-inline dcf-gap-2">
+															<button class="dcf-btn dcf-btn-primary" type="submit">Check In</button>
+														</div>
+													</div>
+													<div class="dcf-col-100% dcf-col-50%@md dcf-overflow-y-auto" style = "max-height: 30rem;">
+														<fieldset>
+														<legend><strong>Description:</strong></legend>
+														<p><%= tool[:description] %></p>
+														</fieldset>
+													</div>
+												</form>
 													</div>
 												</div>
-											</div>
+												</div>
 										</td>
 									</tr>
 								<% end %>
-							</tbody>
-						</table>
-					<% else %>
-						<p>Currently no tools checked out.</p>
-					<% end %>
+								</tbody>
+							</table>
+						<% else %>
+							<p>Currently no tools checked out.</p>
+						<% end %>
+					</div>
+					<div class="dcf-flex-grow-1">
+					<h3>Available Tools</h3>
+					<table class="dcf-table dcf-w-100% dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6">
+						<thead>
+							<tr>
+							<th scope="col">Tool Name</th>
+							<th scope="col">Serial Number</th>
+								<th scope="col">Model Number</th>
+								<th scope="col">Last Accessed</th>
+								<th scope="col" class="dcf-txt-right">Tool Actions</th>
+								</tr>
+								</thead>
+								<tbody>
+								<% tools.each do |tool| %>
+								<tr>
+								<td><%= tool[:tool_name] %></td>
+								<td><%= tool[:serial_number] %></td>
+								<td><%= tool[:model_number] %></td>
+								<td>
+								<%= tool[:last_checked_in].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
+								</td>
+								<td class="dcf-d-flex dcf-flex-row-rev dcf-flex-shrink-1 dcf-gap-2">
+								<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkout-tool-<%= tool[:id] %>" type="button">Check Out</button>
+									<div class="dcf-modal" id="checkout-tool-<%= tool[:id] %>" hidden>
+										<div class="dcf-modal-wrapper">
+											<div class="dcf-modal-header">
+											<h4>Check Out Tool</h4>
+												<button class="dcf-btn-close-modal">Close</button>
+											</div>
+											<div class="dcf-modal-content">
+												<form class="dcf-form dcf-grid" action="/checkout/tool_checkout/?nuid=<%= nuid %>&tool_id=<%= tool[:id] %>" method="POST" enctype="application/x-www-form-urlencoded">
+													<div class="dcf-col-100% dcf-col-50%@md">
+														<p id="tool_name_<%= tool[:id]%>"><strong>Name:</strong> <%= tool[:tool_name] %></p>
+														<p id="serial_number_<%= tool[:id]%>"><strong>Serial Number:</strong> <%= tool[:serial_number] %></p>
+														<p id="model_number_<%= tool[:id]%>"><strong>Model Number:</strong> <%= tool[:model_number] %></p>
+														<div class="dcf-form-controls-inline dcf-gap-2">
+															<button class="dcf-btn dcf-btn-primary" type="submit">Check Out</button>
+														</div>
+													</div>
+													<div class="dcf-col-100% dcf-col-50%@md dcf-overflow-y-auto" style = "max-height: 30rem;">
+														<fieldset>
+														<legend><strong>Description:</strong></legend>
+														<p><%= tool[:description] %></p>
+														</fieldset>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+								</td>
+								</tr>
+								<% end %>
+								</tbody>
+					</table>
+					</div>
 				</div>
 			</div>
+		</div>
 			<script>
 				window.addEventListener('inlineJSReady', function() {
 					WDN.initializePlugin('tabs');
@@ -246,4 +300,32 @@
 			</script>
 		</div>
 	</fieldset>
+	</fieldset>
+    <fieldset class="dcf-form dcf-col-100% dcf-col-25%-end@lg dcf-overflow-auto unl-b-darker-gray dcf-rounded dcf-b-1 dcf-b-solid dcf-pt-4 dcf-pb-4 dcf-p dcf-pr-7 dcf-pl-7">
+			<legend>Tour and Training</legend>
+			<div class="dcf-overflow-x-auto dcf-p-1" tabindex="0">
+            <% if events.count > 0 %>
+                <table class="dcf-table dcf-table-striped dcf-w-100%">
+                    <thead>
+                        <tr>
+                            <th scope="col">Event</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+										<tbody>
+										<% events.each do |event| %>
+											<tr>
+												<form class="dcf-form dcf-w-25% dcf-pb-4"	 action="/checkout/events/<%= event[:id] %>/<%= user[:id] %>/" method="POST" onsubmit="return confirm('Confirm <%= user[:username] %>\'s attendence for <%= event[:title] %>?');" enctype="application/x-www-form-urlencoded">
+													<td><%= event[:title] %></td>
+													<td><button class="dcf-btn dcf-btn-primary" type="submit">Confirm</button></td>
+												</form>
+											<tr>
+										<% end %>
+										</tbody>
+                </table>
+            <% else %>
+                <p>No events found.</p>
+            <% end %>
+        </div>
+    </fieldset>
 </div>

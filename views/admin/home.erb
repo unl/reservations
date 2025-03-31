@@ -6,7 +6,7 @@
 
 <table class="dcf-w-100% dcf-table dcf-table-bordered" aria-label="User Action List">
 	<tbody>
-		<% if has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER) %>
+		<% if has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::VIEW_USER_PERMISSIONS_READ_ONLY) || has_permission?(Permission::SUPER_USER) %>
 		<tr>
 			<th scope="row"><strong>Users</strong></th>
 			<td><%= user_count %> users</td>
