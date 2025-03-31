@@ -189,6 +189,7 @@ post '/lockout/:resource_id/edit/:lockout_id/?' do
 
 		start_time = calculate_time(params[:start_date], start_hour, start_minutes, start_am_pm)
 	end
+
 	unless params[:end_date].to_s.strip.empty?
 		if params[:end_minutes] == "empty"
 			params[:end_minutes] = 0
@@ -208,7 +209,7 @@ post '/lockout/:resource_id/edit/:lockout_id/?' do
 
 	# if they removed the start time, use the original start time
 	params[:start_time] = start_time.nil? ? lockout.started_on : start_time
-	params[:end_time] = end_time
+	params[:end_time] = end_time.nil? ? lockout.released_on : end_time
 
 	lockout.set_data(params)
 	flash(:success, 'Lockout Updated', 'The lockout has been updated.')
