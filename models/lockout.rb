@@ -1,6 +1,26 @@
 require 'active_record'
 
 class Lockout < ActiveRecord::Base
+	# Returns all the users affected by a lockout
+	def affected_users
+		affected_users = User.joins(:permissions).where(permissions: { name: 'MANAGE_CHECKOUT' }).pluck(:id)
+		affected_users = 
+		resource = Resource.find(self.resource_id)
+		if self.released_on.nil?
+			reservations = Reservation.where('resource_id = ? AND start_time >= ? AND start_time < ?', resource.id, self.started_on, Time.now.in_time_zone.midnight)
+		else
+			reservations = Reservation.where('resource_id = ? AND start_time >= ? AND start_time < ?', resource.id, self.started_on, self.released_on)
+		end
+		if self.released_on.nil?
+			reservations = reservations + Reservation.where('resource_id = ? AND start_time >= ? AND start_time < ?', resource.id, Time.now.in_time_zone.midnight, (Time.now.in_time_zone.midnight + 1.day))
+		end
+		# Get all the users for each reservation
+		reservations.each do |reservation|
+			affected_users << reservation.user_id
+		end
+		return affected_users.uniq
+	end
+
 	def initiated_by
 		User.find(self.initiated_by_user_id)
 	end
@@ -47,6 +67,7 @@ class Lockout < ActiveRecord::Base
 
 			self.save
 		end
+		puts "Affected users: #{self.affected_users}"
 	end
 
 	def release(params)
