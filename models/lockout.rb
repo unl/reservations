@@ -5,6 +5,10 @@ class Lockout < ActiveRecord::Base
 		User.find(self.initiated_by_user_id)
 	end
 
+	def released_by
+		User.find(self.released_by_user_id)
+	end
+
 	scope :in_day, ->(time) {
 		today = time.in_time_zone.midnight
 		tomorrow = (time.in_time_zone.midnight + 1.day + 1.hour).in_time_zone.midnight
@@ -45,8 +49,11 @@ class Lockout < ActiveRecord::Base
 		end
 	end
 
-	def release()
+	def release(params)
+		user = User.find(params[:user_id])
+		
 		self.released_on = Time.now
+		self.released_by_user_id = user.id
 		self.save
 	end
 end

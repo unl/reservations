@@ -262,10 +262,11 @@ post '/lockout/:resource_id/release_all/?' do
 		flash(:alert, 'Not Found', 'That tool is not locked out.')
 		redirect '/admin/tools/'
 	end
+	params[:user_id] = @user.id;
 
 	lockouts.each do |lockout|
 		if lockout.started_on <= Time.now && (lockout.released_on.nil? || lockout.released_on >= Time.now)
-			lockout.release()
+			lockout.release(params)
 		end
 	end
 	flash(:success, 'Lockout Released', 'The lockout has been released.')
@@ -281,7 +282,9 @@ post '/lockout/:resource_id/release/:lockout_id/' do
 		redirect '/lockout/' + params[:resource_id] + '/view/'
 	end
 
-	lockout.release()
+	params[:user_id] = @user.id;
+
+	lockout.release(params)
 	flash(:success, 'Lockout Released', 'The lockout has been released.')
 	redirect '/lockout/' + params[:resource_id] + '/view/'
 end
