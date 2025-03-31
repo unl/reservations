@@ -6,8 +6,8 @@
             <legend>User Details</legend>
 
             <div class="dcf-form-group">
-                <label for="username">Username</label>
-                <input class="dcf-w-100%" type="text" id="username" name="username" value="<%= user.username %>" />
+                <label for="username">Username <%= "(<i>Read Only</i>)" if SS_ID == 8 %></label>
+                <input class="dcf-w-100%" type="text" id="username" name="username" value="<%= user.username %>" <%= "readonly" if SS_ID == 8 %> />
             </div>
 
             <div class="dcf-form-group">

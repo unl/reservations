@@ -89,19 +89,24 @@
                 <% if has_permission?(Permission::MANAGE_USERS) || has_permission?(Permission::SUPER_USER) %>
                 <li><a href="/admin/orientation_attended/">Activate Members</a></li>
                 <% end %>
+                <% if SS_ID == 8 %>
+                <li><a href="/admin/login/">SSO Bypass Login</a></li>
+                <% end %>
             </ul>
         </li>
     <% end %>
     <li>
         <a href="/me/">My Account</a>
-        <% unless @user.nil? %>
-        <ul>
-            <li><a href="/logout/">Logout</a></li>
-        </ul>
-        <% else %>
-        <ul>
-            <li><a href="/login/">Login</a></li>
-        </ul>
+        <% if SS_ID != 8 %>
+            <% unless @user.nil? %>
+            <ul>
+                <li><a href="/logout/">Logout</a></li>
+            </ul>
+            <% else %>
+            <ul>
+                <li><a href="/login/">Login</a></li>
+            </ul>
+            <% end %>
+        <% end %>
     </li>
-    <% end %>
 </ul>

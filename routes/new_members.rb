@@ -409,6 +409,12 @@ post '/new_members/sign_up/:event_id/?' do
 	end
 end
 
+get '/engineering_garage/new_users/?' do
+	@breadcrumbs << { :text => "New Users" }
+
+  erb :'/engineering_garage/new_users', :layout => :fixed
+end
+
 def fetch_final_content(uri)
   url = URI.parse(uri)
   redirect_limit = 10

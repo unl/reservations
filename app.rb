@@ -2,6 +2,8 @@ require 'sinatra'
 require 'models/user'
 require 'models/service_space'
 require 'models/event'
+require 'rack-cas'
+require 'rack/cas'
 
 use Rack::Session::Cookie, :key => 'rack.session',
                            :path => '/',
@@ -9,6 +11,8 @@ use Rack::Session::Cookie, :key => 'rack.session',
                            :secret => 'averymanteroldfatherbesseyhamilton',
                            :old_secret => 'averymanteroldfatherbesseyhamilton',
                            :expire_after => 30*24*60*60
+
+use Rack::CAS, server_url: 'https://shib.unl.edu/idp/profile/cas'
 
 Time.zone = "America/Chicago"
 
@@ -90,16 +94,47 @@ def has_permission?(permission)
     !@user.nil? && @user.has_permission?(permission)
 end
 
+def check_sso
+  if !session['cas'].nil? && !session['cas']['user'].nil?
+    @user = User.find_by(:username => session['cas']['user'])
+  else
+    @user = nil
+  end
+end
+
 def require_login(redirect_after_login=nil)
-  if @user.nil?
-    flash(:alert, 'You Must Login', 'That page requires you to be logged in. If you don\'t have an account, please sign up for <a href="/new_members/">New&nbsp;Member&nbsp;Orientation</a>.')
-    if redirect_after_login.nil?
-      redirect '/login/'
+  if SS_ID == 8
+    if session['cas'].nil? || session['cas']['user'].nil?
+      # Allow admins to bypass SSO
+      unless !@user.nil? && @user.is_admin?
+        halt 401
+      end
     else
-      redirect "/login/?next_page=#{redirect_after_login}"
+      # Check if the user exists in the app's db
+      @user = User.find_by(:username => session['cas']['user'])
+      if @user.nil?
+        # Direct nonexistent users to the new member sign up
+        flash(:alert, 'You Must Have an Account', 'To use the Engineering Garage, please sign up for New Member Orientation.')
+        redirect '/engineering_garage/new_users/'
+      else
+        session[:user_id] = @user.id
+
+        # Check for orienation attendance and user agreement renewal
+        if !@user.is_super_user? && !@user.is_admin?
+          require_orientation
+          require_renewal(redirect_after_login)
+        end
+      end
     end
-  elsif SS_ID == 8 && !@user.is_super_user? && !@user.is_admin?
-    require_renewal(redirect_after_login)
+  else
+    if @user.nil?
+      flash(:alert, 'You Must Login', 'That page requires you to be logged in. If you don\'t have an account, please sign up for <a href="/new_members/">New&nbsp;Member&nbsp;Orientation</a>.')
+      if redirect_after_login.nil?
+        redirect '/login/'
+      else
+        redirect "/login/?next_page=#{redirect_after_login}"
+      end
+    end
   end
 end
 
@@ -123,18 +158,10 @@ def require_renewal(redirect_from=nil)
   end
 end
 
-def require_active(redirect_to=nil)
-  if !@user.nil? && !@user.is_active && !@user.is_super_user?
-    if SS_ID == 1
-      flash(:alert, 'You Must Be An Active User', 'That page requires you to be an active user. To activate your account please visit Innovation Studio.')
-    elsif SS_ID == 8
-      flash(:alert, 'You Must Be An Active User', 'That page requires you to be an active user. To activate your account please visit the Engineering Garage.')
-    end
-    if redirect_to.nil?
-      redirect '/'
-    else
-      redirect redirect_to
-    end
+def require_orientation
+  unless AttendedOrientation.exists?(user_id: @user.id)
+    flash(:alert, 'You Must Attend Orientation', 'To use the Engineering Garage, please sign up for a tour.')
+    redirect '/new_members/'
   end
 end
 
@@ -159,6 +186,7 @@ error do
 end
 
 get '/' do
+  check_sso
   @breadcrumbs << {:text => 'Home'}
   redirect '/login/'
 end

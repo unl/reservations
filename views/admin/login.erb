@@ -1,0 +1,29 @@
+<%= erb :auto_updating_announcement %>
+
+<h1 class="dcf-txt-h3">SSO Bypass Login</h1>
+<h2 class="dcf-txt-h6">Currently signed in as <%= @user.full_name %> (<%= @user.username %>)</h2>
+<p><em>
+  NOTE: This page is meant for logging into kiosk accounts and bypasses SSO. 
+  <br>
+  If you wish to log back into your admin account with SSO, please use the 
+  <br>
+  widget at the top of the page or log out of the kiosk account.
+</em></p>
+
+<form class="dcf-form" id="login" action="" method="POST">
+    <div class="dcf-grid-full dcf-grid-halves@sm dcf-col-gap-vw">
+        <div>
+            <div class="dcf-form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" />
+            </div>
+            <div class="dcf-form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" />
+                <span class="dcf-form-help"><a href="/forgot_password/">Forgot password?</a></span>
+            </div>
+            <input type="hidden" id="next-page" name="next_page" value="<%= next_page %>" /> 
+            <button class="dcf-mt-3 dcf-btn dcf-btn-primary" type="submit">Login</button>
+        </div>
+    </div>
+</form>
