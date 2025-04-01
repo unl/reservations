@@ -25,10 +25,12 @@
                 <input class="dcf-w-100%" type="text" id="last-name" name="last_name" value="<%= user.last_name %>" />
             </div>
 
-            <div class="dcf-form-group">
-                <label for="user_nuid">NUID (<i>Read Only</i>)</label>
-                <input class="dcf-w-100%" type="text" id="user_nuid" name="user_nuid" value="<%= user.user_nuid %>" readonly />
-            </div>
+            <% if SS_ID == 8 %>
+                <div class="dcf-form-group">
+                    <label for="user_nuid">NUID (<i>Read Only</i>)</label>
+                    <input class="dcf-w-100%" type="text" id="user_nuid" name="user_nuid" value="<%= user.user_nuid %>" readonly />
+                </div>
+            <% end %>
 
             <div class="dcf-form-group">
                 <label for="university-status">University Status</label>
