@@ -266,6 +266,12 @@ post '/admin/login/?' do
     redirect '/admin/login/'
   end
 
+  # Prevent login for non-admin accounts
+  unless user.is_admin?
+    flash(:danger, "Non-Admin Account: #{user.username}", 'Only admin accounts can bypass SSO.')
+    redirect '/admin/login/'
+  end
+
   # Credentials are valid, clear current admin's session
   session.clear
 
