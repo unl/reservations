@@ -19,12 +19,17 @@ get '/status_page/?' do
     orientation_signups = EventSignup.where(event_id: orientation_ids)
     # Get the number of people that haven't attended Orientation from the previous query
     orientation_potentials = orientation_signups.where(attended: false).count
+  
+    upcoming_lockouts = Lockout.where('started_on BETWEEN ? AND ?', Time.now, Time.now + 7.days).includes(:resource)
+    reservations = Reservation.select(:id, :start_time, :end_time).where.not(start_time: nil, end_time: nil)
 
 
 	erb :'/engineering_garage/status_page', :layout => :fixed, :locals => {
         :lockout_count => lockout_count,
         :lockouts => lockouts,
-        :orientation_potentials => orientation_potentials
+        :orientation_potentials => orientation_potentials,
+        :upcoming_lockouts => upcoming_lockouts,
+        :reservations => reservations
     }
 end
 # events > event_type = 12
