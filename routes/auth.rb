@@ -255,11 +255,6 @@ get '/admin/login/?' do
 end
 
 post '/admin/login/?' do
-  # Clear out current admin's session
-  if !@user.nil?
-    session.clear
-  end 
-
   user = User.where(:username => params[:username], :service_space_id => SS_ID).first
   next_page = params[:next_page]
   # check user existence and password correctness
@@ -271,7 +266,10 @@ post '/admin/login/?' do
     redirect '/admin/login/'
   end
 
-  # it is the user, hooray
+  # Credentials are valid, clear current admin's session
+  session.clear
+
+  # Set new user
   session[:user_id] = user.id
 
   if !next_page.nil? && next_page.length > 0
