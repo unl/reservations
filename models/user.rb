@@ -137,11 +137,11 @@ class User < ActiveRecord::Base
     begin
       content = fetch_final_content("https://directory.unl.edu/people/#{self.username}?format=json")
     rescue => e
-      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."}
+      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not fetch your NUID based on your user. If the issue persists, then please contact an administrator."}
     end
     # Check to make sure it is valid json
     if valid_json?(content) === false
-      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."}
+      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not validate your NUID. If the issue persists, then please contact an administrator."}
     end
 
     # Parse it
@@ -149,7 +149,7 @@ class User < ActiveRecord::Base
 
     # Check to make sure we have data and it is formatted right		
     if json_parse_content.key?('unluncwid') === false || json_parse_content['unluncwid'].empty?
-      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."}
+      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not parse your NUID. If the issue persists, then please contact an administrator."}
     end
 
     # Get the nuid and double check we don't have duplicates
