@@ -1,3 +1,13 @@
+GIT
+  remote: https://github.com/unl/rack-cas.git
+  revision: a7626614ae33d9b8dec1cf6b41bdb76b2ae55854
+  branch: master
+  specs:
+    rack-cas (0.16.1)
+      addressable (~> 2.3)
+      nokogiri (~> 1.5)
+      rack (>= 1.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -110,10 +120,6 @@ GEM
     raabro (1.4.0)
     racc (1.8.1)
     rack (2.2.3)
-    rack-cas (0.16.1)
-      addressable (~> 2.3)
-      nokogiri (~> 1.5)
-      rack (>= 1.3)
     rack-protection (2.2.3)
       rack
     rack-test (2.1.0)
@@ -214,7 +220,7 @@ DEPENDENCIES
   mysql2
   pony
   rack (= 2.2.3)
-  rack-cas (~> 0.16.1)
+  rack-cas!
   rack-test
   recaptcha
   rest-client

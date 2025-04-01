@@ -16,7 +16,7 @@ gem 'bigdecimal'
 gem 'recaptcha'
 gem 'rufus-scheduler'
 gem 'highlander'
-gem "rack-cas", "~> 0.16.1"
+gem 'rack-cas', git: 'https://github.com/unl/rack-cas.git', branch: 'master'
 
 group :development do
   gem 'shotgun'
