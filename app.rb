@@ -186,7 +186,9 @@ error do
 end
 
 get '/' do
-  check_sso
+  if SS_ID == 8 
+    check_sso
+  end
   @breadcrumbs << {:text => 'Home'}
   redirect '/login/'
 end
