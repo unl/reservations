@@ -11,8 +11,6 @@ require 'utils/database'
 # script-necessary things
 require 'models/user'
 require 'models/service_space'
-require 'sinatra'
-require 'routes/new_members'
 
 SS_ID = ServiceSpace.where(:id => CONFIG['app']['service_space_id']).first.id
 
