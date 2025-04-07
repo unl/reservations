@@ -116,6 +116,7 @@ post '/lockout/:resource_id/create/?' do
 
 	lockout = Lockout.new
 	lockout.set_data(params)
+	lockout.email_lockout_affected_users(Time.now.in_time_zone, Time.now.in_time_zone.midnight + 2.day)
 	flash(:success, 'Lockout Created', 'The lockout has been created.')
 	redirect '/lockout/'
 end
@@ -211,7 +212,14 @@ post '/lockout/:resource_id/edit/:lockout_id/?' do
 	params[:start_time] = start_time.nil? ? lockout.started_on : start_time
 	params[:end_time] = end_time.nil? ? lockout.released_on : end_time
 
-	lockout.set_data(params)
+	# only email if the time range has been changed
+	if params[:start_time] != lockout.started_on || params[:end_time] != lockout.released_on
+		lockout.set_data(params)
+		lockout.email_lockout_affected_users(Time.now.in_time_zone, Time.now.in_time_zone.midnight + 1.day)
+	else
+		lockout.set_data(params)
+	end
+
 	flash(:success, 'Lockout Updated', 'The lockout has been updated.')
 	redirect '/lockout/' + params[:resource_id] + '/view/'
 end
@@ -266,6 +274,9 @@ post '/lockout/:resource_id/release_all/?' do
 
 	lockouts.each do |lockout|
 		if lockout.started_on <= Time.now && (lockout.released_on.nil? || lockout.released_on >= Time.now)
+			if lockout.released_on.nil?
+				lockout.email_release_affected_users()
+			end
 			lockout.release(params)
 		end
 	end
@@ -284,6 +295,7 @@ post '/lockout/:resource_id/release/:lockout_id/' do
 
 	params[:user_id] = @user.id;
 
+	lockout.email_release_affected_users()
 	lockout.release(params)
 	flash(:success, 'Lockout Released', 'The lockout has been released.')
 	redirect '/lockout/' + params[:resource_id] + '/view/'

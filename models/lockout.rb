@@ -4,26 +4,43 @@ require 'models/permission'
 class Lockout < ActiveRecord::Base
 	
 	# Returns all the users affected by a lockout
-	def affected_users
+	def get_affected_users(start_date, end_date, notify_admins)
+		
 		# All users with the MANAGE_LOCKOUT permission
-		affected_users = UserHasPermission.where(permission_id: Permission::MANAGE_LOCKOUT).pluck(:user_id)
-
+		if notify_admins
+			affected_users = UserHasPermission.where(permission_id: Permission::MANAGE_LOCKOUT).pluck(:user_id)
+		else
+			affected_users = []
+		end
 		resource = Resource.find(self.resource_id)
 
+		# Default to the start of the lockout until midnight the next day
+		if start_date.nil? || end_date.nil?
+			start_date = self.started_on
+			end_date = Time.now.in_time_zone.midnight + 1.day
+		end
+
 		if self.released_on.nil?
-			# Get all reservations from now until midnight
-			reservations = Reservation.where('resource_id = ? AND start_time >= ? AND start_time < ?', resource.id, self.started_on, Time.now.in_time_zone.midnight)
-			# Get all reservations from midnight until the end of the next day
-			reservations = reservations + Reservation.where('resource_id = ? AND start_time >= ? AND start_time < ?', resource.id, Time.now.in_time_zone.midnight, (Time.now.in_time_zone.midnight + 1.day))
+			# Get all reservations within the time frame
+			reservations = Reservation.where('resource_id = ? AND start_time >= ? AND start_time < ?', resource.id, start_date, end_date)
 		else
 			# Get all reservations from now until the end of the lockout
-			reservations = Reservation.where('resource_id = ? AND start_time >= ? AND start_time < ?', resource.id, self.started_on, self.released_on)
+			if self.started_on < Time.now.in_time_zone
+				start_date = Time.now.in_time_zone
+			else
+				start_date = self.started_on
+			end
+			reservations = Reservation.where('resource_id = ? AND start_time >= ? AND start_time < ?', resource.id, start_date, self.released_on)
 		end
 		# Get all the users for each reservation
 		reservations.each do |reservation|
 			affected_users << reservation.user_id
 		end
-		return affected_users.uniq
+		# Get all the user emails for each reservation
+		affected_users = affected_users.uniq
+		affected_emails = User.where(id: affected_users).pluck(:email)
+
+		return affected_emails
 	end
 
 	def initiated_by
@@ -80,5 +97,28 @@ class Lockout < ActiveRecord::Base
 		self.released_on = Time.now
 		self.released_by_user_id = user.id
 		self.save
+	end
+
+	# creation of a lockout
+	def email_lockout_affected_users(start_date, end_date, notify_admins = true)
+
+		users = self.get_affected_users(start_date, end_date, notify_admins)
+
+		users.each do |user|
+			if user && !user.empty?
+				Emailer.mail(user, "Lockout Created", self.description, '', nil)
+			end
+		end
+	end
+
+	# release of a lockout
+	def email_release_affected_users(notify_admins = true)
+		users = self.get_affected_users(Time.now.in_time_zone, Time.now.in_time_zone.midnight + 2.day, notify_admins)
+
+		users.each do |user|
+			if user && !user.empty?
+				Emailer.mail(user, "Lockout Released", self.description, '', nil)
+			end
+		end
 	end
 end
