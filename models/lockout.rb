@@ -21,11 +21,12 @@ class Lockout < ActiveRecord::Base
 		end
 
 		if self.released_on.nil?
-			# Get all reservations within the time frame
+			# Get all reservations within the specified time frame
 			reservations = Reservation.where('resource_id = ? AND start_time >= ? AND start_time < ?', resource.id, start_date, end_date)
 		else
-			# Get all reservations from now until the end of the lockout
+			# Get all reservations from now until the scheduled end of the lockout
 			if self.started_on < Time.now.in_time_zone
+				# Scheduled lockouts that are currently active only notify future users
 				start_date = Time.now.in_time_zone
 			else
 				start_date = self.started_on
@@ -99,7 +100,7 @@ class Lockout < ActiveRecord::Base
 		self.save
 	end
 
-	# creation of a lockout
+	# email on creation of a lockout
 	def email_lockout_affected_users(start_date, end_date, notify_admins = true)
 
 		users = self.get_affected_users(start_date, end_date, notify_admins)
@@ -111,7 +112,17 @@ class Lockout < ActiveRecord::Base
 		end
 	end
 
-	# release of a lockout
+	def email_edit_lockout_affected_users(start_date, end_date, notify_admins = true)
+		users = self.get_affected_users(start_date, end_date, notify_admins)
+
+		users.each do |user|
+			if user && !user.empty?
+				Emailer.mail(user, "Lockout Dates Updated", self.description, '', nil)
+			end
+		end
+	end
+
+	# email on release of a lockout
 	def email_release_affected_users(notify_admins = true)
 		users = self.get_affected_users(Time.now.in_time_zone, Time.now.in_time_zone.midnight + 2.day, notify_admins)
 
