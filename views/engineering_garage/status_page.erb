@@ -6,7 +6,7 @@
     <div class="dcf-col-50% dcf-flex dcf-jc-center">
 
         <div class="dcf-col-100% dcf-w-100%" style="margin-top:15px">
-            <table class="dcf-table dcf-table-bordered dcf-m-4 dcf-w-100%" aria-describedby="num_down_machines">
+            <table class="dcf-table dcf-table-bordered dcf-m-4 dcf-w-100%" aria-describedby="timeless_potentials">
                 <thead>
                     <tr>
                         <th scope="col">Event</th>
@@ -16,20 +16,14 @@
                 <tbody>
                     <tr class="dcf-txt-center">
                         <td>New User Orientation</td>
-                        <td><%= orientation_potentials %></td>
+                        <td><%= orientation_potentials %> </td>
                     </tr>
-                    <tr class="dcf-txt-center">
-                        <td>3D Printer Bambu X1E</td>
-                        <td>5</td>
-                    </tr>
-                    <tr class="dcf-txt-center">
-                        <td>3D Printer - Formlabs Form 4</td>
-                        <td>2</td>
-                    </tr>
-                    <tr class="dcf-txt-center">
-                        <td>Fabrication Laser - Epilog Fusion Pro 32 100-50</td>
-                        <td>12</td>
-                    </tr>
+                    <% timeless_events.each do |event| %>
+                        <tr class="dcf-txt-center">
+                            <td><%= event[:title] %></td>
+                            <td><%= event[:potential_walkins] %></td>
+                        </tr>
+                    <% end %>    
                 </tbody>
             </table>
         </div>

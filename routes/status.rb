@@ -19,6 +19,14 @@ get '/status_page/?' do
     orientation_signups = EventSignup.where(event_id: orientation_ids)
     # Get the number of people that haven't attended Orientation from the previous query
     orientation_potentials = orientation_signups.where(attended: false).count
+
+    # Get timeless events and their unattended signups count
+    timeless_events = Event.where(start_time: nil, service_space_id: 8).where.not(event_type_id: 12).map do |event|
+        {
+        title: event.title,
+        potential_walkins: EventSignup.where(event_id: event.id, attended: false).count
+        }
+    end
   
     upcoming_lockouts = Lockout.where('started_on BETWEEN ? AND ?', Time.now, Time.now + 7.days).includes(:resource)
     reservations = Reservation.select(:id, :start_time, :end_time).where.not(start_time: nil, end_time: nil)
@@ -29,7 +37,8 @@ get '/status_page/?' do
         :lockouts => lockouts,
         :orientation_potentials => orientation_potentials,
         :upcoming_lockouts => upcoming_lockouts,
-        :reservations => reservations
+        :reservations => reservations,
+        :timeless_events => timeless_events
     }
 end
 # events > event_type = 12
