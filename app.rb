@@ -96,7 +96,7 @@ end
 
 def check_sso
   if !session['cas'].nil? && !session['cas']['user'].nil?
-    @user = User.find_by(:username => session['cas']['user'])
+    @user = User.find_by(:username => session['cas']['user'], :service_space_id => SS_ID)
   else
     @user = nil
   end
@@ -111,7 +111,7 @@ def require_login(redirect_after_login=nil)
       end
     else
       # Check if the user exists in the app's db
-      @user = User.find_by(:username => session['cas']['user'])
+      @user = User.find_by(:username => session['cas']['user'], :service_space_id => SS_ID)
       if @user.nil?
         # Direct nonexistent users to the new member sign up
         flash(:alert, 'You Must Have an Account', 'To use the Engineering Garage, please sign up for New Member Orientation.')
