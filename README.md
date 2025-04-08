@@ -42,6 +42,21 @@ A quick way to test emails without having to set up email stuff is to run a SMTP
 
 `sudo python -m smtpd -n -c DebuggingServer localhost:25`
 
+### Local Single Sign-On (SSO)
+
+You must host the application on a `unl.edu` domain to use UNL's CAS service. This can be done for local development by adding `reservations-dev.unl.edu` or similar to the localhost address in your hosts file `/etc/hosts/`
+
+```conf
+##
+# Host Database
+##
+127.0.0.1 localhost reservations-dev.unl.edu
+```
+
+You can then access the site at `reservations-dev.unl.edu:9393/`
+
+Alternatively, you can skip SSO and use the standard login by commenting out the first `redirect '/home/'` in the `get '/login/?'` route and `halt 401` in the `require_login` method
+
 ## Installation on server
 
 1. Run `sudo -u {user} -s` run commands as a user and navigate to your project's root

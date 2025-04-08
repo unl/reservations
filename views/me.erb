@@ -4,6 +4,9 @@
 
 <% if SS_ID == 8 %>
     <p class="dcf-txt-sm"><a href="/engineering_garage/user_agreement_view_only/">View User Agreement</a></p>
+    <% if @user.is_admin? %>
+        <p class="dcf-txt-sm"><a href="/logout/">SSO Bypass Logout</a></p>
+    <% end %>
 <% end %>
 
 <h2 class="dcf-txt-h4">Update Profile</h2>

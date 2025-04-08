@@ -8,6 +8,8 @@ require 'models/vehicle'
 require 'models/user_has_permission'
 require 'classes/emailer'
 require 'erb'
+require 'json'
+require 'net/http'
 
 class User < ActiveRecord::Base
   has_many :resource_authorizations, dependent: :destroy
@@ -128,6 +130,45 @@ class User < ActiveRecord::Base
     self.save
   end
 
+  def fetch_final_content(uri)
+    url = URI.parse(uri)
+    redirect_limit = 10
+    redirect_count = 0
+  
+    begin
+      response = Timeout::timeout(10) { Net::HTTP.get_response(url) } # Timeout after 10 seconds
+  
+      # Follow redirects (if any) until we reach the final destination
+      while response.is_a?(Net::HTTPRedirection)
+        redirect_count += 1
+        raise "Too many redirects (limit: #{redirect_limit})" if redirect_count > redirect_limit
+  
+        url = URI.parse(response['location'])
+        response = Net::HTTP.get_response(url)
+      end
+  
+      # Handle 404 or other HTTP error responses
+      case response
+      when Net::HTTPSuccess
+        response.body
+      when Net::HTTPNotFound
+        raise "Page not found (404)"
+      else
+        raise "HTTP error: #{response.code} #{response.message}"
+      end
+    rescue Timeout::Error
+      raise "Request timed out"
+    rescue => e
+      raise "Failed to fetch content: #{e.message}"
+    end
+  end
+  
+  def valid_json?(string)
+    !!JSON.parse(string)
+  rescue JSON::ParserError
+    false
+  end
+
   # Retrieves and returns the user's nuid
   # Error headers are used as a conditional in different files
   def fetch_nuid()
@@ -137,11 +178,11 @@ class User < ActiveRecord::Base
     begin
       content = fetch_final_content("https://directory.unl.edu/people/#{self.username}?format=json")
     rescue => e
-      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."}
+      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not fetch your NUID based on your user. If the issue persists, then please contact an administrator."}
     end
     # Check to make sure it is valid json
     if valid_json?(content) === false
-      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."}
+      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not validate your NUID. If the issue persists, then please contact an administrator."}
     end
 
     # Parse it
@@ -149,7 +190,7 @@ class User < ActiveRecord::Base
 
     # Check to make sure we have data and it is formatted right		
     if json_parse_content.key?('unluncwid') === false || json_parse_content['unluncwid'].empty?
-      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not parse your NUID based on your user. If the issue persists, then please contact an administrator."}
+      return {:status => false, :nuid => nil, :error_header => "Error getting your NUID", :error_message => "We could not parse your NUID. If the issue persists, then please contact an administrator."}
     end
 
     # Get the nuid and double check we don't have duplicates
