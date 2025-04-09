@@ -214,15 +214,8 @@ post '/lockout/:resource_id/edit/:lockout_id/?' do
 
 	# only email if the time range has been changed
 	if params[:start_time] != lockout.started_on || params[:end_time] != lockout.released_on
-		# if an end time was set, email the affected users from next midnight to the end time (avoiding notifying people that have already been notified by the script)
-		if lockout.released_on.nil? && !params[:end_time].nil?
 			lockout.set_data(params)
-			notification_start_time = params[:start_time] < Time.now.in_time_zone.midnight + 2.day ? Time.now.in_time_zone.midnight + 2.day : params[:start_time]
-			lockout.email_edit_lockout_affected_users(notification_start_time, params[:end_time])
-		else
-			lockout.set_data(params)
-			lockout.email_edit_lockout_affected_users(Time.now.in_time_zone, Time.now.in_time_zone.midnight + 2.day)
-		end
+			lockout.email_edit_lockout_affected_users(start_time, end_time)
 	else
 		lockout.set_data(params)
 	end
