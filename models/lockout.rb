@@ -108,17 +108,30 @@ class Lockout < ActiveRecord::Base
 	end
 
 	# email on creation of a lockout
-	def email_lockout_affected_users(start_date, end_date, notify_admins = true)
-
+	def email_lockout_affected_users(start_date, end_date, notify_admins = false)
+		# Notify regular users
 		users = self.get_affected_users(start_date, end_date, notify_admins)
+		# Notify admin users differently
+		admin_user_ids = UserHasPermission.where(permission_id: Permission::MANAGE_LOCKOUT).pluck(:user_id)
+		admin_users = User.where(id: admin_user_ids)
 
-		
+		# Regular email to affected users
 		users.each do |user|
 			if user.email && !user.email.empty?
 				subject = "#{self.resource_name} Temporarily Out of Service"
 				body = "<p>Hi #{user.username},\nYou have a machine reservation that's been impacted by a Lockout/Tagout (LOTO). #{self.resource_name} has been locked out and is currently unavailable for use. The reason for the LOTO is:\n\n#{self.description}\n\nYour reservation has not been deleted in the event we are able to resolve the situation before then. Note that new reservations may not be created for this machine while it's locked out.\n\nWe'll keep you updated as we learn more and will notify you when the equipment is back online.</p>"
 
 				Emailer.mail(user.email, subject, body, '', nil)
+			end
+		end
+
+		# Email to admins
+		admin_users.each do |admin_user|
+			if admin_user.email && !admin_user.email.empty?
+				subject = "#{self.resource_name} Lockout Notification"
+				body = "<p>Hi #{admin_user.username}, \nThe user #{self.initiated_by.username} locked out a piece of equipment.  #{self.resource_name} has been locked out due to #{self.description}.</p>"
+
+				Emailer.mail(admin_user.email, subject, body, '', nil)
 			end
 		end
 	end
@@ -138,6 +151,7 @@ class Lockout < ActiveRecord::Base
 
 	# email on release of a lockout
 	def email_release_affected_users(notify_admins = true)
+		# Notify any users that would have been notified at the previous midnight
 		users = self.get_affected_users(Time.now.in_time_zone, Time.now.in_time_zone.midnight + 2.day, notify_admins)
 
 		users.each do |user|
