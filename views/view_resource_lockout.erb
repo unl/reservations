@@ -6,6 +6,7 @@
     <li><a href="#active">Active</a></li>
     <li><a href="#upcoming">Upcoming</a></li>
 		<li><a href="#history">History</a></li>
+		<li><a href="#notifications">Notifications</a></li>
   </ul>
 	<div id="active">
 		<% if active_lockouts.length > 0 %>
@@ -147,6 +148,16 @@
 		<% else %>
 			<p>No lockout history for this tool.</p>
 		<% end %>
+	</div>
+	<div id="notifications">
+		<h2>Notifications</h2>
+		<p>Email notifications are sent users who have conflicting reservations and all accounts that have access to the lockout permission at 4 different times:</p>
+		<ol>
+			<li>When a lockout is created, all users that have reservations in the rest of the day and all of the following day are notified immediately. If the lockout includes a scheduled start and end date, only the users with conflicting reservations during that time are notified</li>
+			<li>At midnight, users that have reservations on locked out machines between 24 and 48 hours from that time will be notified of the ongoing lockout.</li>
+			<li>If the scheduled start or end date are changed, all users with reservations conflicting with the updated start and end dates are notified immediately</li>
+			<li>Whenever a lockout is manually released, all users between the time of the release and the end of the next day are notified. If the lockout was scheduled, only the users that had reservations until the anticipated end of the lockout are notified.</li>
+		</ol>
 	</div>
 </div>
 <script>

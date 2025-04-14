@@ -62,7 +62,7 @@ class Lockout < ActiveRecord::Base
 	scope :in_day, ->(time) {
 		today = time.in_time_zone.midnight
 		tomorrow = (time.in_time_zone.midnight + 1.day + 1.hour).in_time_zone.midnight
-		where('(started_on >= ? AND started_on < ?) OR (released_on >= ? AND released_on < ?)', today.getutc, tomorrow.getutc, today.getutc, tomorrow.getutc)
+		where('released_on IS NULL OR (started_on >= ? AND started_on < ?) OR (released_on >= ? AND released_on < ?)', today.getutc, tomorrow.getutc, today.getutc, tomorrow.getutc)
 	}
 
 	def length
@@ -115,11 +115,16 @@ class Lockout < ActiveRecord::Base
 		admin_user_ids = UserHasPermission.where(permission_id: Permission::MANAGE_LOCKOUT).pluck(:user_id)
 		admin_users = User.where(id: admin_user_ids)
 
+		expected_date = ""
+		if self.released_on
+			expected_date = "#{self.started_on.in_time_zone.strftime('%m/%d/%Y %I:%M %p')} to #{self.released_on.in_time_zone.strftime('%m/%d/%Y %I:%M %p')}\n"
+		end
+
 		# Regular email to affected users
 		users.each do |user|
 			if user.email && !user.email.empty?
 				subject = "#{self.resource_name} Temporarily Out of Service"
-				body = "<p>Hi #{user.username},\nYou have a machine reservation that's been impacted by a Lockout/Tagout (LOTO). #{self.resource_name} has been locked out and is currently unavailable for use. The reason for the LOTO is:\n\n#{self.description}\n\nYour reservation has not been deleted in the event we are able to resolve the situation before then. Note that new reservations may not be created for this machine while it's locked out.\n\nWe'll keep you updated as we learn more and will notify you when the equipment is back online.</p>"
+				body = "<p>Hi #{user.username},\nYou have a machine reservation that's been impacted by a Lockout/Tagout (LOTO). #{self.resource_name} has been locked out and is currently unavailable for use. The reason for the LOTO is:\n\n#{self.description}\n#{expected_date}\nYour reservation has not been deleted in the event we are able to resolve the situation before then. Note that new reservations may not be created for this machine while it's locked out.\n\nWe'll keep you updated as we learn more and will notify you when the equipment is back online.</p>"
 
 				Emailer.mail(user.email, subject, body, '', nil)
 			end

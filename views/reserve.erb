@@ -196,7 +196,10 @@ end %>
                         start_time = lockout.started_on.in_time_zone
                     end
 
-                    if lockout.released_on.in_time_zone > day_end
+										if lockout.released_on.nil?
+												end_time = day_end
+												length = (day.end_of_day - start_time) / 60
+										elsif lockout.released_on.in_time_zone > day_end
                         end_time = day_end
                         length = length - ((lockout.released_on.in_time_zone - day.end_of_day) / 60)
                     else
@@ -209,7 +212,6 @@ end %>
                     if tool.is_24_hour && SS_ID == 8
                         top = top + 240
                     end
-
                     height = length * 20 / 30
                     %>
 
