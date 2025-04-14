@@ -257,15 +257,18 @@ post "/checkout/project/:nuid/create" do
 end
 
 # Project Edit Page
-get "/checkout/project/:project_id/edit" do
+get "/checkout/project/edit/?" do
+
   @breadcrumbs << { :text => "Edit Project" }
   require_login
   project = Project.find_by(id: params[:project_id])
-  user = User.find_by(id: project.owner_user_id)
+  user = User.find_by(user_nuid: params[:nuid])
+  owner = User.find_by(id: project.owner_user_id)
   teammates = ProjectTeammate.where("project_id = ?", params[:project_id])
-  params[:previous_nuid] = user.user_nuid
+  params[:previous_nuid] = owner.user_nuid
 
   erb :'engineering_garage/edit_project', :layout => :fixed, :locals => {
+                                           :owner => owner,
                                            :user => user,
                                            :title => project.title,
                                            :description => project.description,
@@ -276,7 +279,7 @@ get "/checkout/project/:project_id/edit" do
 end
 
 # Edit Project
-post "/checkout/project/:project_id/edit" do
+post "/checkout/project/edit/?" do
   @breadcrumbs << { :text => "Edit Project" }
   require_login
   project = Project.find_by(id: params[:project_id])
@@ -323,7 +326,7 @@ post "/checkout/project/:project_id/edit" do
 end
 
 # Delete Project
-post "/checkout/project/:project_id/edit/delete/" do
+post "/checkout/project/edit/delete/?" do
   project = Project.find_by(id: params[:project_id])
 
   if project != nil

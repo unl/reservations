@@ -9,7 +9,7 @@
         <form id="edit-project-form" action="" method="POST" enctype="multipart/form-data">
             <div class="dcf-form-group ">
                 <label for="nuid">Owner NUID <small class="dcf-required">Required</small></label>
-                <input class="dcf-w-100%" type="text" id="nuid" name="nuid" value ="<%= user.user_nuid %>" />
+                <input class="dcf-w-100%" type="text" id="nuid" name="nuid" value ="<%= owner.user_nuid %>" />
             </div>
 
             <div class="dcf-form-group">
@@ -31,7 +31,7 @@
                 <button class="dcf-mt-3 dcf-btn dcf-btn-secondary" type="submit" form="delete-project-form">Delete</button>
             </div>
         </form>
-        <form class="dcf-form dcf-w-100% dcf-mb-1" id="delete-project-form" action="/checkout/project/<%= project_id %>/edit/delete/" method="POST" onsubmit="return confirm('Delete project?');">
+        <form class="dcf-form dcf-w-100% dcf-mb-1" id="delete-project-form" action="/checkout/project/edit/delete/?project_id=<%= project_id %>" method="POST" onsubmit="return confirm('Delete project?');">
         </form>
     </fieldset>
 
