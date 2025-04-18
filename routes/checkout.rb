@@ -111,13 +111,19 @@ post '/checkout/events/:event_id/:user_id/' do
     end
   end
 
+  if event.start_time == nil
+    end_time = Time.now
+  else 
+    end_time = event.end_time
+  end
+
   if !user.nil?
     if event.event_type_id == new_member_orientation_id
       unless AttendedOrientation.exists?(user_id: user.id)
         AttendedOrientation.create(
           :user_id => user.id,
           :name => user.full_name,
-          :date_attended => event.end_time,
+          :date_attended => end_time,
           :university_status => user.university_status,
           :user_email => user.email,
           :event_id => event.id
