@@ -19,6 +19,7 @@ require 'models/resource_authorization'
 require 'models/resource'
 require 'models/service_space'
 require 'models/tool_log'
+require 'models/touch_point_log'
 
 SS_ID = ServiceSpace.where(:id => CONFIG['app']['service_space_id']).first.id
 
@@ -46,4 +47,8 @@ total_touches += EventSignup.joins(:event).where('events.start_time' => today).w
 # resource_authorizations (authorized_date = today)
 total_touches += ResourceAuthorization.where(:authorized_date => today).count
 
-puts "touch count is #{total_touches}"
+# Log count in db
+TouchPointLog.create(
+  :touch_point_count => total_touches,
+  :created_on => Time.now
+)
