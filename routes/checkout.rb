@@ -71,8 +71,9 @@ get "/checkout/user/?" do
 	tools_checked_out = Tool.where(id: user_checked_out.pluck(:tool_id))
 	tools_checked_out = tools_checked_out.select { |tool| tool.last_checked_out > tool.last_checked_in }
 	if search_tool_id && !search_tool_id.strip.empty?
-		available_tools = available_tools.select { |tool| tool.serial_number == search_tool_id }
-		tools_checked_out = tools_checked_out.select { |tool| tool.serial_number == search_tool_id }
+		search_tool_id = search_tool_id.downcase
+		available_tools = available_tools.select { |tool| tool.serial_number.downcase.strip == search_tool_id.downcase.strip }
+		tools_checked_out = tools_checked_out.select { |tool| tool.serial_number.downcase.strip == search_tool_id.downcase.strip }
 	end
 
 
