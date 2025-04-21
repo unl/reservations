@@ -24,7 +24,7 @@
 							<label for="filter-input">Filter Projects</label>
 							<div class="dcf-input-group">
 								<input type="hidden" name="nuid" value="<%= nuid %>">
-								<input id="project-input" name="search_project_id">
+								<input id="project-input" name="search_project_id" value="<%= params[:search_project_id] if params[:search_project_id] %>">
 								<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
 							</div>
 						</form>
@@ -185,11 +185,11 @@
 					<% end %>
 				</div>
 				<div id="user-tools-panel">
-					<form class="dcf-form dcf-w-25% dcf-pb-4" id="filter-input" action="/checkout/user/" method="GET" enctype="application/x-www-form-urlencoded">
+					<form class="dcf-form dcf-w-25% dcf-pb-4" id="filter-input" action="/checkout/user/#user-tools-panel" method="GET" enctype="application/x-www-form-urlencoded">
 						<label for="filter-input">Scan Tool</label>
 						<div class="dcf-input-group">
 							<input type="hidden" name="nuid" value="<%= nuid %>">
-							<input id="team-input" name="search_tool_id">
+							<input id="team-input" name="search_tool_id" value="<%= params[:search_tool_id] if params[:search_tool_id] %>">
 							<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
 						</div>
 					</form>
@@ -243,15 +243,18 @@
 								<% end %>
 								</tbody>
 							</table>
+						<% elsif !params[:search_tool_id].nil? %>
+							<p>No tools meet that filter</p>
 						<% else %>
-							<p>Currently no tools checked out.</p>
+							<p>No tools checked out.</p>
 						<% end %>
 					</div>
 					<div class="dcf-flex-grow-1">
 					<h4>Available Tools</h4>
+					<% if tools.count > 0 %>
 					<table class="dcf-table dcf-w-100% dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6" aria-describedby="tool-list-table">
-						<thead>
-							<tr>
+					<thead>
+					<tr>
 							<th scope="col">Tool Name</th>
 							<th scope="col">Serial Number</th>
 								<th scope="col">Model Number</th>
@@ -261,7 +264,7 @@
 								</thead>
 								<tbody>
 								<% tools.each do |tool| %>
-								<tr>
+									<tr>
 								<td><%= tool[:tool_name] %></td>
 								<td><%= tool[:serial_number] %></td>
 								<td><%= tool[:model_number] %></td>
@@ -294,13 +297,18 @@
 													</div>
 												</form>
 											</div>
-										</div>
-									</div>
-								</td>
+											</div>
+											</div>
+											</td>
 								</tr>
 								<% end %>
 								</tbody>
-					</table>
+								</table>
+								<% elsif !params[:search_tool_id].nil? %>
+									<p>No tools meet that filter</p>
+								<% else %>
+									<p>No tools available.</p>
+								<% end %>
 					</div>
 				</div>
 			</div>

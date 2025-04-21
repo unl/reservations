@@ -75,6 +75,7 @@ get "/checkout/user/?" do
 		tools_checked_out = tools_checked_out.select { |tool| tool.serial_number == search_tool_id }
 	end
 
+
   user_event_signups = EventSignup.where(user_id: checkout_user.id, attended: 0)
 
   user_events =  Event.where(id: user_event_signups.select(:event_id))
