@@ -79,13 +79,32 @@ get "/checkout/user/?" do
 
   user_events =  Event.where(id: user_event_signups.select(:event_id))
 
-  erb :"engineering_garage/checkout_user", :layout => :fixed, locals: {
+  erb :"engineering_garage/checkout_all", :layout => :fixed, locals: {
                                              :user => checkout_user,
 																						 :nuid => nuid,
                                              :checked_out => tools_checked_out,
                                              :projects => projects,
 																						 :tools => available_tools,
                                              :events => user_events,
+                                           }
+end
+
+get "/checkout/all_projects/" do
+  @breadcrumbs << { :text => "Checkout" }
+  require_login
+	search_project_id = params[:search_project_id]
+	search_tool_id = params[:search_tool_id]
+
+  projects = Project.all
+
+  checked_in_tools = Tool.all.select { |tool| tool.last_checked_out.nil? || tool.last_checked_in > tool.last_checked_out}
+
+  checked_out_tools = Tool.all.select { |tool| tool.last_checked_in <= tool.last_checked_out}
+
+  erb :"engineering_garage/checkout_all", :layout => :fixed, locals: {
+                                             :checked_out => checked_out_tools,
+                                             :projects => projects,
+																						 :tools => checked_in_tools,
                                            }
 end
 

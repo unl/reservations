@@ -300,32 +300,31 @@
 			</script>
 		</div>
 	</fieldset>
+	<fieldset class="dcf-form dcf-col-100% dcf-col-25%-end@lg dcf-overflow-auto unl-b-darker-gray dcf-rounded dcf-b-1 dcf-b-solid dcf-pt-4 dcf-pb-4 dcf-p dcf-pr-7 dcf-pl-7">
+		<legend>Tour and Training</legend>
+		<div class="dcf-overflow-x-auto dcf-p-1" tabindex="0">
+					<% if events.count > 0 %>
+							<table class="dcf-table dcf-table-striped dcf-w-100%">
+									<thead>
+											<tr>
+													<th scope="col">Event</th>
+													<th scope="col">Actions</th>
+											</tr>
+									</thead>
+									<tbody>
+									<% events.each do |event| %>
+										<tr>
+											<form class="dcf-form dcf-w-25% dcf-pb-4"	 action="/checkout/events/<%= event[:id] %>/<%= user[:id] %>/" method="POST" onsubmit="return confirm('Confirm <%= user[:username] %>\'s attendence for <%= event[:title] %>?');" enctype="application/x-www-form-urlencoded">
+												<td><%= event[:title] %></td>
+												<td><button class="dcf-btn dcf-btn-primary" type="submit">Confirm</button></td>
+											</form>
+										<tr>
+									<% end %>
+									</tbody>
+							</table>
+					<% else %>
+							<p>No events found.</p>
+					<% end %>
+			</div>
 	</fieldset>
-    <fieldset class="dcf-form dcf-col-100% dcf-col-25%-end@lg dcf-overflow-auto unl-b-darker-gray dcf-rounded dcf-b-1 dcf-b-solid dcf-pt-4 dcf-pb-4 dcf-p dcf-pr-7 dcf-pl-7">
-			<legend>Tour and Training</legend>
-			<div class="dcf-overflow-x-auto dcf-p-1" tabindex="0">
-            <% if events.count > 0 %>
-                <table class="dcf-table dcf-table-striped dcf-w-100%">
-                    <thead>
-                        <tr>
-                            <th scope="col">Event</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-										<tbody>
-										<% events.each do |event| %>
-											<tr>
-												<form class="dcf-form dcf-w-25% dcf-pb-4"	 action="/checkout/events/<%= event[:id] %>/<%= user[:id] %>/" method="POST" onsubmit="return confirm('Confirm <%= user[:username] %>\'s attendence for <%= event[:title] %>?');" enctype="application/x-www-form-urlencoded">
-													<td><%= event[:title] %></td>
-													<td><button class="dcf-btn dcf-btn-primary" type="submit">Confirm</button></td>
-												</form>
-											<tr>
-										<% end %>
-										</tbody>
-                </table>
-            <% else %>
-                <p>No events found.</p>
-            <% end %>
-        </div>
-    </fieldset>
 </div>
