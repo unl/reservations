@@ -124,6 +124,10 @@
                         <input <%= 'checked="checked"' if user.permissions.include?(mc_permisssion) %> type="checkbox" id="permission-<%= mc_permisssion.id %>" name="permission_<%= mc_permisssion.id %>">
                         <label for="permission-<%= mc_permisssion.id %>"><%= mc_permisssion.name %> </label>
                     </div>
+                    <div class="dcf-input-checkbox">
+                        <input <%= 'checked="checked"' if user.permissions.include?(rpdr_permission) %> type="checkbox" id="permission-<%= rpdr_permission.id %>" name="permission_<%= rpdr_permission.id %>">
+                        <label for="permission-<%= rpdr_permission.id %>"><%= rpdr_permission.name %> </label>
+                    </div>
                 <% end %>
                 <% permissions.each do |perm| %>
                     <div class="dcf-input-checkbox">
