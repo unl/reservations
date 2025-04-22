@@ -111,7 +111,7 @@ post '/checkout/events/:event_id/:user_id/' do
     end
   end
 
-  if event.start_time == nil
+  if event.start_time == nil && SS_ID == 8
     end_time = Time.now
   else 
     end_time = event.end_time
