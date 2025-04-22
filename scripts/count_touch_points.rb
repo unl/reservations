@@ -24,31 +24,37 @@ require 'models/touch_point_log'
 SS_ID = ServiceSpace.where(:id => CONFIG['app']['service_space_id']).first.id
 
 today = Date.today.all_day
-total_touches = 0
 
 # project (created_on = today)
-total_touches += Project.where(created_on: today).count
+# unique_touches = Project.distinct.where(created_on: today).pluck(:owner_user_id)
+unique_touches = Project.distinct.pluck(:owner_user_id)
 
 # project_logs (checked_date = today)
-total_touches += ProjectLog.where(checked_date: today).count
+# unique_touches |= ProjectLog.distinct.where(checked_date: today).pluck(:checkout_user_id)
+unique_touches |= ProjectLog.distinct.pluck(:checkout_user_id)
 
 # tool_logs (checked_date = today) 
-total_touches += ToolLog.where(checked_date: today).count
+# unique_touches |= ToolLog.distinct.where(checked_date: today).pluck(:checkout_user_id)
+unique_touches |= ToolLog.distinct.pluck(:checkout_user_id)
 
 # reservations (start_time = today)  
-total_touches += Reservation.joins(:resource).where('resources.service_space_id' => 8).where('reservations.start_time' => today).count
+# unique_touches |= Reservation.distinct.joins(:resource).where('resources.service_space_id' => 8).where('reservations.start_time' => today).pluck(:user_id)
+unique_touches |= Reservation.distinct.joins(:resource).pluck(:user_id)
 
 # attended_orientation (date_attended = today)
-total_touches += AttendedOrientation.joins(:event).where('attended_orientations.date_attended' => today).where('events.service_space_id' => 8).count
+# unique_touches |= AttendedOrientation.distinct.joins(:event).where('attended_orientations.date_attended' => today).where('events.service_space_id' => 8).pluck(:user_id)
+unique_touches |= AttendedOrientation.distinct.joins(:event).where('events.service_space_id' => 8).pluck(:user_id)
 
 # event attendance (  GET eventID where(event.start_time = today), countif(event_signups(eventID) where attended = 1)  )
-total_touches += EventSignup.joins(:event).where('events.start_time' => today).where('event_signups.attended' => 1).where('events.service_space_id' => 8).count
+# unique_touches |= EventSignup.distinct.joins(:event).where('events.start_time' => today).where('event_signups.attended' => 1).where('events.service_space_id' => 8).pluck(:user_id)
+unique_touches |= EventSignup.distinct.joins(:event).where('events.service_space_id' => 8).pluck(:user_id)
 
 # resource_authorizations (authorized_date = today)
-total_touches += ResourceAuthorization.where(:authorized_date => today).count
+# unique_touches |= ResourceAuthorization.distinct.where(:authorized_date => today).pluck(:user_id)
+unique_touches |= ResourceAuthorization.distinct.pluck(:user_id)
 
 # Log count in db
 TouchPointLog.create(
-  :touch_point_count => total_touches,
+  :touch_point_count => unique_touches.count,
   :created_on => Time.now
 )
