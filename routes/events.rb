@@ -298,7 +298,7 @@ end
 
 def verify_recaptcha(options = {})
   options = { model: options } unless options.is_a? Hash
-  return true if CONFIG['email']['site_key'].nil? || CONFIG['reCaptcha']['site_key'].empty?
+  return true if CONFIG['reCaptcha']['site_key'].nil? || CONFIG['reCaptcha']['site_key'].empty?
   return true if Recaptcha.skip_env?(options[:env])
 
   model = options[:model]
