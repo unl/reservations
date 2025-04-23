@@ -6,6 +6,8 @@ require 'models/event_signup'
 require 'models/space_hour'
 require 'erb'
 require 'models/lockout'
+require 'models/touch_point_log'
+
 
 get '/status_page/?' do
 	@breadcrumbs << {:text => 'Status Page'}
@@ -27,7 +29,43 @@ get '/status_page/?' do
         potential_walkins: EventSignup.where(event_id: event.id, attended: false).count
         }
     end
-  
+      
+    forecasts_by_day = {}
+    changes_by_day = {}
+    
+    (0..6).each do |i|
+        day_name = (Date.today + i).strftime('%a')
+        dates = [21, 14, 7].map { |days_ago| Date.today - days_ago + i }
+    
+        touchdata = dates.map do |target_date|
+        TouchPointLog
+            .where("DATE(created_on) = ?", target_date)
+            .order(:created_on)
+            .first
+        end.compact
+    
+        if touchdata.size == 3
+        x_values = [3, 2, 1]
+        y_values = touchdata.map(&:touch_point_count)
+    
+        x_mean = x_values.sum.to_f / x_values.size
+        y_mean = y_values.sum.to_f / y_values.size
+    
+        numerator = x_values.zip(y_values).map { |x, y| (x - x_mean) * (y - y_mean) }.sum
+        denominator = x_values.map { |x| (x - x_mean)**2 }.sum
+    
+        slope = numerator / denominator
+        intercept = y_mean - slope * x_mean # we only need intercept since the full equ is forecast = (slope * x_forecast) + intercept but x_forecast = 0
+        forecast = intercept.round
+    
+        forecasts_by_day[day_name] = forecast
+        changes_by_day[day_name] = forecast - y_values.last
+        else
+        forecasts_by_day[day_name] = nil
+        changes_by_day[day_name] = nil
+        end
+    end
+
     upcoming_lockouts = Lockout.where('started_on BETWEEN ? AND ?', Time.now, Time.now + 7.days).includes(:resource)
     reservations = Reservation.select(:id, :start_time, :end_time).where.not(start_time: nil, end_time: nil)
 
@@ -38,7 +76,9 @@ get '/status_page/?' do
         :orientation_potentials => orientation_potentials,
         :upcoming_lockouts => upcoming_lockouts,
         :reservations => reservations,
-        :timeless_events => timeless_events
+        :timeless_events => timeless_events,
+        :forecasts_by_day => forecasts_by_day,
+        :changes_by_day => changes_by_day
     }
 end
 # events > event_type = 12
