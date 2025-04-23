@@ -125,7 +125,7 @@ post '/admin/events/:event_id/signup_list/?' do
 						signup_record.save
 					end
 
-          if event.start_time == nil
+          if event.start_time == nil && SS_ID == 8
             end_time = Time.now
           else 
             end_time = event.end_time
