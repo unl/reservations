@@ -1,15 +1,38 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css">
 <div class="dcf-col-50% dcf-ac-center">
+=======
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css">
+
     <h1 class="dcf-txt-h1 dcf-txt-center" id="Title">Kiewit Garage Status</h1>
 </div>
 
-<div class="dcf-box dcf-border-all dcf-p-6 dcf-mb-4">
-    <h2 class="dcf-txt-center">A beautiful histogram here</h2>
-    <p>
-        This box will be changed to a histogram at a later time
-    </p>
-
-
+<div id="reservations-histogram">
+  <table class="charts-css column show-labels data-spacing-3 show-heading">
+    <caption>Reservations (Last updated: <%= chart_start.strftime('%Y-%m-%d %H:%M') %>)</caption>
+    <thead>
+      <tr>
+        <th scope="col">Time</th>
+        <th scope="col">Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% max_count = bins.values.max.nonzero? || 1 %> <!-- prevent divide-by-zero -->
+      <% colors = ['#0072ce', '#28a745', '#dc3545', '#ffc107', '#6f42c1'] %>
+      <% bins.sort.each_with_index do |(interval, count), idx| %>
+        <tr>
+          <th scope="row"><%= interval.strftime('%H:%M') %></th>
+          <td
+            style="--size: <%= (count.to_f / max_count).round(2) %>; --color: <%= colors[idx % colors.length] %>;"
+            data-value="<%= count %>">
+            <%= count %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>
+
+<h1 class="dcf-txt-h3 dcf-txt-center" id="Title">Locked Out / Tag Out Machines</h1>
 
 <div class="dcf-grid dcf-col-gap-vw dcf-flex-wrap">
 

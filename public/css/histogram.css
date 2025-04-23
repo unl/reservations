@@ -1,0 +1,16 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+#reservations-histogram {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+#reservations-histogram .column {
+  --aspect-ratio: 4 / 3;
+}
