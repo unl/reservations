@@ -10,7 +10,6 @@ require 'models/lockout'
 get '/status_page/?' do
   @breadcrumbs << { text: 'Status Page' }
 
-<<<<<<< HEAD
     lockout_count = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).select(:resource_id).distinct.count
     lockouts = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).includes(:resource).all
     upcoming_lockouts = Lockout.where('started_on BETWEEN ? AND ?', Time.now, Time.now + 7.days).includes(:resource)
@@ -63,9 +62,9 @@ get '/status_page/?' do
         :orientation_potentials => orientation_potentials,
         :upcoming_lockouts => upcoming_lockouts,
         :reservations => reservations,
-        :timeless_events => timeless_events
-        :bins: bins,
-        :chart_start: chart_start
+        :timeless_events => timeless_events,
+        :bins => bins,
+        :chart_start => chart_start
     }
 end
 # events > event_type = 12
