@@ -62,27 +62,25 @@ get "/checkout/user/?" do
 	available_tools = Tool.all.select { |tool| tool.last_checked_out.nil? || tool.last_checked_in > tool.last_checked_out}
 	
 	# select the logs from tool logs where the user is checkout_user and the is_checking_in is false and is the most recent log for each tool id
-  user_checked_out = ToolLog.where(checkout_user_id: checkout_user.id, is_checking_in: false)
+  tools_user_checked_out = Tool.where(current_user_id: checkout_user.id)
 	
-	if user_checked_out.nil?
-		user_checked_out = []
+	if tools_user_checked_out.nil?
+		tools_user_checked_out = []
 	end
-	
-	tools_checked_out = Tool.where(id: user_checked_out.pluck(:tool_id))
-	tools_checked_out = tools_checked_out.select { |tool| tool.last_checked_out > tool.last_checked_in }
+
 	if search_tool_id && !search_tool_id.strip.empty?
 		available_tools = available_tools.select { |tool| tool.serial_number == search_tool_id }
-		tools_checked_out = tools_checked_out.select { |tool| tool.serial_number == search_tool_id }
+		tools_user_checked_out = tools_checked_out.select { |tool| tool.serial_number == search_tool_id }
 	end
 
   user_event_signups = EventSignup.where(user_id: checkout_user.id, attended: 0)
 
   user_events =  Event.where(id: user_event_signups.select(:event_id))
 
-  erb :"engineering_garage/checkout_all", :layout => :fixed, locals: {
+  erb :"engineering_garage/checkout_user", :layout => :fixed, locals: {
                                              :user => checkout_user,
 																						 :nuid => nuid,
-                                             :checked_out => tools_checked_out,
+                                             :checked_out => tools_user_checked_out,
                                              :projects => projects,
 																						 :tools => available_tools,
                                              :events => user_events,
@@ -91,20 +89,33 @@ end
 
 get "/checkout/all_projects/" do
   @breadcrumbs << { :text => "Checkout" }
+  # currently: Several things in the checkout use nuid to find the project. Recommended approach: For each of the projects, make a dictonary entry that gives the nuid, and pass that into the all.
   require_login
 	search_project_id = params[:search_project_id]
 	search_tool_id = params[:search_tool_id]
 
   projects = Project.all
 
-  checked_in_tools = Tool.all.select { |tool| tool.last_checked_out.nil? || tool.last_checked_in > tool.last_checked_out}
+  if search_project_id && !search_project_id.strip.empty?
+    projects = projects.where(bin_id: search_project_id.strip)
+  end
 
   checked_out_tools = Tool.all.select { |tool| tool.last_checked_in <= tool.last_checked_out}
+
+  if search_tool_id && !search_tool_id.strip.empty?
+		checked_out_tools = checked_out_tools.select { |tool| tool.serial_number == search_tool_id }
+	end
+
+  project_owner_nuid = {}
+
+  projects.each do |project|
+    project_owner_nuid[project.id] = User.find_by(id: project.owner_user_id).user_nuid
+  end
 
   erb :"engineering_garage/checkout_all", :layout => :fixed, locals: {
                                              :checked_out => checked_out_tools,
                                              :projects => projects,
-																						 :tools => checked_in_tools,
+                                             :project_owner_nuid => project_owner_nuid
                                            }
 end
 
@@ -430,6 +441,7 @@ post "/checkout/tool_checkout/?" do
 	end
 
 	tool.update_last_checked_out
+  tool.update_current_user(user: user, is_checking_in: false)
 	tool_log = ToolLog.new
 	tool_log.set_data(user: user, tool: tool, is_checking_in: false)
 
@@ -439,15 +451,14 @@ end
 
 # Tool Checkin
 post "/checkout/tool_checkin/?" do
-	nuid = params[:nuid]
 	tool_id = params[:tool_id]
-	if nuid.nil? || tool_id.nil?
+	if tool_id.nil?
 		flash :danger, "Error", "NUID or Tool ID not found"
 		redirect "/checkout/"
 	end
 
 	tool = Tool.find_by(id: tool_id)
-	user = User.find_by(user_nuid: nuid)
+	user = User.find_by(id: tool.current_user_id)
 	if tool.nil?
 		flash :danger, "Error", "Tool not found"
 		redirect "/checkout/"
@@ -457,6 +468,7 @@ post "/checkout/tool_checkin/?" do
 	end
 
 	tool.update_last_checked_in
+  tool.update_current_user(user: user, is_checking_in: true)
 	tool_log = ToolLog.new
 	tool_log.set_data(user: user, tool: tool, is_checking_in: true)
 	flash :success, "Success", "Tool checked in"
