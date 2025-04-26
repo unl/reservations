@@ -102,20 +102,29 @@ get "/checkout/all_projects/" do
 
   checked_out_tools = Tool.all.select { |tool| tool.last_checked_in <= tool.last_checked_out}
 
+  checked_out_tools = checked_out_tools.sort_by { |tool| tool.last_checked_out }.reverse
+
   if search_tool_id && !search_tool_id.strip.empty?
 		checked_out_tools = checked_out_tools.select { |tool| tool.serial_number == search_tool_id }
 	end
 
-  project_owner_nuid = {}
+  project_owners = {}
+
+  current_tool_users = {}
 
   projects.each do |project|
-    project_owner_nuid[project.id] = User.find_by(id: project.owner_user_id).user_nuid
+    project_owners[project.id] = User.find_by(id: project.owner_user_id)
+  end
+
+  checked_out_tools.each do |tool|
+    current_tool_users[tool.id] = User.find_by(id: tool.current_user_id)
   end
 
   erb :"engineering_garage/checkout_all", :layout => :fixed, locals: {
                                              :checked_out => checked_out_tools,
                                              :projects => projects,
-                                             :project_owner_nuid => project_owner_nuid
+                                             :project_owners => project_owners,
+                                             :current_tool_users => current_tool_users
                                            }
 end
 
@@ -296,6 +305,11 @@ get "/checkout/project/edit/?" do
   owner = User.find_by(id: project.owner_user_id)
   teammates = ProjectTeammate.where("project_id = ?", params[:project_id])
   params[:previous_nuid] = owner.user_nuid
+  return_to_all_projects = false
+  if !params[:returning_to_all_projects].nil?
+    return_to_all_projects = true
+  end
+
 
   erb :'engineering_garage/edit_project', :layout => :fixed, :locals => {
                                            :owner => owner,
@@ -305,6 +319,7 @@ get "/checkout/project/edit/?" do
                                            :bin_id => project.bin_id,
                                            :teammates => teammates,
                                            :project_id => project.id,
+                                           :return_to_all_projects => return_to_all_projects
                                          }
 end
 
