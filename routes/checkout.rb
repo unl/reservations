@@ -87,7 +87,7 @@ get "/checkout/user/?" do
                                            }
 end
 
-get "/checkout/all_projects/" do
+get "/checkout/warehouse/" do
   @breadcrumbs << { :text => "Checkout" }
   # currently: Several things in the checkout use nuid to find the project. Recommended approach: For each of the projects, make a dictonary entry that gives the nuid, and pass that into the all.
   require_login
@@ -305,9 +305,9 @@ get "/checkout/project/edit/?" do
   owner = User.find_by(id: project.owner_user_id)
   teammates = ProjectTeammate.where("project_id = ?", params[:project_id])
   params[:previous_nuid] = owner.user_nuid
-  return_to_all_projects = false
-  if !params[:returning_to_all_projects].nil?
-    return_to_all_projects = true
+  return_to_warehouse = false
+  if !params[:returning_to_warehouse].nil?
+    return_to_warehouse = true
   end
 
 
@@ -319,7 +319,7 @@ get "/checkout/project/edit/?" do
                                            :bin_id => project.bin_id,
                                            :teammates => teammates,
                                            :project_id => project.id,
-                                           :return_to_all_projects => return_to_all_projects
+                                           :return_to_warehouse => return_to_warehouse
                                          }
 end
 

@@ -12,7 +12,7 @@
 				<div id="user-projects-panel">
 					<% if defined?(projects) && projects.count > 0 %>
 						<h3>User Projects</h3>
-						<form class="dcf-form" style = "width: 14em" id="filter-input" action="/checkout/all_projects/?#user-projects-panel" method="GET" enctype="application/x-www-form-urlencoded">
+						<form class="dcf-form" style = "width: 14em" id="filter-input" action="/checkout/warehouse/?#user-projects-panel" method="GET" enctype="application/x-www-form-urlencoded">
 							<label for="filter-input">Filter Projects</label>
 							<div class="dcf-input-group">
 								<input id="project-input" name="search_project_id">
@@ -25,6 +25,7 @@
 									<th scope="col">Location</th>
 									<th scope="col">Project Name</th>
 									<th scope="col">Owner Username</th>
+									<th scope="col">Status</th>
 									<th scope="col">Last Accessed</th>
 									<th scope="col" class="dcf-txt-right">Project Actions</th>
 								</tr>
@@ -35,23 +36,24 @@
 										<td><%= project[:bin_id] %></td>
 										<td><%= project[:title] %></td>
 										<td><%= project_owners[project.id].username %></td>
-										<td>
 										<% if project[:last_checked_out] != nil && project[:last_checked_in] != nil %>
 											<% if project[:last_checked_out] >= project[:last_checked_in] %>
-												<%= project[:last_checked_out].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
+												<td><%= "Checked Out" %></td>
+												<td><%= project[:last_checked_out].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %></td>
 											<% else %>
-												<%= project[:last_checked_in].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
+												<td><%= "Checked In"  %></td>
+												<td><%= project[:last_checked_in].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %></td>
 											<% end %>
 										<% else %>
 											<% if project[:last_checked_out] != nil %>
-												<%= project[:last_checked_out].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
+												<td><%= "Checked Out" %></td>
+												<td><%= project[:last_checked_out].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %></td>
 											<% end %>
 											<% if project[:last_checked_in] != nil %>
-												<%= project[:last_checked_in].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
+												<td><%= "Checked In"  %></td>
+												<td><%= project[:last_checked_in].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %></td>
 											<% end %>
 										<% end %>
-
-										</td>
 										<td class="dcf-d-flex dcf-flex-row-rev dcf-flex-shrink-1 dcf-gap-2">
 											<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="delete-<%= project[:id] %>" type="button">Delete</button>
 											<div class="dcf-modal" id="delete-<%= project[:id] %>" hidden>
@@ -74,7 +76,7 @@
 													</div>
 												</div>
 											</div>
-											<a href="/checkout/project/edit/?project_id=<%= project[:id] %>&returning_to_all_projects=true" class="dcf-btn dcf-btn-primary">Edit</a>
+											<a href="/checkout/project/edit/?project_id=<%= project[:id] %>&returning_to_warehouse=true" class="dcf-btn dcf-btn-primary">Edit</a>
 										</td>
 									</tr>
 								<% end %>
@@ -85,7 +87,7 @@
 					<% end %>
 				</div>
 				<div id="user-tools-panel">
-					<form class="dcf-form dcf-pb-4" style = "width: 14em" id="tool-input" action="/checkout/all_projects/?#user-tools-panel" method="GET" enctype="application/x-www-form-urlencoded">
+					<form class="dcf-form dcf-pb-4" style = "width: 14em" id="tool-input" action="/checkout/warehouse/?#user-tools-panel" method="GET" enctype="application/x-www-form-urlencoded">
 					<label for="search_tool_id">Scan Tool</label>
 					<div class="dcf-input-group">
 						<input id="search_tool_id" name="search_tool_id">
