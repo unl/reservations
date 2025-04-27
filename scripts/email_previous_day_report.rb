@@ -23,9 +23,11 @@ require 'models/touch_point_log'
 SS_ID = ServiceSpace.where(:id => CONFIG['app']['service_space_id']).first.id
 
 # Get Newly Authorized Users
-users_authrizd_today = User.joins(:attended_orientations)
-        .where(users: {:service_space_id => SS_ID})
-        .where(attended_orientations: { 'date_attended >= ? AND date_attended < ?', Time.now - 1.days, Time.now}).all
+users_authrizd_today = User
+  .joins("INNER JOIN attended_orientations ON attended_orientations.user_id = users.id")
+  .where(users: { service_space_id: SS_ID })
+  .where('date_attended >= ? AND date_attended < ?', Time.now - 1.days, Time.now)
+
 
 # Status page
 # Num of Lockouts Logic

@@ -30,6 +30,7 @@ GEM
     fugit (1.8.0)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
+    gnuplot (2.6.2)
     guard (2.18.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -194,6 +195,7 @@ DEPENDENCIES
   activerecord (>= 6.0.3.5)
   bcrypt
   bigdecimal
+  gnuplot
   guard
   guard-less
   highlander
