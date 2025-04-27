@@ -42,7 +42,8 @@ get '/status_page/?' do
         potential_walkins: EventSignup.where(event_id: event.id, attended: false).count
         }
     end
-      
+    
+    # Forecasting Logic
     forecasts_by_day = {}
     changes_by_day = {}
     
