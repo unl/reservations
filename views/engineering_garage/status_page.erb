@@ -27,7 +27,7 @@
                     <% end %>
                     </tr>
                     <tr>
-                    <th scope="row">Change</th>
+                    <th scope="row">Change From Last Week</th>
                     <% forecasts_by_day.each_key do |day| %>
                         <% change = changes_by_day[day] %>
                         <td style="color: <%= change.nil? ? 'black' : (change > 0 ? 'green' : (change < 0 ? 'red' : 'gray')) %>">

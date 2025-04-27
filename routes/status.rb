@@ -27,7 +27,7 @@ get '/status_page/?' do
     chart_start = Time.at((Time.now.to_i / 1800) * 1800)
     chart_end = chart_start + 24.hours
 
-    # Create bins for 30-min intervals over 24 hours
+    # Create bins for 30-min intervals over 24 hours 
     bins = {}
     current = chart_start
     while current < chart_end
