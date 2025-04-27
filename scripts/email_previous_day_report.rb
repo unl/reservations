@@ -2,13 +2,12 @@ require 'bundler/setup'
 
 require_relative '../utils/language'
 ENV['RACK_ENV'] ||= 'development'
-# load the config file
-require_relative '../utils/config_loader'
 
-# set up the database connection
+# Load config and database connection
+require_relative '../utils/config_loader'
 require 'utils/database'
 
-# script-necessary things
+# Load models
 require 'models/user'
 require 'models/service_space'
 require 'models/resource'
@@ -20,96 +19,316 @@ require 'models/space_hour'
 require 'models/lockout'
 require 'models/touch_point_log'
 
-SS_ID = ServiceSpace.where(:id => CONFIG['app']['service_space_id']).first.id
+# Set service space ID
+SS_ID = ServiceSpace.where(id: CONFIG['app']['service_space_id']).first.id
 
-# Get Newly Authorized Users
-users_authrizd_today = User.joins(:attended_orientations)
-        .where(users: {:service_space_id => SS_ID})
-        .where(attended_orientations: { 'date_attended >= ? AND date_attended < ?', Time.now - 1.days, Time.now}).all
+# =====================
+# Data Queries
+# =====================
 
-# Status page
-# Num of Lockouts Logic
+# Newly Authorized Users (today)
+users_authorized_today = User.joins(:attended_orientations)
+  .where(users: { service_space_id: SS_ID })
+  .where('date_attended >= ? AND date_attended < ?', Time.now - 1.day, Time.now)
+
+# Lockouts
 lockout_count = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).select(:resource_id).distinct.count
+lockouts = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).includes(:resource)
 
-# Get lockouts Logic
-lockouts = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).includes(:resource).all
-
-# Logic for Orientation Potentials Logic
+# Orientation Potentials
 orientation_ids = Event.where(event_type_id: 12).pluck(:id)
 orientation_signups = EventSignup.where(event_id: orientation_ids)
 orientation_potentials = orientation_signups.where(attended: false).count
 
-# Logic for Timeless Event Potentials Logic
-timeless_events = Event.where(start_time: nil, service_space_id: SS_ID).where.not(event_type_id: 12).map do |event|
-  {
-    title: event.title,
-    potential_walkins: EventSignup.where(event_id: event.id, attended: false).count
-  }
-end
+# Timeless Events
+timeless_events = Event.where(start_time: nil, service_space_id: SS_ID)
+  .where.not(event_type_id: 12)
+  .map do |event|
+    {
+      title: event.title,
+      potential_walkins: EventSignup.where(event_id: event.id, attended: false).count
+    }
+  end
 
-# Upcoming Lockouts Logic
+# Upcoming Lockouts (next 7 days)
 upcoming_lockouts = Lockout.where('started_on BETWEEN ? AND ?', Time.now, Time.now + 7.days).includes(:resource)
 
-# Upcoming resource reservations Logic
-reservations = Reservation.select(:id, :start_time, :end_time).where.not(start_time: nil, end_time: nil)
+# Reservations
+reservations = Reservation.where.not(start_time: nil, end_time: nil).select(:id, :start_time, :end_time)
 
-# Plain text
+# Forecasting Logic (today + 6 more days = 7 days total)
+forecasts_by_day = {}
+changes_by_day = {}
+
+(0..6).each do |i|
+  forecast_day = Date.today + i
+  day_name = forecast_day.strftime('%a')
+
+  # Historical dates always relative to the forecasted day
+  dates = [21, 14, 7].map { |days_ago| forecast_day - days_ago }
+
+  touchdata = dates.map do |target_date|
+    TouchPointLog
+      .where("DATE(created_on) = ?", target_date)
+      .order(:created_on)
+      .first
+  end.compact
+
+  if touchdata.size == 3
+    x_values = [3, 2, 1]
+    y_values = touchdata.map(&:touch_point_count)
+
+    x_mean = x_values.sum.to_f / x_values.size
+    y_mean = y_values.sum.to_f / y_values.size
+
+    numerator = x_values.zip(y_values).map { |x, y| (x - x_mean) * (y - y_mean) }.sum
+    denominator = x_values.map { |x| (x - x_mean)**2 }.sum
+
+    slope = numerator / denominator
+    intercept = y_mean - slope * x_mean
+    forecast = intercept.round
+
+    forecasts_by_day[day_name] = forecast
+    changes_by_day[day_name] = forecast - y_values.last
+  else
+    forecasts_by_day[day_name] = nil
+    changes_by_day[day_name] = nil
+  end
+end
+
+require 'bundler/setup'
+
+require_relative '../utils/language'
+ENV['RACK_ENV'] ||= 'development'
+
+# Load config and database connection
+require_relative '../utils/config_loader'
+require 'utils/database'
+
+# Load models
+require 'models/user'
+require 'models/service_space'
+require 'models/resource'
+require 'models/reservation'
+require 'models/event'
+require 'models/event_type'
+require 'models/event_signup'
+require 'models/space_hour'
+require 'models/lockout'
+require 'models/touch_point_log'
+
+# Set service space ID
+SS_ID = ServiceSpace.where(id: CONFIG['app']['service_space_id']).first.id
+
+# Newly Authorized Users
+users_authorized_today = User.joins(:attended_orientations)
+  .where(users: { service_space_id: SS_ID })
+  .where('date_attended >= ? AND date_attended < ?', Time.now - 1.day, Time.now)
+
+# Lockouts
+lockout_count = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).select(:resource_id).distinct.count
+lockouts = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).includes(:resource)
+
+# Orientation Potentials
+orientation_ids = Event.where(event_type_id: 12).pluck(:id)
+orientation_signups = EventSignup.where(event_id: orientation_ids)
+orientation_potentials = orientation_signups.where(attended: false).count
+
+# Timeless Events
+timeless_events = Event.where(start_time: nil, service_space_id: SS_ID)
+  .where.not(event_type_id: 12)
+  .map do |event|
+    {
+      title: event.title,
+      potential_walkins: EventSignup.where(event_id: event.id, attended: false).count
+    }
+  end
+
+# Upcoming Lockouts (next 7 days)
+upcoming_lockouts = Lockout.where('started_on BETWEEN ? AND ?', Time.now, Time.now + 7.days).includes(:resource)
+
+# Reservations
+reservations = Reservation.where.not(start_time: nil, end_time: nil).select(:id, :start_time, :end_time)
+
+# Forecasting 
+forecasts_by_day = {}
+changes_by_day = {}
+
+(0..6).each do |i|
+  forecast_day = Date.today + i
+  day_name = forecast_day.strftime('%a')
+
+  # Historical dates always relative to the forecasted day
+  dates = [21, 14, 7].map { |days_ago| forecast_day - days_ago }
+
+  touchdata = dates.map do |target_date|
+    TouchPointLog
+      .where("DATE(created_on) = ?", target_date)
+      .order(:created_on)
+      .first
+  end.compact
+
+  if touchdata.size == 3
+    x_values = [3, 2, 1]
+    y_values = touchdata.map(&:touch_point_count)
+
+    x_mean = x_values.sum.to_f / x_values.size
+    y_mean = y_values.sum.to_f / y_values.size
+
+    numerator = x_values.zip(y_values).map { |x, y| (x - x_mean) * (y - y_mean) }.sum
+    denominator = x_values.map { |x| (x - x_mean)**2 }.sum
+
+    slope = numerator / denominator
+    intercept = y_mean - slope * x_mean
+    forecast = intercept.round
+
+    forecasts_by_day[day_name] = forecast
+    changes_by_day[day_name] = forecast - y_values.last
+  else
+    forecasts_by_day[day_name] = nil
+    changes_by_day[day_name] = nil
+  end
+end
+
 body = "Daily Orientation Status Report\n\n"
 
 # Authorized Users
-if users_authrizd_today.count > 0
-    body << "Users Authorized Today:\n"
-    users_authrizd_today.each do |user|
-        body << "- #{user.first_name} #{user.last_name}, Email: #{user.email}, NUID: #{user.NUID}\n"
-    end
+body << if users_authorized_today.any?
+  "Users Authorized Today:\n" +
+  users_authorized_today.map do |user|
+    "- #{user.first_name} #{user.last_name}, Email: #{user.email}, NUID: #{user.NUID}\n"
+  end.join
 else
-    body << "No users were authorized today.\n"
+  "No users were authorized today.\n"
 end
 
-# Potential orientation
+# Potential Orientation
 body << "\nUsers Signed Up for Orientation (Not Yet Attended): #{orientation_potentials} user(s)\n"
 
-# Timeless events
-if timeless_events.any?
-    body << "\nTimeless Events (No Start Time):\n"
-    timeless_events.each do |event|
-        body << "- #{event[:title]} — Potential Walk-ins: #{event[:potential_walkins]}\n"
-    end
+# Timeless Events
+body << if timeless_events.any?
+  "\nTimeless Events (No Start Time):\n" +
+  timeless_events.map do |event|
+    "- #{event[:title]} — Potential Walk-ins: #{event[:potential_walkins]}\n"
+  end.join
 else
-    body << "\nNo timeless events found.\n"
+  "\nNo timeless events found.\n"
 end
 
-# Past lockouts
+# Past Lockouts
 body << "\nPast Lockouts:\n"
-if lockouts.any?
-    lockouts.each do |lockout|
-        body << "- Resource: #{lockout.resource.name}, Released On: #{lockout.released_on.strftime('%Y-%m-%d')}\n"
-    end
+body << if lockouts.any?
+  lockouts.map do |lockout|
+    "- Resource: #{lockout.resource.name}, Released On: #{lockout.released_on.strftime('%Y-%m-%d')}\n"
+  end.join
 else
-    body << "No past lockouts found.\n"
+  "No past lockouts found.\n"
 end
 
-# Upcoming lockouts
+# Upcoming Lockouts
 body << "\nUpcoming Lockouts (Next 7 Days):\n"
-if upcoming_lockouts.any?
-    upcoming_lockouts.each do |lockout|
-        body << "- Resource: #{lockout.resource.name}, Starts On: #{lockout.started_on.strftime('%Y-%m-%d')}\n"
-    end
+body << if upcoming_lockouts.any?
+  upcoming_lockouts.map do |lockout|
+    "- Resource: #{lockout.resource.name}, Starts On: #{lockout.started_on.strftime('%Y-%m-%d')}\n"
+  end.join
 else
-    body << "No upcoming lockouts scheduled.\n"
+  "No upcoming lockouts scheduled.\n"
 end
 
 # Reservations
 body << "\nActive Reservations:\n"
-if reservations.any?
-    reservations.each do |res|
-        body << "- Reservation ID: #{res.id}, Start: #{res.start_time}, End: #{res.end_time}\n"
-    end
+body << if reservations.any?
+  reservations.map do |res|
+    "- Reservation ID: #{res.id}, Start: #{res.start_time}, End: #{res.end_time}\n"
+  end.join
 else
-    body << "No current reservations found.\n"
+  "No current reservations found.\n"
+end
+
+# Forecasting Section
+body << "\nTouchpoint Forecasts (Next 7 Days):\n"
+forecasts_by_day.each do |day, forecast|
+  if forecast
+    change = changes_by_day[day]
+    change_text = change.positive? ? "(+#{change})" : "(#{change})"
+    body << "- #{day}: #{forecast} touchpoints #{change_text}\n"
+  else
+    body << "- #{day}: Insufficient data for forecast\n"
+  end
 end
 
 body << "\nThis is an automated daily report."
 
-# Send email
+Emailer.mail(CONFIG['app']['email_from'], "Daily Status Report", body, '', nil)
+
+body = "Daily Orientation Status Report\n\n"
+
+# Authorized Users
+body << if users_authorized_today.any?
+  "Users Authorized Today:\n" +
+  users_authorized_today.map do |user|
+    "- #{user.first_name} #{user.last_name}, Email: #{user.email}, NUID: #{user.NUID}\n"
+  end.join
+else
+  "No users were authorized today.\n"
+end
+
+# Potential Orientation
+body << "\nUsers Signed Up for Orientation (Not Yet Attended): #{orientation_potentials} user(s)\n"
+
+# Timeless Events
+body << if timeless_events.any?
+  "\nTimeless Events (No Start Time):\n" +
+  timeless_events.map do |event|
+    "- #{event[:title]} — Potential Walk-ins: #{event[:potential_walkins]}\n"
+  end.join
+else
+  "\nNo timeless events found.\n"
+end
+
+# Past Lockouts
+body << "\nPast Lockouts:\n"
+body << if lockouts.any?
+  lockouts.map do |lockout|
+    "- Resource: #{lockout.resource.name}, Released On: #{lockout.released_on.strftime('%Y-%m-%d')}\n"
+  end.join
+else
+  "No past lockouts found.\n"
+end
+
+# Upcoming Lockouts
+body << "\nUpcoming Lockouts (Next 7 Days):\n"
+body << if upcoming_lockouts.any?
+  upcoming_lockouts.map do |lockout|
+    "- Resource: #{lockout.resource.name}, Starts On: #{lockout.started_on.strftime('%Y-%m-%d')}\n"
+  end.join
+else
+  "No upcoming lockouts scheduled.\n"
+end
+
+# Reservations
+body << "\nActive Reservations:\n"
+body << if reservations.any?
+  reservations.map do |res|
+    "- Reservation ID: #{res.id}, Start: #{res.start_time}, End: #{res.end_time}\n"
+  end.join
+else
+  "No current reservations found.\n"
+end
+
+# Forecasting Section
+body << "\nTouchpoint Forecasts (Next 7 Days):\n"
+forecasts_by_day.each do |day, forecast|
+  if forecast
+    change = changes_by_day[day]
+    change_text = change.positive? ? "(+#{change})" : "(#{change})"
+    body << "- #{day}: #{forecast} touchpoints #{change_text}\n"
+  else
+    body << "- #{day}: Insufficient data for forecast\n"
+  end
+end
+
+body << "\nThis is an automated daily report."
+
+
 Emailer.mail(CONFIG['app']['email_from'], "Daily Status Report", body, '', nil)
