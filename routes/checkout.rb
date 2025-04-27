@@ -265,7 +265,6 @@ get "/checkout/project/edit/?" do
   user = User.find_by(user_nuid: params[:nuid])
   owner = User.find_by(id: project.owner_user_id)
   teammates = ProjectTeammate.where("project_id = ?", params[:project_id])
-  params[:previous_nuid] = owner.user_nuid
 
   erb :'engineering_garage/edit_project', :layout => :fixed, :locals => {
                                            :owner => owner,
