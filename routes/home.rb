@@ -27,6 +27,15 @@ get '/home/?' do
 		order(:start_time).all
 	user_alerts = AlertSignup.joins(:alert).where('user_id = ?', @user.id)
 
+	logs = ToolLog.where(:checkout_user_id => @user.id)
+	user_tools = []
+	logs.each do |log|
+		tool = Tool.find(log.tool_id)
+		if !tool.nil? && tool.is_checked_out && !user_tools.include?(tool)
+			user_tools << tool
+		end
+	end
+	
 	if Announcements.count > 0
 		flash(:info, Announcements.first.header, Announcements.first.text)
 	end
@@ -35,7 +44,8 @@ get '/home/?' do
 		:reservations => reservations,
 		:events => user_events,
 		:trainer_events => trainer_events,
-		:user_alerts => user_alerts
+		:user_alerts => user_alerts,
+		:user_tools => user_tools
 	}
 end
 

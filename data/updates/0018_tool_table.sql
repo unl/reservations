@@ -7,7 +7,7 @@ CREATE TABLE `tools` (
 	`model_number` VARCHAR(255) DEFAULT NULL,
 	`serial_number` VARCHAR(255) DEFAULT NULL UNIQUE,
 	`INOP` tinyint(1) DEFAULT 0,
-	`last_checked_in` datetime DEFAULT NULL,
+	`last_checked_in` datetime DEFAULT CURRENT_TIMESTAMP,
 	`last_checked_out` datetime DEFAULT NULL,
 	`created_on` datetime DEFAULT CURRENT_TIMESTAMP,
 	`updated_on` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX index_resource_authorizations_on_resource_id_and_user_id ON resource_authorizations (resource_id, user_id);

@@ -11,11 +11,12 @@
         </ul>
         </li>
         <li><a href="/tools/">Reserve Equipment</a>
-        <% if SS_ID == 8 && has_permission?(Permission::MANAGE_CHECKOUT)  %>
-            <ul>
-                <li><a href="/checkout/">Checkout</a></li>
-            </ul>
-        <% end %>
+				<ul>
+        	<% if SS_ID == 8 && has_permission?(Permission::MANAGE_CHECKOUT)  %>
+            <li><a href="/checkout/">Checkout</a></li>
+					<% end %>
+          <li><a href="/lockout/">Lockout</a></li>
+				</ul>
         </li>
         <% if SS_ID == 1 %>
             <li><a href="/training-documents">Training Documents</a>

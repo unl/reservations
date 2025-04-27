@@ -3813,6 +3813,39 @@ INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUE
 INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 10, 8);
 INSERT INTO user_has_permissions(user_id, permission_id, service_space_id) VALUES (3, 11, 8);
 
+ALTER TABLE `events` ADD COLUMN `area` VARCHAR(50) DEFAULT NULL;
+ALTER TABLE `preset_events` ADD COLUMN `area` VARCHAR(50) DEFAULT NULL;
+
+ALTER TABLE `events` ADD COLUMN `trainer_2_id` int(11) DEFAULT NULL AFTER `trainer_id`;
+ALTER TABLE `events` ADD COLUMN `trainer_2_confirmed` tinyint(4) DEFAULT 0 AFTER `trainer_confirmed`;
+ALTER TABLE `events` ADD COLUMN `trainer_3_id` int(11) DEFAULT NULL AFTER `trainer_2_id`;
+ALTER TABLE `events` ADD COLUMN `trainer_3_confirmed` tinyint(4) DEFAULT 0 AFTER `trainer_2_confirmed`;
+
+ALTER TABLE `events`
+    ADD KEY `FK_trainer_2_id` (`trainer_2_id`);
+ALTER TABLE `events`
+    ADD KEY `FK_trainer_3_id` (`trainer_3_id`);
+
+ALTER TABLE `events`
+    ADD CONSTRAINT `FK_trainer_2_id` FOREIGN KEY (`trainer_2_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `events`
+    ADD CONSTRAINT `FK_trainer_3_id` FOREIGN KEY (`trainer_3_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+CREATE TABLE `tools` (
+	`id` int(11) PRIMARY KEY AUTO_INCREMENT,
+	`tool_name` VARCHAR(255) NOT NULL,
+	`category_id` int(11) DEFAULT NULL,
+	`description` VARCHAR(255) DEFAULT NULL,
+	`service_space_id` int(11) NOT NULL,
+	`model_number` VARCHAR(255) DEFAULT NULL,
+	`serial_number` VARCHAR(255) DEFAULT NULL UNIQUE,
+	`INOP` tinyint(1) DEFAULT 0,
+	`last_checked_in` datetime DEFAULT CURRENT_TIMESTAMP,
+	`last_checked_out` datetime DEFAULT NULL,
+	`created_on` datetime DEFAULT CURRENT_TIMESTAMP,
+	`updated_on` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
