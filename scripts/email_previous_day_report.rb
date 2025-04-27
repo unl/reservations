@@ -27,7 +27,7 @@ SS_ID = ServiceSpace.where(id: CONFIG['app']['service_space_id']).first.id
 # =====================
 
 # Newly Authorized Users (today)
-users_authrizd_today = User
+users_authorized_today = User
   .joins("INNER JOIN attended_orientations ON attended_orientations.user_id = users.id")
   .where(users: { service_space_id: SS_ID })
   .where('date_attended >= ? AND date_attended < ?', Time.now - 1.days, Time.now)
