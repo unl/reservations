@@ -55,7 +55,7 @@
 											<% end %>
 										<% end %>
 										<td class="dcf-d-flex dcf-flex-row-rev dcf-flex-shrink-1 dcf-gap-2">
-											<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="delete-<%= project[:id] %>" type="button">Delete</button>
+											<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-secondary" data-toggles-modal="delete-<%= project[:id] %>" type="button">Delete</button>
 											<div class="dcf-modal" id="delete-<%= project[:id] %>" hidden>
 												<div class="dcf-modal-wrapper">
 													<div class="dcf-modal-header">
@@ -69,7 +69,7 @@
 																<p id="bin_id"><strong>Location:</strong> <%= project[:bin_id] %></p>
 																<p><strong>Description:</strong> <%= project[:description] %></p>
 																<div class="dcf-form-controls-inline dcf-gap-2">
-																	<button class="dcf-btn dcf-btn-primary" type="submit">Delete</button>
+																	<button class="dcf-btn dcf-btn-secondary" type="submit">Delete</button>
 																</div>
 															</div>
 														</form>
