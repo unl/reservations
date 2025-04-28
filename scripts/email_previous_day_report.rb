@@ -171,7 +171,8 @@ end
 body << "\nThis is an automated daily report."
 
 # Get list of users with RECEIVE_PREVIOUS_DAY_REPORT permission
-users_to_email = User.joins(:user_has_permissions).where(:service_space_id => SS_ID).where("user_has_permissions.permission_id = 13").pluck(:email)
+pdr_permission = Permission.find(Permission::RECEIVE_PREVIOUS_DAY_REPORT)
+users_to_email = User.joins(:user_has_permissions).where(:service_space_id => SS_ID).where("user_has_permissions.permission_id = ?", pdr_permission).pluck(:email)
 
 users_to_email.each do |user|
   Emailer.mail(user, "Daily Status Report", body, '', nil)  
