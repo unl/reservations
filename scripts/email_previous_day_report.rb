@@ -57,7 +57,9 @@ timeless_events = Event.where(start_time: nil, service_space_id: SS_ID)
 upcoming_lockouts = Lockout.where('started_on BETWEEN ? AND ?', Time.now, Time.now + 7.days).includes(:resource)
 
 # Reservations
-reservations = Reservation.where.not(start_time: nil, end_time: nil).select(:id, :start_time, :end_time)
+reservations = Reservation.joins(:event)
+  .where("events.service_space_id" => SS_ID)
+  .where('reservations.start_time >= ? AND reservations.end_time < ?', Time.now, Time.now + 7.days)
 
 # Forecasting Logic (today + 6 more days = 7 days total)
 forecasts_by_day = {}
