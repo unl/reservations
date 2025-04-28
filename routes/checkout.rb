@@ -105,7 +105,8 @@ get "/checkout/warehouse/" do
   checked_out_tools = checked_out_tools.sort_by { |tool| tool.last_checked_out }.reverse
 
   if search_tool_id && !search_tool_id.strip.empty?
-		checked_out_tools = checked_out_tools.select { |tool| tool.serial_number == search_tool_id }
+    search_tool_id = search_tool_id.downcase
+		checked_out_tools = checked_out_tools.select { |tool| tool.serial_number.downcase.strip == search_tool_id.downcase.strip }
 	end
 
   project_owners = {}
