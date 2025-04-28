@@ -15,7 +15,9 @@
         	<% if SS_ID == 8 && has_permission?(Permission::MANAGE_CHECKOUT)  %>
             <li><a href="/checkout/">Checkout</a></li>
 					<% end %>
-          <li><a href="/lockout/">Lockout</a></li>
+        	<% if SS_ID == 8 %>
+						<li><a href="/lockout/">Lockout</a></li>
+					<% end %>
 				</ul>
         </li>
         <% if SS_ID == 1 %>

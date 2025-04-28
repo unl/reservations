@@ -371,7 +371,8 @@ INSERT INTO `permissions` (`id`, `name`) VALUES
 (9, 'Events Admin Read-only'),
 (10, 'Sub-Super User'),
 (11, 'Manage Checkout'),
-(12, 'Manage Lockout');
+(12, 'View User Permissions Read-Only');
+(13, 'Manage Lockout');
 
 -- --------------------------------------------------------
 
