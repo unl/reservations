@@ -12,10 +12,12 @@ require 'models/touch_point_log'
 get '/status_page/?' do
   @breadcrumbs << { text: 'Status Page' }
 
+  SS_ID = ServiceSpace.where(id: CONFIG['app']['service_space_id']).first.id
+
     lockout_count = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).select(:resource_id).distinct.count
     lockouts = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).includes(:resource).all
     upcoming_lockouts = Lockout.where('started_on BETWEEN ? AND ?', Time.now, Time.now + 7.days).includes(:resource)
-    reservations = Reservation.select(:id, :start_time, :end_time).where.not(start_time: nil, end_time: nil)
+    reservations = Reservation.joins(:resource).where("resource.service_space_id" => SS_ID).select(:id, :start_time, :end_time).where.not(start_time: nil, end_time: nil)
 
     # Retrieve a list events ID's of events with the Garage Orientation Event Type
     orientation_ids = Event.where(event_type_id: 12).pluck(:id)
