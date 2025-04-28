@@ -100,7 +100,7 @@ get "/checkout/warehouse/" do
     projects = projects.where(bin_id: search_project_id.strip)
   end
 
-  checked_out_tools = Tool.all.select { |tool| tool.last_checked_in <= tool.last_checked_out}
+  checked_out_tools = Tool.all.select { |tool| tool.is_checked_out }
 
   checked_out_tools = checked_out_tools.sort_by { |tool| tool.last_checked_out }.reverse
 
