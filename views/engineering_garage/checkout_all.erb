@@ -11,7 +11,7 @@
 				</ul>
 				<div id="user-projects-panel">
 					<% if defined?(projects) && projects.count > 0 %>
-						<h3>User Projects</h3>
+						<h2>User Projects</h2>
 						<form class="dcf-form" style = "width: 14em" id="filter-input" action="/checkout/warehouse/?#user-projects-panel" method="GET" enctype="application/x-www-form-urlencoded">
 							<label for="filter-input">Filter Projects</label>
 							<div class="dcf-input-group">
@@ -59,7 +59,7 @@
 											<div class="dcf-modal" id="delete-<%= project[:id] %>" hidden>
 												<div class="dcf-modal-wrapper">
 													<div class="dcf-modal-header">
-														<h4>Delete Project</h4>
+														<h3>Delete Project</h3>
 														<button class="dcf-btn-close-modal">Close</button>
 													</div>
 													<div class="dcf-modal-content">
@@ -96,7 +96,7 @@
 					</form>
 					<div class="dcf-w-100% dcf-gap-4">
 						<div>
-							<h3>Checked Out Tools</h3>
+							<h2>Checked Out Tools</h2>
 							<% if checked_out.count > 0 %>
 								<table class="dcf-table dcf-w-100% dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6">
 								<thead>
@@ -118,7 +118,7 @@
 											<div class="dcf-modal" id="checkin-tool-<%= tool[:id] %>" hidden>
 												<div class="dcf-modal-wrapper">
 													<div class="dcf-modal-header">
-													<h4>Check In Tool</h4>
+													<h3>Check In Tool</h3>
 														<button class="dcf-btn-close-modal">Close</button>
 													</div>
 													<div class="dcf-modal-content">
