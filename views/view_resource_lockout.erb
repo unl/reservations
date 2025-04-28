@@ -1,0 +1,181 @@
+<h1><%= tool.name %> Lockout Details</h1>
+<p>View active, upcoming, and past lockouts for <%= tool.name %>.</p>
+
+<div class="dcf-tabs dcf-tabs-responsive">
+  <ul>
+    <li><a href="#active">Active</a></li>
+    <li><a href="#upcoming">Upcoming</a></li>
+		<li><a href="#history">History</a></li>
+		<li><a href="#notifications">Notifications</a></li>
+  </ul>
+	<div id="active">
+		<% if active_lockouts.length > 0 %>
+			<form class="dcf-form" action="/lockout/<%= tool.id %>/release_all/" method="post">
+				<input type="hidden" name="resource_id" value="<%= tool.id %>"/>
+				<input type="hidden" name="user_id" value="<%= @user.id %>"/>
+				<button class="dcf-btn dcf-btn-primary" type="submit">Release All Active Lockouts</button>
+			</form>
+			<table class="dcf-table dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6" aria-describedby="active-lockouts-table">
+					<thead>
+							<tr>
+									<th scope="col">User</th>
+									<th scope="col">Description</th>
+									<th scope="col">Started On</th>
+									<th scope="col">Releases On</th>
+									<th scope="col">Actions</th>
+							</tr>
+					</thead>
+					<tbody>
+					<% active_lockouts.each do |lockout| %>
+							<tr>
+									<td>
+											<%= lockout.initiated_by.username %>
+									</td>
+									<td>
+											<%= lockout.description %>
+									</td>
+									<td>
+											<%= lockout.started_on.in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
+									</td>
+									<td>
+											<% if lockout.released_on.nil? %>
+												<p>Manual</p>
+											<% else %>
+												<%= lockout.released_on.in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
+											<% end %>
+									</td>
+									<td class="table-actions">
+											<a class="dcf-btn dcf-btn-secondary" href="/lockout/<%= tool.id %>/edit/<%= lockout.id %>">Edit</a>
+											<input class="dcf-btn dcf-btn-primary" type="submit" form="release-lockout-form-<%= lockout.id %>" value="Release">
+									</td>
+							</tr>
+					<% end %>
+					</tbody>
+			</table>
+		<% else %>
+			<p>No active lockouts for this tool.</p>
+			<a class="dcf-btn dcf-btn-primary" href="/lockout/<%= tool.id %>/create/">Create Lockout</a>
+		<% end %>
+	</div>
+	<div id="upcoming">
+		<% if scheduled_lockouts.length > 0 %>
+		<table class="dcf-table dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6" aria-describedby="upcoming-lockouts-table">
+				<thead>
+						<tr>
+								<th scope="col">User</th>
+								<th scope="col">Description</th>
+								<th scope="col">Starts On</th>
+								<th scope="col">Releases On</th>
+								<th scope="col">Actions</th>
+						</tr>
+				</thead>
+				<tbody>
+				<% scheduled_lockouts.each do |lockout| %>
+						<tr>
+								<td>
+										<%= lockout.initiated_by.username %>
+								</td>
+								<td>
+										<%= lockout.description %>
+								</td>
+								<td>
+										<%= lockout.started_on.in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
+								</td>
+								<td>
+										<% if lockout.released_on.nil? %>
+											<p>Manual</p>
+										<% else %>
+											<%= lockout.released_on.in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
+										<% end %>
+								</td>
+								<td class="table-actions">
+									<a class="dcf-btn dcf-btn-secondary" href="/lockout/<%= tool.id %>/edit/<%= lockout.id %>">Edit</a>
+									<input class="dcf-btn dcf-btn-primary" type="submit" form="delete-lockout-form-<%= lockout.id %>" value="Delete">
+								</td>
+						</tr>
+				<% end %>
+				</tbody>
+		</table>
+		<% else %>
+			<p>No upcoming lockouts for this tool.</p>
+		<% end %>
+	</div>
+	<div id="history">
+		<% if lockout_history.length > 0 %>
+		<table class="dcf-table dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6" aria-describedby="lockout-history-table">
+				<thead>
+						<tr>
+								<th scope="col">User</th>
+								<th scope="col">Description</th>
+								<th scope="col">Started On</th>
+								<th scope="col">Released On</th>
+								<th scope="col">Released By</th>
+								<th scope="col">Actions</th>
+						</tr>
+				</thead>
+				<tbody>
+				<% lockout_history.each do |lockout| %>
+						<tr>
+								<td>
+										<%= lockout.initiated_by.username %>
+								</td>
+								<td>
+										<%= lockout.description %>
+								</td>
+								<td>
+										<%= lockout.started_on.in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
+								</td>
+								<td>
+										<% if lockout.released_on.nil? %>
+											<p>Manual</p>
+										<% else %>
+											<%= lockout.released_on.in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %>
+										<% end %>
+								</td>
+								<td>
+										<% if lockout.released_by.nil? %>
+											<p>Automatic</p>
+										<% else %>
+											<%= lockout.released_by.username %>
+										<% end %>
+								<td>
+									<a class="dcf-btn dcf-btn-secondary" href="/lockout/<%= tool.id %>/edit/<%= lockout.id %>?fromHistory=true">Edit</a>
+								</td>
+						</tr>
+				<% end %>
+				</tbody>
+		</table>
+		<% else %>
+			<p>No lockout history for this tool.</p>
+		<% end %>
+	</div>
+	<div id="notifications">
+		<h2>Notifications</h2>
+		<p>Email notifications are sent users who have conflicting reservations and all accounts that have access to the lockout permission at 4 different times:</p>
+		<ol>
+			<li>When a lockout is created, all users that have reservations in the rest of the day and all of the following day are notified immediately. If the lockout includes a scheduled start and end date, only the users with conflicting reservations during that time are notified</li>
+			<li>At midnight, users that have reservations on locked out machines between 24 and 48 hours from that time will be notified of the ongoing lockout.</li>
+			<li>If the scheduled start or end date are changed, all users with reservations conflicting with the updated start and end dates are notified immediately</li>
+			<li>Whenever a lockout is manually released, all users between the time of the release and the end of the next day are notified. If the lockout was scheduled, only the users that had reservations until the anticipated end of the lockout are notified.</li>
+		</ol>
+	</div>
+</div>
+<script>
+  window.addEventListener('inlineJSReady', function() {
+    WDN.initializePlugin('tabs');
+  }, false);
+</script>
+
+<% active_lockouts.each do |lockout| %>
+	<form id="release-lockout-form-<%= lockout.id %>" class="dcf-form" action="/lockout/<%= tool.id %>/release/<%= lockout.id %>/" method="post">
+		<input type="hidden" name="resource_id" value="<%= tool.id %>"/>
+		<input type="hidden" name="lockout_id" value="<%= lockout.id %>"/>
+	</form>
+<% end %>
+
+<% scheduled_lockouts.each do |lockout| %>
+	<form id="delete-lockout-form-<%= lockout.id %>" class="dcf-form" action="/lockout/<%= tool.id %>/delete/<%= lockout.id %>/" method="post">
+		<input type="hidden" name="resource_id" value="<%= tool.id %>"/>
+		<input type="hidden" name="lockout_id" value="<%= lockout.id %>"/>
+	</form>
+<% end %>

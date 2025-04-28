@@ -1,0 +1,45 @@
+<h1 class="dcf-txt-h3" id="tools-list-table">Kiewit Garage Status</h1>
+
+<table class="dcf-table dcf-table-bordered" aria-describedby="tool-list-header">
+    <thead>
+        <tr>
+            <th scope="col">Category</th>
+            <th scope="col">Tool</th>
+            <th scope="col">Model</th>
+            <th scope="col">INOP</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% inop_tools.each do |tool| %>
+            <tr>
+                <td>
+                    <%= tool.get_category_name %>
+                </td>
+                <td>
+                    <%= tool.tool_name %>
+                </td>
+                <td>
+                    <%= tool.model_number %>
+                </td>
+                <td>
+                    <div class="dcf-input-checkbox">
+                        <input <%= 'checked="checked"' if tool.INOP %> id="INOP-checkbox_<%= tool.id %>" type="checkbox" name="INOP_<%= tool.id %>"  >
+                        <label for="INOP-checkbox_<%= tool.id %>"></label>
+                    </div>
+                </td>
+                <td>
+                    <%= tool.get_status %>
+                </td>
+                <td class="table-actions">
+                    <div>
+                        <a href="/admin/tools/<%= tool.id %>/edit/" class="dcf-btn dcf-btn-primary">Edit</a>
+                        <input class="dcf-btn dcf-btn-secondary" type="submit" form="delete-form-<%= tool.id %>" value="Delete">
+                    </div>
+                </td>
+            </tr>
+        <% end %>   
+    </tbody>
+</table>
+		
