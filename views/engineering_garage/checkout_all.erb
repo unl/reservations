@@ -15,7 +15,7 @@
 						<form class="dcf-form" style = "width: 14em" id="filter-input" action="/checkout/warehouse/?#user-projects-panel" method="GET" enctype="application/x-www-form-urlencoded">
 							<label for="project-input">Filter Projects</label>
 							<div class="dcf-input-group">
-								<input id="search_project_id" name="search_project_id" value="<%= params[:search_project_id] if params[:search_project_id] %>">
+								<input id="project-input" name="search_project_id" value="<%= params[:search_project_id] if params[:search_project_id] %>">
 								<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
 							</div>
 						</form>
