@@ -18,6 +18,7 @@ require 'models/event_signup'
 require 'models/space_hour'
 require 'models/lockout'
 require 'models/touch_point_log'
+require 'models/user_has_permission'
 
 # Set service space ID
 SS_ID = ServiceSpace.where(id: CONFIG['app']['service_space_id']).first.id
@@ -167,4 +168,9 @@ end
 
 body << "\nThis is an automated daily report."
 
-Emailer.mail(CONFIG['app']['email_from'], "Daily Status Report", body, '', nil)
+# Get list of users with RECEIVE_PREVIOUS_DAY_REPORT permission
+users_to_email = User.joins(:user_has_permissions).where(:service_space_id => SS_ID).where("user_has_permissions.permission_id = 13").pluck(:email)
+
+users_to_email.each do |user|
+  Emailer.mail(user, "Daily Status Report", body, '', nil)  
+end
