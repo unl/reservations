@@ -12,10 +12,10 @@
 				<div id="user-projects-panel">
 					<h2>User Projects</h2>
 					<% if defined?(projects) && projects.count > 0 %>
-						<form class="dcf-form" style = "width: 14em" id="filter-input" action="/checkout/warehouse/?#user-projects-panel" method="GET" enctype="application/x-www-form-urlencoded">
-							<label for="project-input">Filter Projects</label>
+						<form class="dcf-form dcf-pb-4" style = "width: 14em" id="filter-input" action="/checkout/warehouse/?#user-projects-panel" method="GET" enctype="application/x-www-form-urlencoded">
+							<label for="search_project_id">Filter Projects</label>
 							<div class="dcf-input-group">
-								<input id="project-input" name="search_project_id" value="<%= params[:search_project_id] if params[:search_project_id] %>">
+								<input id="search_project_id" name="search_project_id" value="<%= params[:search_project_id] if params[:search_project_id] %>">
 								<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
 							</div>
 						</form>
@@ -84,9 +84,9 @@
 						</table>
 						<% elsif !params[:search_project_id].nil? %>
 							<form class="dcf-form dcf-pb-4" style = "width: 14em" id="filter-input" action="/checkout/warehouse/?#user-projects-panel" method="GET" enctype="application/x-www-form-urlencoded">
-								<label for="project-input">Filter Projects</label>
+								<label for="search_project_id">Filter Projects</label>
 								<div class="dcf-input-group">
-									<input id="project-input" name="search_project_id">
+									<input id="search_project_id" name="search_project_id" value="<%= params[:search_project_id] if params[:search_project_id] %>">
 									<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
 								</div>
 							</form>
