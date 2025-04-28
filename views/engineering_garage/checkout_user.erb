@@ -34,7 +34,7 @@
 									<th scope="col">Location</th>
 									<th scope="col">Project Name</th>
 									<th scope="col">Last Accessed</th>
-									<th scope="col" class="dcf-txt-right">Project Actions</th>
+									<th scope="col">Project Actions</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -60,7 +60,7 @@
 
 										</td>
 										<td class="dcf-d-flex dcf-flex-row-rev dcf-flex-shrink-1 dcf-gap-2">
-											<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="delete-<%= project[:id] %>" type="button">Delete</button>
+											<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-secondary" data-toggles-modal="delete-<%= project[:id] %>" type="button">Delete</button>
 											<div class="dcf-modal" id="delete-<%= project[:id] %>" hidden>
 												<div class="dcf-modal-wrapper">
 													<div class="dcf-modal-header">
@@ -74,7 +74,7 @@
 																<p id="bin_id"><strong>Location:</strong> <%= project[:bin_id] %></p>
 																<p><strong>Description:</strong> <%= project[:description] %></p>
 																<div class="dcf-form-controls-inline dcf-gap-2">
-																	<button class="dcf-btn dcf-btn-primary" type="submit">Delete</button>
+																	<button class="dcf-btn dcf-btn-secondary" type="submit">Delete</button>
 																</div>
 															</div>
 														</form>
@@ -82,7 +82,7 @@
 												</div>
 											</div>
 											<% if project[:last_checked_out] == nil || project[:last_checked_out] <= project[:last_checked_in] %>
-												<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkout-project-<%= project[:id] %>" type="button">Check Out</button>
+												<button class="dcf-btn-toggle-modal dcf-btn dcf-jc-center dcf-w-11 dcf-btn-primary" data-toggles-modal="checkout-project-<%= project[:id] %>" type="button">Check Out</button>
 												<div class="dcf-modal" id="checkout-project-<%= project[:id] %>" hidden>
 													<div class="dcf-modal-wrapper">
 														<div class="dcf-modal-header">
@@ -95,9 +95,7 @@
 																	<p id="project_name"><strong>Name:</strong> <%= project[:title] %></p>
 																	<p id="bin_id"><strong>Location:</strong> <%= project[:bin_id] %></p>
 																	<p><strong>Description:</strong> <%= project[:description] %></p>
-																	<div class="dcf-form-controls-inline dcf-gap-2">
-																		<button class="dcf-btn dcf-btn-primary" type="submit">Check Out</button>
-																	</div>
+																	<button class="dcf-btn dcf-btn-primary dcf-form-controls-inline dcf-jc-center dcf-w-11" type="submit">Check Out</button>
 																</div>
 																<div class="dcf-col-100% dcf-col-50%@md dcf-overflow-y-auto" style = "max-height: 30rem;">
 																	<fieldset>
@@ -122,7 +120,7 @@
 													</div>
 												</div>
 											<% else %>
-												<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-secondary" data-toggles-modal="check_in-<%= project[:id] %>" type="button">Check In</button>
+												<button class="dcf-btn-toggle-modal dcf-btn dcf-jc-center dcf-w-11 dcf-btn-secondary" data-toggles-modal="check_in-<%= project[:id] %>" type="button">Check In</button>
 												<div class="dcf-modal" id="check_in-<%= project[:id] %>" hidden>
 													<div class="dcf-modal-wrapper">
 														<div class="dcf-modal-header">
@@ -135,9 +133,7 @@
 																	<p id="project_name"><strong>Name:</strong> <%= project[:title] %></p>
 																	<p id="bin_id"><strong>Location:</strong> <%= project[:bin_id] %></p>
 																	<p><strong>Description:</strong> <%= project[:description] %></p>
-																	<div class="dcf-form-controls-inline dcf-gap-2">
-																		<button class="dcf-btn dcf-btn-primary" type="submit">Check In</button>
-																	</div>
+																	<button class="dcf-btn dcf-btn-primary dcf-form-controls-inline dcf-jc-center dcf-w-11" type="submit">Check In</button>
 																</div>
 																<div class="dcf-col-100% dcf-col-50%@md dcf-overflow-y-auto" style = "max-height: 30rem;">
 																	<fieldset>
@@ -163,6 +159,47 @@
 												</div>
 											<% end %>
 											<a href="/checkout/project/edit/?nuid=<%= nuid %>&project_id=<%= project[:id] %>" class="dcf-btn dcf-btn-primary">Edit</a>
+											<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="log-project-<%= project[:id] %>" type="button">Log</button>
+ 												<div class="dcf-modal" id="log-project-<%= project[:id] %>" hidden>
+ 													<div class="dcf-modal-wrapper">
+ 														<div class="dcf-modal-header">
+ 															<h4>Log Project</h4>
+ 															<button class="dcf-btn-close-modal">Close</button>
+ 														</div>
+ 														<div class="dcf-modal-content">
+ 															<form class="dcf-form dcf-grid" action="/checkout/log_project/" method="POST" enctype="application/x-www-form-urlencoded">
+ 																<div class="dcf-col-100% dcf-col-50%@md">
+ 																	<input type="hidden" name="nuid" value="<%= nuid %>">
+ 																	<input type="hidden" name="bin_id" value="<%= project[:bin_id] %>">
+ 																	<p id="project_name"><strong>Name:</strong> <%= project[:title] %></p>
+ 																	<p id="bin_id"><strong>Location:</strong> <%= project[:bin_id] %></p>
+ 																	<p><strong>Description:</strong> <%= project[:description] %></p>
+ 																	<div class="dcf-form-controls-inline dcf-gap-2">
+ 																		<button class="dcf-btn dcf-btn-primary dcf-w-11" type="submit">Log</button>
+ 																	</div>
+ 																</div>
+ 																<div class="dcf-col-100% dcf-col-50%@md dcf-overflow-y-auto" style = "max-height: 30rem;">
+ 																	<fieldset>
+ 																	<legend><strong>Teammates:</strong></legend>
+ 																	<% teammates = project.find_teammates %>
+ 																	<% if teammates.present? %>
+ 																	<ul>
+ 																		<% teammates.each do |teammate| %>
+ 																			<li>
+ 																				<%= teammate.find_username.username %>
+ 																				<%= " (owner)" if teammate.is_owner %>
+ 																			</li>
+ 																		<% end %>
+ 																	</ul>
+ 																	<% else %>
+ 																		<p>No teammates found.</p>
+ 																	<% end %>
+ 																	</fieldset>
+ 																</div>
+ 															</form>
+ 														</div>
+ 													</div>
+ 												</div>
 										</td>
 									</tr>
 								<% end %>
