@@ -11,14 +11,14 @@
 }
 
 #reservations-histogram {
-  width: 100%;
+  width: clamp(10rem, 100%, 80rem);
   max-width: 1500px;
   margin: 0 auto;
   padding: 1rem;
 }
 
 #reservations-histogram table {
-  width: 100%;
+  width: clamp(10rem, 100%, 80rem);
   table-layout: fixed;
 }
 
