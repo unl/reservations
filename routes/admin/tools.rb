@@ -3,8 +3,6 @@ require 'models/permission'
 require 'models/reservation'
 require 'models/resource_authorization'
 require 'models/tool'
-require 'models/resource_authorization'
-require 'models/tool'
 
 NIS_TOOL_RESOURCE_CLASS_ID = 1
 
@@ -17,8 +15,6 @@ end
 get '/admin/tools/?' do
 	require_login
 	@breadcrumbs << {:text => 'Admin Tools'}
-
-	nuid = @user.user_nuid
 
 	nuid = @user.user_nuid
 
