@@ -2,7 +2,6 @@ require "models/project"
 require "models/project_teammate"
 require "models/project_log"
 require "models/tool_log"
-require "models/tool_log"
 require "date"
 require "erb"
 
@@ -13,7 +12,6 @@ before "/checkout*" do
 end
 
 # Check out scan pages
-# Check out scan pages
 get "/checkout/?" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
@@ -21,13 +19,10 @@ get "/checkout/?" do
 end
 
 # Check out page
-# Check out page
 get "/checkout/user/?" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
   nuid = params[:nuid]
-	search_project_id = params[:search_project_id]
-	search_tool_id = params[:search_tool_id]
 	search_project_id = params[:search_project_id]
 	search_tool_id = params[:search_tool_id]
 
