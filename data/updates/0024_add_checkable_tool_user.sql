@@ -1,0 +1,1 @@
+ALTER TABLE `tools` ADD COLUMN `current_user_id` int(11) DEFAULT NULL;
