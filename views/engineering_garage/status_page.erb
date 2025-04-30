@@ -101,7 +101,7 @@
         <%# right side of the page  dcf-grid dcf-col-gap-vw dcf-flex-wrap  #%>
         <div class="dcf-col-100% dcf-col-50%@md dcf-flex dcf-jc-center">
             <h2 class="dcf-txt-h2 dcf-txt-center" id="loto_title">Locked Out / Tag Out Machines</h2>
-
+            
             <div class="dcf-col-gap-vw" style="margin-top:15px">
                 <table class="dcf-table dcf-table-bordered dcf-w-100%" aria-describedby="num_down_machines">
                     <thead>
@@ -116,47 +116,56 @@
             <div class="dcf-col-100% dcf-w-100% dcf-flex-wrap">
                 <div class="dcf-col-67%-center dcf-felx-wrap">
                     <h2 class="dcf-txt-h2 dcf-txt-center dcf-mt-4">Currently Locked Out Equipment</h2>
-                    <table class="dcf-table dcf-table-bordered dcf-w-100%" aria-describedby="Down-Machines">
-                        <thead>
-                            <tr>
-                                <th>Machine Name</th>
-                                <th>Description</th>
-                                <th>Start Date</th>
-                                <th>Scheduled Release Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% lockouts.each do |lockout| %>
+                    <% if lockout_count > 0 %>
+                        <table class="dcf-table dcf-table-bordered dcf-w-100%" aria-describedby="Down-Machines">
+                            <thead>
                                 <tr>
-                                    <td><%= lockout.resource_name%></td>
-                                    <td><%= lockout.description %></td>
-                                    <td><%= lockout.started_on.strftime('%Y-%m-%d %H:%M') if lockout.started_on %></td>
-                                    <td><%= lockout.released_on.strftime('%Y-%m-%d %H:%M') if lockout.released_on %></td>
+                                    <th>Machine Name</th>
+                                    <th>Description</th>
+                                    <th>Start Date</th>
+                                    <th>Scheduled Release Date</th>
                                 </tr>
-                            <% end %>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <% lockouts.each do |lockout| %>
+                                    <tr>
+                                        <td><%= lockout.resource_name%></td>
+                                        <td><%= lockout.description %></td>
+                                        <td><%= lockout.started_on.strftime('%Y-%m-%d %H:%M') if lockout.started_on %></td>
+                                        <td><%= lockout.released_on.strftime('%Y-%m-%d %H:%M') if lockout.released_on %></td>
+                                    </tr>
+                                <% end %>
+                            </tbody>
+                        </table>
+                    <% else %>
+                        <h3 class="dcf-txt-h3 dcf-txt-center ">No Locked Out Equipment</h3>
+                    <% end %>
+
                     <h2 class="dcf-txt-h2 dcf-txt-center dcf-mt-4">Upcoming Scheduled Lockouts</h2>
-                    <table class="dcf-table dcf-table-bordered dcf-w-100%" aria-describedby="Upcoming-Machines">
-                        <thead>
-                            <tr>
-                                <th>Machine Name</th>
-                                <th>Description</th>
-                                <th>Scheduled Start Date</th>
-                                <th>Scheduled Release Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% upcoming_lockouts.each do |lockout| %>
+                    <% if upcoming_lockouts.count > 0 %>
+                        <table class="dcf-table dcf-table-bordered dcf-w-100%" aria-describedby="Upcoming-Machines">
+                            <thead>
                                 <tr>
-                                    <td><%= lockout.resource_name%></td>
-                                    <td><%= lockout.description %></td>
-                                    <td><%= lockout.started_on.strftime('%Y-%m-%d %H:%M') if lockout.started_on %></td>
-                                    <td><%= lockout.released_on.strftime('%Y-%m-%d %H:%M') if lockout.released_on %></td>
+                                    <th>Machine Name</th>
+                                    <th>Description</th>
+                                    <th>Scheduled Start Date</th>
+                                    <th>Scheduled Release Date</th>
                                 </tr>
-                            <% end %>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <% upcoming_lockouts.each do |lockout| %>
+                                    <tr>
+                                        <td><%= lockout.resource_name%></td>
+                                        <td><%= lockout.description %></td>
+                                        <td><%= lockout.started_on.strftime('%Y-%m-%d %H:%M') if lockout.started_on %></td>
+                                        <td><%= lockout.released_on.strftime('%Y-%m-%d %H:%M') if lockout.released_on %></td>
+                                    </tr>
+                                <% end %>
+                            </tbody>
+                        </table>
+                    <% else %>
+                        <h3 class="dcf-txt-h3 dcf-txt-center ">No Upcoming Lockouts</h3>
+                    <% end %>
                 </div>
             </div>
         
