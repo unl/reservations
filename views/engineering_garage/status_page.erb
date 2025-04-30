@@ -100,22 +100,10 @@
 
         <%# right side of the page  dcf-grid dcf-col-gap-vw dcf-flex-wrap  #%>
         <div class="dcf-col-100% dcf-col-50%@md dcf-flex dcf-jc-center">
-            <h2 class="dcf-txt-h2 dcf-txt-center" id="loto_title">Locked Out / Tag Out Machines</h2>
-            
-            <div class="dcf-col-gap-vw" style="margin-top:15px">
-                <table class="dcf-table dcf-table-bordered dcf-w-100%" aria-describedby="num_down_machines">
-                    <thead>
-                        <tr>
-                            <th class="dcf-txt-center">Number of Locked Out / Tag Out Machines</th>
-                            <th class="dcf-txt-center"><%= lockout_count %></th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
                             
             <div class="dcf-col-100% dcf-w-100% dcf-flex-wrap">
                 <div class="dcf-col-67%-center dcf-felx-wrap">
-                    <h2 class="dcf-txt-h2 dcf-txt-center dcf-mt-4">Currently Locked Out Equipment</h2>
+                    <h2 class="dcf-txt-h2 dcf-txt-center">Currently Locked Out Equipment (<%= lockout_count %>)</h2>
                     <% if lockout_count > 0 %>
                         <table class="dcf-table dcf-table-bordered dcf-w-100%" aria-describedby="Down-Machines">
                             <thead>
