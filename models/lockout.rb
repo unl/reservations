@@ -2,7 +2,8 @@ require 'active_record'
 require 'models/permission'
 
 class Lockout < ActiveRecord::Base
-	
+	belongs_to :resource
+
 	# Returns all the users affected by a lockout
 	def get_affected_users(start_date, end_date, notify_admins)
 		# All users with the MANAGE_LOCKOUT permission
