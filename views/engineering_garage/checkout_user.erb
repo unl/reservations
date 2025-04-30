@@ -1,12 +1,12 @@
 <h1 class="dcf-txt-h3" id="Checkout">Warehouse Check In / Check Out</h1>
 <a href="/checkout" class="dcf-btn dcf-btn-secondary dcf-mb-4" type="button">Return to Scan Page</a>
 <div class="dcf-grid dcf-col-gap-vw">
-  <fieldset class="dcf-form dcf-col-100% dcf-col-75%-start@md unl-b-darker-gray dcf-rounded dcf-b-1 dcf-b-solid dcf-pt-4 dcf-pb-4 dcf-p dcf-pr-7 dcf-pl-7">
+  <fieldset class="dcf-form dcf-col-100% dcf-col-75%-start@lg unl-b-darker-gray dcf-rounded dcf-b-1 dcf-b-solid dcf-pt-4 dcf-pb-4 dcf-p dcf-pr-7 dcf-pl-7">
 		<legend>User Details</legend>
 		<div class="dcf-d-flex dcf-flex-col dcf-gap-2">
 			<div class="dcf-d-flex dcf-flex-row dcf-jc-between dcf-ai-baseline dcf-w-100% dcf-gap-2">
 				<div class="dcf-d-inline-flex dcf-flex-row dcf-ai-baseline dcf-gap-4">
-					<h3><%= user[:username] %></h3>
+					<h2><%= user[:username] %></h2>
 				</div>
 				<div class="dcf-d-flex dcf-gap-2">
 					<a href="/checkout/project/<%= nuid %>/create" class="dcf-btn dcf-btn-primary">Create New Project</a>
@@ -19,16 +19,16 @@
 				</ul>
 				<div id="user-projects-panel">
 					<% if defined?(projects) && projects.count > 0 %>
-						<h4>User Projects</h4>
-						<form class="dcf-form" style = "width: 14em"id="filter-input" action="/checkout/user/" method="GET" enctype="application/x-www-form-urlencoded">
-							<label for="filter-input">Filter Projects</label>
+						<h3>User Projects</h3>
+						<form class="dcf-form" style = "width: 14em" id="filter-input" action="/checkout/user/" method="GET" enctype="application/x-www-form-urlencoded">
+							<label for="project-input">Filter Projects</label>
 							<div class="dcf-input-group">
 								<input type="hidden" name="nuid" value="<%= nuid %>">
 								<input id="project-input" name="search_project_id" value="<%= params[:search_project_id] if params[:search_project_id] %>">
 								<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
 							</div>
 						</form>
-						<table class="dcf-table dcf-w-100% dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6" aria-describedby="project-list-table">
+						<table class="dcf-table dcf-w-100% dcf-table-striped dcf-table-responsive dcf-mt-6 dcf-mb-6">
 							<thead>
 								<tr>
 									<th scope="col">Location</th>
@@ -168,7 +168,18 @@
 								<% end %>
 							</tbody>
 						</table>
-					<% else %>
+					<% elsif !params[:search_project_id].nil? %>
+						<h3>User Projects</h3>
+						<form class="dcf-form dcf-pb-4" style = "width: 14em" id="filter-input" action="/checkout/user/" method="GET" enctype="application/x-www-form-urlencoded">
+							<label for="project-input">Filter Projects</label>
+							<div class="dcf-input-group">
+								<input type="hidden" name="nuid" value="<%= nuid %>">
+								<input id="project-input" name="search_project_id" value="<%= params[:search_project_id] if params[:search_project_id] %>">
+								<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
+							</div>
+						</form>
+							<p>No projects meet that filter</p>
+						<% else %>
 						<p>No projects found.</p>
 					<% end %>
 				</div>

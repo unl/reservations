@@ -109,5 +109,3 @@ get '/status_page/?' do
         :chart_start => chart_start
     }
 end
-# events > event_type = 12
-# Filter event signups for all event ids for 

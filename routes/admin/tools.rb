@@ -3,8 +3,6 @@ require 'models/permission'
 require 'models/reservation'
 require 'models/resource_authorization'
 require 'models/tool'
-require 'models/resource_authorization'
-require 'models/tool'
 
 NIS_TOOL_RESOURCE_CLASS_ID = 1
 
@@ -20,8 +18,6 @@ get '/admin/tools/?' do
 
 	nuid = @user.user_nuid
 
-	nuid = @user.user_nuid
-
 	tools = Resource.where(:service_space_id => SS_ID).order(:name).all.to_a
 	tools.sort_by! do |tool|
 		[
@@ -29,20 +25,6 @@ get '/admin/tools/?' do
 			tool.name.to_s.downcase,
 			tool.model.to_s.downcase
 		]
-	end
-
-	checkable_tools = Tool.where(service_space_id: SS_ID)
-
-	if SS_ID == 8
-		erb :'admin/garage_tools', :layout => :fixed, :locals => {
-			:tools => tools,
-			:checkable_tools => checkable_tools,
-			:nuid => nuid
-		}	
-	else
-		erb :'admin/tools', :layout => :fixed, :locals => {
-			:tools => tools,
-		}	
 	end
 
 	checkable_tools = Tool.where(service_space_id: SS_ID)
