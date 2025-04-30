@@ -128,7 +128,7 @@
                         <tbody>
                             <% lockouts.each do |lockout| %>
                                 <tr>
-                                    <td><%= lockout.resource.name if lockout.resource %></td>
+                                    <td><%= lockout.resource_name%></td>
                                     <td><%= lockout.description %></td>
                                     <td><%= lockout.started_on.strftime('%Y-%m-%d %H:%M') if lockout.started_on %></td>
                                     <td><%= lockout.released_on.strftime('%Y-%m-%d %H:%M') if lockout.released_on %></td>
@@ -149,7 +149,7 @@
                         <tbody>
                             <% upcoming_lockouts.each do |lockout| %>
                                 <tr>
-                                    <td><%= lockout.resource.name if lockout.resource %></td>
+                                    <td><%= lockout.resource_name%></td>
                                     <td><%= lockout.description %></td>
                                     <td><%= lockout.started_on.strftime('%Y-%m-%d %H:%M') if lockout.started_on %></td>
                                     <td><%= lockout.released_on.strftime('%Y-%m-%d %H:%M') if lockout.released_on %></td>

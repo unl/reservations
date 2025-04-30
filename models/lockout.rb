@@ -5,7 +5,6 @@ class Lockout < ActiveRecord::Base
 	
 	# Returns all the users affected by a lockout
 	def get_affected_users(start_date, end_date, notify_admins)
-		
 		# All users with the MANAGE_LOCKOUT permission
 		if notify_admins
 			affected_users = UserHasPermission.where(permission_id: Permission::MANAGE_LOCKOUT).pluck(:user_id)
