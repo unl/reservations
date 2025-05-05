@@ -14,8 +14,9 @@ get '/status_page/?' do
 
   SS_ID = ServiceSpace.where(id: CONFIG['app']['service_space_id']).first.id
 
-    lockout_count = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).select(:resource_id).distinct.count
-    lockouts = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).includes(:resource).all
+    lockouts = Lockout
+      .where('started_on <= ?', Time.now).where('released_on IS NULL OR released_on > ?', Time.now).includes(:resource)
+    lockout_count = lockouts.select(:resource_id).distinct.count
     upcoming_lockouts = Lockout.where('started_on BETWEEN ? AND ?', Time.now, Time.now + 7.days).includes(:resource)
     reservations = Reservation.joins(:resource).where("resource.service_space_id" => SS_ID).select(:id, :start_time, :end_time).where.not(start_time: nil, end_time: nil)
 
