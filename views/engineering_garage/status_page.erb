@@ -55,7 +55,7 @@
       <% colors = ['#0072ce', '#28a745', '#dc3545', '#ffc107', '#6f42c1'] %>
       <% bins.sort.each_with_index do |(interval, count), idx| %>
         <tr>
-          <th scope="row"><%= interval.strftime('%H:%M') %></th>
+        <th scope="row"><div class="time-interval"><%= interval.strftime('%H:%M') %></div></th>
           <td
             style="--size: <%= (count.to_f / max_count).round(2) %>; --color: <%= colors[idx % colors.length] %>;"
             data-value="<%= count %>">

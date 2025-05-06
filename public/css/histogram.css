@@ -27,12 +27,14 @@
   word-wrap: break-word;
 }
 
-#reservations-histogram table tbody th[scope="row"] {
-  font-size: .6vw;
+.time-interval {
+  writing-mode: vertical-rl;
+  transform: rotate(335deg);
+  font-size: 0.55rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  padding-top: 4em;
 }
 
-@media (min-width: 1500px) {
-  #reservations-histogram table tbody th[scope="row"] {
-    font-size: 9px;
-  }
-}
