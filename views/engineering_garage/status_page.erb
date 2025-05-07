@@ -42,7 +42,7 @@
 </div>
 
 <div id="reservations-histogram">
-  <table class="charts-css column show-labels data-spacing-3 show-heading">
+<table id="reservations-chart" class="charts-css column show-labels data-spacing-3 show-heading">
     <caption>Reservations (Last updated: <%= chart_start.strftime('%Y-%m-%d %H:%M') %>)</caption>
     <thead>
       <tr>
@@ -52,7 +52,7 @@
     </thead>
     <tbody>
       <% max_count = bins.values.max.nonzero? || 1 %> <!-- prevent divide-by-zero -->
-      <% colors = ['#0072ce', '#28a745', '#dc3545', '#ffc107', '#6f42c1'] %>
+      <% colors = ['#0072ce', '#28a745', '#dc3545', '#e47d00', '#6f42c1'] %>
       <% bins.sort.each_with_index do |(interval, count), idx| %>
         <tr>
         <th scope="row"><div class="time-interval"><%= interval.strftime('%H:%M') %></div></th>
@@ -66,6 +66,27 @@
     </tbody>
   </table>
 </div>
+
+<script>
+  function checkScreenSizeForHistogram() {
+    const chart = document.getElementById("reservations-chart");
+
+    // Check if the screen width is under 897.92px
+    if (window.matchMedia("(max-width: 897.92px)").matches) {
+      chart.classList.remove("column");
+      chart.classList.add("bar");
+    } else {
+      chart.classList.remove("bar");
+      chart.classList.add("column");
+    }
+  }
+
+  // Initial check
+  document.addEventListener("DOMContentLoaded", checkScreenSizeForHistogram);
+
+  // Re-check on window resize
+  window.addEventListener("resize", checkScreenSizeForHistogram);
+</script>
 
 
     <div class="dcf-grid dcf-col-gap-vw dcf-flex-wrap dcf-mt-4 dcf-row-gap-6">
