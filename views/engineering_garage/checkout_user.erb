@@ -21,10 +21,10 @@
 					<% if defined?(projects) && projects.count > 0 %>
 						<h3>User Projects</h3>
 						<form class="dcf-form" style = "width: 14em" id="filter-input" action="/checkout/user/" method="GET" enctype="application/x-www-form-urlencoded">
-							<label for="filter-input">Filter Projects</label>
+							<label for="project-input">Filter Projects</label>
 							<div class="dcf-input-group">
 								<input type="hidden" name="nuid" value="<%= nuid %>">
-								<input id="project-input" name="search_project_id">
+								<input id="project-input" name="search_project_id" value="<%= params[:search_project_id] if params[:search_project_id] %>">
 								<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
 							</div>
 						</form>
@@ -205,16 +205,27 @@
 								<% end %>
 							</tbody>
 						</table>
-					<% else %>
+					<% elsif !params[:search_project_id].nil? %>
+						<h3>User Projects</h3>
+						<form class="dcf-form dcf-pb-4" style = "width: 14em" id="filter-input" action="/checkout/user/" method="GET" enctype="application/x-www-form-urlencoded">
+							<label for="project-input">Filter Projects</label>
+							<div class="dcf-input-group">
+								<input type="hidden" name="nuid" value="<%= nuid %>">
+								<input id="project-input" name="search_project_id" value="<%= params[:search_project_id] if params[:search_project_id] %>">
+								<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
+							</div>
+						</form>
+							<p>No projects meet that filter</p>
+						<% else %>
 						<p>No projects found.</p>
 					<% end %>
 				</div>
 				<div id="user-tools-panel">
-					<form class="dcf-form dcf-pb-4" style = "width: 14em" id="tool-input" action="/checkout/user/" method="GET" enctype="application/x-www-form-urlencoded">
-					<label for="search_tool_id">Scan Tool</label>
+					<form class="dcf-form dcf-pb-4" style="width: 14em" id="tool-input" action="/checkout/user/#user-tools-panel" method="GET" enctype="application/x-www-form-urlencoded">
+					<label for="filter-input">Scan Tool</label>
 					<div class="dcf-input-group">
 						<input type="hidden" name="nuid" value="<%= nuid %>">
-						<input id="search_tool_id" name="search_tool_id">
+						<input id="filter-input" name="search_tool_id" value="<%= params[:search_tool_id] if params[:search_tool_id] %>">
 						<button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
 					</div>
 					</form>
@@ -268,6 +279,8 @@
 								<% end %>
 								</tbody>
 							</table>
+						<% elsif !params[:search_tool_id].nil? %>
+							<p>No tools meet that filter</p>
 						<% else %>
 							<p>Currently no tools checked out.</p>
 						<% end %>

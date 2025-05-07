@@ -6,6 +6,7 @@ require 'models/resource_field'
 require 'models/resource_field_data'
 require 'models/preset_events_has_resource'
 require 'models/preset_events_has_resource_reservation'
+require 'models/lockout'
 
 class Resource < ActiveRecord::Base
 	has_many :reservations, dependent: :destroy
@@ -44,6 +45,34 @@ class Resource < ActiveRecord::Base
 			}
 		end
     end
+
+		def get_status
+			if self.is_locked_out?
+				return 'Locked Out'
+			else
+				return 'Active'
+			end
+		end
+
+		def is_locked_out?
+			lockouts = Lockout.where(:resource_id => self.id)
+			lockouts.each do |lockout|
+				if lockout.started_on <= Time.now && (lockout.released_on.nil? || lockout.released_on >= Time.now)
+					return true
+				end
+			end
+			return false
+		end
+
+		def is_manually_locked_out?
+			lockouts = Lockout.where(:resource_id => self.id)
+			lockouts.each do |lockout|
+				if lockout.started_on <= Time.now && lockout.released_on.nil? 
+					return true
+				end
+			end
+			return false
+		end
 
     def self.valid_category_id?(category_id)
         self.category_options.key?(category_id.to_i)
