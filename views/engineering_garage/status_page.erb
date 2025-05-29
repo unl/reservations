@@ -3,7 +3,7 @@
 
 <div class="dcf-grid dcf-col-gap-vw dcf-flex-wrap dcf-mb-4 dcf-row-gap-6">
 
-    <div class="dcf-col-100% dcf-col-50%@md dcf-d-flex dcf-jc-center dcf-ai-center">    
+    <div class="dcf-col-100% dcf-col-50%@md dcf-d-flex dcf-jc-center dcf-ai-center">
         <h1 class="dcf-txt-h1 dcf-txt-center" id="Title">Kiewit Garage Status</h1>
     </div>
 
@@ -30,15 +30,24 @@
                     <th scope="row">Change From Last Week</th>
                     <% forecasts_by_day.each_key do |day| %>
                         <% change = changes_by_day[day] %>
-                        <td style="color: <%= change.nil? ? '' : (change > 0 ? 'green' : (change < 0 ? 'red' : '')) %>">
-                        <%= change.nil? ? "N/A" : "#{change > 0 ? '+' : ''}#{change}" %>
-                        </td>
+                        <% if change.nil? %>
+                            <td>N/A</td>
+                        <% elsif change > 0 %>
+                            <td>
+                                <span class="unl-cream dcf-rounded dcf-p-1" style="background-color: #00784e;">+<%= change %></span>
+                            </td>
+                        <% else %>
+                            <td>
+                                <span class="unl-cream dcf-rounded dcf-p-1" style="background-color: #d53f25;"><%= change %></span>
+                            </td>
+                            
+                        <% end %>
                     <% end %>
                     </tr>
                 </tbody>
                 </table>
-            </div>    
-    </div>    
+            </div>
+    </div>
 </div>
 
 <div id="reservations-histogram">
@@ -112,16 +121,16 @@
                                     <td><%= event[:title] %></td>
                                     <td class="dcf-txt-center"><%= event[:potential_walkins] %></td>
                                 </tr>
-                            <% end %>    
+                            <% end %>
                         </tbody>
                     </table>
                 </div>
         </div>
-            
+
 
         <%# right side of the page  dcf-grid dcf-col-gap-vw dcf-flex-wrap  #%>
         <div class="dcf-col-100% dcf-col-50%@md dcf-flex dcf-jc-center">
-                            
+
             <div class="dcf-col-100% dcf-w-100% dcf-flex-wrap">
                 <div class="dcf-col-67%-center dcf-felx-wrap">
                     <h2 class="dcf-txt-h2 dcf-txt-center">Currently Locked Out Equipment (<%= lockout_count %>)</h2>
@@ -147,7 +156,7 @@
                             </tbody>
                         </table>
                     <% else %>
-                        <h3 class="dcf-txt-h3 dcf-txt-center ">No Locked Out Equipment</h3>
+                        <p class="dcf-txt-center">No Locked Out Equipment</p>
                     <% end %>
 
                     <h2 class="dcf-txt-h2 dcf-txt-center dcf-mt-4">Upcoming Scheduled Lockouts</h2>
@@ -173,11 +182,11 @@
                             </tbody>
                         </table>
                     <% else %>
-                        <h3 class="dcf-txt-h3 dcf-txt-center ">No Upcoming Lockouts</h3>
+                        <p class="dcf-txt-center">No Upcoming Lockouts</p>
                     <% end %>
                 </div>
             </div>
-        
+
         </div>
     </div>
 
