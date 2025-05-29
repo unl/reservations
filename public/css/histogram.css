@@ -1,0 +1,46 @@
+
+#reservations-histogram td {
+  font-size: 0.7rem;
+  min-height: 1.2em;
+  line-height: 1.2;
+  text-align: center;
+}
+
+#reservations-histogram {
+  width: clamp(10rem, 100%, 80rem);
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+#reservations-histogram table {
+  width: clamp(10rem, 100%, 80rem);
+  table-layout: fixed;
+}
+
+#reservations-histogram th,
+#reservations-histogram td {
+  word-wrap: break-word;
+}
+
+.time-interval {
+  writing-mode: vertical-rl;
+  transform: rotate(335deg);
+  font-size: 0.55rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  padding-top: 4em;
+}
+
+@media (max-width: 897.92px) {
+  #reservations-histogram td {
+    font-size: 0.6rem;
+    min-width: .6em;
+  }
+  .time-interval {
+    transform: rotate(270deg);
+    padding-top: 2em;
+  }
+}

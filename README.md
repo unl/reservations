@@ -99,4 +99,6 @@ Alternatively, you can skip SSO and use the standard login by commenting out the
 0 12 * * * ruby ././scripts/email_expiring_users.rb
 0 12 * * * ruby ././scripts/email_unconfirmed_trainers.rb
 0 22 * * * ruby ././scripts/email_expiring_users_vehicle_update.rb
+55 23 * * * ruby ././scripts/email_previous_day_report.rb
+55 23 * * * ruby ././scripts/count_touch_points.rb
 ```

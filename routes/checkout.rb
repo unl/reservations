@@ -69,8 +69,9 @@ get "/checkout/user/?" do
 	end
 
 	if search_tool_id && !search_tool_id.strip.empty?
-		available_tools = available_tools.select { |tool| tool.serial_number == search_tool_id }
-		tools_user_checked_out = tools_checked_out.select { |tool| tool.serial_number == search_tool_id }
+		search_tool_id = search_tool_id.downcase
+		available_tools = available_tools.select { |tool| tool.serial_number.downcase.strip == search_tool_id.downcase.strip }
+		tools_user_checked_out = tools_checked_out.select { |tool| tool.serial_number.downcase.strip == search_tool_id.downcase.strip
 	end
 
   user_event_signups = EventSignup.where(user_id: checkout_user.id, attended: 0)
@@ -151,13 +152,19 @@ post '/checkout/events/:event_id/:user_id/' do
     end
   end
 
+  if event.start_time == nil && SS_ID == 8
+    end_time = Time.now
+  else 
+    end_time = event.end_time
+  end
+
   if !user.nil?
     if event.event_type_id == new_member_orientation_id
       unless AttendedOrientation.exists?(user_id: user.id)
         AttendedOrientation.create(
           :user_id => user.id,
           :name => user.full_name,
-          :date_attended => event.end_time,
+          :date_attended => end_time,
           :university_status => user.university_status,
           :user_email => user.email,
           :event_id => event.id

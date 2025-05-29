@@ -176,6 +176,126 @@ end %>
                             <% end %>
                         <% end %>
                     <% end %>
+
+										<%
+                    lockouts.each do |lockout|
+                    length = lockout.length
+
+                    if tool.is_24_hour && SS_ID == 8
+                        day_start = (day.midnight) # 12:00 am
+                        day_end = (day.end_of_day) # 11:59 pm
+                    else 
+                        day_start = (day.midnight + 21600) # 06:00 am
+                        day_end = (day.end_of_day - 1799)  # 11:30 pm
+                    end
+
+                    if lockout.started_on.in_time_zone < day_start
+                        start_time = day_start
+                        length = length - ((day_start - lockout.started_on.in_time_zone) / 60)
+                    else
+                        start_time = lockout.started_on.in_time_zone
+                    end
+
+										if lockout.released_on.nil?
+												end_time = day_end
+												length = (day.end_of_day - start_time) / 60
+										elsif lockout.released_on.in_time_zone > day_end
+                        end_time = day_end
+                        length = length - ((lockout.released_on.in_time_zone - day.end_of_day) / 60)
+                    else
+                        end_time = lockout.released_on.in_time_zone
+                    end
+
+                    top = (((start_time - day.midnight) / 60 - 360) / 30) * 20
+
+                    # Shift div down to account for 12:00 pm to 6:00 am
+                    if tool.is_24_hour && SS_ID == 8
+                        top = top + 240
+                    end
+                    height = length * 20 / 30
+                    %>
+
+                    <div class="reservation" 
+                        style="top: <%= top %>px; height: <%= height %>px;">
+                        Scheduled Lockout
+                    </div>
+                    <% end %>
+
+                    <% unless space_hour.nil? 
+                        # figure out where the closed divs need to be
+                        # we can assume that all records in this space_hour are non-intertwined
+                        closed_start = 0
+                        closed_end = 0
+                        starts = space_hour.hours.map{|record| record[:start]}
+                        ends = space_hour.hours.map{|record| record[:end]}
+                        %> <%
+                        closeds = []
+                        first_minute = (tool.is_24_hour && SS_ID == 8) ? 0 : 360
+                        (first_minute..1439).each do |j|
+                            if starts.include?(j)
+                                closed_end = j
+                                closeds << [closed_start, closed_end]
+                                closed_start = 0
+                                closed_end = 0
+                            end
+                            if ends.include?(j)
+                                closed_start = j
+                            end
+                        end
+                        closed_end = 1440
+                        closeds << [closed_start, closed_end]
+
+                        closeds.each do |closed|
+                            start_time = closed[0] %>
+                            <% end_time = closed[1] %>
+                            <% 
+                            last_slot = (tool.is_24_hour && SS_ID == 8) ? 47 : 35
+                            if [((end_time - 360) / 30).floor, last_slot].min < 0
+                                next
+                            end
+                            top = ((start_time - 360) / 30) * 20
+
+                            if tool.is_24_hour && SS_ID == 8
+                                top = top + 240
+                            end
+
+                            height = (end_time - start_time) * 20 / 30
+                            if top < 0
+                                height += top
+                                top = 0
+                            end
+                            if top + height > 720
+                                height = 720 - top
+                            end %>
+                            <div class="status closed" title="Closed" style="top: <%= top %>px; height: <%= height %>px;">
+                                &nbsp;
+                            </div>
+                            <% end %>
+
+                        <% space_hour.hours.each do |record|
+                            if record[:status] != 'open' && record[:status] != 'closed'
+                                start_time = record[:start]
+                                end_time = record[:end]
+                                last_slot = (tool.is_24_hour && SS_ID == 8) ? 47 : 35
+                                if [((end_time - 360) / 30).floor, last_slot].min  < 0
+                                    next
+                                end
+                                top = ((start_time - 360) / 30) * 20
+                                height = (end_time - start_time) * 20 / 30
+                                if top < 0
+                                    height += top
+                                    top = 0
+                                end 
+                                if top + height > 720
+                                    height = 720 - top
+                                end
+                                %>
+                                <div title="<%= record[:status].split('_').join(' ').capitalize_all %>" class="status <%= record[:status].downcase.split('_').join('-') %>" style="top: <%= top %>px; height: <%= height %>px;">
+                                    &nbsp;
+                                </div>
+                            <% end %>
+                        <% end %>
+                    <% end %>
                     <div>
                         <% 
                         first_hour = (tool.is_24_hour && SS_ID == 8) ? 0 : 12
