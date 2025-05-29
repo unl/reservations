@@ -50,6 +50,15 @@ class Tool < ActiveRecord::Base
 		self.save
 	end
 
+	def update_current_user(user:, is_checking_in:)
+		if is_checking_in
+			self.current_user_id = nil
+		else
+			self.current_user_id = user.id
+		end
+		self.save
+	end
+
 	def set_data(params)
 		self.tool_name = params[:name]
 		self.category_id = params[:category_id].to_i

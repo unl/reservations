@@ -1,7 +1,14 @@
 <h1 class="dcf-txt-h3" id="Edit_Project">Edit Project</h1>
-<div>
-    <a href="/checkout/user/?nuid=<%= user.user_nuid %>" class="dcf-btn dcf-btn-secondary dcf-25% dcf-w-max-2xs dcf-mb-4" type="button">Back to Checkout</a>
-</div>
+
+<% if params[:returning_to_warehouse] %>
+    <div>
+        <a href="/checkout/warehouse/" class="dcf-btn dcf-btn-secondary dcf-25% dcf-w-max-2xs dcf-mb-4" type="button">Back to Warehouse</a>
+    </div>
+<% else %>
+    <div>
+        <a href="/checkout/user/?nuid=<%= user.user_nuid %>" class="dcf-btn dcf-btn-secondary dcf-25% dcf-w-max-2xs dcf-mb-4" type="button">Back to Checkout</a>
+    </div>
+<% end %>
 
 <div class="dcf-grid dcf-col-gap-vw">
     <fieldset class="dcf-form dcf-col-100% dcf-col-50%-start@sm unl-b-darker-gray dcf-rounded dcf-b-1 dcf-b-solid dcf-pt-4 dcf-pb-4 dcf-p dcf-pr-7 dcf-pl-7">
@@ -9,7 +16,7 @@
         <form id="edit-project-form" action="" method="POST" enctype="multipart/form-data">
             <div class="dcf-form-group ">
                 <label for="nuid">Owner NUID <small class="dcf-required">Required</small></label>
-                <input class="dcf-w-100%" type="text" id="nuid" name="nuid" value ="<%= user.user_nuid %>" />
+                <input class="dcf-w-100%" type="text" id="nuid" name="nuid" value ="<%= owner.user_nuid %>" />
             </div>
 
             <div class="dcf-form-group">
@@ -31,7 +38,7 @@
                 <button class="dcf-mt-3 dcf-btn dcf-btn-secondary" type="submit" form="delete-project-form">Delete</button>
             </div>
         </form>
-        <form class="dcf-form dcf-w-100% dcf-mb-1" id="delete-project-form" action="/checkout/project/<%= project_id %>/edit/delete/" method="POST" onsubmit="return confirm('Delete project?');">
+        <form class="dcf-form dcf-w-100% dcf-mb-1" id="delete-project-form" action="/checkout/project/edit/delete/?project_id=<%= project_id %>" method="POST" onsubmit="return confirm('Delete project?');">
         </form>
     </fieldset>
 

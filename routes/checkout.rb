@@ -62,18 +62,16 @@ get "/checkout/user/?" do
 	available_tools = Tool.all.select { |tool| tool.last_checked_out.nil? || tool.last_checked_in > tool.last_checked_out}
 	
 	# select the logs from tool logs where the user is checkout_user and the is_checking_in is false and is the most recent log for each tool id
-  user_checked_out = ToolLog.where(checkout_user_id: checkout_user.id, is_checking_in: false)
+  tools_user_checked_out = Tool.where(current_user_id: checkout_user.id)
 	
-	if user_checked_out.nil?
-		user_checked_out = []
+	if tools_user_checked_out.nil?
+		tools_user_checked_out = []
 	end
-	
-	tools_checked_out = Tool.where(id: user_checked_out.pluck(:tool_id))
-	tools_checked_out = tools_checked_out.select { |tool| tool.last_checked_out > tool.last_checked_in }
+
 	if search_tool_id && !search_tool_id.strip.empty?
 		search_tool_id = search_tool_id.downcase
 		available_tools = available_tools.select { |tool| tool.serial_number.downcase.strip == search_tool_id.downcase.strip }
-		tools_checked_out = tools_checked_out.select { |tool| tool.serial_number.downcase.strip == search_tool_id.downcase.strip }
+		tools_user_checked_out = tools_checked_out.select { |tool| tool.serial_number.downcase.strip == search_tool_id.downcase.strip
 	end
 
   user_event_signups = EventSignup.where(user_id: checkout_user.id, attended: 0)
@@ -83,10 +81,52 @@ get "/checkout/user/?" do
   erb :"engineering_garage/checkout_user", :layout => :fixed, locals: {
                                              :user => checkout_user,
 																						 :nuid => nuid,
-                                             :checked_out => tools_checked_out,
+                                             :checked_out => tools_user_checked_out,
                                              :projects => projects,
 																						 :tools => available_tools,
                                              :events => user_events,
+                                           }
+end
+
+get "/checkout/warehouse/" do
+  @breadcrumbs << { :text => "Checkout" }
+  # currently: Several things in the checkout use nuid to find the project. Recommended approach: For each of the projects, make a dictonary entry that gives the nuid, and pass that into the all.
+  require_login
+	search_project_id = params[:search_project_id]
+	search_tool_id = params[:search_tool_id]
+
+  projects = Project.all
+
+  if search_project_id && !search_project_id.strip.empty?
+    projects = projects.where(bin_id: search_project_id.strip)
+  end
+
+  checked_out_tools = Tool.all.select { |tool| tool.is_checked_out }
+
+  checked_out_tools = checked_out_tools.sort_by { |tool| tool.last_checked_out }.reverse
+
+  if search_tool_id && !search_tool_id.strip.empty?
+    search_tool_id = search_tool_id.downcase
+		checked_out_tools = checked_out_tools.select { |tool| tool.serial_number.downcase.strip == search_tool_id.downcase.strip }
+	end
+
+  project_owners = {}
+
+  current_tool_users = {}
+
+  projects.each do |project|
+    project_owners[project.id] = User.find_by(id: project.owner_user_id)
+  end
+
+  checked_out_tools.each do |tool|
+    current_tool_users[tool.id] = User.find_by(id: tool.current_user_id)
+  end
+
+  erb :"engineering_garage/checkout_all", :layout => :fixed, locals: {
+                                             :checked_out => checked_out_tools,
+                                             :projects => projects,
+                                             :project_owners => project_owners,
+                                             :current_tool_users => current_tool_users
                                            }
 end
 
@@ -197,6 +237,32 @@ post "/checkout/project_checkin/?" do
 	end
 end
 
+post "/checkout/log_project/?" do
+  bin_id = params[:bin_id]
+  nuid = params[:nuid]
+
+  if bin_id != nil && nuid != nil
+    project = Project.find_by(bin_id: bin_id)
+    user = User.find_by(user_nuid: nuid)
+    if project != nil
+      project_log = ProjectLog.new
+      is_checking_in = false
+      if project.last_checked_out != nil
+        is_checking_in = project.last_checked_in < project.last_checked_out
+      end
+      project_log.set_data(user: user, project: project, is_checking_in: is_checking_in)
+      flash :success, 'Success', 'Project successfully logged'
+      redirect "/checkout/?"
+    else
+      flash :error, 'Error', 'Project not found'
+      redirect "/checkout/"
+    end
+  else
+    flash :error, 'Error', 'Bin ID not found'
+    redirect "/checkout/"
+  end
+end
+
 # Delete Project
 post "/checkout/project_delete/?" do
 	bin_id = params[:bin_id]
@@ -264,26 +330,33 @@ post "/checkout/project/:nuid/create" do
 end
 
 # Project Edit Page
-get "/checkout/project/:project_id/edit" do
+get "/checkout/project/edit/?" do
+
   @breadcrumbs << { :text => "Edit Project" }
   require_login
   project = Project.find_by(id: params[:project_id])
-  user = User.find_by(id: project.owner_user_id)
+  user = User.find_by(user_nuid: params[:nuid])
+  owner = User.find_by(id: project.owner_user_id)
   teammates = ProjectTeammate.where("project_id = ?", params[:project_id])
-  params[:previous_nuid] = user.user_nuid
+  return_to_warehouse = false
+  if !params[:returning_to_warehouse].nil?
+    return_to_warehouse = true
+  end
 
   erb :'engineering_garage/edit_project', :layout => :fixed, :locals => {
+                                           :owner => owner,
                                            :user => user,
                                            :title => project.title,
                                            :description => project.description,
                                            :bin_id => project.bin_id,
                                            :teammates => teammates,
                                            :project_id => project.id,
+                                           :return_to_warehouse => return_to_warehouse
                                          }
 end
 
 # Edit Project
-post "/checkout/project/:project_id/edit" do
+post "/checkout/project/edit/?" do
   @breadcrumbs << { :text => "Edit Project" }
   require_login
   project = Project.find_by(id: params[:project_id])
@@ -330,7 +403,7 @@ post "/checkout/project/:project_id/edit" do
 end
 
 # Delete Project
-post "/checkout/project/:project_id/edit/delete/" do
+post "/checkout/project/edit/delete/?" do
   project = Project.find_by(id: params[:project_id])
 
   if project != nil
@@ -418,6 +491,7 @@ post "/checkout/tool_checkout/?" do
 	end
 
 	tool.update_last_checked_out
+  tool.update_current_user(user: user, is_checking_in: false)
 	tool_log = ToolLog.new
 	tool_log.set_data(user: user, tool: tool, is_checking_in: false)
 
@@ -427,15 +501,14 @@ end
 
 # Tool Checkin
 post "/checkout/tool_checkin/?" do
-	nuid = params[:nuid]
 	tool_id = params[:tool_id]
-	if nuid.nil? || tool_id.nil?
+	if tool_id.nil?
 		flash :danger, "Error", "NUID or Tool ID not found"
 		redirect "/checkout/"
 	end
 
 	tool = Tool.find_by(id: tool_id)
-	user = User.find_by(user_nuid: nuid)
+	user = User.find_by(id: tool.current_user_id)
 	if tool.nil?
 		flash :danger, "Error", "Tool not found"
 		redirect "/checkout/"
@@ -445,6 +518,7 @@ post "/checkout/tool_checkin/?" do
 	end
 
 	tool.update_last_checked_in
+  tool.update_current_user(user: user, is_checking_in: true)
 	tool_log = ToolLog.new
 	tool_log.set_data(user: user, tool: tool, is_checking_in: true)
 	flash :success, "Success", "Tool checked in"
