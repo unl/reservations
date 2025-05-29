@@ -4,7 +4,7 @@ source "https://rubygems.org"
 
 gem 'sinatra'
 gem 'sinatra-contrib'
-gem 'activerecord', ">= 6.0.3.5", :require => 'active_record'
+gem 'activerecord', ">= 6.1.7.1", :require => 'active_record'
 gem 'mysql2'
 gem 'bcrypt'
 gem 'unicorn'
