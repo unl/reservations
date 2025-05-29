@@ -22,8 +22,9 @@ UNL reservation system for schedule resources, classes, etc.
 6. `config/config.json` is a committed file, and a template for the configuration. Create a copy in the same directory named `server.json` and edit it to match your database. You will also need to include your site keys for google reCaptcha which can be generated at [https://www.google.com/recaptcha/](https://www.google.com/recaptcha/) for the V2 checkbox.
 7. Your database is currently blank. Install database schema by running `./data/db_2024_11_08.sql` and any updates greater than `0006`.
 8. Install the WDN Framework into the `public/wdn` directory...see [WDN Documentation](http://wdn.unl.edu/documentation).
-9. Start the server by going to the root directory and doing `bundle exec shotgun -o 0.0.0.0 -p 9393`. This launches the server on localhost port 9393, listening everywhere (you can use your iimlemburg.unl.edu or whichever), and the server will automatically update to new code. If you add gems to the bundle, you will need to re-execute this command.
-10. Navigate to `localhost:9393/` or similar and begin!
+9. You will need to add `localhost.unl.edu` to your `/etc/hosts` file and point it to 127.0.0.1
+10. Start the server by going to the root directory and doing `bundle exec shotgun -o localhost.unl.edu -p 9393`. This launches the server on localhost port 9393, listening everywhere (you can use your iimlemburg.unl.edu or whichever), and the server will automatically update to new code. If you add gems to the bundle, you will need to re-execute this command.
+11. Navigate to `https://localhost.unl.edu:9393/` or similar and begin!
 
 ### Less
 
