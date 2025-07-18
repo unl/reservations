@@ -36,7 +36,7 @@ users_authorized_today = User
 
 # Lockouts
 lockout_count = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).select(:resource_id).distinct.count
-lockouts = Lockout.where('released_on IS NOT NULL AND released_on < ?', Time.now).includes(:resource)
+lockouts = Lockout.where('released_on IS NOT NULL AND released_on BETWEEN ? AND ?', Time.now, Time.now - 7.days).includes(:resource)
 
 # Orientation Potentials
 orientation_ids = Event.where(event_type_id: 12).pluck(:id)
@@ -101,78 +101,92 @@ changes_by_day = {}
   end
 end
 
-body = "Daily Orientation Status Report\n\n"
+body = "<h1>Daily Status Report</h1>"
 
 # Authorized Users
-body << if users_authorized_today.any?
-  "Users Authorized Today:\n" +
+body << "<h2>Users Authorized Today</h2>"
+if users_authorized_today.any?
+  body << "<table><thead><tr><th>Name</th><th>Email</th><th>NUID</th></tr><thead><tbody>"
   users_authorized_today.map do |user|
-    "- #{user.first_name} #{user.last_name}, Email: #{user.email}, NUID: #{user.NUID}\n"
+    body << "<tr><td>#{user.first_name} #{user.last_name}</td><td>#{user.email}</td><td>#{user.user_nuid}</td></tr>"
   end.join
+  body << "</tbody></table>"
 else
-  "No users were authorized today.\n"
+  body << "<p>No users were authorized today.</p>"
 end
 
 # Potential Orientation
-body << "\nUsers Signed Up for Orientation (Not Yet Attended): #{orientation_potentials} user(s)\n"
+body << "<h2>Users Signed Up for Orientation (Not Yet Attended)</h2>"
+body << "<p>#{orientation_potentials} user(s)</p>"
 
 # Timeless Events
-body << if timeless_events.any?
-  "\nTimeless Events (No Start Time):\n" +
+body << "<h2>Timeless Events (No Start Time)</h2>"
+if timeless_events.any?
+  body << "<table><thead><tr><th>Event</th><th>Potentials</th></tr></thead><tbody>"
   timeless_events.map do |event|
-    "- #{event[:title]} — Potential Walk-ins: #{event[:potential_walkins]}\n"
+    body << "<tr><td>#{event[:title]}</td><td style='text-align:right;'>#{event[:potential_walkins]}</td><tr>"
   end.join
+  body << "</tbody></table>"
 else
-  "\nNo timeless events found.\n"
+  body << "<p>No timeless events found.</p>"
 end
 
 # Past Lockouts
-body << "\nPast Lockouts:\n"
-body << if lockouts.any?
+body << "<h2>Past Lockouts (Previous 7 Days)</h2>"
+if lockouts.any?
+body << "<table><thead><tr><th>Resource Name</th><th>Released On</th></tr></thead><tbody>"
   lockouts.map do |lockout|
-    "- Resource: #{lockout.resource.name}, Released On: #{lockout.released_on.strftime('%Y-%m-%d')}\n"
+    body << "<tr><td>#{lockout.resource.name}</td><td>#{lockout.released_on.strftime('%Y-%m-%d')}</td></tr>"
   end.join
+  body << "</tbody></table>"
 else
-  "No past lockouts found.\n"
+  body << "<p>No past lockouts found.</p>"
 end
 
 # Upcoming Lockouts
-body << "\nUpcoming Lockouts (Next 7 Days):\n"
-body << if upcoming_lockouts.any?
+body << "<h2>Upcoming Lockouts (Next 7 Days)</h2>"
+if upcoming_lockouts.any?
+  body << "<table><thead><tr><th>Resource Name</th><th>Starts On</th></tr></thead><tbody>"
   upcoming_lockouts.map do |lockout|
-    "- Resource: #{lockout.resource.name}, Starts On: #{lockout.started_on.strftime('%Y-%m-%d')}\n"
+    body << "<tr><td>#{lockout.resource.name}</td><td>#{lockout.started_on.strftime('%Y-%m-%d')}</td></tr>"
   end.join
+  body << "</tbody></table>"
 else
-  "No upcoming lockouts scheduled.\n"
+  body << "<p>No upcoming lockouts scheduled.</p>"
 end
 
 # Reservations
-body << "\nActive Reservations:\n"
-body << if reservations.any?
+body << "<h2>Active Reservations</h2>"
+if reservations.any?
+  body << "<table><thead><tr><th>Reservation ID</th><th>Start</th><th>End</th></tr></thead><tbody>"
   reservations.map do |res|
-    "- Reservation ID: #{res.id}, Start: #{res.start_time}, End: #{res.end_time}\n"
+    body << "<tr><td>#{res.id}</td><td>#{res.start_time}</td><td>#{res.end_time}</td></tr>"
   end.join
+  body << "</tbody></table>"
 else
-  "No current reservations found.\n"
+  body << "<p>No current reservations found.</p>"
 end
 
 # Forecasting Section
-body << "\nTouchpoint Forecasts (Next 7 Days):\n"
+body << "<h2>Touchpoint Forecasts (Next 7 Days)</h2>"
+body << "<ul>"
 forecasts_by_day.each do |day, forecast|
   if forecast
     change = changes_by_day[day]
     change_text = change.positive? ? "(+#{change})" : "(#{change})"
-    body << "- #{day}: #{forecast} touchpoints #{change_text}\n"
+    body << "<li><b>#{day}:</b> #{forecast} touchpoints #{change_text}</li>"
   else
-    body << "- #{day}: Insufficient data for forecast\n"
+    body << "<li><b>#{day}:</b> Insufficient data for forecast</li>"
   end
 end
+body << "</ul>"
 
-body << "\nThis is an automated daily report."
+body << "<p><small><i>This is an automated daily report.</i></small></p>"
 
 # Get list of users with RECEIVE_PREVIOUS_DAY_REPORT permission
 pdr_permission = Permission.find(Permission::RECEIVE_PREVIOUS_DAY_REPORT)
 users_to_email = User.joins(:user_has_permissions).where(:service_space_id => SS_ID).where("user_has_permissions.permission_id = ?", pdr_permission).pluck(:email)
+users_to_email = ['tneumann9@unl.edu']
 
 users_to_email.each do |user|
   Emailer.mail(user, "Daily Status Report", body, '', nil)  
