@@ -125,7 +125,7 @@
             </fieldset>
 
             <fieldset>
-            <legend>Location, Date, and Time</legend>
+            <legend>Location</legend>
                 <div class="dcf-form-group">
                     <label for="location">Location <small class="dcf-required">Required</small></label>
                     <select id="location" name="location" class="use-select2">
@@ -172,7 +172,7 @@
                         <input type="text" id="location-additionalinfo" name="new_location[additionalinfo]" />
                     </div>
 
-                    <label>* This location will be saved for future use</label>
+                    <p class="dcf-mb-0">* This location will be saved for future use</p>
                 </div>
 
                 <div>
@@ -217,101 +217,169 @@
                         </select>
                     </div>
                 </div>
-                <br>
+            </fieldset>
 
-                <% if SS_ID == 8 %>
-                    <div class="dcf-input-checkbox dcf-mt-6">
-                        <input type="checkbox" <%= 'checked="checked"' if event.start_time == nil && event.title != nil %> id="timeless_event_checkbox" name="timeless_event_checkbox">
-                        <label for="timeless_event_checkbox">Timeless event</label>
+            <fieldset class="dcf-mb-4">
+                <legend>Occurrences</legend>
+
+                <div class="dcf-w-100% dcf-d-flex dcf-jc-between dcf-ai-center dcf-mb-3">
+                    <% if SS_ID == 8 %>
+                        <div class="dcf-input-checkbox" >
+                            <input type="checkbox" <%= 'checked="checked"' if event.start_time == nil && event.title != nil %> id="timeless_event_checkbox" name="timeless_event_checkbox">
+                            <label for="timeless_event_checkbox">Timeless event</label>
+                        </div>
+                    <% end %>
+                    <div>
+                        <button
+                            id="add_new_occurrence"
+                            <% if mode === "create" %>
+                                class="dcf-btn dcf-btn-primary"
+                            <% else %>
+                                class="dcf-btn dcf-btn-primary dcf-d-none"
+                            <% end %>
+                            type="button"
+                        >Add Another Occurrence</button>
                     </div>
-                <% end %>
-
+                </div>
                 <div id="date-picker-group">
-                    <label for="start-date" >Start Date &amp; Time <small class="dcf-required">Required</small></label>
-                    <div class="date-time-select">
-                        <div class="dcf-datepicker">
-                            <input id="start-date" value="<%= event.start_time.in_time_zone.strftime('%m/%d/%Y') if !event.start_time.nil? %>" name="start_date" title="Start Date" type="text" />
+                    <div class="occurrence_group unl-bg-lighter-gray dcf-mb-3 dcf-p-4 dcf-relative dcf-rounded">
+                        <div
+                        <% if mode === "create" %>
+                            class="dcf-absolute occurrence-count dcf-pl-2 dcf-pr-2 dcf-pt-0 dcf-pb-0 unl-cream unl-bg-scarlet dcf-rounded"
+                        <% else %>
+                            class="dcf-absolute occurrence-count dcf-pl-2 dcf-pr-2 dcf-pt-0 dcf-pb-0 unl-cream unl-bg-scarlet dcf-rounded dcf-d-none"
+                        <% end %>
+                        >1</div>
+                        <div class="dcf-absolute dcf-right-0 dcf-mr-4">
+                            <button class="dcf-btn dcf-btn-tertiary dcf-d-none occurrence-delete-btn" type="button">Delete</button>
                         </div>
-                        <div class="dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mt-4 dcf-mr-4">
-                        <span class="dcf-pr-2">@</span>
-                            <select class="dcf-flex-grow-1 dcf-input-select" id="start-time-hour" name="start_time_hour" title="Start Time Hour">
-                                <option value=""></option>
-                                <% (1..12).each do |i| %>
-                                <option <%= 'selected="selected"' if !event.start_time.nil? && event.start_time.in_time_zone.hour.to_i % 12 == i % 12 %> value="<%= i %>"><%= i %></option>
-                                <% end %>
-                            </select> :
-
-                            <select class="dcf-flex-grow-1 dcf-input-select" id="start-time-minute" name="start_time_minute" title="Start Time Minute">
-                                <option value=""></option>
-                                <% (0..11).each do |i| %>
-                                <option <%= 'selected="selected"' if !event.start_time.nil? && event.start_time.in_time_zone.min == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
-                                <% end %>
-                            </select>
-
-                            <div id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
-                                <div class="dcf-d-flex dcf-ai-center">
-                                    <div class="dcf-input-radio">
-                                        <input <%= 'checked="checked"' if !event.start_time.nil? && event.start_time.in_time_zone.hour < 12 %> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm" class="dcf-flex-shrink-0">
-                                        <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-am">AM</label>
-                                    </div>
-                                </div>
-                                <div class="dcf-d-flex dcf-ai-center">
-                                    <div class="dcf-input-radio">
-                                        <input <%= 'checked="checked"' if event.start_time.nil? || event.start_time.in_time_zone.hour >= 12 %> id="start-time-am-pm-pm" title="PM" type="radio" value="pm" name="start_time_am_pm" class="dcf-flex-shrink-0">
-                                        <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-pm">PM</label>
-                                    </div>
-                                </div>
+                        <div class="dcf-d-flex dcf-jc-center">
+                            <div class="dcf-datepicker dcf-w-fit-content dcf-mb-3">
+                                <label for="start-date" class="start-date-label">Date<small class="dcf-required">Required</small></label>
+                                <input id="start-date" class="start-date-input" value="<%= event.start_time.in_time_zone.strftime('%m/%d/%Y') if !event.start_time.nil? %>" name="start_date[0]" type="text" />
                             </div>
                         </div>
-                    </div>
+                        <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+                            <fieldset class="dcf-pl-3 dcf-pr-3 dcf-pt-1 dcf-pb-1 dcf-mb-0">
+                                <legend>Start Time <small class="dcf-required">Required</small></legend>
+                                <div class="dcf-d-flex dcf-jc-center dcf-ai-center">
+                                    <div class="dcf-form-group">
+                                        <label for="start-time-hour" class="start-time-hour-label">Hour</label>
+                                        <select class="dcf-input-select start-time-hour-input" id="start-time-hour" name="start_time_hour[0]" required>
+                                            <option value=""></option>
+                                            <% (1..12).each do |i| %>
+                                            <option <%= 'selected="selected"' if !event.start_time.nil? && event.start_time.in_time_zone.hour.to_i % 12 == i % 12 %> value="<%= i %>"><%= i %></option>
+                                            <% end %>
+                                        </select>
+                                    </div>
 
-                    <label for="end-date">End Date &amp; Time <small class="dcf-form-help">(optional)</small></label>
-                    <div class="date-time-select">
-                        <div class="dcf-datepicker">
-                            <input id="end-date" value="<%= event.end_time.in_time_zone.strftime('%m/%d/%Y') if !event.end_time.nil? %>" name="end_date" title="End Date" type="text" />
-                        </div>
+                                    <span class="dcf-pr-1 dcf-pl-1">:</span>
 
-                        <div class="dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mt-4 dcf-mr-4">
-                            <span class="dcf-pr-2">@</span>
-                            <select class="dcf-flex-grow-1 dcf-input-select" id="end-time-hour" name="end_time_hour" title="End Time Hour">
-                                <option value=""></option>
-                                <% (1..12).each do |i| %>
-                                <option <%= 'selected="selected"' if !event.end_time.nil? && event.end_time.in_time_zone.hour.to_i % 12 == i % 12 %> value="<%= i %>"><%= i %></option>
-                                <% end %>
-                            </select> :
+                                    <div class="dcf-form-group">
+                                        <label for="start-time-minute" class="start-time-minute-label">Minute</label>
+                                        <select class="dcf-input-select start-time-minute-input" id="start-time-minute" name="start_time_minute[0]" required>
+                                            <option value=""></option>
+                                            <% (0..11).each do |i| %>
+                                            <option <%= 'selected="selected"' if !event.start_time.nil? && event.start_time.in_time_zone.min == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
+                                            <% end %>
+                                        </select>
+                                    </div>
 
-                            <select class="dcf-flex-grow-1 dcf-input-select" id="end-time-minute" name="end_time_minute" title="End Time Minute">
-                                <option value=""></option>
-                                <% (0..11).each do |i| %>
-                                <option <%= 'selected="selected"' if !event.end_time.nil? && event.end_time.in_time_zone.min == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
-                                <% end %>
-                            </select>
-
-                            <div id="end-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
-                                <div class="dcf-d-flex dcf-ai-center">
-                                    <div class="dcf-input-radio">
-                                        <input <%= 'checked="checked"' if !event.end_time.nil? && event.end_time.in_time_zone.hour < 12 %> id="end-time-am-pm-am" title="AM" type="radio" value="am" name="end_time_am_pm" class="dcf-flex-shrink-0">
-                                        <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-am">AM</label>
+                                    <div id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
+                                        <div class="dcf-d-flex dcf-ai-center">
+                                            <div class="dcf-input-radio">
+                                                <input
+                                                    <%= 'checked="checked"' if !event.start_time.nil? && event.start_time.in_time_zone.hour < 12 %>
+                                                    id="start-time-am-pm-am"
+                                                    type="radio"
+                                                    value="am"
+                                                    name="start_time_am_pm[0]"
+                                                    class="dcf-flex-shrink-0 start-time-am-input"
+                                                >
+                                                <label class="dcf-label dcf-2nd dcf-mt-0 start-time-am-label" for="start-time-am-pm-am">AM</label>
+                                            </div>
+                                        </div>
+                                        <div class="dcf-d-flex dcf-ai-center">
+                                            <div class="dcf-input-radio">
+                                                <input
+                                                    <%= 'checked="checked"' if event.start_time.nil? || event.start_time.in_time_zone.hour >= 12 %>
+                                                    id="start-time-am-pm-pm"
+                                                    type="radio"
+                                                    value="pm"
+                                                    name="start_time_am_pm[0]"
+                                                    class="dcf-flex-shrink-0 start-time-pm-input">
+                                                <label class="dcf-label dcf-2nd dcf-mt-0 start-time-pm-label" for="start-time-am-pm-pm">PM</label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="dcf-d-flex dcf-ai-center">
-                                    <div class="dcf-input-radio">
-                                        <input <%= 'checked="checked"' if event.end_time.nil? || event.end_time.in_time_zone.hour >= 12 %> id="end-time-am-pm-pm" title="PM" type="radio" value="pm" name="end_time_am_pm" class="dcf-flex-shrink-0">
-                                        <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-pm">PM</label>
+                            </fieldset>
+
+                            <fieldset class="dcf-pl-3 dcf-pr-3 dcf-pt-1 dcf-pb-1 dcf-mb-0">
+                                <legend>End Time <small class="dcf-required">Required</small></legend>
+                                <div class="dcf-d-flex dcf-jc-center dcf-ai-center">
+                                    <div class="dcf-form-group">
+                                        <label for="end-time-hour" class="end-time-hour-label">Hour</label>
+                                        <select class="dcf-input-select end-time-hour-input" id="end-time-hour" name="end_time_hour[0]" required>
+                                            <option value=""></option>
+                                            <% (1..12).each do |i| %>
+                                            <option <%= 'selected="selected"' if !event.end_time.nil? && event.end_time.in_time_zone.hour.to_i % 12 == i % 12 %> value="<%= i %>"><%= i %></option>
+                                            <% end %>
+                                        </select>
+                                    </div>
+
+                                    <span class="dcf-pr-1 dcf-pl-1">:</span>
+
+                                    <div class="dcf-form-group">
+                                        <label for="end-time-minute" class="end-time-minute-label">Minute</label>
+                                        <select class="dcf-input-select end-time-minute-input" id="end-time-minute" name="end_time_minute[0]" required>
+                                            <option value=""></option>
+                                            <% (0..11).each do |i| %>
+                                            <option <%= 'selected="selected"' if !event.end_time.nil? && event.end_time.in_time_zone.min == i*5 %> value="<%= i * 5 %>"><%= (i*5).to_s.rjust(2, '0') %></option>
+                                            <% end %>
+                                        </select>
+                                    </div>
+
+                                    <div id="end-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
+                                        <div class="dcf-d-flex dcf-ai-center">
+                                            <div class="dcf-input-radio">
+                                                <input
+                                                    <%= 'checked="checked"' if !event.end_time.nil? && event.end_time.in_time_zone.hour < 12 %>
+                                                    id="end-time-am-pm-am"
+                                                    type="radio"
+                                                    value="am"
+                                                    name="end_time_am_pm[0]"
+                                                    class="dcf-flex-shrink-0 end-time-am-input"
+                                                >
+                                                <label class="dcf-label dcf-2nd dcf-mt-0 end-time-am-label" for="end-time-am-pm-am">AM</label>
+                                            </div>
+                                        </div>
+                                        <div class="dcf-d-flex dcf-ai-center">
+                                            <div class="dcf-input-radio">
+                                                <input
+                                                    <%= 'checked="checked"' if event.end_time.nil? || event.end_time.in_time_zone.hour >= 12 %>
+                                                    id="end-time-am-pm-pm"
+                                                    type="radio"
+                                                    value="pm"
+                                                    name="end_time_am_pm[0]"
+                                                    class="dcf-flex-shrink-0 end-time-pm-input">
+                                                <label class="dcf-label dcf-2nd dcf-mt-0 end-time-pm-label" for="end-time-am-pm-pm">PM</label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </fieldset>
                         </div>
+
                     </div>
                 </div>
             </fieldset>
-
         </div>
         <input type="hidden" name="hidden-duration" id="duration" value="<%=duration%>">
         <div class="dcf-col-100% dcf-col-33%-end@sm">
             <div class="visual-island">
                 <div class="vi-header">
-                    <label>Image</label>
+                    <p class="dcf-mb-0 dcf-pb-0">Image</p>
                 </div>
 
                 <div class="details">
@@ -356,7 +424,179 @@
 </div>
 <br>
 
-<% append_script_declaration("WDN.initializePlugin('datepickers');") %>
+<% append_script_declaration(%q[
+    window.setEndTimeAMPM = (container_element, new_hour) => {
+        const end_am_input = container_element.querySelector('.end-time-am-input');
+        const end_pm_input = container_element.querySelector('.end-time-pm-input');
+
+        new_hour = new_hour % 24;
+        if (new_hour < 12) {
+            end_am_input.checked = true;
+            end_pm_input.checked = false;
+        } else {
+            end_am_input.checked = false;
+            end_pm_input.checked = true;
+        }
+    }
+
+    window.update_time = (container_element) => {
+        const start_minute_input = container_element.querySelector('.start-time-minute-input');
+        const start_hour_input = container_element.querySelector('.start-time-hour-input');
+        const start_pm_input = container_element.querySelector('.start-time-pm-input');
+        const duration_input = document.getElementById('duration');
+        const end_minute_input = container_element.querySelector('.end-time-minute-input');
+        const end_hour_input = container_element.querySelector('.end-time-hour-input');
+
+        const start_time_minute = parseInt(start_minute_input.value);
+        let start_time_hour = parseInt(start_hour_input.value);
+        if (start_pm_input.checked) {
+            start_time_hour += 12;
+        }
+        const duration = parseInt(duration_input.value);
+        const duration_hour_delta = Math.floor(duration / 60) % 24;
+        const duration_minute_delta = duration % 60;
+        let new_end_hour = start_time_hour + duration_hour_delta;
+        let new_end_minute = start_time_minute + duration_minute_delta;
+
+        if (new_end_minute >= 60) {
+            new_end_hour = new_end_hour + 1;
+            new_end_minute = new_end_minute % 60;
+        }
+
+        window.setEndTimeAMPM(container_element, new_end_hour);
+        let new_end_hour_in_12 = (new_end_hour % 12);
+
+        // 0 is not a valid time but 12 is
+        if (new_end_hour_in_12 === 0) {
+            new_end_hour_in_12 = 12;
+        }
+
+        end_hour_input.value = new_end_hour_in_12;
+        end_minute_input.value = new_end_minute;
+    }
+
+    WDN.initializePlugin('datepickers');
+
+    const date_picker_group = document.getElementById('date-picker-group');
+    const init_occurrence_groups = date_picker_group.querySelectorAll('.occurrence_group');
+    init_occurrence_groups.forEach((single_group) => {
+        const start_time_hour_input = single_group.querySelector('.start-time-hour-input');
+        const start_time_minute_input = single_group.querySelector('.start-time-minute-input');
+
+        start_time_hour_input.addEventListener('change', () => {
+            window.update_time(single_group);
+        });
+
+        start_time_minute_input.addEventListener('change', () => {
+            window.update_time(single_group);
+        });
+    })
+
+
+    require(['dcf-datepicker'], function (datePickerModule) {
+        const add_new_occurrence = document.getElementById('add_new_occurrence');
+        let occurrence_count = 1;
+        add_new_occurrence.addEventListener('click', () => {
+            const occurrence_groups = date_picker_group.querySelectorAll('.occurrence_group');
+            const last_occurrence_group = occurrence_groups[occurrence_groups.length - 1];
+            const new_occurrence_group = last_occurrence_group.cloneNode(true);
+            occurrence_count++;
+
+            const occurrence_count_output = new_occurrence_group.querySelector('.occurrence-count');
+            occurrence_count_output.innerText = occurrence_groups.length + 1;
+
+            const occurrence_delete_btn = new_occurrence_group.querySelector('.occurrence-delete-btn');
+            occurrence_delete_btn.classList.remove('dcf-d-none');
+            occurrence_delete_btn.addEventListener('click', () => {
+                new_occurrence_group.remove();
+                const all_occurrence_count_output = document.querySelectorAll('.occurrence-count');
+                all_occurrence_count_output.forEach((single_output, index) => {
+                    single_output.innerText = index + 1;
+                });
+            });
+
+            const date_picker_container = new_occurrence_group.querySelector('.dcf-datepicker');
+            date_picker_container.innerHTML = `<label for="start-date" class="start-date-label">Date<small class="dcf-required">Required</small></label>
+<input id="start-date" class="start-date-input" value="" name="start_date[]" type="text" />`;
+
+            const start_date_input = new_occurrence_group.querySelector('.start-date-input');
+            start_date_input.value = last_occurrence_group.querySelector('.start-date-input').value;
+            start_date_input.setAttribute('id', `start-date-${occurrence_count}`);
+            start_date_input.setAttribute('name', `start_date[${occurrence_count}]`);
+            const start_date_label = new_occurrence_group.querySelector('.start-date-label');
+            start_date_label.setAttribute('for', `start-date-${occurrence_count}`);
+
+            new datePickerModule.DCFDatepicker(date_picker_container);
+
+            const start_time_hour_input = new_occurrence_group.querySelector('.start-time-hour-input');
+            start_time_hour_input.value = last_occurrence_group.querySelector('.start-time-hour-input').value;
+            start_time_hour_input.setAttribute('id', `start-time-hour-${occurrence_count}`);
+            start_time_hour_input.setAttribute('name', `start_time_hour[${occurrence_count}]`);
+            const start_time_hour_label = new_occurrence_group.querySelector('.start-time-hour-label');
+            start_time_hour_label.setAttribute('for', `start-time-hour-${occurrence_count}`);
+
+            start_time_hour_input.addEventListener('change', () => {
+                window.update_time(new_occurrence_group);
+            });
+
+            const start_time_minute_input = new_occurrence_group.querySelector('.start-time-minute-input');
+            start_time_minute_input.value = last_occurrence_group.querySelector('.start-time-minute-input').value;
+            start_time_minute_input.setAttribute('id', `start-time-minute-${occurrence_count}`);
+            start_time_minute_input.setAttribute('name', `start_time_minute[${occurrence_count}]`);
+            const start_time_minute_label = new_occurrence_group.querySelector('.start-time-minute-label');
+            start_time_minute_label.setAttribute('for', `start-time-minute-${occurrence_count}`);
+
+            start_time_minute_input.addEventListener('change', () => {
+                window.update_time(new_occurrence_group);
+            });
+
+            const start_time_am_input = new_occurrence_group.querySelector('.start-time-am-input');
+            start_time_am_input.checked = last_occurrence_group.querySelector('.start-time-am-input').checked;
+            start_time_am_input.setAttribute('id', `start-time-am-pm-am-${occurrence_count}`);
+            start_time_am_input.setAttribute('name', `start_time_am_pm[${occurrence_count}]`);
+            const start_time_am_label = new_occurrence_group.querySelector('.start-time-am-label');
+            start_time_am_label.setAttribute('for', `start-time-am-pm-am-${occurrence_count}`);
+
+            const start_time_pm_input = new_occurrence_group.querySelector('.start-time-pm-input');
+            start_time_pm_input.checked = last_occurrence_group.querySelector('.start-time-pm-input').checked;
+            start_time_pm_input.setAttribute('id', `start-time-am-pm-pm-${occurrence_count}`);
+            start_time_pm_input.setAttribute('name', `start_time_am_pm[${occurrence_count}]`);
+            const start_time_pm_label = new_occurrence_group.querySelector('.start-time-pm-label');
+            start_time_pm_label.setAttribute('for', `start-time-am-pm-pm-${occurrence_count}`);
+
+            const end_time_hour_input = new_occurrence_group.querySelector('.end-time-hour-input');
+            end_time_hour_input.value = last_occurrence_group.querySelector('.end-time-hour-input').value;
+            end_time_hour_input.setAttribute('id', `end-time-hour-${occurrence_count}`);
+            end_time_hour_input.setAttribute('name', `end_time_hour[${occurrence_count}]`);
+            const end_time_hour_label = new_occurrence_group.querySelector('.end-time-hour-label');
+            end_time_hour_label.setAttribute('for', `end-time-hour-${occurrence_count}`);
+
+            const end_time_minute_input = new_occurrence_group.querySelector('.end-time-minute-input');
+            end_time_minute_input.value = last_occurrence_group.querySelector('.end-time-minute-input').value;
+            end_time_minute_input.setAttribute('id', `end-time-minute-${occurrence_count}`);
+            end_time_minute_input.setAttribute('name', `end_time_minute[${occurrence_count}]`);
+            const end_time_minute_label = new_occurrence_group.querySelector('.end-time-minute-label');
+            end_time_minute_label.setAttribute('for', `end-time-minute-${occurrence_count}`);
+
+            const end_time_am_input = new_occurrence_group.querySelector('.end-time-am-input');
+            end_time_am_input.checked = last_occurrence_group.querySelector('.end-time-am-input').checked;
+            end_time_am_input.setAttribute('id', `end-time-am-pm-am-${occurrence_count}`);
+            end_time_am_input.setAttribute('name', `end_time_am_pm[${occurrence_count}]`);
+            const end_time_am_label = new_occurrence_group.querySelector('.end-time-am-label');
+            end_time_am_label.setAttribute('for', `end-time-am-pm-am-${occurrence_count}`);
+
+            const end_time_pm_input = new_occurrence_group.querySelector('.end-time-pm-input');
+            end_time_pm_input.checked = last_occurrence_group.querySelector('.end-time-pm-input').checked;
+            end_time_pm_input.setAttribute('id', `end-time-am-pm-pm-${occurrence_count}`);
+            end_time_pm_input.setAttribute('name', `end_time_am_pm[${occurrence_count}]`);
+            const end_time_pm_label = new_occurrence_group.querySelector('.end-time-pm-label');
+            end_time_pm_label.setAttribute('for', `end-time-am-pm-pm-${occurrence_count}`);
+
+
+            date_picker_group.append(new_occurrence_group);
+        });
+    });
+])%>
 <% if SS_ID == 1 %>
 <% append_script_declaration(%q[
     const type_select = document.getElementById('type');
@@ -417,18 +657,6 @@
 <% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {
     $ = require('jquery');
 
-    // sets AM/PM radio buttons and mods the time passed if necessary
-    function setEndTimeAMPM(new_hour) {
-        new_hour = new_hour % 24;
-        if (new_hour < 12) {
-            $('#end-time-am-pm-am').prop('checked', true);
-            $('#end-time-am-pm-pm').prop('checked', false);
-        } else {
-            $('#end-time-am-pm-am').prop('checked', false);
-            $('#end-time-am-pm-pm').prop('checked', true);
-        }
-    }
-
     $('#reserve-tool').click(function(click) {
         if ($('#reserve-tool').is(':checked')) {
             $('#tools-for-reserving').show();
@@ -453,8 +681,6 @@
         });
     });
 
-    
-
     $('#location').change(function (change) {
         if ($(this).val() == 'new') {
             $('#new-location-details').show();
@@ -471,60 +697,4 @@
             $('#consider-for-unl-main').attr('disabled', 'disabled');
         }
     }).change();
-
-    $('#start-time-hour').change(function (change) {
-        update_time();
-    }).change();
-
-    $('#start-time-minute').change(function (change) {
-        update_time();
-    }).change();
-
-    function update_time() {
-        start_time_minute = parseInt($('#start-time-minute').val());
-        start_time_hour = parseInt($('#start-time-hour').val());
-        if ($('#start-time-am-pm-pm').is(':checked')) {
-            start_time_hour += 12;
-        }
-        duration = parseInt($('#duration').val());
-        duration_hour_delta = Math.floor(duration / 60) % 24;
-        duration_minute_delta = duration % 60;
-        new_end_hour = start_time_hour + duration_hour_delta;
-        new_end_minute = start_time_minute + duration_minute_delta;
-
-        if (new_end_minute >= 60) {
-            new_end_hour = new_end_hour + 1;
-            new_end_minute = new_end_minute % 60;
-        }
-
-        setEndTimeAMPM(new_end_hour);
-        new_end_hour_in_12 = (new_end_hour % 12);
-
-        // 0 is not a valid time but 12 is
-        if (new_end_hour_in_12 === 0) {
-            new_end_hour_in_12 = 12;
-        }
-
-        $('#end-time-hour').val(new_end_hour_in_12);
-        $('#end-time-minute').val(new_end_minute);
-    }
-
-    $('#start-date').change(function (change) {
-        start_date = $('#start-date').val();
-        if (start_date === '') {
-            return;
-        }
-        duration = parseInt($('#duration').val());
-        duration_day_delta = Math.floor(duration / 60 / 24);
-
-        new_start_date = new Date(start_date);
-        new_start_date.setDate(new_start_date.getDate() + duration_day_delta);
-
-        let day = ("0" + new_start_date.getDate()).slice(-2);
-        let month = ("0" + (new_start_date.getMonth() + 1)).slice(-2);
-        let formatted_date = month + '/' + day + '/' + new_start_date.getFullYear();
-
-        $('#end-date').val(formatted_date);
-    }).change();
-
 }]);]) %>
