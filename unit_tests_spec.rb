@@ -15,7 +15,7 @@ describe "Test Login Page" do
     post '/login/?', params = { :username => "mhawk2", :password => "Welcome123" }
     follow_redirect!
     expect(last_response).to be_ok
-    expect(last_response.body).to include('Welcome to The Engineering Garage')
+    expect(last_response.body).to include('Welcome to The Engineering Design Hub')
   end
 
   it "unsuccessful login with invalid credentials" do

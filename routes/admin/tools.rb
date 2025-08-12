@@ -30,7 +30,7 @@ get '/admin/tools/?' do
 	checkable_tools = Tool.where(service_space_id: SS_ID)
 
 	if SS_ID == 8
-		erb :'admin/garage_tools', :layout => :fixed, :locals => {
+		erb :'admin/design_hub_tools', :layout => :fixed, :locals => {
 			:tools => tools,
 			:checkable_tools => checkable_tools,
 			:nuid => nuid

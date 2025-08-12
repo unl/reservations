@@ -154,7 +154,7 @@ post '/events/:event_id/sign_up_as_non_member/?' do
 
 	template_path = "#{ROOT}/views/innovationstudio/email_templates/event_signup_nonmember_email.erb"
 	if SS_ID == 8
-		template_path = "#{ROOT}/views/engineering_garage/email_templates/event_signup_nonmember_email.erb"
+		template_path = "#{ROOT}/views/engineering_design_hub/email_templates/event_signup_nonmember_email.erb"
 	end
 	template = File.read(template_path)
 	body = ERB.new(template).result(binding)
@@ -212,11 +212,11 @@ post '/events/:event_id/sign_up/?' do
 		@event = event
 
 		if @user.email && !@user.email.empty?
-			template_path = "#{ROOT}/views/engineering_garage/email_templates/timeless_event_signup_email.erb"
+			template_path = "#{ROOT}/views/engineering_design_hub/email_templates/timeless_event_signup_email.erb"
 			success_message = "Thanks for signing up! You may attend during any regular operating hours."
 			if SS_ID == 8
 				if event.start_time != nil
-					template_path = "#{ROOT}/views/engineering_garage/email_templates/event_signup_email.erb"
+					template_path = "#{ROOT}/views/engineering_design_hub/email_templates/event_signup_email.erb"
 					success_message = "Thanks for signing up! Don't forget, #{event.title} is #{event.start_time.in_time_zone.strftime('%A, %B %d at %l:%M %P')}."
 				end
 			else
