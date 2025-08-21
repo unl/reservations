@@ -35,7 +35,13 @@
 									<tr>
 										<td><%= project[:bin_id] %></td>
 										<td><%= project[:title] %></td>
-										<td><%= project_owners[project.id].username %></td>
+										<td>
+											<% if project_owners[project.id] %>
+												<%= project_owners[project.id].username %>
+											<% else %>
+												No Owner Found
+											<% end %>
+										</td>
 										<% if project[:last_checked_out] != nil && project[:last_checked_in] != nil %>
 											<% if project[:last_checked_out] >= project[:last_checked_in] %>
 												<td><%= "Checked Out" %></td>

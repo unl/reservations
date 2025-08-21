@@ -71,7 +71,7 @@ get "/checkout/user/?" do
 	if search_tool_id && !search_tool_id.strip.empty?
 		search_tool_id = search_tool_id.downcase
 		available_tools = available_tools.select { |tool| tool.serial_number.downcase.strip == search_tool_id.downcase.strip }
-		tools_user_checked_out = tools_checked_out.select { |tool| tool.serial_number.downcase.strip == search_tool_id.downcase.strip }
+		tools_user_checked_out = tools_user_checked_out.select { |tool| tool.serial_number.downcase.strip == search_tool_id.downcase.strip }
 	end
 
   user_event_signups = EventSignup.where(user_id: checkout_user.id, attended: 0)
