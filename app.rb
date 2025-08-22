@@ -8,8 +8,8 @@ require 'rack/cas'
 use Rack::Session::Cookie, :key => 'rack.session',
                            :path => '/',
                            :domain => CONFIG['app']['cookie_domain'],
-                           :secret => 'averymanteroldfatherbesseyhamilton',
-                           :old_secret => 'averymanteroldfatherbesseyhamilton',
+                           :secret => CONFIG['app']['session_secret'],
+                           :old_secret => CONFIG['app']['session_secret'],
                            :expire_after => 30*24*60*60
 
 use Rack::CAS, server_url: 'https://shib.unl.edu/idp/profile/cas'

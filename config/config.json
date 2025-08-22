@@ -15,6 +15,7 @@
 		"service_space_id": "1",
 		"URL": "http://localhost.unl.edu:9395/",
 		"cookie_domain": "",
+		"session_secret": "averymanteroldfatherbesseyhamilton",
 		"email_from": "test@unl.edu",
 		"cb_version": "2024022701"
 	},
