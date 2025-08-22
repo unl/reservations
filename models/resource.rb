@@ -27,7 +27,7 @@ class Resource < ActiveRecord::Base
     CATEGORY_WOOD_SHOP = 6
 
 	# For service space 8
-    CATEGORY_GARAGE = 7
+    CATEGORY_DESIGN_HUB = 7
 
     def self.category_options
 		if SS_ID == 1
@@ -41,7 +41,7 @@ class Resource < ActiveRecord::Base
         }
 		elsif SS_ID == 8
 			{
-				CATEGORY_GARAGE => 'Engineering Garage',
+				CATEGORY_DESIGN_HUB => 'Engineering Design Hub',
 			}
 		end
     end

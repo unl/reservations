@@ -54,7 +54,7 @@ before do
       @inline_body_script_content = ''
       @affiliation = 'College of Engineering'
       @affiliation_link = 'https://engineering.unl.edu/'
-      CONFIG['app']['title'] = 'Engineering Garage'
+      CONFIG['app']['title'] = 'Engineering Design Hub'
       @breadcrumbs = [
         {
           :href => 'https://www.unl.edu/',
@@ -114,8 +114,8 @@ def require_login(redirect_after_login=nil)
       @user = User.find_by(:username => session['cas']['user'], :service_space_id => SS_ID)
       if @user.nil?
         # Direct nonexistent users to the new member sign up
-        flash(:alert, 'You Must Have an Account', 'To use the Engineering Garage, please sign up for New Member Orientation.')
-        redirect '/engineering_garage/new_users/'
+        flash(:alert, 'You Must Have an Account', 'To use the Engineering Design Hub, please sign up for New Member Orientation.')
+        redirect '/engineering_design_hub/new_users/'
       else
         session[:user_id] = @user.id
 
@@ -150,9 +150,9 @@ def require_renewal(redirect_from=nil)
 
     if renewal_needed
       # Avoid a redirect loop when coming from the user_agreement view
-      if !redirect_from.eql? "engineering_garage/user_agreement"
-        flash(:alert, 'User Agreement Expired', 'To continue to use the Engineering Garage, please renew your User Agreement.')
-        redirect '/engineering_garage/user_agreement'
+      if !redirect_from.eql? "engineering_design_hub/user_agreement"
+        flash(:alert, 'User Agreement Expired', 'To continue to use the Engineering Design Hub, please renew your User Agreement.')
+        redirect '/engineering_design_hub/user_agreement'
       end
     end
   end
@@ -160,7 +160,7 @@ end
 
 def require_orientation
   unless AttendedOrientation.exists?(user_id: @user.id)
-    flash(:alert, 'You Must Attend Orientation', 'To use the Engineering Garage, please sign up for a tour.')
+    flash(:alert, 'You Must Attend Orientation', 'To use the Engineering Design Hub, please sign up for a tour.')
     redirect '/new_members/'
   end
 end

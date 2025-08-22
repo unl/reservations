@@ -15,7 +15,7 @@ end
 get "/checkout/?" do
   @breadcrumbs << { :text => "Checkout" }
   require_login
-  erb :'engineering_garage/checkout', :layout => :fixed, locals: {}
+  erb :'engineering_design_hub/checkout', :layout => :fixed, locals: {}
 end
 
 # Check out page
@@ -71,14 +71,14 @@ get "/checkout/user/?" do
 	if search_tool_id && !search_tool_id.strip.empty?
 		search_tool_id = search_tool_id.downcase
 		available_tools = available_tools.select { |tool| tool.serial_number.downcase.strip == search_tool_id.downcase.strip }
-		tools_user_checked_out = tools_checked_out.select { |tool| tool.serial_number.downcase.strip == search_tool_id.downcase.strip }
+		tools_user_checked_out = tools_user_checked_out.select { |tool| tool.serial_number.downcase.strip == search_tool_id.downcase.strip }
 	end
 
   user_event_signups = EventSignup.where(user_id: checkout_user.id, attended: 0)
 
   user_events =  Event.where(id: user_event_signups.select(:event_id))
 
-  erb :"engineering_garage/checkout_user", :layout => :fixed, locals: {
+  erb :"engineering_design_hub/checkout_user", :layout => :fixed, locals: {
                                              :user => checkout_user,
 																						 :nuid => nuid,
                                              :checked_out => tools_user_checked_out,
@@ -122,7 +122,7 @@ get "/checkout/warehouse/" do
     current_tool_users[tool.id] = User.find_by(id: tool.current_user_id)
   end
 
-  erb :"engineering_garage/checkout_all", :layout => :fixed, locals: {
+  erb :"engineering_design_hub/checkout_all", :layout => :fixed, locals: {
                                              :checked_out => checked_out_tools,
                                              :projects => projects,
                                              :project_owners => project_owners,
@@ -288,7 +288,7 @@ get "/checkout/project/:nuid/create" do
   @breadcrumbs << { :text => "New Project" }
   require_login
   user = User.find_by(user_nuid: params[:nuid])
-  erb :'engineering_garage/new_project', :layout => :fixed, :locals => {
+  erb :'engineering_design_hub/new_project', :layout => :fixed, :locals => {
                                            :user => user,
                                          }
 end
@@ -343,7 +343,7 @@ get "/checkout/project/edit/?" do
     return_to_warehouse = true
   end
 
-  erb :'engineering_garage/edit_project', :layout => :fixed, :locals => {
+  erb :'engineering_design_hub/edit_project', :layout => :fixed, :locals => {
                                            :owner => owner,
                                            :user => user,
                                            :title => project.title,

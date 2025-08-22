@@ -374,7 +374,7 @@ post '/new_members/sign_up/:event_id/?' do
 
 		template_path = "#{ROOT}/views/innovationstudio/email_templates/new_member_email.erb"
 		if SS_ID == 8
-			template_path = "#{ROOT}/views/engineering_garage/email_templates/new_member_email.erb"
+			template_path = "#{ROOT}/views/engineering_design_hub/email_templates/new_member_email.erb"
 		end
 		template = File.read(template_path)
 		body = ERB.new(template).result(binding)
@@ -392,7 +392,7 @@ post '/new_members/sign_up/:event_id/?' do
 
 				template_path = "#{ROOT}/views/innovationstudio/email_templates/hrc_signup_email.erb"
 				if SS_ID == 8
-					template_path = "#{ROOT}/views/engineering_garage/email_templates/hrc_signup_email.erb"
+					template_path = "#{ROOT}/views/engineering_design_hub/email_templates/hrc_signup_email.erb"
 				end
 				template = File.read(template_path)
 				body = ERB.new(template).result(binding)
@@ -409,10 +409,10 @@ post '/new_members/sign_up/:event_id/?' do
 	end
 end
 
-get '/engineering_garage/new_users/?' do
+get '/engineering_design_hub/new_users/?' do
 	@breadcrumbs << { :text => "New Users" }
 
-  erb :'/engineering_garage/new_users', :layout => :fixed
+  erb :'/engineering_design_hub/new_users', :layout => :fixed
 end
 
 def fetch_final_content(uri)

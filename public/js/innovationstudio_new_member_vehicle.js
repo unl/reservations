@@ -10,9 +10,9 @@ const unl_perimeter = document.getElementById('unl-perimeter');
 const unl_perimeter_yes = document.getElementById('unl-perim-yes');
 const unl_perimeter_no = document.getElementById('unl-perim-no');
 
-const unl_garage = document.getElementById('unl-garage');
-const unl_garage_yes = document.getElementById('unl-garage-yes');
-const unl_garage_no = document.getElementById('unl-garage-no');
+const unl_design_hub = document.getElementById('unl-design-hub');
+const unl_design_hub_yes = document.getElementById('unl-design-hub-yes');
+const unl_design_hub_no = document.getElementById('unl-design-hub-no');
 
 const parking_checkbox = document.getElementById('parking-checkbox');
 const vehicle_info = document.getElementById('vehicle-info');
@@ -31,9 +31,9 @@ unl_association_yes.addEventListener('input', (e) => {
     unl_perimeter_yes.checked = false;
     unl_perimeter_no.checked = false;
 
-    unl_garage.classList.add('dcf-d-none');
-    unl_garage_yes.checked = false;
-    unl_garage_no.checked = false;
+    unl_design_hub.classList.add('dcf-d-none');
+    unl_design_hub_yes.checked = false;
+    unl_design_hub_no.checked = false;
 
     vehicle_info.classList.add('dcf-d-none');
     parking_checkbox.classList.add('dcf-d-none');
@@ -49,9 +49,9 @@ unl_association_no.addEventListener('input', (e) => {
     unl_perimeter_yes.checked = false;
     unl_perimeter_no.checked = false;
 
-    unl_garage.classList.add('dcf-d-none');
-    unl_garage_yes.checked = false;
-    unl_garage_no.checked = false;
+    unl_design_hub.classList.add('dcf-d-none');
+    unl_design_hub_yes.checked = false;
+    unl_design_hub_no.checked = false;
 
     vehicle_info.classList.remove('dcf-d-none'); // Show this
     parking_checkbox.classList.add('dcf-d-none');
@@ -67,9 +67,9 @@ unl_permit_yes.addEventListener('input', (e) => {
     unl_perimeter_yes.checked = false;
     unl_perimeter_no.checked = false;
 
-    unl_garage.classList.add('dcf-d-none');
-    unl_garage_yes.checked = false;
-    unl_garage_no.checked = false;
+    unl_design_hub.classList.add('dcf-d-none');
+    unl_design_hub_yes.checked = false;
+    unl_design_hub_no.checked = false;
 
     vehicle_info.classList.add('dcf-d-none');
     parking_checkbox.classList.add('dcf-d-none');
@@ -81,9 +81,9 @@ unl_permit_no.addEventListener('input', (e) => {
     unl_perimeter_yes.checked = false;
     unl_perimeter_no.checked = false;
 
-    unl_garage.classList.add('dcf-d-none');
-    unl_garage_yes.checked = false;
-    unl_garage_no.checked = false;
+    unl_design_hub.classList.add('dcf-d-none');
+    unl_design_hub_yes.checked = false;
+    unl_design_hub_no.checked = false;
 
     vehicle_info.classList.remove('dcf-d-none'); // Show this
     parking_checkbox.classList.add('dcf-d-none');
@@ -95,9 +95,9 @@ unl_permit_no.addEventListener('input', (e) => {
 //  |_| \___|_| |_|_|_|_\___|\__\___|_|
 // If yes then they do not qualify for reciprocal parking
 unl_perimeter_yes.addEventListener('input', () => {
-    unl_garage.classList.add('dcf-d-none');
-    unl_garage_yes.checked = false;
-    unl_garage_no.checked = false;
+    unl_design_hub.classList.add('dcf-d-none');
+    unl_design_hub_yes.checked = false;
+    unl_design_hub_no.checked = false;
 
     vehicle_info.classList.remove('dcf-d-none'); // Show this
     parking_checkbox.classList.add('dcf-d-none');
@@ -105,9 +105,9 @@ unl_perimeter_yes.addEventListener('input', () => {
 
 // If no then we don't have enough info yet
 unl_perimeter_no.addEventListener('input', () => {
-    unl_garage.classList.remove('dcf-d-none'); // Show this
-    unl_garage_yes.checked = false;
-    unl_garage_no.checked = false;
+    unl_design_hub.classList.remove('dcf-d-none'); // Show this
+    unl_design_hub_yes.checked = false;
+    unl_design_hub_no.checked = false;
 
     vehicle_info.classList.add('dcf-d-none');
     parking_checkbox.classList.add('dcf-d-none');
@@ -119,13 +119,13 @@ unl_perimeter_no.addEventListener('input', () => {
 //   \___\__,_|_| \__,_\__, \___|
 //                     |___/
 // If yes then they do qualify for reciprocal parking
-unl_garage_yes.addEventListener('input', () => {
+unl_design_hub_yes.addEventListener('input', () => {
     vehicle_info.classList.add('dcf-d-none');
     parking_checkbox.classList.remove('dcf-d-none'); // Show this
 });
 
 // This is a last catch for incorrect entries and not understanding the questions being asked
-unl_garage_no.addEventListener('input', () => {
+unl_design_hub_no.addEventListener('input', () => {
     vehicle_info.classList.remove('dcf-d-none'); // Show this
     parking_checkbox.classList.add('dcf-d-none');
 });

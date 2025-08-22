@@ -20,7 +20,7 @@ get '/status_page/?' do
     upcoming_lockouts = Lockout.where('started_on BETWEEN ? AND ?', Time.now, Time.now + 7.days).includes(:resource)
     reservations = Reservation.joins(:resource).where("resource.service_space_id" => SS_ID).select(:id, :start_time, :end_time).where.not(start_time: nil, end_time: nil)
 
-    # Retrieve a list events ID's of events with the Garage Orientation Event Type
+    # Retrieve a list events ID's of events with the Design Hub Orientation Event Type
     orientation_ids = Event.where(event_type_id: 12).pluck(:id)
     # Retrieve a list of event signups based on the orientation ID's (ActiveRecord handles multiple inputs for SQL search)
     orientation_signups = EventSignup.where(event_id: orientation_ids)
@@ -97,7 +97,7 @@ get '/status_page/?' do
       end
     end
 
-	erb :'/engineering_garage/status_page', :layout => :fixed, :locals => {
+	erb :'/engineering_design_hub/status_page', :layout => :fixed, :locals => {
         :lockout_count => lockout_count,
         :lockouts => lockouts,
         :orientation_potentials => orientation_potentials,

@@ -24,7 +24,7 @@
 								<tr>
 									<th scope="col">Location</th>
 									<th scope="col">Project Name</th>
-									<th scope="col">Owner Username</th>
+									<th scope="col">Owner</th>
 									<th scope="col">Status</th>
 									<th scope="col">Last Accessed</th>
 									<th scope="col" class="dcf-txt-right">Project Actions</th>
@@ -35,7 +35,13 @@
 									<tr>
 										<td><%= project[:bin_id] %></td>
 										<td><%= project[:title] %></td>
-										<td><%= project_owners[project.id].username %></td>
+										<td>
+											<% if project_owners[project.id] %>
+												<%= project_owners[project.id][:first_name] %> <%= project_owners[project.id][:last_name] %> <span style="font-size: 0.75em; font-weight: normal;">(<%= project_owners[project.id][:username] %>)</span>
+											<% else %>
+												No Owner Found
+											<% end %>
+										</td>
 										<% if project[:last_checked_out] != nil && project[:last_checked_in] != nil %>
 											<% if project[:last_checked_out] >= project[:last_checked_in] %>
 												<td><%= "Checked Out" %></td>
@@ -120,7 +126,13 @@
 									<% checked_out.each do |tool| %>
 									<tr>
 										<td><%= tool[:tool_name] %></td>
-										<td><%= current_tool_users[tool.id].username %></td>
+										<td>
+											<% if current_tool_users[tool.id] %>
+												<%= current_tool_users[tool.id][:first_name] %> <%= current_tool_users[tool.id][:last_name] %> <span style="font-size: 0.75em; font-weight: normal;">(<%= current_tool_users[tool.id][:username] %>)</span>
+											<% else %>
+												Not currently checked out
+											<% end %>
+										</td>
 										<td><%= tool[:last_checked_out].in_time_zone.strftime("%b %-d, %Y %-I:%M%P") %></td>
 										<td class="table-actions">
 											<button class="dcf-btn-toggle-modal dcf-btn dcf-btn-primary" data-toggles-modal="checkin-tool-<%= tool[:id] %>" type="button">Check In</button>
