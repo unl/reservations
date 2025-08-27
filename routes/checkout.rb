@@ -134,7 +134,7 @@ post '/checkout/events/:event_id/:user_id/' do
 	new_member_orientation_id = EventType.find_by(:description => 'New Member Orientation', :service_space_id => SS_ID).id
   tool_training_event_id = EventType.find_by(:description => 'Machine Training', :service_space_id => SS_ID).id
 	event = Event.find_by(:id => params[:event_id])
-	tool = EventAuthorization.find_by(:event_id => params[:event_id])
+  tools = EventAuthorization.where(:event_id => params[:event_id])
   user = User.find_by(:id => params[:user_id])
 
 	if event.nil?
@@ -173,16 +173,20 @@ post '/checkout/events/:event_id/:user_id/' do
       end
     end
 
-    if !tool.nil?
-      unless user.authorized_resource_ids.include?(tool.resource_id)
+    # Loop through all tools and authorize the user for all them
+    tools.each do |tool|
+      tool_id = tool.resource_id 
+      # check if the user already has permission for this tool
+      unless user.authorized_resource_ids.include?(tool_id)
         ResourceAuthorization.create(
           :user_id => user.id,
-          :resource_id => tool.resource_id,
+          :resource_id => tool_id,
           :authorized_date => Time.now,
           :authorized_event => signup_record.event_id
         )
       end
     end
+
   end
 
 	flash :success, 'Event attendence confirmed', "#{user.username}'s attendence confirmed for #{event.title}."
