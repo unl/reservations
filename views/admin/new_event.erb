@@ -256,7 +256,7 @@
                         <div class="dcf-d-flex dcf-jc-center">
                             <div class="dcf-datepicker dcf-w-fit-content dcf-mb-3">
                                 <label for="start-date" class="start-date-label">Date<small class="dcf-required">Required</small></label>
-                                <input id="start-date" class="start-date-input" value="<%= event.start_time.in_time_zone.strftime('%m/%d/%Y') if !event.start_time.nil? %>" name="start_date[0]" type="text" />
+                                <input id="start-date" class="start-date-input" value="<%= event.start_time.in_time_zone.strftime('%m/%d/%Y') if !event.start_time.nil? %>" name="start_date[0]" type="text" required />
                             </div>
                         </div>
                         <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
@@ -517,7 +517,7 @@
 
             const date_picker_container = new_occurrence_group.querySelector('.dcf-datepicker');
             date_picker_container.innerHTML = `<label for="start-date" class="start-date-label">Date<small class="dcf-required">Required</small></label>
-<input id="start-date" class="start-date-input" value="" name="start_date[]" type="text" />`;
+<input id="start-date" class="start-date-input" value="" name="start_date[]" type="text" required />`;
 
             const start_date_input = new_occurrence_group.querySelector('.start-date-input');
             start_date_input.value = last_occurrence_group.querySelector('.start-date-input').value;
@@ -669,8 +669,19 @@
         function toggleDatePicker() {
             if ($('#timeless_event_checkbox').is(':checked')) {
                 $('#date-picker-group').hide();
+                $('#add_new_occurrence').hide();
+
+                document.getElementById('date-picker-group').querySelectorAll('[required]').forEach((single_element) => {
+                    single_element.removeAttribute('required');
+                    single_element.dataset.required = 'required';
+                });
             } else {
                 $('#date-picker-group').show();
+                $('#add_new_occurrence').show();
+                document.getElementById('date-picker-group').querySelectorAll('[data-required]').forEach((single_element) => {
+                    single_element.setAttribute('required', 'required');
+                    delete single_element.dataset.required;
+                });
             }
         }
 
