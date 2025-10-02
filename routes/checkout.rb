@@ -363,20 +363,37 @@ end
 post "/checkout/project/edit/?" do
   @breadcrumbs << { :text => "Edit Project" }
   require_login
-  project = Project.find_by(id: params[:project_id])
-  params[:user] = User.find_by(user_nuid: params[:nuid])
 
-  if  params[:title].blank?
+  nuid = params[:nuid]
+
+  if nuid.nil? || nuid.strip.empty?
+    flash :danger, "Error", "NUID empty."
+    redirect back
+  end
+
+  #If the nuid length is 8, it was manually input and should be correct
+  #If not, it'll be nuid+issue code from a barcode scan
+  if nuid.length != 8 
+    #pre-pends with zeroes if the input is not 13 characters long 
+    nuid = nuid.rjust(13, "0")
+    #extracts the NUID portion from the scanned input
+    nuid = nuid[0, 8]
+  end
+
+  project = Project.find_by(id: params[:project_id])
+  params[:user] = User.find_by(user_nuid: nuid)
+
+  if params[:title].blank?
 		flash :error, 'Error', 'Please enter a title'
 		redirect back
 	end 
 
-  if  params[:bin_id].blank?
+  if params[:bin_id].blank?
 		flash :error, 'Error', 'Please enter a bin code'
 		redirect back
 	end
 
-  if  params[:user].nil?
+  if params[:user].nil?
 		flash :error, 'Error', 'User with provided NUID not found'
 		redirect back
 	end 
@@ -426,6 +443,15 @@ post "/checkout/project/:project_id/edit/teammates/" do
   if nuid.nil? || nuid.strip.empty?
     flash :danger, "Error", "NUID empty."
     redirect back
+  end
+
+  #If the nuid length is 8, it was manually input and should be correct
+  #If not, it'll be nuid+issue code from a barcode scan
+  if nuid.length != 8 
+    #pre-pends with zeroes if the input is not 13 characters long 
+    nuid = nuid.rjust(13, "0")
+    #extracts the NUID portion from the scanned input
+    nuid = nuid[0, 8]
   end
 
   teammate_user = User.find_by(user_nuid: nuid)
