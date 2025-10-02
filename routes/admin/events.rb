@@ -30,6 +30,7 @@ get '/admin/events/?' do
 	preset_events = PresetEvents.where(:service_space_id => SS_ID).order(event_name: :asc).all.to_a
 	event_type = params[:event_type]
 	event_area = params[:event_area]
+	trainer_filter = params[:trainer_filter]
 
 	case tab
 	when 'past'
@@ -55,6 +56,19 @@ get '/admin/events/?' do
 			iterator = iterator.where(:area => event_area)
 		end
 	end
+
+	unless trainer_filter.nil? || trainer_filter.length == 0
+		iterator = iterator.joins(
+			"LEFT JOIN users u1 ON events.trainer_id = u1.id
+			LEFT JOIN users u2 ON events.trainer_2_id = u2.id
+			LEFT JOIN users u3 ON events.trainer_3_id = u3.id"
+		).where(
+			"LOWER(u1.username) LIKE :filter OR LOWER(u1.first_name) LIKE :filter OR LOWER(u1.last_name) LIKE :filter
+			OR LOWER(u2.username) LIKE :filter OR LOWER(u2.first_name) LIKE :filter OR LOWER(u2.last_name) LIKE :filter
+			OR LOWER(u3.username) LIKE :filter OR LOWER(u3.first_name) LIKE :filter OR LOWER(u3.last_name) LIKE :filter",
+			filter: "%#{trainer_filter.downcase}%"
+		)
+	end
 	
 	erb :'admin/events', :layout => :fixed, :locals => {
 		:events => iterator.order(order_clause).limit(page_size).offset((page-1)*page_size).all,
@@ -63,7 +77,8 @@ get '/admin/events/?' do
 		:tab => tab,
 		:preset_events => preset_events,
 		:event_type => event_type,
-		:event_area => event_area
+		:event_area => event_area,
+		:trainer_filter => trainer_filter
 	}
 end
 

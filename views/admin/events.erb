@@ -67,6 +67,18 @@
                                     <% end %>
                                 </select>
                             </div>
+                            <% if SS_ID === 1 %>
+                                <div class="dcf-form-group dcf-w-100%">
+                                    <label for="trainer_filter">Trainer:</label>
+                                    <input
+                                        id="trainer_filter"
+                                        name="trainer_filter"
+                                        class="dcf-w-100%"
+                                        type="text"
+                                        value="<%= trainer_filter if trainer_filter.present? %>"
+                                    >
+                                </div>
+                            <% end %>
                             <div>
                                 <input type="hidden" name="tab" id="tab" value="<%= tab %>">
                                 <button id="search-btn" class="dcf-btn dcf-btn-inverse-primary">Search</button>
