@@ -33,3 +33,22 @@ startup.sh
 
 # On Mac
 *.DS_Store
+
+# Server stuff
+.bash_history
+.bash_logout
+.bash_profile
+.bashrc
+.gitconfig
+.lesshst
+.local/
+.mkshrc
+.my.cnf
+.mysql_history
+.profile
+.rvm/
+.ssh/
+.vim/
+.viminfo
+.zlogin
+.zshrc
