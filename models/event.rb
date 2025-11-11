@@ -56,15 +56,19 @@ class Event < ActiveRecord::Base
     EVENT_TYPES_NOT_ALLOWED_FOR_SIGNUP = []
 
 	scope :in_day, ->(time) {
-		today = time.in_time_zone.midnight
-		tomorrow = (time.in_time_zone.midnight + 1.day + 1.hour).in_time_zone.midnight
-		where('(start_time >= ? AND start_time < ?) OR (end_time >= ? AND end_time < ?)', today.getutc, tomorrow.getutc, today.getutc, tomorrow.getutc)
+		day_start = time.in_time_zone.beginning_of_day
+		day_end = day_start + 1.day
+
+		# Include any event that overlaps this day at all
+		where('start_time < ? AND end_time > ?', day_end.utc, day_start.utc)
 	}
 
-	scope :in_week, ->(time) {
-		last_sunday = time.in_time_zone.week_start
-		next_sunday = (time.in_time_zone.week_start + 1.week + 1.hour).in_time_zone.week_start
-		where('(start_time >= ? AND start_time < ?) OR (end_time >= ? AND end_time < ?)', last_sunday.getutc, next_sunday.getutc, last_sunday.getutc, next_sunday.getutc)
+		scope :in_week, ->(time) {
+		week_start = time.in_time_zone.beginning_of_week  # usually Monday, change if you use Sunday
+		week_end = week_start + 1.week
+
+		# Include any event that overlaps this week
+		where('start_time < ? AND end_time > ?', week_end.utc, week_start.utc)
 	}
 
 	# returns length in minutes. If start or end is nil, returns 0

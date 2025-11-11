@@ -8,9 +8,11 @@ class Reservation < ActiveRecord::Base
 	MAX_MINUTES_PER_RESERVATION_LIMIT = 1440
 
 	scope :in_day, ->(time) {
-		today = time.in_time_zone.midnight
-		tomorrow = (time.in_time_zone.midnight + 1.day + 1.hour).in_time_zone.midnight
-		where('(start_time >= ? AND start_time < ?) OR (end_time >= ? AND end_time < ?)', today.getutc, tomorrow.getutc, today.getutc, tomorrow.getutc)
+		day_start = time.in_time_zone.beginning_of_day
+		day_end = day_start + 1.day
+
+		# Any reservation that overlaps with [day_start, day_end)
+		where('start_time < ? AND end_time > ?', day_end.utc, day_start.utc)
 	}
 
 	# returns length in minutes. If start or end is nil, returns 0

@@ -60,9 +60,11 @@ class Lockout < ActiveRecord::Base
 	end
 
 	scope :in_day, ->(time) {
-		today = time.in_time_zone.midnight
-		tomorrow = (time.in_time_zone.midnight + 1.day + 1.hour).in_time_zone.midnight
-		where('released_on IS NULL OR (started_on >= ? AND started_on < ?) OR (released_on >= ? AND released_on < ?)', today.getutc, tomorrow.getutc, today.getutc, tomorrow.getutc)
+		day_start = time.in_time_zone.beginning_of_day
+		day_end = day_start + 1.day
+
+		# Any lockout that overlaps this day at all
+		where('(released_on IS NULL AND started_on < ?) OR (started_on < ? AND released_on > ?)', day_end.utc, day_end.utc, day_start.utc)
 	}
 
 	def length
