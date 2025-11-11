@@ -56,7 +56,7 @@ No reservations today. Hopefully someone will still come in to use the space!<br
                     <% if !reservation.user.expiration_date.nil? && reservation.user.expiration_date > Date.today %>
                         <%= reservation.user.full_name %>
                     <% else %>
-                        <p style="color:#d00000;"><%= reservation.user.full_name %> </p>
+                        <p class="dcf-rounded unl-cream unl-bg-scarlet dcf-p-3 dcf-w-fit-content"><%= reservation.user.full_name %> </p>
                     <% end %>
                 <% elsif !reservation.event.nil? %>
                 <strong>Event:</strong> <%= reservation.event.title %>
@@ -69,8 +69,15 @@ No reservations today. Hopefully someone will still come in to use the space!<br
                 <%= reservation.resource.model %>
             </td>
             <td>
-            	<%= reservation.start_time.in_time_zone.strftime('%l:%M %P') %><br>
-            	<%= reservation.length %> minutes
+            	<% if reservation.length > 1440 %> <!-- longer than 24 hours -->
+                    <%= reservation.start_time.in_time_zone.strftime('%b %-d %l:%M %P') %> 
+                    – 
+                    <%= reservation.end_time.in_time_zone.strftime('%b %-d %l:%M %P') %>
+                <% else %>
+                    <%= reservation.start_time.in_time_zone.strftime('%l:%M %P') %>
+                <% end %>
+                <br>
+                <%= reservation.length %> minutes
             </td>
             <td>
                 <form class="dcf-form delete-form" method="POST" action="/admin/agenda/reservations/<%= reservation.id %>/remove/">
