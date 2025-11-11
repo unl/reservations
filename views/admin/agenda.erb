@@ -69,13 +69,9 @@ No reservations today. Hopefully someone will still come in to use the space!<br
                 <%= reservation.resource.model %>
             </td>
             <td>
-            	<% if reservation.length > 1440 %> <!-- longer than 24 hours -->
-                    <%= reservation.start_time.in_time_zone.strftime('%b %-d %l:%M %P') %> 
-                    – 
-                    <%= reservation.end_time.in_time_zone.strftime('%b %-d %l:%M %P') %>
-                <% else %>
-                    <%= reservation.start_time.in_time_zone.strftime('%l:%M %P') %>
-                <% end %>
+                <%= reservation.start_time.in_time_zone.strftime('%b %-d %l:%M %P') %> 
+                –
+                <%= reservation.end_time.in_time_zone.strftime('%b %-d %l:%M %P') %>
                 <br>
                 <%= reservation.length %> minutes
             </td>
