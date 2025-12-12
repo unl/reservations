@@ -57,6 +57,7 @@
                         <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
+                            <th scope="col">NUID</th>
                             <th scope="col">Date Added</th>
                             <th scope="col">Actions</th>
                         </tr>
@@ -67,6 +68,7 @@
                             <tr class="dcf-ai-center dcf-col-gap-vw">
                                 <td><%= user.full_name %></td>
                                 <td><%= user.email %></td>
+                                <td><%= user.user_nuid %></td>
                                 <td><%= teammate.created_on.strftime('%m/%d/%Y') %></td>
                                 <td>
                                     <% if teammate.is_owner %>
