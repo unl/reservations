@@ -27,7 +27,13 @@
                 </td>
                 <td>
                     <div class="dcf-input-checkbox">
-                        <input <%= 'checked="checked"' if tool.INOP %> id="INOP-checkbox_<%= tool.id %>" type="checkbox" name="INOP_<%= tool.id %>"  >
+                        <input
+                            <%= 'checked="checked"' if tool.INOP %> id="INOP-checkbox_<%= tool.id %>"
+                            type="checkbox"
+                            name="INOP_<%= tool.id %>"
+                            data-tool-name="<%= tool.name %>"
+                            data-tool-model="<%= tool.model %>"
+                        >
                         <label for="INOP-checkbox_<%= tool.id %>"></label>
                     </div>
                 </td>
@@ -54,3 +60,27 @@
         onSubmit="return confirm('Are you sure you want to delete <%= tool.name %>?') "
     ></form>
 <% end %>
+
+<script>
+    const all_checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    console.log(all_checkboxes);
+    all_checkboxes.forEach((single_checkbox) => {
+        single_checkbox.addEventListener('change', () => {
+            if (single_checkbox.checked === false) {
+                return;
+            }
+
+            let dialog_text = `Are you sure you want to INOP the ${single_checkbox.dataset.toolName ?? "No Name Found" }`;
+            if (single_checkbox.dataset.toolModel !== '') {
+                dialog_text += ` - ${single_checkbox.dataset.toolModel ?? "No Model Found"}`;
+            }
+
+            dialog_text += '\n\nPlease note you will still need to click "Update Tools INOP Status" at the bottom of the page to save the changes'
+
+            const result = window.confirm(dialog_text);
+            if (result !== true) {
+                single_checkbox.checked = false;
+            }
+        });
+    });
+</script>
