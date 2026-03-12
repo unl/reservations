@@ -21,7 +21,12 @@
 
             <div class="dcf-form-group">
                 <label for="email">Email Address <small class="dcf-required">Required</small></label>
-                <input class="dcf-w-100%" type="text" id="email" name="email" value="<%= form_data[:email] if check_form_data(form_data, :email) %>" required/>
+                <% if SS_ID == 8 %>
+                    <input class="dcf-w-100%" type="text" id="email" name="email" value="<%= form_data[:email] if check_form_data(form_data, :email) %>" required aria-describedby="email-help"/>
+                    <p class="dcf-form-help" id="email-help">UNL students should use their @huskers.unl.edu email address and not their @nebraska.edu email address</p>
+                <% else %>
+                    <input class="dcf-w-100%" type="text" id="email" name="email" value="<%= form_data[:email] if check_form_data(form_data, :email) %>" required/>
+                <% end %>
             </div>
 
             <div class="dcf-form-group">
@@ -259,7 +264,7 @@
             <% if SS_ID == 8 %>
                 <fieldset>
                     <legend>User Agreement</legend>
-                    <p class=.dcf-form-help>By checking the box, you agree to the following statements</p>
+                    <p>By checking the box, you agree to the following statements</p>
                         <div class="dcf-input-checkbox">
                             <input type="checkbox" name="weapon-agreement" id="weapon-agreement" required>
                             <label for="weapon-agreement">I understand that the production or customization of weapons, weapon accessories, weapon parts, ammunition, or tools of vandalism is strictly prohibited. I understand that any attempts to produce these items will be reported to the appropriate law enforcement agencies.<small class="dcf-required">Required</small></label>
