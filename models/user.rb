@@ -194,7 +194,7 @@ class User < ActiveRecord::Base
     end
 
     # Get the nuid and double check we don't have duplicates
-    user_nuid = json_parse_content['unluncwid'][0]
+    user_nuid = json_parse_content['unluncwid']
     unless User.find_by(:user_nuid => user_nuid, :service_space_id => SS_ID).nil?
       return {:status => false, :nuid => nil, :error_header => "Error retrieving your NUID", :error_message => "A user with that NUID already exists. If you believe this to be an error, please contact an administrator."}
     end
