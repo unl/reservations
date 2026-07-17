@@ -14,6 +14,10 @@ class Alert < ActiveRecord::Base
     ALERT_CATEGORY_ENGINEERING_METALSHOP_ALERTS = 8
     ALERT_CATEGORY_ENGINEERING_DIGITAL_FABRICATION_ALERTS = 9
 
+    ALERT_CATEGORY_DIGITAL_LAB_GENERAL_ALERTS = 10
+    ALERT_CATEGORY_LASER_CUTTER_ALERTS = 11
+    ALERT_CATEGORY_LASER_GRAPH_ALERTS = 12
+
     def self.category_options
         if SS_ID == 1
             {
@@ -23,14 +27,19 @@ class Alert < ActiveRecord::Base
                 ALERT_CATEGORY_DIGITAL_FABRICATION_ALERTS => 'Digital Fabrication Alerts',
                 ALERT_CATEGORY_ART_ALERTS => 'Art Alerts',
             }
-		elsif SS_ID == 8
-			{
-				ALERT_CATEGORY_ENGINEERING_GENERAL_ALERTS => 'General Alerts',
+		    elsif SS_ID == 8
+		    	  {   ALERT_CATEGORY_ENGINEERING_GENERAL_ALERTS => 'General Alerts',
                 ALERT_CATEGORY_ENGINEERING_WOODSHOP_ALERTS => 'Woodshop Alerts',
                 ALERT_CATEGORY_ENGINEERING_METALSHOP_ALERTS => 'Metalshop Alerts',
                 ALERT_CATEGORY_ENGINEERING_DIGITAL_FABRICATION_ALERTS => 'Digital Fabrication Alerts',
-			}
-		end
+            }
+        elsif SS_ID == 9
+		    	  {
+		    		    ALERT_CATEGORY_DIGITAL_LAB_GENERAL_ALERTS => 'General Alerts',
+                ALERT_CATEGORY_LASER_CUTTER_ALERTS => 'Laser Cutter Alerts',
+                ALERT_CATEGORY_LASER_GRAPH_ALERTS => 'Laser Graph Alerts',
+		    	  }
+		    end
     end
 
     def self.valid_category_id?(category_id)

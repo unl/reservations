@@ -128,6 +128,10 @@
   <%= erb :'engineering_design_hub/my_alerts', :locals => {
     :user_alerts => user_alerts
   } %>
+<% elsif SS_ID == 9 %>
+  <%= erb :'digital_lab/my_alerts', :locals => {
+    :user_alerts => user_alerts
+  } %>
 <% end %>
 
 <% if @user.is_trainer == 1 %>
