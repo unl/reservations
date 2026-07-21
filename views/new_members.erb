@@ -59,7 +59,10 @@ Welcome to the <%= CONFIG['app']['title'] %>!
     There are no member orientations scheduled right now. Please check back again soon!
     </p>
     <% end %>
-<% else %>
+<% elsif SS_ID == 8 %>
     For full details on completing Orientation please visit Canvas.
+    </p>
+<% elsif SS_ID == 9 %>
+    For full details on completing Orientation please email aahdigitallab@unl.edu or contact Allison Woods at awoods5@nebraska.edu.
     </p>
 <% end %>
