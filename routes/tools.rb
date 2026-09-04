@@ -22,7 +22,7 @@ get '/tools/?' do
 
 	tools.reject! {|tool| tool.needs_authorization && !@user.authorized_resource_ids.include?(tool.id)}
 
-	if SS_ID == 8
+	if SS_ID == 8 || SS_ID == 9
 		tools.reject! {|tool| tool.is_manually_locked_out?}
 	end
 	
@@ -123,6 +123,8 @@ post '/tools/trainings/sign_up/:event_id/?' do
 		template_path = "#{ROOT}/views/innovationstudio/email_templates/training_signup_email.erb"
 		if SS_ID == 8
 			template_path = "#{ROOT}/views/engineering_design_hub/email_templates/training_signup_email.erb"
+		elsif SS_ID == 9
+			template_path = "#{ROOT}/views/digital_lab/email_templates/training_signup_email.erb"
 		end
 		template = File.read(template_path)
 		body = ERB.new(template).result(binding)
@@ -171,7 +173,7 @@ get '/tools/:resource_id/reserve/?' do
 
 	available_start_times = []
 	# calculate the available start times for reservation
-	if space_hour.nil? || (tool.is_24_hour && SS_ID == 8)
+	if space_hour.nil? || (tool.is_24_hour && (SS_ID == 8 || SS_ID == 9))
 		start = 0
 		while start + (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15) <= 1440
 			available_start_times << start
@@ -193,7 +195,7 @@ get '/tools/:resource_id/reserve/?' do
 	reservations = Reservation.includes(:event).where(:resource_id => tool.id).in_day(date).all
     unavailable_start_times = []
     available_start_times.each do |available_start_time|
-				if tool.is_24_hour && SS_ID == 8
+				if tool.is_24_hour && (SS_ID == 8 || SS_ID == 9)
 						date_start = (date.midnight) # 12:00 am
 						date_end = (date.end_of_day) # 11:59 pm
 				else
@@ -306,7 +308,7 @@ get '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 
 	available_start_times = []
 	# calculate the available start times for reservation
-	if space_hour.nil? || (tool.is_24_hour && SS_ID == 8)
+	if space_hour.nil? || (tool.is_24_hour && (SS_ID == 8 || SS_ID == 9))
 		start = 0
 		while start + (tool.minutes_per_reservation || tool.min_minutes_per_reservation || 15) <= 1440
 			available_start_times << start
@@ -328,7 +330,7 @@ get '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 	reservations = Reservation.includes(:event).where(:resource_id => tool.id).in_day(date).all
     unavailable_start_times = []
 	available_start_times.each do |available_start_time|
-		if tool.is_24_hour && SS_ID == 8
+		if tool.is_24_hour && (SS_ID == 8 || SS_ID == 9)
 				date_start = (date.midnight) # 12:00 am
 				date_end = (date.end_of_day) # 11:59 pm
 		else

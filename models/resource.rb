@@ -29,19 +29,26 @@ class Resource < ActiveRecord::Base
 	# For service space 8
     CATEGORY_DESIGN_HUB = 7
 
+	# For service space 9
+	  CATEGORY_DIGITAL_LAB = 8
+
     def self.category_options
 		if SS_ID == 1
-        {
-            CATEGORY_ART_STUDIO => 'Art Studio',
-            CATEGORY_GENERAL => 'General',
-            CATEGORY_METAL_SHOP => 'Metal Shop',
-            CATEGORY_RAPID_PROTOTYPING => 'Rapid Prototyping',
-            CATEGORY_TEXTILES => 'Textiles',
-            CATEGORY_WOOD_SHOP => 'Wood Shop',
-        }
+      {
+          CATEGORY_ART_STUDIO => 'Art Studio',
+          CATEGORY_GENERAL => 'General',
+          CATEGORY_METAL_SHOP => 'Metal Shop',
+          CATEGORY_RAPID_PROTOTYPING => 'Rapid Prototyping',
+          CATEGORY_TEXTILES => 'Textiles',
+          CATEGORY_WOOD_SHOP => 'Wood Shop',
+      }
 		elsif SS_ID == 8
 			{
 				CATEGORY_DESIGN_HUB => 'Engineering Design Hub',
+			}
+		elsif SS_ID == 9
+			{
+				CATEGORY_DIGITAL_LAB => 'Digital Lab',
 			}
 		end
     end

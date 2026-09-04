@@ -28,6 +28,11 @@ class Event < ActiveRecord::Base
 	EVENT_TYPE_ID_ENGINEERING_METALSHOP = 16
 	EVENT_TYPE_ID_ENGINEERING_DIGITAL_FABRICATION = 17
 
+  # Serivce Space ID 9
+	EVENT_TYPE_ID_DIGITAL_LAB_NEW_MEMBER_ORIENTATION = 18
+	EVENT_TYPE_ID_LASER_CUTTER_ORIENTATION = 19
+	EVENT_TYPE_ID_LASER_GRAPH_ORIENTATION = 20
+
 	def self.type_options
 		# These correspond with event_types table
 		if SS_ID == 1
@@ -49,6 +54,12 @@ class Event < ActiveRecord::Base
 				EVENT_TYPE_ID_ENGINEERING_WOODSHOP => 'Woodshop',
 				EVENT_TYPE_ID_ENGINEERING_METALSHOP => 'Metalshop',
 				EVENT_TYPE_ID_ENGINEERING_DIGITAL_FABRICATION => 'Digital Fabrication',
+			}
+		elsif SS_ID == 9
+			{
+        EVENT_TYPE_ID_DIGITAL_LAB_NEW_MEMBER_ORIENTATION => 'New Member Orientation',
+				EVENT_TYPE_ID_LASER_CUTTER_ORIENTATION => 'Laser Cutter Orientation',
+				EVENT_TYPE_ID_LASER_GRAPH_ORIENTATION => 'Laser Graph Orientation',
 			}
 		end
     end

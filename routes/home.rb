@@ -101,6 +101,12 @@ post '/home/add_all/:category_id/' do
 		flash(:success, 'Added All Metalshop Alerts', "You've been signed up for all Metalshop Alerts.")
 	when Alert::ALERT_CATEGORY_ENGINEERING_DIGITAL_FABRICATION_ALERTS
 		flash(:success, 'Added All Digital Fabrication Alerts', "You've been signed up for all Digital Fabrication Alerts.")
+	when Alert::ALERT_CATEGORY_DIGITAL_LAB_GENERAL_ALERTS
+		flash(:success, 'Added All General Alerts', "You've been signed up for all General Alerts.")
+	when Alert::ALERT_CATEGORY_LASER_CUTTER_ALERTS
+		flash(:success, 'Added All Laser Cutter Alerts', "You've been signed up for all Laser Cutter Alerts.")
+	when Alert::ALERT_CATEGORY_LASER_GRAPH_ALERTS
+		flash(:success, 'Added All Laser Graph Alerts', "You've been signed up for all Laser Graph Alerts.")
 	end
 
 	redirect '/home/'

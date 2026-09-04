@@ -171,7 +171,7 @@ post '/check_in_login/?' do
   # it is the user, hooray
   session[:user_id] = user.id
   # checks whether the NU user has a nuid or whether is has tried and failed less than 20 times before
-  if user.university_status != 'Non-NU Student (All Other Institutions)' && SS_ID == 8
+  if user.university_status != 'Non-NU Student (All Other Institutions)' && (SS_ID == 8 || SS_ID == 9)
     if user.user_nuid == nil || (user.user_nuid.to_i > -20 && user.user_nuid.to_i < 0)
       nuid_hash = user.fetch_nuid()
       if nuid_hash[:status]
@@ -201,6 +201,8 @@ end
 get '/login/?' do
   if SS_ID == 8
     redirect '/home/'
+  elsif SS_ID == 9
+    redirect '/home/'
   end
 
   @breadcrumbs << {:text => 'Login'}
@@ -228,7 +230,7 @@ post '/login/?' do
   session[:user_id] = user.id
 
   # checks whether the NU user has a nuid or whether is has tried and failed less than 20 times before
-  if user.university_status != 'Non-NU Student (All Other Institutions)' && SS_ID == 8
+  if user.university_status != 'Non-NU Student (All Other Institutions)' && (SS_ID == 8 || SS_ID == 9)
     if user.user_nuid == nil || (user.user_nuid.to_i > -20 && user.user_nuid.to_i < 0)
       nuid_hash = user.fetch_nuid()
       if nuid_hash[:status]
@@ -335,7 +337,7 @@ end
 
 get '/logout/?' do
   session.clear
-  if (SS_ID == 8)
+  if (SS_ID == 8 || SS_ID == 9)
     redirect "https://shib.unl.edu/idp/profile/cas/logout?url=#{request.base_url}/logout"
   else 
     redirect '/'

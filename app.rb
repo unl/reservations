@@ -70,6 +70,26 @@ before do
           :text => CONFIG['app']['title']
         }
       ]
+    elsif SS_ID == 9
+      @inline_body_script_content = ''
+      @affiliation = 'Hixson-Lied College of Fine and Performing Arts'
+      @affiliation_link = 'https://arts.unl.edu'
+      CONFIG['app']['title'] = 'Digital Lab' 
+      @breadcrumbs = [
+        {
+          :href => 'https://www.unl.edu/',
+          :text => 'Nebraska',
+          :title => 'University of Nebraska&ndash;Lincoln Home'
+        },
+        {
+          :href => 'https://arts.unl.edu',
+          :text => 'Hixson-Lied College of Fine and Performing Arts'
+        },
+        {
+          :href => '/',
+          :text => CONFIG['app']['title']
+        }
+      ]
     end
 
     session[:init] = true
@@ -126,6 +146,29 @@ def require_login(redirect_after_login=nil)
         end
       end
     end
+  elsif SS_ID == 9
+    if session['cas'].nil? || session['cas']['user'].nil?
+      # Allow admins to bypass SSO
+      unless !@user.nil? && @user.is_admin?
+        halt 401
+      end
+    else
+      # Check if the user exists in the app's db
+      @user = User.find_by(:username => session['cas']['user'], :service_space_id => SS_ID)
+      if @user.nil?
+        # Direct nonexistent users to the new member sign up
+        flash(:alert, 'You Must Have an Account', 'To use the Digital Lab, please sign up for New Member Orientation.')
+        redirect '/digital_lab/new_users/'
+      else
+        session[:user_id] = @user.id
+
+        # Check for orienation attendance and user agreement renewal
+        if !@user.is_super_user? && !@user.is_admin?
+          require_orientation
+          require_renewal(redirect_after_login)
+        end
+      end
+    end
   else
     if @user.nil?
       flash(:alert, 'You Must Login', 'That page requires you to be logged in. If you don\'t have an account, please sign up for <a href="/new_members/">New&nbsp;Member&nbsp;Orientation</a>.')
@@ -160,8 +203,12 @@ end
 
 def require_orientation
   unless AttendedOrientation.exists?(user_id: @user.id)
-    flash(:alert, 'You Must Attend Orientation', 'To use the Engineering Design Hub, please sign up for a tour.')
-    redirect '/new_members/'
+    if SS_ID == 8
+      flash(:alert, 'You Must Attend Orientation', 'To use the Engineering Design Hub, please sign up for a tour.' + @user.id.to_s)
+    elsif SS_ID == 9
+      flash(:alert, 'You Must Attend Orientation', 'To use the Digital Lab, please sign up for a tour.' + @user.id.to_s)
+    end
+      redirect '/new_members/'
   end
 end
 
@@ -187,6 +234,8 @@ end
 
 get '/' do
   if SS_ID == 8 
+    check_sso
+  elsif SS_ID == 9 
     check_sso
   end
   @breadcrumbs << {:text => 'Home'}

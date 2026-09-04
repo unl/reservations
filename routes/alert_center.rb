@@ -89,6 +89,30 @@ get '/alert_center/:user_id/?' do
                 digitalFabricationAlerts.description.to_s.downcase
             ]
         end
+    elsif SS_ID == 9
+        generalAlerts = Alert.all.where(category_id: 10).to_a
+        generalAlerts.sort_by! do |generalAlerts|
+            [
+                generalAlerts.name.to_s.downcase,
+                generalAlerts.description.to_s.downcase
+            ]
+        end
+
+        laserCutterAlerts = Alert.all.where(category_id: 11).to_a
+        laserCutterAlerts.sort_by! do |laserCutterAlerts|
+            [
+                laserCutterAlerts.name.to_s.downcase,
+                laserCutterAlerts.description.to_s.downcase
+            ]
+        end
+
+        laserGraphAlerts = Alert.all.where(category_id: 12).to_a
+        laserGraphAlerts.sort_by! do |laserGraphAlerts|
+            [
+                laserGraphAlerts.name.to_s.downcase,
+                laserGraphAlerts.description.to_s.downcase
+            ]
+        end
     end
 
     erb :alert_center, :layout => :fixed, :locals => {
@@ -97,7 +121,9 @@ get '/alert_center/:user_id/?' do
         :metalShopAlerts => metalShopAlerts,
         :digitalFabricationAlerts => digitalFabricationAlerts,
         :artAlerts => artAlerts,
-        :alert_ids => alert_ids
+        :alert_ids => alert_ids,
+        :laserCutterAlerts => laserCutterAlerts,
+        :laserGraphAlerts => laserGraphAlerts
     }
 
 end
