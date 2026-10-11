@@ -5,7 +5,7 @@ class Reservation < ActiveRecord::Base
 	belongs_to :event
 	belongs_to :user
 
-	MAX_MINUTES_PER_RESERVATION_LIMIT = 1440
+	MAX_MINUTES_PER_RESERVATION_LIMIT = 2880
 
 	scope :in_day, ->(time) {
 		day_start = time.in_time_zone.beginning_of_day

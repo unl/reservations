@@ -154,6 +154,8 @@ post '/checkout/events/:event_id/:user_id/' do
 
   if event.start_time == nil && SS_ID == 8
     end_time = Time.now
+  elsif event.start_time == nil && SS_ID ==9
+    end_time = Time.now
   else 
     end_time = event.end_time
   end

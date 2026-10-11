@@ -1,0 +1,18 @@
+<form method="POST">
+    <fieldset>
+        <div class="dcf-form-group">
+            <h4> General Alerts </h4>
+            <% if !generalAlerts.empty? %>
+                <% generalAlerts.each do |alert| %>
+                    <input <%= 'checked="checked"' if alert_ids.include?(alert.id)%> type="checkbox" name="alert_id_<%=alert.id%>" value=<%=alert.id%> /> <%= alert.name %> <br/>
+                    <% if !alert.description.blank? %>
+                    <p>- <%=alert.description%> </p>
+                    <% end %>
+                <% end %>
+            <% else %>
+                <p>No alerts right now</p>
+            <% end %>
+        </div>
+        <button class="dcf-mt-3 dcf-btn dcf-btn-primary" type="submit">Update Groups</button>
+    </fieldset>
+</form>

@@ -136,6 +136,8 @@ get '/admin/users/?' do
     unless user_nuid.nil? || user_nuid.length == 0
         if SS_ID == 8
             users = users.where("user_nuid LIKE ?", "%#{user_nuid}%")
+        elsif SS_ID == 9
+            users = users.where("user_nuid LIKE ?", "%#{user_nuid}%")
         end
     end
 
@@ -485,7 +487,7 @@ post '/admin/users/create/?' do
     user.created_by_user_id = @user.id
     user.space_status = 'current'
     user.service_space_id = SS_ID
-    if params[:university_status] != 'Non-NU Student (All Other Institutions)' && SS_ID == 8
+    if params[:university_status] != 'Non-NU Student (All Other Institutions)' && (SS_ID == 8 || SS_ID == 9)
         nuid_hash = user.fetch_nuid()
 
         # Checks if the NUID was successfully retrieved

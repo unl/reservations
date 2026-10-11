@@ -254,6 +254,8 @@ class User < ActiveRecord::Base
       template_path = "#{ROOT}/views/innovationstudio/email_templates/expiring_email.erb"
       if SS_ID == 8
         template_path = "#{ROOT}/views/engineering_design_hub/email_templates/expiring_email.erb"
+      elsif SS_ID == 9
+        template_path = "#{ROOT}/views/digital_lab/email_templates/expiring_email.erb"
       end
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
@@ -278,6 +280,8 @@ class User < ActiveRecord::Base
       template_path = "#{ROOT}/views/innovationstudio/email_templates/password_email.erb"
       if SS_ID == 8
         template_path = "#{ROOT}/views/engineering_design_hub/email_templates/password_email.erb"
+      elsif SS_ID == 9
+        template_path = "#{ROOT}/views/digital_lab/email_templates/password_email.erb"
       end
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
@@ -294,6 +298,8 @@ class User < ActiveRecord::Base
       template_path = "#{ROOT}/views/innovationstudio/email_templates/new_event_email.erb"
       if SS_ID == 8
         template_path = "#{ROOT}/views/engineering_design_hub/email_templates/new_event_email.erb"
+      elsif SS_ID == 9
+        template_path = "#{ROOT}/views/digital_lab/email_templates/new_event_email.erb"
       end
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
@@ -310,6 +316,8 @@ class User < ActiveRecord::Base
       template_path = "#{ROOT}/views/innovationstudio/email_templates/modified_event_email.erb"
       if SS_ID == 8
         template_path = "#{ROOT}/views/engineering_design_hub/email_templates/modified_event_email.erb"
+      elsif SS_ID == 9
+        template_path = "#{ROOT}/views/digital_lab/email_templates/modified_event_email.erb"
       end
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
@@ -326,6 +334,8 @@ class User < ActiveRecord::Base
       template_path = "#{ROOT}/views/innovationstudio/email_templates/removed_event_email.erb"
       if SS_ID == 8
         template_path = "#{ROOT}/views/engineering_design_hub/email_templates/removed_event_email.erb"
+      elsif SS_ID == 9
+        template_path = "#{ROOT}/views/digital_lab/email_templates/removed_event_email.erb"
       end
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
@@ -342,6 +352,8 @@ class User < ActiveRecord::Base
       template_path = "#{ROOT}/views/innovationstudio/email_templates/deleted_event_email.erb"
       if SS_ID == 8
         template_path = "#{ROOT}/views/engineering_design_hub/email_templates/deleted_event_email.erb"
+      elsif SS_ID == 9
+        template_path = "#{ROOT}/views/digital_lab/email_templates/deleted_event_email.erb"
       end
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
@@ -357,6 +369,8 @@ class User < ActiveRecord::Base
       template_path = "#{ROOT}/views/innovationstudio/email_templates/confirmation_reminder_email.erb"
       if SS_ID == 8
         template_path = "#{ROOT}/views/engineering_design_hub/email_templates/confirmation_reminder_email.erb"
+      elsif SS_ID == 9
+        template_path = "#{ROOT}/views/digital_lab/email_templates/confirmation_reminder_email.erb"
       end
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
@@ -378,6 +392,8 @@ class User < ActiveRecord::Base
         template_path = "#{ROOT}/views/innovationstudio/email_templates/vehicle_info_email.erb"
         if SS_ID == 8
           template_path = "#{ROOT}/views/engineering_design_hub/email_templates/vehicle_info_email.erb"
+        elsif SS_ID == 9
+          template_path = "#{ROOT}/views/digital_lab/email_templates/vehicle_info_email.erb"
         end
         template = File.read(template_path)
         body = ERB.new(template).result(binding)
@@ -403,6 +419,8 @@ class User < ActiveRecord::Base
       template_path = "#{ROOT}/views/innovationstudio/email_templates/vehicle_info_email.erb"
       if SS_ID == 8
         template_path = "#{ROOT}/views/engineering_design_hub/email_templates/vehicle_info_email.erb"
+      elsif SS_ID == 9
+        template_path = "#{ROOT}/views/digital_lab/email_templates/vehicle_info_email.erb"
       end
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
@@ -418,6 +436,8 @@ class User < ActiveRecord::Base
       template_path = "#{ROOT}/views/innovationstudio/email_templates/activation_email.erb"
       if SS_ID == 8
         template_path = "#{ROOT}/views/engineering_design_hub/email_templates/activation_email.erb"
+      elsif SS_ID == 9
+        template_path = "#{ROOT}/views/digital_lab/email_templates/activation_email.erb"
       end
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
@@ -441,6 +461,8 @@ class User < ActiveRecord::Base
       template_path = "#{ROOT}/views/innovationstudio/email_templates/attended_orientation_email.erb"
       if SS_ID == 8
         template_path = "#{ROOT}/views/engineering_design_hub/email_templates/attended_orientation_email.erb"
+      elsif SS_ID == 9
+        template_path = "#{ROOT}/views/digital_lab/email_templates/attended_orientation_email.erb"
       end
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
@@ -457,6 +479,8 @@ class User < ActiveRecord::Base
       template_path = "#{ROOT}/views/innovationstudio/email_templates/broken_equipment_email.erb"
       if SS_ID == 8
         template_path = "#{ROOT}/views/engineering_design_hub/email_templates/broken_equipment_email.erb"
+      elsif SS_ID == 9
+        template_path = "#{ROOT}/views/digital_lab/email_templates/broken_equipment_email.erb"
       end
       template = File.read(template_path)
       body = ERB.new(template).result(binding)

@@ -18,4 +18,11 @@
         :artAlerts => artAlerts,
         :alert_ids => alert_ids
     } %>
+<% elsif SS_ID == 9 %>
+    <%= erb :'digital_lab/alert_center', :locals => {
+        :generalAlerts => generalAlerts,
+        :laserCutterAlerts => laserCutterAlerts,
+        :laserGraphAlerts => laserGraphAlerts,
+        :alert_ids => alert_ids
+    } %>
 <% end %>
