@@ -85,6 +85,7 @@ end
 get '/admin/events/:event_id/signup_list/?' do
 	@breadcrumbs << {:text => 'Admin Events', :href => '/admin/events/'} << {text: 'Signup List'}
 	event = Event.includes(:event_signups).find_by(:id => params[:event_id], :service_space_id => SS_ID)
+	users = User.where(:service_space_id => SS_ID).all
 	if event.nil?
 		# that event does not exist
 		flash(:danger, 'Not Found', 'That event does not exist')
@@ -93,7 +94,8 @@ get '/admin/events/:event_id/signup_list/?' do
 
 	erb :'admin/signup_list', :layout => :fixed, :locals => {
 		:event => event,
-		:event_type_id => event.event_type_id
+		:event_type_id => event.event_type_id,
+		:users => users,
 	}
 end
 
@@ -233,6 +235,28 @@ post '/admin/events/:event_id/signup_list/?' do
 				end
 			end
 		end
+	end
+
+	# add user(s)
+	add_users = Array(params['add_user']).reject(&:empty?)
+	new_count = add_users.length
+
+	if !event.max_signups.nil? &&
+		event.signups.count + new_count > event.max_signups
+		flash(:danger, 'Failed', 'You are trying to add more users than available slots.')
+		redirect back
+	end
+
+	add_users.each do |user_id|
+		user = User.find_by(id: user_id, service_space_id: SS_ID)
+		next unless user
+
+		EventSignup.create(
+			event_id: event.id,
+			name: user.full_name,
+			user_id: user.id,
+			email: user.email
+		)
 	end
 
 	flash :success, 'Event\'s Signup List Updated', "#{event.title.rstrip}'s Signup List have been updated."
