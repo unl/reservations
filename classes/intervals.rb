@@ -2,7 +2,7 @@
 # seconds. An end of Float::INFINITY means "open-ended" (e.g. a lockout that
 # has not been released); clip such lists before measuring them.
 module Intervals
-  module_function
+  extend self
 
   # Sorted, non-overlapping union of the list.
   def union(list)

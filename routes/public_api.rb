@@ -235,7 +235,7 @@ get '/api/v1/reservations/?' do
     service_space: api_service_space,
     start: start_date.iso8601,
     end: end_date.iso8601,
-    reservations: api_reservations(tools.pluck(:id), start_date, end_date)
+    reservations: api_reservations(tools.ids, start_date, end_date)
   )
 end
 
