@@ -323,9 +323,9 @@ class User < ActiveRecord::Base
       @user = self
       @event = event
 
-      template_path = "#{ROOT}/views/innovationstudio/email_templates/removed_event_email.erb"
+      template_path = "#{ROOT}/views/innovationstudio/email_templates/remove_event_email.erb"
       if SS_ID == 8
-        template_path = "#{ROOT}/views/engineering_design_hub/email_templates/removed_event_email.erb"
+        template_path = "#{ROOT}/views/engineering_design_hub/email_templates/remove_event_email.erb"
       end
       template = File.read(template_path)
       body = ERB.new(template).result(binding)
