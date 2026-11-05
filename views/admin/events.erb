@@ -1,8 +1,8 @@
-<section class="dcf-grid dcf-col-gap-vw">
-    <% event_div_class = 'dcf-col-100%' %>
+<section class="dcf-d-grid dcf-grid-cols-4 dcf-col-gap-vw">
+    <% event_div_class = 'dcf-col-span-4' %>
     <% if has_permission?(Permission::MANAGE_EVENTS) %>
-    <% event_div_class = 'dcf-col-100% dcf-col-75%-end@sm' %>
-    <nav class="dcf-col-100% dcf-col-25%-start@sm">
+    <% event_div_class = 'dcf-col-span-4 dcf-col-span-3@sm' %>
+    <nav class="dcf-col-span-4 dcf-col-span-1@sm">
         <div class="toolbox">
             <h3>Toolbox</h3>
             <div class="tools">
@@ -29,9 +29,7 @@
         <ol class="dcf-tabs-list dcf-list-bare dcf-mb-0" role="tablist">
             <li class="dcf-tabs-list-item dcf-mb-0" role="presentation"><a id="tab-upcoming" href="?tab=upcoming" class="dcf-tab dcf-d-block" role="tab" <%='tabindex="-1" aria-selected="true"' if tab == 'upcoming' %>>Upcoming</a></li>
             <li class="dcf-tabs-list-item dcf-mb-0" role="presentation"><a id="tab-past" href="?tab=past" class="dcf-tab dcf-d-block" role="tab" <%='tabindex="-1" aria-selected="true"' if tab == 'past' %>>Past</a></li>
-            <% if SS_ID == 8 %>
-                <li class="dcf-tabs-list-item dcf-mb-0" role="presentation"><a id="tab-timeless" href="?tab=timeless" class="dcf-tab dcf-d-block" role="tab" <%='tabindex="-1" aria-selected="true"' if tab == 'timeless' %>>Timeless</a></li>
-            <% end %>
+            <li class="dcf-tabs-list-item dcf-mb-0" role="presentation"><a id="tab-timeless" href="?tab=timeless" class="dcf-tab dcf-d-block" role="tab" <%='tabindex="-1" aria-selected="true"' if tab == 'timeless' %>>Timeless</a></li>
         </ol>
             <section id="status-<%= tab %>" role="tabpanel" tabindex="-1" class="dcf-tabs-panel" aria-labelledby="tab-<%= tab %>">
                 <div class="event-page">
@@ -85,12 +83,6 @@
                             </div>
                         </fieldset>
                     </form>
-
-                    <script>
-                        window.addEventListener('inlineJSReady', function() {
-                            WDN.initializePlugin('collapsible-fieldsets');
-                        }, false);
-                    </script>
                 <div style="margin-bottom: 20px;">
                     <table class="dcf-w-100% dcf-table dcf-table-bordered" aria-label="Event Listings">
                         <thead>
@@ -147,18 +139,16 @@
                                     </td>
                                     <td>
                                     <% unless event.admin_notes.nil? %>
-                                    <button class="dcf-mt-1 dcf-btn dcf-btn-secondary dcf-btn-toggle-modal" data-toggles-modal="admin-notes-modal-<%= event.id %>" type="button">Notes</button>
-                                    <div class="dcf-modal" id="admin-notes-modal-<%= event.id %>" hidden>
-                                        <div class="dcf-modal-wrapper">
-                                            <div class="dcf-modal-header">
-                                                <h3>Admin Notes for <%= event.title %></h3>
-                                                <button class="dcf-btn-close-modal">Close</button>
-                                            </div>
-                                            <div class="dcf-modal-content">
-                                                <pre><%= event.admin_notes %></pre>
-                                            </div>
+                                    <button class="dcf-mt-1 dcf-btn dcf-btn-secondary dcf-btn-toggle-dialog" data-controls="admin-notes-modal-<%= event.id %>" type="button">Notes</button>
+                                    <dialog class="dcf-dialog" id="admin-notes-modal-<%= event.id %>" hidden>
+                                        <div class="dcf-dialog-header">
+                                            <h3>Admin Notes for <%= event.title %></h3>
+                                            <button class="dcf-btn-close-dialog">Close</button>
                                         </div>
-                                    </div>
+                                        <div class="dcf-dialog-content">
+                                            <pre><%= event.admin_notes %></pre>
+                                        </div>
+                                    </dialog>
                                     <% end %>
                                     <% if has_permission?(Permission::MANAGE_EVENTS) %>
                                     <form class="dcf-form delete-event delete-form" action="/admin/events/<%=event.id%>/delete/" method="POST">
@@ -179,7 +169,6 @@
                 </div>
             </section>
             <% if total_pages > 1 %>
-                <% append_script_declaration("WDN.initializePlugin('pagination');") %>
                 <nav class="dcf-pagination dcf-mt-3">
                     <ol class="dcf-list-bare dcf-list-inline">
                     <% if page != 1 %>
@@ -222,13 +211,15 @@
     </div>
 </section>
 
-<% append_script_declaration("WDN.initializePlugin('tabs');") %>
-<% append_script_declaration(%q[require(['jquery'], function($) {
-    $(document).ready(function() {
-        $('.delete-event').submit(function (submit) {
-            if (!window.confirm('Are you sure you want to delete this event?')) {
-                submit.preventDefault();
-            }
-        });
-    });
-});]) %>
+<% append_style_tag('/wdn/templates_6.1/css/components-js/_tabs.css') %>
+
+<% append_script_declaration(%q[
+document.addEventListener('submit', (submit_event) => {
+    const delete_event_button = submit_event.target.closest('.delete-event');
+    if (delete_event_button !== null) {
+        if (!window.confirm('Are you sure you want to delete this event?')) {
+            submit_event.preventDefault();
+        }
+    }
+});
+]) %>

@@ -123,7 +123,7 @@
                 <div>
                     <div id="vehicle-info" class="dcf-d-none">
                         <p class="dcf-txt-h6 dcf-bold dcf-mb-2">Vehicle #1</p>
-                        <div class="dcf-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+                        <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-vw">
                             <div class="dcf-form-group">
                                 <label for="license-plate1">Vehicle #1 License Plate</label>
                                 <input class="dcf-w-100%" type="text" id="license-plate1" name="license_plate1"/>
@@ -147,7 +147,7 @@
 
                         <fieldset class="dcf-collapsible-fieldset dcf-mb-4" data-start-expanded="false">
                             <legend>Vehicle #2</legend>
-                            <div class="dcf-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+                            <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-vw">
                                 <div class="dcf-form-group">
                                     <label for="license-plate2">Vehicle #2 License Plate</label>
                                     <input class="dcf-w-100%" type="text" id="license-plate2" name="license_plate2"/>
@@ -172,7 +172,7 @@
 
                         <fieldset class="dcf-collapsible-fieldset dcf-mb-4" data-start-expanded="false">
                             <legend>Vehicle #3</legend>
-                            <div class="dcf-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+                            <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-vw">
                                 <div class="dcf-form-group">
                                     <label for="license-plate3">Vehicle #3 License Plate</label>
                                     <input class="dcf-w-100%" type="text" id="license-plate3" name="license_plate3"/>
@@ -197,12 +197,6 @@
                     </div>
                 </div>
 
-                <script>
-                    window.addEventListener('inlineJSReady', function() {
-                        WDN.initializePlugin('collapsible-fieldsets');
-                    }, false);
-                </script>
-
                 <div class="dcf-input-checkbox dcf-mb-4">
                     <input type="checkbox" name="vehicle-update" id="vehicle-update" required>
                     <label for="vehicle-update">I UNDERSTAND I MUST UPDATE VEHICLE INFORMATION AS CHANGES OCCUR. <small class="dcf-required">Required</small></label>
@@ -214,7 +208,7 @@
 
             <div>
                 <p class="dcf-txt-h6 dcf-bold dcf-mb-2">Primary Emergency Contact</p>
-                <div class="dcf-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+                <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-vw">
                     <div class="dcf-form-group">
                         <label for="name1">Name <small class="dcf-required">Required</small></label>
                         <input class="dcf-w-100%" type="text" id="name1" name="name1" value="<%= form_data[:name1] if check_form_data(form_data, :name1) %>" required/>
@@ -238,7 +232,7 @@
 
             <div>
                 <p class="dcf-txt-h6 dcf-bold dcf-mb-2">Secondary Emergency Contact</p>
-                <div class="dcf-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+                <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-vw">
                     <div class="dcf-form-group">
                         <label for="name2">Name</label>
                         <input class="dcf-w-100%" type="text" id="name2" name="name2" value="<%= form_data[:name2] if check_form_data(form_data, :name2) %>" />
@@ -324,7 +318,7 @@
 
             <form action="/verify">
                 <div>
-                    <%= recaptcha %>
+                    <%== recaptcha %>
                 </div>
                 <div>
                     <button class="dcf-mt-3 dcf-btn dcf-btn-primary" type="submit">Sign Up</button>
@@ -334,7 +328,6 @@
     </div>
 </form>
 
-<% append_script_declaration("WDN.initializePlugin('datepickers');") %>
 <% if SS_ID == 1 %>
     <% append_script_tag('/js/innovationstudio_new_member_vehicle.js?cb=' + CONFIG['app']['cb_version']) %>
 <% end %>

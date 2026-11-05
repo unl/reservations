@@ -1,6 +1,6 @@
 <form class="dcf-form" id="create-event-form" action="" method="POST" enctype="multipart/form-data">
-    <div class="dcf-grid dcf-col-gap-vw">
-        <div class="dcf-col-100% dcf-col-67%-start@sm">
+    <div class="dcf-d-grid dcf-grid-cols-3 dcf-col-gap-vw">
+        <div class="dcf-col-span-3 dcf-col-span-2@sm">
             <fieldset>
                 <legend>Event Details</legend>
 
@@ -83,11 +83,6 @@
                             </select>
                         </div>
                     </fieldset>
-                    <script>
-                        window.addEventListener('inlineJSReady', function() {
-                            WDN.initializePlugin('collapsible-fieldsets');
-                        }, false);
-                    </script>
                 <% end %>
 
                 <div class="dcf-form-group">
@@ -229,12 +224,10 @@
                 <legend>Occurrences</legend>
 
                 <div class="dcf-w-100% dcf-d-flex dcf-jc-between dcf-ai-center dcf-mb-3">
-                    <% if SS_ID == 8 %>
-                        <div class="dcf-input-checkbox" >
-                            <input type="checkbox" <%= 'checked="checked"' if event.start_time == nil && event.title != nil %> id="timeless_event_checkbox" name="timeless_event_checkbox">
-                            <label for="timeless_event_checkbox">Timeless event</label>
-                        </div>
-                    <% end %>
+                    <div class="dcf-input-checkbox" >
+                        <input type="checkbox" <%= 'checked="checked"' if event.start_time == nil && event.title != nil %> id="timeless_event_checkbox" name="timeless_event_checkbox">
+                        <label for="timeless_event_checkbox">Timeless event</label>
+                    </div>
                     <div>
                         <button
                             id="add_new_occurrence"
@@ -265,7 +258,7 @@
                                 <input id="start-date" class="start-date-input" value="<%= event.start_time.in_time_zone.strftime('%m/%d/%Y') if !event.start_time.nil? %>" name="start_date[0]" type="text" required />
                             </div>
                         </div>
-                        <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+                        <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-vw">
                             <fieldset class="dcf-pl-3 dcf-pr-3 dcf-pt-1 dcf-pb-1 dcf-mb-0">
                                 <legend>Start Time <small class="dcf-required">Required</small></legend>
                                 <div class="dcf-d-flex dcf-jc-center dcf-ai-center">
@@ -382,7 +375,7 @@
             </fieldset>
         </div>
         <input type="hidden" name="hidden-duration" id="duration" value="<%=duration%>">
-        <div class="dcf-col-100% dcf-col-33%-end@sm">
+        <div class="dcf-col-span-3 dcf-col-span-1@sm">
             <div class="visual-island">
                 <div class="vi-header">
                     <p class="dcf-mb-0 dcf-pb-0">Image</p>
@@ -421,11 +414,7 @@
         </div>
     </div>
 
-    <div class="dcf-grid dcf-col-gap-vw">
-        <div class="dcf-col-100% dcf-col-67%-start@sm">
-            <button class="dcf-btn dcf-btn-primary dcf-float-left" type="submit"><%= event.id.nil? ? 'Create' : 'Save' %> Event</button>
-        </div>
-    </div>
+    <button class="dcf-btn dcf-btn-primary dcf-float-left" type="submit"><%= event.id.nil? ? 'Create' : 'Save' %> Event</button>
 </form>
 </div>
 <br>
@@ -481,8 +470,6 @@
         end_minute_input.value = new_end_minute;
     }
 
-    WDN.initializePlugin('datepickers');
-
     const date_picker_group = document.getElementById('date-picker-group');
     const init_occurrence_groups = date_picker_group.querySelectorAll('.occurrence_group');
     init_occurrence_groups.forEach((single_group) => {
@@ -499,108 +486,105 @@
     })
 
 
-    require(['dcf-datepicker'], function (datePickerModule) {
-        const add_new_occurrence = document.getElementById('add_new_occurrence');
-        let occurrence_count = 1;
-        add_new_occurrence.addEventListener('click', () => {
-            const occurrence_groups = date_picker_group.querySelectorAll('.occurrence_group');
-            const last_occurrence_group = occurrence_groups[occurrence_groups.length - 1];
-            const new_occurrence_group = last_occurrence_group.cloneNode(true);
-            occurrence_count++;
+    const add_new_occurrence = document.getElementById('add_new_occurrence');
+    let occurrence_count = 1;
+    add_new_occurrence.addEventListener('click', () => {
+        const occurrence_groups = date_picker_group.querySelectorAll('.occurrence_group');
+        const last_occurrence_group = occurrence_groups[occurrence_groups.length - 1];
+        const new_occurrence_group = last_occurrence_group.cloneNode(true);
+        occurrence_count++;
 
-            const occurrence_count_output = new_occurrence_group.querySelector('.occurrence-count');
-            occurrence_count_output.innerText = occurrence_groups.length + 1;
+        const occurrence_count_output = new_occurrence_group.querySelector('.occurrence-count');
+        occurrence_count_output.innerText = occurrence_groups.length + 1;
 
-            const occurrence_delete_btn = new_occurrence_group.querySelector('.occurrence-delete-btn');
-            occurrence_delete_btn.classList.remove('dcf-d-none');
-            occurrence_delete_btn.addEventListener('click', () => {
-                new_occurrence_group.remove();
-                const all_occurrence_count_output = document.querySelectorAll('.occurrence-count');
-                all_occurrence_count_output.forEach((single_output, index) => {
-                    single_output.innerText = index + 1;
-                });
+        const occurrence_delete_btn = new_occurrence_group.querySelector('.occurrence-delete-btn');
+        occurrence_delete_btn.classList.remove('dcf-d-none');
+        occurrence_delete_btn.addEventListener('click', () => {
+            new_occurrence_group.remove();
+            const all_occurrence_count_output = document.querySelectorAll('.occurrence-count');
+            all_occurrence_count_output.forEach((single_output, index) => {
+                single_output.innerText = index + 1;
             });
+        });
 
-            const date_picker_container = new_occurrence_group.querySelector('.dcf-datepicker');
-            date_picker_container.innerHTML = `<label for="start-date" class="start-date-label">Date<small class="dcf-required">Required</small></label>
+        const date_picker_container = new_occurrence_group.querySelector('.dcf-datepicker');
+        date_picker_container.classList.remove('dcf-datepicker-initialized');
+        date_picker_container.innerHTML = `<label for="start-date" class="start-date-label">Date<small class="dcf-required">Required</small></label>
 <input id="start-date" class="start-date-input" value="" name="start_date[]" type="text" required />`;
 
-            const start_date_input = new_occurrence_group.querySelector('.start-date-input');
-            start_date_input.value = last_occurrence_group.querySelector('.start-date-input').value;
-            start_date_input.setAttribute('id', `start-date-${occurrence_count}`);
-            start_date_input.setAttribute('name', `start_date[${occurrence_count}]`);
-            const start_date_label = new_occurrence_group.querySelector('.start-date-label');
-            start_date_label.setAttribute('for', `start-date-${occurrence_count}`);
+        const start_date_input = new_occurrence_group.querySelector('.start-date-input');
+        start_date_input.value = last_occurrence_group.querySelector('.start-date-input').value;
+        start_date_input.setAttribute('id', `start-date-${occurrence_count}`);
+        start_date_input.setAttribute('name', `start_date[${occurrence_count}]`);
+        const start_date_label = new_occurrence_group.querySelector('.start-date-label');
+        start_date_label.setAttribute('for', `start-date-${occurrence_count}`);
 
-            new datePickerModule.DCFDatepicker(date_picker_container);
+        const start_time_hour_input = new_occurrence_group.querySelector('.start-time-hour-input');
+        start_time_hour_input.value = last_occurrence_group.querySelector('.start-time-hour-input').value;
+        start_time_hour_input.setAttribute('id', `start-time-hour-${occurrence_count}`);
+        start_time_hour_input.setAttribute('name', `start_time_hour[${occurrence_count}]`);
+        const start_time_hour_label = new_occurrence_group.querySelector('.start-time-hour-label');
+        start_time_hour_label.setAttribute('for', `start-time-hour-${occurrence_count}`);
 
-            const start_time_hour_input = new_occurrence_group.querySelector('.start-time-hour-input');
-            start_time_hour_input.value = last_occurrence_group.querySelector('.start-time-hour-input').value;
-            start_time_hour_input.setAttribute('id', `start-time-hour-${occurrence_count}`);
-            start_time_hour_input.setAttribute('name', `start_time_hour[${occurrence_count}]`);
-            const start_time_hour_label = new_occurrence_group.querySelector('.start-time-hour-label');
-            start_time_hour_label.setAttribute('for', `start-time-hour-${occurrence_count}`);
-
-            start_time_hour_input.addEventListener('change', () => {
-                window.update_time(new_occurrence_group);
-            });
-
-            const start_time_minute_input = new_occurrence_group.querySelector('.start-time-minute-input');
-            start_time_minute_input.value = last_occurrence_group.querySelector('.start-time-minute-input').value;
-            start_time_minute_input.setAttribute('id', `start-time-minute-${occurrence_count}`);
-            start_time_minute_input.setAttribute('name', `start_time_minute[${occurrence_count}]`);
-            const start_time_minute_label = new_occurrence_group.querySelector('.start-time-minute-label');
-            start_time_minute_label.setAttribute('for', `start-time-minute-${occurrence_count}`);
-
-            start_time_minute_input.addEventListener('change', () => {
-                window.update_time(new_occurrence_group);
-            });
-
-            const start_time_am_input = new_occurrence_group.querySelector('.start-time-am-input');
-            start_time_am_input.checked = last_occurrence_group.querySelector('.start-time-am-input').checked;
-            start_time_am_input.setAttribute('id', `start-time-am-pm-am-${occurrence_count}`);
-            start_time_am_input.setAttribute('name', `start_time_am_pm[${occurrence_count}]`);
-            const start_time_am_label = new_occurrence_group.querySelector('.start-time-am-label');
-            start_time_am_label.setAttribute('for', `start-time-am-pm-am-${occurrence_count}`);
-
-            const start_time_pm_input = new_occurrence_group.querySelector('.start-time-pm-input');
-            start_time_pm_input.checked = last_occurrence_group.querySelector('.start-time-pm-input').checked;
-            start_time_pm_input.setAttribute('id', `start-time-am-pm-pm-${occurrence_count}`);
-            start_time_pm_input.setAttribute('name', `start_time_am_pm[${occurrence_count}]`);
-            const start_time_pm_label = new_occurrence_group.querySelector('.start-time-pm-label');
-            start_time_pm_label.setAttribute('for', `start-time-am-pm-pm-${occurrence_count}`);
-
-            const end_time_hour_input = new_occurrence_group.querySelector('.end-time-hour-input');
-            end_time_hour_input.value = last_occurrence_group.querySelector('.end-time-hour-input').value;
-            end_time_hour_input.setAttribute('id', `end-time-hour-${occurrence_count}`);
-            end_time_hour_input.setAttribute('name', `end_time_hour[${occurrence_count}]`);
-            const end_time_hour_label = new_occurrence_group.querySelector('.end-time-hour-label');
-            end_time_hour_label.setAttribute('for', `end-time-hour-${occurrence_count}`);
-
-            const end_time_minute_input = new_occurrence_group.querySelector('.end-time-minute-input');
-            end_time_minute_input.value = last_occurrence_group.querySelector('.end-time-minute-input').value;
-            end_time_minute_input.setAttribute('id', `end-time-minute-${occurrence_count}`);
-            end_time_minute_input.setAttribute('name', `end_time_minute[${occurrence_count}]`);
-            const end_time_minute_label = new_occurrence_group.querySelector('.end-time-minute-label');
-            end_time_minute_label.setAttribute('for', `end-time-minute-${occurrence_count}`);
-
-            const end_time_am_input = new_occurrence_group.querySelector('.end-time-am-input');
-            end_time_am_input.checked = last_occurrence_group.querySelector('.end-time-am-input').checked;
-            end_time_am_input.setAttribute('id', `end-time-am-pm-am-${occurrence_count}`);
-            end_time_am_input.setAttribute('name', `end_time_am_pm[${occurrence_count}]`);
-            const end_time_am_label = new_occurrence_group.querySelector('.end-time-am-label');
-            end_time_am_label.setAttribute('for', `end-time-am-pm-am-${occurrence_count}`);
-
-            const end_time_pm_input = new_occurrence_group.querySelector('.end-time-pm-input');
-            end_time_pm_input.checked = last_occurrence_group.querySelector('.end-time-pm-input').checked;
-            end_time_pm_input.setAttribute('id', `end-time-am-pm-pm-${occurrence_count}`);
-            end_time_pm_input.setAttribute('name', `end_time_am_pm[${occurrence_count}]`);
-            const end_time_pm_label = new_occurrence_group.querySelector('.end-time-pm-label');
-            end_time_pm_label.setAttribute('for', `end-time-am-pm-pm-${occurrence_count}`);
-
-
-            date_picker_group.append(new_occurrence_group);
+        start_time_hour_input.addEventListener('change', () => {
+            window.update_time(new_occurrence_group);
         });
+
+        const start_time_minute_input = new_occurrence_group.querySelector('.start-time-minute-input');
+        start_time_minute_input.value = last_occurrence_group.querySelector('.start-time-minute-input').value;
+        start_time_minute_input.setAttribute('id', `start-time-minute-${occurrence_count}`);
+        start_time_minute_input.setAttribute('name', `start_time_minute[${occurrence_count}]`);
+        const start_time_minute_label = new_occurrence_group.querySelector('.start-time-minute-label');
+        start_time_minute_label.setAttribute('for', `start-time-minute-${occurrence_count}`);
+
+        start_time_minute_input.addEventListener('change', () => {
+            window.update_time(new_occurrence_group);
+        });
+
+        const start_time_am_input = new_occurrence_group.querySelector('.start-time-am-input');
+        start_time_am_input.checked = last_occurrence_group.querySelector('.start-time-am-input').checked;
+        start_time_am_input.setAttribute('id', `start-time-am-pm-am-${occurrence_count}`);
+        start_time_am_input.setAttribute('name', `start_time_am_pm[${occurrence_count}]`);
+        const start_time_am_label = new_occurrence_group.querySelector('.start-time-am-label');
+        start_time_am_label.setAttribute('for', `start-time-am-pm-am-${occurrence_count}`);
+
+        const start_time_pm_input = new_occurrence_group.querySelector('.start-time-pm-input');
+        start_time_pm_input.checked = last_occurrence_group.querySelector('.start-time-pm-input').checked;
+        start_time_pm_input.setAttribute('id', `start-time-am-pm-pm-${occurrence_count}`);
+        start_time_pm_input.setAttribute('name', `start_time_am_pm[${occurrence_count}]`);
+        const start_time_pm_label = new_occurrence_group.querySelector('.start-time-pm-label');
+        start_time_pm_label.setAttribute('for', `start-time-am-pm-pm-${occurrence_count}`);
+
+        const end_time_hour_input = new_occurrence_group.querySelector('.end-time-hour-input');
+        end_time_hour_input.value = last_occurrence_group.querySelector('.end-time-hour-input').value;
+        end_time_hour_input.setAttribute('id', `end-time-hour-${occurrence_count}`);
+        end_time_hour_input.setAttribute('name', `end_time_hour[${occurrence_count}]`);
+        const end_time_hour_label = new_occurrence_group.querySelector('.end-time-hour-label');
+        end_time_hour_label.setAttribute('for', `end-time-hour-${occurrence_count}`);
+
+        const end_time_minute_input = new_occurrence_group.querySelector('.end-time-minute-input');
+        end_time_minute_input.value = last_occurrence_group.querySelector('.end-time-minute-input').value;
+        end_time_minute_input.setAttribute('id', `end-time-minute-${occurrence_count}`);
+        end_time_minute_input.setAttribute('name', `end_time_minute[${occurrence_count}]`);
+        const end_time_minute_label = new_occurrence_group.querySelector('.end-time-minute-label');
+        end_time_minute_label.setAttribute('for', `end-time-minute-${occurrence_count}`);
+
+        const end_time_am_input = new_occurrence_group.querySelector('.end-time-am-input');
+        end_time_am_input.checked = last_occurrence_group.querySelector('.end-time-am-input').checked;
+        end_time_am_input.setAttribute('id', `end-time-am-pm-am-${occurrence_count}`);
+        end_time_am_input.setAttribute('name', `end_time_am_pm[${occurrence_count}]`);
+        const end_time_am_label = new_occurrence_group.querySelector('.end-time-am-label');
+        end_time_am_label.setAttribute('for', `end-time-am-pm-am-${occurrence_count}`);
+
+        const end_time_pm_input = new_occurrence_group.querySelector('.end-time-pm-input');
+        end_time_pm_input.checked = last_occurrence_group.querySelector('.end-time-pm-input').checked;
+        end_time_pm_input.setAttribute('id', `end-time-am-pm-pm-${occurrence_count}`);
+        end_time_pm_input.setAttribute('name', `end_time_am_pm[${occurrence_count}]`);
+        const end_time_pm_label = new_occurrence_group.querySelector('.end-time-pm-label');
+        end_time_pm_label.setAttribute('for', `end-time-am-pm-pm-${occurrence_count}`);
+
+
+        date_picker_group.append(new_occurrence_group);
     });
 ])%>
 <% if SS_ID == 1 %>
@@ -660,58 +644,57 @@
     type_select.addEventListener('input', require_training);
 ])%>
 <% end %>
-<% append_script_declaration(%q[WDN.initializePlugin('jqueryui', [function() {
-    $ = require('jquery');
+<% append_script_module_declaration(%q[
+import $ from "/wdn/templates_6.1/js/lib/jQuery.js";
+$('#reserve-tool').click(function(click) {
+    if ($('#reserve-tool').is(':checked')) {
+        $('#tools-for-reserving').show();
+    } else {
+        $('#tools-for-reserving').hide();
+    }
+});
 
-    $('#reserve-tool').click(function(click) {
-        if ($('#reserve-tool').is(':checked')) {
-            $('#tools-for-reserving').show();
+$(document).ready(function () {
+    function toggleDatePicker() {
+        if ($('#timeless_event_checkbox').is(':checked')) {
+            $('#date-picker-group').hide();
+            $('#add_new_occurrence').hide();
+
+            document.getElementById('date-picker-group').querySelectorAll('[required]').forEach((single_element) => {
+                single_element.removeAttribute('required');
+                single_element.dataset.required = 'required';
+            });
         } else {
-            $('#tools-for-reserving').hide();
+            $('#date-picker-group').show();
+            $('#add_new_occurrence').show();
+            document.getElementById('date-picker-group').querySelectorAll('[data-required]').forEach((single_element) => {
+                single_element.setAttribute('required', 'required');
+                delete single_element.dataset.required;
+            });
         }
-    });
+    }
 
-    $(document).ready(function () {
-        function toggleDatePicker() {
-            if ($('#timeless_event_checkbox').is(':checked')) {
-                $('#date-picker-group').hide();
-                $('#add_new_occurrence').hide();
+    toggleDatePicker();
 
-                document.getElementById('date-picker-group').querySelectorAll('[required]').forEach((single_element) => {
-                    single_element.removeAttribute('required');
-                    single_element.dataset.required = 'required';
-                });
-            } else {
-                $('#date-picker-group').show();
-                $('#add_new_occurrence').show();
-                document.getElementById('date-picker-group').querySelectorAll('[data-required]').forEach((single_element) => {
-                    single_element.setAttribute('required', 'required');
-                    delete single_element.dataset.required;
-                });
-            }
-        }
-
+    $('#timeless_event_checkbox').change(function () {
         toggleDatePicker();
-
-        $('#timeless_event_checkbox').change(function () {
-            toggleDatePicker();
-        });
     });
+});
 
-    $('#location').change(function (change) {
-        if ($(this).val() == 'new') {
-            $('#new-location-details').show();
-        } else {
-            $('#new-location-details').hide();
-        }
-    }).change();
+$('#location').change(function (change) {
+    if ($(this).val() == 'new') {
+        $('#new-location-details').show();
+    } else {
+        $('#new-location-details').hide();
+    }
+}).change();
 
-    $('#export-to-unl-events').change(function (change) {
-        if ($('#export-to-unl-events').is(':checked')) {
-            $('#consider-for-unl-main').removeAttr('disabled');
-        } else {
-            $('#consider-for-unl-main').attr('checked', false);
-            $('#consider-for-unl-main').attr('disabled', 'disabled');
-        }
-    }).change();
-}]);]) %>
+$('#export-to-unl-events').change(function (change) {
+    if ($('#export-to-unl-events').is(':checked')) {
+        $('#consider-for-unl-main').removeAttr('disabled');
+    } else {
+        $('#consider-for-unl-main').attr('checked', false);
+        $('#consider-for-unl-main').attr('disabled', 'disabled');
+    }
+}).change();
+]) %>

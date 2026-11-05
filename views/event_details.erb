@@ -1,10 +1,9 @@
-<div class="dcf-modal" id="enter-code-modal" hidden>
-  <div class="dcf-modal-wrapper">
-	<div class="dcf-modal-header">
-	  <h2>Code Required</h2>
-	  <button class="dcf-btn-close-modal">Close</button>
+<dialog class="dcf-dialog" id="enter-code-modal" hidden>
+	<div class="dcf-dialog-header">
+		<h2>Code Required</h2>
+		<button class="dcf-btn-close-dialog">Close</button>
 	</div>
-	<div class="dcf-modal-content">
+	<div class="dcf-dialog-content">
 		<p>To sign up for this event, please enter the code that you received from the NIS administrators.
 
 		<form class="dcf-form inline-form" id="signup-with-code-form" action="" method="POST">
@@ -25,8 +24,7 @@
 			<button type="submit" class="dcf-btn dcf-btn-primary">Sign Up!</button>
 		</form>
 	</div>
-  </div>
-</div>
+</dialog>
 
 <div class="event-details dcf-p-4">
 	<div class="dcf-d-flex dcf-flex-row dcf-jc-between dcf-ai-center dcf-mb-4">
@@ -38,7 +36,7 @@
 		<% if SS_ID == 1 && !(event.start_time.nil?) %>
 			<div>
 				<a class="dcf-txt-decor-hover" href="/events/<%= event.id %>.ics" aria-label="I C S for <%= event.title %>">
-					<svg class="dcf-h-6 dcf-w-6 dcf-fill-current" focusable="false" width="24" height="24" viewBox="0 0 24 24">
+					<svg class="dcf-h-6 dcf-w-6 dcf-fill-current" aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24">
 						<path d="M23.5 2H20V.5a.5.5 0 00-.5-.5h-3a.5.5 0 00-.5.5V2
 							H8V.5a.5.5 0 00-.5-.5h-3a.5.5 0 00-.5.5V2H.5a.5.5
 							0 00-.5.5V7h24V2.5a.5.5 0 00-.5-.5zM7 4H5V1h2v3zm12
@@ -91,19 +89,15 @@
 		<% if !event.signup_allowed_for_type? %>
 			Please read details above on how to signup for this event.
 		<% elsif event.max_signups.nil? || event.signups.count < event.max_signups %>
-			<% if event.payment_link %>
-				<a class="dcf-btn dcf-btn-primary dcf-external" href="<%= event.payment_link %>">Register for this event</a>
-			<% else %>
-				<form class="dcf-form" action="/events/<%= event.id %>/sign_up/" method="POST">
-				<button type="submit" <% if event.event_code.present? %> onclick="promptCode('/events/<%= event.id %>/sign_up/', event);" data-toggles-modal="enter-code-modal" <% end %> class="dcf-btn dcf-btn-primary dcf-btn-toggle-modal">
+			<form class="dcf-form" action="/events/<%= event.id %>/sign_up/" method="POST">
+				<button type="submit" <% if event.event_code.present? %> onclick="promptCode('/events/<%= event.id %>/sign_up/', event);" data-controls="enter-code-modal" <% end %> class="dcf-btn dcf-btn-primary dcf-btn-toggle-dialog">
 					<% if event.free_event_type? %>
 						Note event on my homepage
 					<% else %>
 						Sign up for this event
 					<% end %>
-				</a>
-				</form>
-			<% end %>
+				</button>
+			</form>
 		<% else %>
 			All slots for this event are filled.
 		<% end %>
@@ -115,7 +109,7 @@
 			<% if !event.signup_allowed_for_type? %>
 				Please read details above on how to signup for this event.
 			<% elsif event.max_signups.nil? || event.signups.count < event.max_signups %>
-				<a <% if event.event_code.present? %> onclick="promptCode('/events/<%= event.id %>/sign_up_as_non_member/', event);" data-toggles-modal="enter-code-modal" <% end %> class="dcf-btn dcf-btn-primary dcf-btn-toggle-modal" href="/events/<%= event.id %>/sign_up_as_non_member/">Sign up for this event</a>
+				<a <% if event.event_code.present? %> onclick="promptCode('/events/<%= event.id %>/sign_up_as_non_member/', event);" data-controls="enter-code-modal" <% end %> class="dcf-btn dcf-btn-primary dcf-btn-toggle-dialog" href="/events/<%= event.id %>/sign_up_as_non_member/">Sign up for this event</a>
 			<% else %>
 				All slots for this event are filled.
 			<% end %>

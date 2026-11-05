@@ -16,6 +16,8 @@ use Rack::CAS, server_url: 'https://shib.unl.edu/idp/profile/cas'
 
 Time.zone = "America/Chicago"
 
+set :erb, escape_html: true
+
 # this gives the user messages
 def flash(type, header, message)
   session["notice"] ||= []
@@ -30,6 +32,7 @@ SS_ID = ServiceSpace.where(:id => CONFIG['app']['service_space_id']).first.id
 
 before do
     # site defaults
+    @inline_head_style_content = ''
     @inline_body_script_content = ''
     @affiliation = 'Nebraska Innovation Campus'
     @affiliation_link = 'https://innovate.unl.edu/'
@@ -38,7 +41,7 @@ before do
       {
         :href => 'https://www.unl.edu/',
         :text => 'Nebraska',
-        :title => 'University of Nebraska&ndash;Lincoln Home'
+        :title => 'University of Nebraska–Lincoln Home'
       },
       {
         :href => 'https://innovationstudio.unl.edu/',
@@ -51,6 +54,7 @@ before do
     ]
 
     if SS_ID == 8
+      @inline_head_style_content = ''
       @inline_body_script_content = ''
       @affiliation = 'College of Engineering'
       @affiliation_link = 'https://engineering.unl.edu/'
@@ -82,12 +86,20 @@ before do
     end
 end
 
+def append_style_tag(src)
+    @inline_head_style_content <<  "<link rel=\"stylesheet\" href=\"#{src}\">\n"
+end
+
 def append_script_tag(src)
     @inline_body_script_content <<  "<script type=\"text/javascript\" src=\"#{src}\"></script>\n"
 end
 
 def append_script_declaration(content)
     @inline_body_script_content <<  "<script>#{content}</script>\n"
+end
+
+def append_script_module_declaration(content)
+    @inline_body_script_content <<  "<script type='module'>#{content}</script>\n"
 end
 
 def has_permission?(permission)
@@ -176,13 +188,13 @@ end
 
 not_found do
   @breadcrumbs << {:text => 'Not Found'}
-  erb 'That page was not found.', :layout => :fixed
+  erb 'That page was not found.', :layout => :fixed_61
 end
 
 error do
   @breadcrumbs << {:text => 'Error'}
   flash(:danger, 'Sorry! There was an error.', "We apologize. A really bad error occurred and it didn't work. We're fixing this as we speak.")
-  erb 'In the meantime, you can <a href="/">go back to the homepage</a>.', :layout => :fixed
+  erb 'In the meantime, you can <a href="/">go back to the homepage</a>.', :layout => :fixed_61
 end
 
 get '/' do
