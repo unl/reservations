@@ -20,7 +20,7 @@ end %>
 <section class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-3@sm dcf-col-gap-vw">
     <div class="dcf-datepicker">
         <label for="date">Date</label>
-        <input class="dcf-w-100%" type="button" id="date" name="date" title="Reservation Date" type="text" value="<%= day.strftime('%m/%d/%Y') %>" />
+        <input class="dcf-w-100%" id="date" name="date" title="Reservation Date" type="text" value="<%= day.strftime('%m/%d/%Y') %>" />
     </div>
     <div>
     	<label>Schedule for <span id="current-date"><%= day.strftime('%m/%d/%Y') %></span></label>
