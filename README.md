@@ -11,6 +11,10 @@ UNL reservation system for schedule resources, classes, etc.
 5. Admins with the right privilege can set the _hours_ of the space, which indicate when reservations can be made.
 6. The agenda is a quick overview of the day for Admins to look at.
 
+## Public API
+
+Read-only JSON endpoints for tool reservations, availability and utilization live under `/api/v1`. See [docs/public-api.md](docs/public-api.md).
+
 ## Installation Local
 
 0. Run `xcode-select --install`. Congratulations, you have saved yourself 5000 insanity points.
