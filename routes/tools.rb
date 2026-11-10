@@ -6,6 +6,17 @@ require 'models/event_signup'
 require 'models/space_hour'
 require 'erb'
 
+helpers do
+	# true if any lockout on this tool overlaps the requested window
+	def lockout_conflict?(tool, start_time, end_time)
+		return false unless SS_ID == 8
+
+		Lockout.where(:resource_id => tool.id)
+			.where('started_on < ? AND (released_on IS NULL OR released_on > ?)', end_time, start_time)
+			.exists?
+	end
+end
+
 get '/tools/?' do
 	@breadcrumbs << {:text => 'Tools'}
 	require_login
@@ -518,6 +529,11 @@ post '/tools/:resource_id/reserve/?' do
 		end
 	end
 
+	if lockout_conflict?(tool, start_time, end_time)
+		flash :alert, 'Tool Locked Out', 'Sorry, that tool is scheduled to be locked out during that time period. Please choose a shorter reservation or a different time slot.'
+		redirect back
+	end
+
 	Reservation.create(
 		:resource_id => tool.id,
 		:event_id => nil,
@@ -619,6 +635,11 @@ post '/tools/:resource_id/edit_reservation/:reservation_id/?' do
 			flash :alert, "Over Limit", "Sorry, you can only reserve this tool once per day. Please try reserving another time slot on another day."
 			redirect back
 		end
+	end
+
+	if lockout_conflict?(tool, start_time, end_time)
+		flash :alert, 'Tool Locked Out', 'Sorry, that tool is scheduled to be locked out during that time period. Please choose a shorter reservation or a different time slot.'
+		redirect back
 	end
 
 	reservation.update(
