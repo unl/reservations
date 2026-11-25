@@ -1,25 +1,33 @@
-<h1 class="dcf-txt-h3">Announcements</h1>
+<div class="dcf-d-flex dcf-flex-row dcf-jc-between dcf-ai-center dcf-mb-4">
+    <h2>Announcements</h2>
+    <a href="/admin/announcements/create/" class="dcf-btn dcf-btn-primary">Create Announcement</a>
+</div>
 
-<form class="dcf-form" action="" method="POST">
-	<label for="first-name">Header (empty if no current announcement):</label>
-	<% if announcements %>
-		<input class="dcf-w-100%" type="text" id="header" name="header" value="<%= announcements.header %>"/>
-	<% else %>
-		<input class="dcf-w-100%" type="text" id="header" name="header"/>
-	<% end %>
-	<br>
-	<label for="body">Text (empty if no current announcement):</label>
-	<% if announcements %>	<%# If there is an existing announcement, display its text in the text box %>
-		<textarea class="ckeditor" style="min-height: 150px" id="text" name="text"><%= announcements.text %></textarea>
-	<% else %>
-		<textarea class="ckeditor" style="min-height: 150px" id="text" name="text"></textarea>
-	<% end %>
-
-	<br>
-	<div class="dcf-form-group">
-		<button type="submit" formaction="/admin/announcements/post/" class="dcf-btn dcf-btn-primary">Post</button>
-		<button type="submit" formaction="/admin/announcements/delete/" class="dcf-btn dcf-btn-secondary dcf-mt-1">Delete current announcement</button>		
-	</div>
-</form>
-
-<% append_script_tag('/js/lib/ckeditor/ckeditor.js') %>
+<table class="dcf-table dcf-table-striped dcf-table-responsive dcf-w-100% dcf-mt-6 dcf-mb-6" aria-describedby="announcements-list-table">
+    <thead>
+        <tr class="dcf-d-grid dcf-grid-cols-5 dcf-w-100%">
+            <th scope="col" class="dcf-col-span-2">Announcements</th>
+            <th scope="col" class="dcf-col-span-2">Status</th>
+            <th scope="col">Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% announcements.each do |announcement| %>
+        <tr class="dcf-d-grid dcf-grid-cols-5 dcf-w-100%">
+            <td class="dcf-col-span-2">
+                <%= announcement.header %>
+            </td>
+            <td class="dcf-col-span-2">
+                <% if announcement.status? %>
+                    Active
+                <% else %>
+                    Inactive
+                <% end %>
+            </td>
+            <td>
+                <a href="/admin/announcements/edit/<%= announcement.id %>/" class="dcf-btn dcf-btn-primary">Edit</a>
+            </td>
+        </tr>
+    <% end %>
+    </tbody>
+</table>

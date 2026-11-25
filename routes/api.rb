@@ -1,12 +1,16 @@
 require 'models/announcements'
 
 get '/api/announcements/?' do
-    announcement = Announcements.first
+    announcements = Announcements.where(status: true).order(:id).map do |announcement|
+        {
+            header: announcement.header.to_s,
+            body: announcement.text.to_s
+        }
+    end
 
     content_type :json
-    if announcement
-        { has_announcement: true, header: announcement.header, body: announcement.text }.to_json
-    else
-        { has_announcement: false, header: "", body: "" }.to_json
-    end
+    {
+        has_announcement: announcements.any?,
+        announcements: announcements
+    }.to_json
 end

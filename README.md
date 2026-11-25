@@ -4,7 +4,7 @@ UNL reservation system for schedule resources, classes, etc.
 
 ## Quick Tutorial
 
-1. Service spaces refer to different silos of the University that will utilize resources. E.g. the math department, the Honors program, or University Communication.
+1. Service spaces refer to different silos of the University that will utilize resources. E.g. the math department, the Honors program, or University Communication. Currently there are two service spaces. Innovation Studio (id=1) and Design Hub (id=8).
 2. Super Admins of a space can do anything, including giving others access and privileges to the space.
 3. Resources are created, and then may be reserved by anyone who has the User Access privilege in the space.
 4. Events _may_ include a resource reservation but do not have to.
@@ -20,12 +20,31 @@ UNL reservation system for schedule resources, classes, etc.
 4. In the project root, install the gems using `bundle install`.
 5. Create a mysql database you'd like to use, you can typically use one on your computer. `brew install mysql` if necessary.
 6. `config/config.json` is a committed file, and a template for the configuration. Create a copy in the same directory named `server.json` and edit it to match your database. You will also need to include your site keys for google reCaptcha which can be generated at [https://www.google.com/recaptcha/](https://www.google.com/recaptcha/) for the V2 checkbox.
-7. Your database is currently blank. Install database schema by running `./data/db_2024_11_08.sql` and any updates greater than `0006`.
+7. There are two types of service spaces currently. If you want to use the Innovation Studio, change service_space_id to "1". If you are wanting to work with Design Hub, change service_space_id to "8". When switching between these two service spaces, you may need to stop your current bundle execution and restart your Ruby bundle execution  again. (Example: bundle exec ...)
+7. Your database is currently blank. Install database schema by running `./data/db_2024_11_08.sql` and any updates greater than `0006`. As you are working on you project, new database updates maybe pushed out so make sure you run those database updates you may be missing.
 8. Install the WDN Framework into the `public/wdn` directory...see [WDN Documentation](http://wdn.unl.edu/documentation).
 9. You will need to add `localhost.unl.edu` to your `/etc/hosts` file and point it to 127.0.0.1
 10. Start the server by going to the root directory and doing `bundle exec shotgun -o localhost.unl.edu -p 9393`. This launches the server on localhost port 9393, listening everywhere (you can use your iimlemburg.unl.edu or whichever), and the server will automatically update to new code. If you add gems to the bundle, you will need to re-execute this command.
 11. Navigate to `https://localhost.unl.edu:9393/` or similar and begin!
+12. For local Innovation Studio testing, create a test user in the `users` table. Use test values for the username, email, name, and integer `user_nuid`. Set `service_space_id` to `1` for Innovation Studio or `8` for Design Hub. The database schema provides the temporary password `Welcome123` by default. Run these statements in the database configured in `config/server.json`:
 
+    ```sql
+    INSERT INTO users (username, email, first_name, last_name, user_nuid, service_space_id)
+    VALUES ('test_user', 'test@example.com', 'Test', 'User', 12345678, 1);
+    SET @test_user_id = LAST_INSERT_ID();
+    ```
+
+    Use `8` instead of `1` for Design Hub.
+
+13. To grant the test user admin access, add the `SUPER_USER` permission (`permission_id` `1`) to `user_has_permissions`, using the same `service_space_id` as the user. The application grants admin access through this permission row; the `is_admin` flags alone do not grant it.
+
+    ```sql
+    INSERT INTO user_has_permissions (user_id, permission_id, service_space_id)
+    VALUES (@test_user_id, 1, 1);
+    ```
+
+    Use `8` instead of `1` for Design Hub.
+14. If code changes or new views are not reflected, stop and restart the Ruby server by rerunning the command from step 10.
 ### Less
 
 I couldn't get Guard to work for me locally so I also added a npm version of less complication

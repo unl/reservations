@@ -1,0 +1,23 @@
+<h2>Create Announcement</h2>
+
+<form class="dcf-form" action="/admin/announcements/create/post/" method="POST">
+	<label for="header">Header:</label>
+	<input class="dcf-w-100%" type="text" id="header" name="header"/>
+	<br>
+	<label for="text">Text:</label>
+	<textarea class="ckeditor" style="min-height: 150px" id="text" name="text"></textarea>
+
+	<br>
+
+  <div class="dcf-input-checkbox">
+    <input type="checkbox" id="status" name="status" value="" />
+    <label for="status" id="status-label">Active (Show announcement)</label>
+  </div>
+
+	<br>
+	<div class="dcf-form-group">
+		<button type="submit" class="dcf-btn dcf-btn-primary">Create</button>
+	</div>
+</form>
+
+<% append_script_tag('/js/lib/ckeditor/ckeditor.js') %>
