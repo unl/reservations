@@ -1,0 +1,35 @@
+<h2>Edit Announcement</h2>
+
+<p>Announcement ID: <%= announcement.id %></p>
+
+
+<form class="dcf-form" action="/admin/announcements/edit/<%= announcement.id %>/" method="POST">
+	<label for="header">Header:</label>
+	<% if announcement.header %>
+		<input class="dcf-w-100%" type="text" id="header" name="header" value="<%= announcement.header %>"/>
+	<% else %>
+		<input class="dcf-w-100%" type="text" id="header" name="header"/>
+	<% end %>
+	<br>
+	<label for="body">Text:</label>
+	<% if announcement.text %>
+		<textarea class="ckeditor" style="min-height: 150px" id="text" name="text"><%= announcement.text %></textarea>
+	<% else %>
+		<textarea class="ckeditor" style="min-height: 150px" id="text" name="text"></textarea>
+	<% end %>
+
+	<br>
+
+  <div class="dcf-input-checkbox">
+    <input type="checkbox" id="status" name="status" value="1" <%= 'checked' if announcement.status == true || announcement.status.to_s == '1' %> />
+    <label for="status" id="status-label">Active (Show announcement)</label>
+  </div>
+
+	<br>
+	<div class="dcf-form-group">
+		<button type="submit" class="dcf-btn dcf-btn-primary">Update</button>
+		<button type="submit" formaction="/admin/announcements/edit/<%= announcement.id %>/delete/" class="dcf-btn dcf-btn-secondary dcf-mt-1">Delete announcement</button>
+	</div>
+</form>
+
+<% append_script_tag('/js/lib/ckeditor/ckeditor.js') %>

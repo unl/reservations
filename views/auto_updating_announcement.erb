@@ -1,5 +1,5 @@
 <div id="announcement-notice-container" class="dcf-d-none!">
-    <div id="announcement-notice" class="dcf-notice dcf-notice-info" data-no-close-button="true" hidden>
+    <div id="announcement-notice-template" class="dcf-notice dcf-notice-info" data-no-close-button="true" hidden>
         <h2></h2>
         <div></div>
     </div>
@@ -8,40 +8,51 @@
 <script type="module">
     import { getClassInstance } from "/wdn/templates_6.1/js/lib/unl-utility.js";
     const announcement_notice_container = document.getElementById('announcement-notice-container');
-    const announcement_notice = document.getElementById('announcement-notice');
+    const announcement_notice_template = document.getElementById('announcement-notice-template');
     const announcement_url = "/api/announcements/";
     const announcement_refresh_rate_ms = 30 * 1000;
 
     async function fetch_notice() {
-            const announcement_notice_header = announcement_notice.querySelector('.dcf-notice-heading');
-            const announcement_notice_body = announcement_notice.querySelector('.dcf-notice-message');
-
-            if (announcement_notice_header == null || announcement_notice_body == null) {
-                console.error('Could Not Find Notice Header or Body');
-                return;
-            }
         try {
             const response = await fetch(announcement_url);
             if (!response.ok) { console.err('Could Not Get Announcements'); return;}
 
             const announcement_json = await response.json();
-            if ( !('has_announcement' in announcement_json && 'header' in announcement_json && 'body' in announcement_json)){
+            if (!('has_announcement' in announcement_json && 'announcements' in announcement_json)) {
                 console.error('Bad Announcement JSON');
                 return;
             }
             if (
                 typeof announcement_json['has_announcement'] !== "boolean" ||
-                typeof announcement_json['header'] !== "string" ||
-                typeof announcement_json['body'] !== "string"
+                !Array.isArray(announcement_json['announcements']) ||
+                announcement_json['announcements'].some((announcement) =>
+                    typeof announcement.header !== "string" ||
+                    typeof announcement.body !== "string"
+                )
             ) {
                 console.error('Bad Announcement JSON data');
                 return;
             }
 
-            if (announcement_json['has_announcement'] === true) {
+            announcement_notice_container.replaceChildren();
+            if (announcement_json['announcements'].length > 0) {
                 announcement_notice_container.classList.remove('dcf-d-none!');
-                announcement_notice_header.innerText = announcement_json['header'];
-                announcement_notice_body.innerHTML = announcement_json['body'];
+                for (const [index, announcement] of announcement_json['announcements'].entries()) {
+                    const notice = announcement_notice_template.cloneNode(true);
+                    notice.removeAttribute('id');
+                    notice.hidden = false;
+
+                    const heading = notice.querySelector('.dcf-notice-heading');
+                    const body = notice.querySelector('.dcf-notice-message');
+                    if (heading == null || body == null) {
+                        console.error('Could Not Find Notice Header or Body');
+                        return;
+                    }
+
+                    heading.innerText = announcement.header;
+                    body.innerHTML = announcement.body;
+                    announcement_notice_container.append(notice);
+                }
             } else {
                 announcement_notice_container.classList.add('dcf-d-none!');
             }
@@ -51,7 +62,7 @@
         }
     }
 
-    getClassInstance('announcement-notice').then((classInstance) => {
+    getClassInstance('announcement-notice-template').then((classInstance) => {
         setInterval(fetch_notice, announcement_refresh_rate_ms);
         fetch_notice();
     });

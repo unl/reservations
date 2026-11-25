@@ -36,8 +36,8 @@ get '/home/?' do
 		end
 	end
 	
-	if Announcements.count > 0
-		flash(:info, Announcements.first.header, Announcements.first.text)
+	Announcements.where(status: true).each do |announcement|
+		flash(:info, announcement.header, announcement.text)
 	end
 
 	erb :home, :layout => :fixed_61, :locals => {
